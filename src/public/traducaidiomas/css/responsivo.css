@@ -1,0 +1,530 @@
+ 
+/*
+######################################################################
+######################################################################
+#######################    LAYOUT MOBILE     #########################
+######################################################################
+######################################################################
+
+Até 4 telas - Notebook, Tablet, Celulares
+
+Notebooks - 993 até 1200
+Tablet - 768 até 992
+Celulares - 0 - 768
+
+*/
+
+/* Notebooks - 993 - 1050 -  1200 */
+@media (max-width: 1200px) {
+  
+  .container {
+    padding-inline: 0;
+    width: 100%;
+  }
+
+  /* ############################# TOPO ############################ */
+
+  .topo .container {
+    gap: 1em;
+  }
+  .topo h1 {
+    width: 250px;
+  }
+  .topo nav ul {
+    justify-content: space-evenly;
+  }
+  .topo nav ul li a {
+    padding-inline: 0.8em;
+  }
+  .redes {
+    gap: 0.5em;
+  }
+
+  /* #############################FIM TOPO ############################ */
+ 
+
+  /* ############################# SOBRE ############################ */
+  .sobre-container {
+        display: flex;
+        flex-direction: column; /* 👈 Empilha imagem + texto */
+        align-items: center;
+        text-align: center;     /* Centraliza tudo */
+        gap: 25px;
+    }
+
+    .foto-container img {
+        width: 280px;   /* Ajuste para notebook */
+        height: auto;
+        border-radius: 20px;
+    }
+
+    .texto-sobre {
+        max-width: 700px;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    .texto-sobre h2 {
+        position: relative;
+        bottom:40px;
+        font-size: 30px;
+        padding-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .biografia-texto p {
+        position: relative;
+        bottom:100px;
+        font-size: 17px;
+        line-height: 1.6;
+    }
+
+    .btn-gradient {
+        position: relative;
+       bottom: 218px;
+        left:80px;
+        padding: 1px 5px;   /* 👈 DIMINUI A ALTURA E A LARGURA */
+        font-size: 13px;
+        width: 130px;   /* ajuste o valor como quiser */
+        border-radius: 6px;
+}
+
+  /* ############################# SERVIÇO ############################ */
+
+
+  /* ############################# PQ NOS ESCOLHER  ############################ */
+ 
+  /*############################## DEPOIMENTO ##################################*/
+
+} /* FIM do Notebooks - 993 até 1200 */
+
+
+
+/* Tablet - 768 - 800 -  992 */
+@media (max-width: 992px) {
+
+  /* .banner {
+    display: block;
+  } */
+
+
+
+} /* FIM do Tablet - 768 até 992 */
+
+
+
+@media not all and (max-width:768px){
+  .abrir-menu,
+  .fechar-menu{
+    display: none;
+  }
+  
+
+  
+}
+
+
+/* Celulares - 0 - 400 - 768 */
+@media (max-width: 768px) {
+
+.rodape-centro ul{
+   display: flex;
+   flex-direction: row;
+  gap: 12px;
+
+}
+
+
+.idiomas {
+  list-style: none;
+  /* display: flex;
+  flex-direction: row; */
+   gap: 12px;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+ 
+  .menu-ativo .rede{
+    display:none;
+  }
+
+  nav ul li a{
+    display: flex;
+  }
+
+
+  
+  .topo h1{
+    width: 350px;
+  }
+
+.topo nav{
+  background-color:#fff;
+  height: 50%;
+  position: fixed;
+  top:0;
+  height: auto;
+  max-width: 400px;
+  max-width: 50%;
+  z-index: 100;
+  right: -200px;
+  transition: right 1s ease-in-out;
+}
+
+
+.rede{
+  display: block;
+}
+
+
+
+.menu-ativo .topo nav{
+  right:0;
+}
+
+.topo nav ul {
+  flex-direction: column;
+  
+}
+
+.rodape-conteudo {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .rodape-nome {
+    font-size: 1.3rem;
+  }
+  
+  .idiomas {
+    gap: 0.75rem;
+  }
+  
+  .rodape-redes {
+    justify-content: center;
+  }
+
+    .rodape-conteudo {
+    flex-direction: column;
+    align-items: flex-start;
+    }
+
+
+/* ===== RESPONSIVO 0 a 400px ===== */
+@media (max-width: 400px) {
+ 
+
+   .rodape p {
+    font-size: 0.7em;
+    margin-left: 17px;
+  }
+
+  .rodape ul li img {
+    width: 26px;
+  }
+
+  .rodape .idiomas {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+   .menu-ativo nav .rede {
+    display: flex;          /* agora fica em linha */
+    justify-content: center;
+    flex-direction: row;
+    gap: 2px; 
+    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
+    margin-top: 2px;
+}
+
+  /* Título da página */
+  .page-title {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .page-title h2 {
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  .page-title p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* Container geral */
+  #main_container {
+    display: flex;
+    flex-direction:column;
+    gap: 32px;
+    padding: 20px;
+  }
+
+
+
+
+
+  /* ==============================
+      SEÇÃO DE CONTATOS (LEFT)
+     ============================== */
+  #contcts_container {
+    width: 100%;
+    text-align: center;
+  }
+
+  #contcts_container h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  #contcts_container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  /* Cards ficam em coluna */
+  #cards_container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .contact-card {
+  display: flex;
+        gap: -1px;
+        padding: 14px;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        width: 109%;
+  }
+
+  .card-infos p {
+    font-size: 16px;
+  }
+
+  .card-infos span {
+    font-size: 15px;
+  }
+
+  /* Redes sociais */
+  .social_media_icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .icon-link i {
+    font-size: 24px;
+  }
+
+  /* ==============================
+      FORMULÁRIO (RIGHT)
+     ============================== */
+
+  #contacts_form_container {
+    width: 105%;
+     padding: 20px; 
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  }
+
+  #contacts_form_container h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  #contact_form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+  }
+
+  button[type="submit"]:hover {
+    background: #444;
+  }
+
+}
+
+.rodape-redes {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center; /* Centraliza horizontalmente */
+  flex-wrap: wrap;
+}
+
+
+.rodape-redes span {
+  font-size: 16px;
+  white-space: nowrap; /* Evita quebra de linha */
+}
+
+rodape-redes span i {
+  margin-right: 0.5rem; /* Espaço entre texto e ícone */
+}
+
+/* Se quiser o ícone EXATAMENTE no centro do span */
+.rodape-redes span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; /* Largura fixa para centralizar melhor */
+}
+
+.rodape-centro{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center; /* Centraliza horizontalmente */
+ 
+}
+
+.idiomas li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; /* Largura fixa para centralizar melhor */
+}
+
+
+/*##################MENU MOBILE##############*/
+.abrir-menu{
+  background-image: url(../img/abrir-menu.png);
+  background-size: cover;
+  padding:20px;
+  border:0;
+  display: block;
+  margin-right:10px;
+}
+.fechar-menu{
+  background-image: url(../img/fechar-menu.png);
+  background-size: cover;
+  padding:20px;
+  border:0;
+  display: block;
+  margin-right:10px;
+
+}
+
+
+
+.rede {
+  display: none; /* some no desktop */
+}
+
+.menu-ativo nav .rede {
+    display: flex;          /* agora fica em linha */
+    justify-content: center;
+    flex-direction: row;
+    gap: 2px; 
+    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
+    margin-top: 2px;
+}
+
+    .menu-ativo nav .rede img {
+        width: 30px;
+        height: 32px;
+        padding: 0;
+        /* margin-left: -26px; */
+    }
+
+.menu-ativo nav .rede img:hover {
+    transform: scale(1.15);
+    transition: 0.2s ease;
+}
+
+
+
+
+}
+
+/* ------------------------------ */
+/*   RESPONSIVO 400px → 768px     */
+/* ------------------------------ */
+@media  (max-width: 768px)  {
+
+  /* .banner{
+    display: none;
+  } */
+
+   .menu-ativo nav .rede {
+    display: flex;          /* agora fica em linha */
+    justify-content: center;
+    flex-direction: row;
+    gap: 2px; 
+    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
+    margin-top: 2px;
+}
+
+  /* Título da página */
+  .page-title {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .page-title h2 {
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  .page-title p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* Container geral */
+  #main_container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 20px;
+  }
+
+  .rodape {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rodape ul {
+    justify-content: center;
+  }
+ 
+    } 
