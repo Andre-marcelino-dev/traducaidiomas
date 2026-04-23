@@ -1,0 +1,154 @@
+/* TÍTULO */
+.alunos {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 20px 0;
+    color: #1f2937;
+}
+
+/* CONTAINER */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.alunos {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:red
+    
+}
+
+
+
+/* CARD */
+.card {
+
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff, #f8fafc);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+}
+
+/* HEADER */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #fff;
+}
+
+.school-logo {
+    font-size: 22px;
+}
+
+/* FOTO */
+.photo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+    background: #fff;
+}
+
+/* INFO ALUNO */
+.student-info h2 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.student-id {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* BODY */
+.card-body {
+    padding: 16px;
+}
+
+/* INFO CURSO */
+.course-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.value {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* BADGE IDIOMA */
+.language-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.flag {
+    width: 18px;
+    height: 12px;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* VALIDADE */
+.validity {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .card-container {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .course-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .student-info h2 {
+        font-size: 16px;
+    }
+}

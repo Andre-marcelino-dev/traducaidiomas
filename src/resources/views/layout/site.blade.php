@@ -6,18 +6,16 @@
 </head>
 
 <body>
-    <div class="page-wrapper">
-        @include('partials.preloader')
-        
-        @include('partials.header')
-        
-        <main>
-            @yield('content')
-        </main>
-        
-        @include('partials.footer')
 
-    </div>
+    @include('partials.header')
+
+    <main>
+        @yield('content')
+
+    
+    </main>
+
+    @include('partials.footer')
 
     @include('partials.script')
 </body>
