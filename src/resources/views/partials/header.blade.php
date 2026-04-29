@@ -13,26 +13,21 @@
         <li><a href="{{route('home')}}" class="<?= ($pgAtual == 'index.php') ? 'ativo' : '' ?>">Home</a></li>
 
         <li><a href="{{route('sobre')}}" class="<?= ($pgAtual == 'sobre.php') ? 'ativo' : '' ?>"> Sobre</a></li>
-        
-  <li class="dropdown">
-    <a href="{{ route('servicos') }}" 
-       class="<?= ($pgAtual == 'servico.php') ? 'ativo' : '' ?>">
-        Serviços
-    </a>
 
+<li class="dropdown">
+    <a href="{{ route('servicos') }}">Serviços</a>
     <ul class="submenu">
-        <li>
-            <a href="{{ route('servicos.php') }}">Inglês</a>
-        </li>
-        <li>
-            <a href="{{ route('servicos.php') }}">Italiano</a>
-        </li>
-        <li>
-            <a href="{{ route('servicos.php') }}">Portugues</a>
-        </li>
+        @foreach($categorias as $linha)
+            <li>
+                {{-- O link envia o ID, mas o texto exibido é apenas o título --}}
+                <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
+                  {{ Str::title($linha->titulo_servico) }}
+                </a>
+            </li>
+        @endforeach
     </ul>
 </li>
-      
+
         <li><a href="{{ route('quiz') }}" class="<?= ($pgAtual == 'quiz.php') ? 'ativo' : '' ?>">Quiz</a></li>
 
 
