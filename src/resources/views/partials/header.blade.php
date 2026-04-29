@@ -13,20 +13,30 @@
         <li><a href="{{route('home')}}" class="<?= ($pgAtual == 'index.php') ? 'ativo' : '' ?>">Home</a></li>
 
         <li><a href="{{route('sobre')}}" class="<?= ($pgAtual == 'sobre.php') ? 'ativo' : '' ?>"> Sobre</a></li>
-        <li><a href="servicos.php" class="<?= ($pgAtual == 'servico.php') ? 'ativo' : '' ?>">Serviços</a></li>
-        <li><a href="quiz.php" class="<?= ($pgAtual == 'quiz.php') ? 'ativo' : '' ?>">Quiz</a></li>
+        
+  <li class="dropdown">
+    <a href="{{ route('servicos') }}" 
+       class="<?= ($pgAtual == 'servico.php') ? 'ativo' : '' ?>">
+        Serviços
+    </a>
 
-        <!-- 🔽 MENU DROPDOWN -->
-        <li class="dropdown">
-          <a href="#">Idiomas ▾</a>
-          <ul class="submenu">
-            <li><a href="#">Inglês</a></li>
-            <li><a href="#">Italiano</a></li>
-            <li><a href="#">Português</a></li>
-          </ul>
+    <ul class="submenu">
+        <li>
+            <a href="{{ route('servicos.php') }}">Inglês</a>
         </li>
+        <li>
+            <a href="{{ route('servicos.php') }}">Italiano</a>
+        </li>
+        <li>
+            <a href="{{ route('servicos.php') }}">Portugues</a>
+        </li>
+    </ul>
+</li>
+      
+        <li><a href="{{ route('quiz') }}" class="<?= ($pgAtual == 'quiz.php') ? 'ativo' : '' ?>">Quiz</a></li>
 
-        <li><a href="contato.php" class="<?= ($pgAtual == 'contato.php') ? 'ativo' : '' ?>">Contato</a></li>
+
+        <li><a href="{{ route('contato') }}" class="<?= ($pgAtual == 'contato.php') ? 'ativo' : '' ?>">Contato</a></li>
 
       </ul>
     </nav>

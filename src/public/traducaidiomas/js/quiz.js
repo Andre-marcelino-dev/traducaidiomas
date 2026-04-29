@@ -1,11 +1,25 @@
+
+   document.querySelector('.abrir-menu').onclick = function(){
+  document.documentElement.classList.add('menu-ativo')
+   }
+
+   document.querySelector('.fechar-menu').onclick = function(){
+     document.documentElement.classList.remove("menu-ativo")
+
+
+     
+ }
+
+
+
 let questions = [
             {
-                question: "A) Excuse me. __________________ B) Yes. There's a bank on the next corner.",
+                question: "A) Excuse me. __________________ ) Yes. There's a bank on the next corner.",
                 ops: ["Is there a bank near here?", "What's a bank near here?", "Where bank is here?", "Bank is there here?"],
                 correct: 0
             },
             {
-                question: "A) __________________ B) I'm fine, thanks!",
+                question: "A) __________________ ) I'm fine, thanks!",
                 ops: ["How you are?", "What are you?", "How are you?", "How is you?"],
                 correct: 2
             },
@@ -15,7 +29,7 @@ let questions = [
                 correct: 1
             },
             {
-                question: "A) What do you do? B) __________________",
+                question: "A) What do you do? ) __________________",
                 ops: ["I do my homework", "I'm a teacher", "I'm doing fine", "I do sports"],
                 correct: 1
             },
@@ -25,7 +39,7 @@ let questions = [
                 correct: 2
             },
             {
-                question: "A) Can you help me? B) __________________",
+                question: "A) Can you help me? ) __________________",
                 ops: ["Yes, I help", "Yes, I can", "Yes, I do", "Yes, I am"],
                 correct: 1
             },

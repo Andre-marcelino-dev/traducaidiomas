@@ -66,14 +66,25 @@ $(".option").click(function(){
    
 });
 
-  
-   document.querySelector('.abrir-menu').onclick = function(){
-  document.documentElement.classList.add('menu-ativo')
+$(document).ready(function() {
+   console.log('DOM carregado, tentando selecionar .abrir-menu');
+   const abrirMenu = document.querySelector('.abrir-menu');
+   console.log('Elemento .abrir-menu:', abrirMenu);
+   if (abrirMenu) {
+       abrirMenu.onclick = function(){
+           console.log('Clicou em abrir menu');
+           document.documentElement.classList.add('menu-ativo');
+       }
+   } else {
+       console.log('Elemento .abrir-menu não encontrado');
    }
 
-   document.querySelector('.fechar-menu').onclick = function(){
-     document.documentElement.classList.remove("menu-ativo")
-
-     
- }
+   const fecharMenu = document.querySelector('.fechar-menu');
+   if (fecharMenu) {
+       fecharMenu.onclick = function(){
+           console.log('Clicou em fechar menu');
+           document.documentElement.classList.remove("menu-ativo");
+       }
+   }
+});
 

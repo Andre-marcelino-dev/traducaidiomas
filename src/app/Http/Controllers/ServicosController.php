@@ -8,6 +8,6 @@ class ServicosController extends Controller
 {
    public function servicos()
     {
-        return view('site.home.servicos');
+        return view('site.servicos.servico');
     }
 }
