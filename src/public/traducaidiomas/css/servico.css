@@ -1,6 +1,6 @@
 
         .services-container {
-            max-width: 1200px;
+            max-width: 490px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -12,6 +12,37 @@
             margin-bottom:20px;
             border-radius:25px ;
         }
+
+
+        /* Container da Faixa Azul */
+.faixa-azul {
+    background-color: #007bff; /* Azul vibrante */
+    padding: 15px 20px;
+    margin: -20px -20px 20px -20px; /* Ajusta para encostar nas bordas do card */
+    border-radius: 8px 8px 0 0; /* Arredonda apenas o topo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título com Destaque Centralizado */
+.titulo-servico-destaque {
+    color:#ffff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Ajuste opcional para o card não cortar a faixa */
+.service-card {
+    overflow: hidden; /* Garante que a faixa azul respeite o arredondamento do card */
+    padding-top: 20px;
+}
 
         .service-card {
             background: white;

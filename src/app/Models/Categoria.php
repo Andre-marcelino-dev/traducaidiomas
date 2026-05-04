@@ -14,11 +14,14 @@ class Categoria extends Model
 
 
 
-    protected $fillable = [
-        'titulo_servico',
-        'subtitulo_servico'
-
- ];
+protected $fillable = [
+    'titulo_servico',
+    'subtitulo_servico',
+    'nome_professor', // Adicione os outros campos aqui
+    'whatsapp',
+    'preco',
+    
+];
 
 
 }
