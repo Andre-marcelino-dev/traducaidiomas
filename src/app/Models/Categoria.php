@@ -17,10 +17,11 @@ class Categoria extends Model
 protected $fillable = [
     'titulo_servico',
     'subtitulo_servico',
+     'lista_beneficios_servico',
     'nome_professor', // Adicione os outros campos aqui
     'whatsapp',
     'preco',
-    
+
 ];
 
 

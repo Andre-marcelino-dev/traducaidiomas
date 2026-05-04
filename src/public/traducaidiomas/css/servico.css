@@ -1,17 +1,21 @@
+/* Garanta que o container use Flexbox e ocupe a largura total */
+.services-container {
+    display: flex;
+    flex-wrap: wrap; /* Essencial para o responsivo */
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-        .services-container {
-            max-width: 490px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-            margin-bottom:20px;
-            border-radius:25px ;
-        }
+/* Garanta que os cards tenham uma largura definida */
+.service-card {
+    display: block;
+    flex: 0 1 calc(33.333% - 20px); /* Tenta colocar 3 por linha */
+    min-width: 250px;              /* Não deixa o card ficar muito espremido */
+    box-sizing: border-box;        /* Garante que o padding não aumente a largura */
+}
 
 
         /* Container da Faixa Azul */
@@ -123,8 +127,8 @@
         }
 
         .service-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: linear-gradient(135deg, #4facfe, #00f2fe);
             border-radius: 50%;
             display: flex;
@@ -168,13 +172,52 @@
             transform: scale(1.05);
         }
 
-        @media (max-width: 768px) {
-            .services-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .service-card {
-                padding: 25px 20px;
-            }
-        }
+        /* Dispositivos Móveis (Celulares e Tablets pequenos) */
+@media (max-width: 768px) {
+    .services-container {
+        padding: 10px; /* Reduz o respiro lateral no celular */
+        gap: 15px;
+    }
+
+    .service-card {
+        flex: 1 1 100%; /* Ocupa 100% da largura disponível */
+        max-width: 100%; /* Remove a trava de largura máxima no mobile */
+        margin: 0;      /* Remove margens laterais desnecessárias */
+        padding: 1.2rem; /* Compacta o conteúdo interno */
+    }
+
+    /* Ajuste de fontes para telas pequenas */
+    .titulo-servico-destaque {
+        font-size: 1.2rem;
+    }
+
+    .teacher-name {
+        font-size: 1rem;
+    }
+
+    .service-desc {
+        font-size: 0.9rem;
+    }
+
+    /* Garante que o botão de WhatsApp fique fácil de clicar no touch */
+    .contact-btn {
+        width: 100%;
+        display: block;
+        text-align: center;
+        padding: 12px;
+    }
+}
+
+/* Celulares muito pequenos (iPhone SE, etc) */
+@media (max-width: 480px) {
+    .faixa-azul {
+        padding: 5px;
+    }
+    
+    .service-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
+}
+        

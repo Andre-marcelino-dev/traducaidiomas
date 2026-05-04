@@ -1,0 +1,449 @@
+/**
+ * ==================== CSS AVANÇADO - SISTEMA DE CADASTRO ====================
+ * Arquivo auxiliar com estilos expandidos
+ * Importar em cadastro.php se precisar de customizações adicionais
+ */
+
+/* ==================== ANIMAÇÕES EXTRAS ====================*/
+
+@keyframes bounceInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -30px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes rotateIn {
+    from {
+        opacity: 0;
+        transform: rotate(-5deg) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 1);
+    }
+}
+
+/* ==================== EFEITOS DE LOADING ====================*/
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    border-top-color: #667eea;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==================== PLACEHOLDERS ANIMADOS ====================*/
+
+input::placeholder {
+    animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* ==================== FOCOS ESPECIAIS ====================*/
+
+.form-group input:focus::placeholder {
+    animation: none;
+    opacity: 0.3;
+}
+
+/* ==================== EFEITO RIPPLE ====================*/
+
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.ripple:active::after {
+    animation: rippleEffect 0.6s ease-out;
+}
+
+@keyframes rippleEffect {
+    to {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* ==================== TOOLTIPS PERSONALIZADOS ====================*/
+
+.tooltip-custom {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-custom .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.tooltip-custom:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ==================== BADGE ANIMADO ====================*/
+
+.badge-pulse {
+    display: inline-block;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ==================== GRADIENT ANIMADO ====================*/
+
+.gradient-animated {
+    background: linear-gradient(
+        -45deg,
+        #667eea,
+        #764ba2,
+        #667eea,
+        #764ba2
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ==================== ESQUELETO DE CARREGAMENTO ====================*/
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e0e0e0 50%,
+        #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 8px;
+}
+
+.skeleton-text {
+    height: 12px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.skeleton-input {
+    height: 40px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+/* ==================== VALIDAÇÕES VISUAIS ====================*/
+
+.input-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+}
+
+.input-invalid {
+    animation: shake 0.5s;
+}
+
+/* ==================== MODO DARK (OPCIONAL) ====================*/
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #ecf0f1;
+    }
+
+    .card {
+        background: #0f3460;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        background: #1a1a2e;
+        color: #ecf0f1;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        background: #16213e;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
+    .tipo-btn {
+        background: #16213e;
+        color: #bdc3c7;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .tipo-btn:hover {
+        color: #667eea;
+        border-color: #667eea;
+    }
+
+    .tipo-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+}
+
+/* ==================== TIPOGRAFIA APRIMORADA ====================*/
+
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== BREAKPOINTS ADICIONAIS ====================*/
+
+@media (max-width: 1200px) {
+    .container {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 992px) {
+    .card {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .tipo-btn {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        min-height: 100%;
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .card-header-custom {
+        padding: 20px 15px;
+    }
+
+    .card-header-custom h2 {
+        font-size: 20px;
+    }
+
+    .card-header-custom p {
+        font-size: 12px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .tipo-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tipo-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .btn-submit {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .divider-text {
+        font-size: 11px;
+    }
+}
+
+/* ==================== ACESSIBILIDADE ====================*/
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==================== IMPRESSÃO ====================*/
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .tipo-btn,
+    .divider-text {
+        display: none;
+    }
+
+    .btn-submit {
+        display: none;
+    }
+}
+
+/* ==================== CURSOR PERSONALIZADOS ====================*/
+
+.form-group input[type="file"] {
+    cursor: pointer;
+}
+
+.tipo-btn {
+    cursor: pointer;
+}
+
+.btn-submit {
+    cursor: pointer;
+}
+
+.btn-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ==================== TRANSITIONS GLOBAIS ====================*/
+
+* {
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button,
+input,
+select,
+textarea {
+    transition: var(--transition);
+}
+
+/* ==================== ZOOM INTERACTION ====================*/
+
+@media (max-width: 480px) {
+    body {
+        font-size: 16px; /* Previne zoom automático no iOS */
+    }
+}

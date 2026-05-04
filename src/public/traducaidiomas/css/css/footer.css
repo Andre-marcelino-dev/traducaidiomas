@@ -1,0 +1,147 @@
+.rodape {
+  height: 100%;
+  background: #fff;
+  color: #333;
+  padding: 20px 15px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.rodape a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.rodape a:hover {
+  text-decoration: underline;
+}
+
+.rodape-conteudo {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rodape-centro ul{
+  display: flex;
+  gap: 25px; /* Aumentar o espaço para os cards não sobreporem */
+
+}
+
+.rodape-nome {
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.texto-pt {
+  font-size: 12px;
+  color: #333;
+}
+
+.idiomas {
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+.idiomas a {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color:#60a5fa;
+}
+
+.idiomas a:hover {
+  color: #000;
+}
+
+.rodape-redes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.rodape-redes i {
+  font-size: 20px;
+  color: #000;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.rodape-redes a:hover i {
+  color: #60a5fa;
+  transform: translateY(-2px);
+}
+
+/* Responsivo */
+
+
+  .rodape-centro {
+    order: 3;
+  }
+
+  .rodape-redes {
+    order: 2;
+  }
+
+/* Adicionado para o novo recurso de card */
+.rodape-centro ul li {
+  position: relative; /* Cada item da lista é um container para o card */
+}
+
+.footer-card {
+  position: absolute;
+  bottom: calc(100% + 15px); /* Posiciona o card acima do item com espaço para a seta */
+  left: 50%;
+  transform: translateX(-50%) translateY(10px); /* Começa um pouco para baixo */
+  width: 230px;
+  background-color: #ffffff;
+  color: #333;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  border: 1px solid #f0f0f0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+  text-align: left;
+}
+
+.footer-card::after { /* Seta para baixo */
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.rodape-centro ul li:hover .footer-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0); /* Sobe para a posição final */
+}
+
+.footer-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #012169; /* Cor primária do seu site */
+}
+
+.footer-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+}

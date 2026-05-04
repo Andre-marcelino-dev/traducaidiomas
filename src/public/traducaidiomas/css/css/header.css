@@ -37,7 +37,6 @@
   position: fixed;
   background-color: #fff;
   padding-block: 17px;
- 
 }
 
 .topo h1 {
@@ -60,6 +59,8 @@
 }
 
 .topo nav ul li a {
+
+  text-decoration: none;
   color: #012169;
   font-size: 1.2em;
   text-transform: uppercase;
@@ -68,16 +69,16 @@
   padding-inline: 1.2em;
   position: relative;
   transition: color 0.3s ease, transform 0.3s ease;
-  text-decoration: none;
 }
 
-.ativo {
+/* .ativo {
   color: var(--cor_destaque) !important;
-}
+} */
 
 
 /* Cria a linha embaixo do texto */
 .topo nav ul li a::after {
+  /* text-decoration: none; */
   content: "";
   position: absolute;
   left: 0;
@@ -126,39 +127,6 @@ nav ul li a.ativo::after {
   border-radius: 90px;
 }
 
-  .topo h1 {
-    width: 250px;
-  }
 
 
-nav ul li .submenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #ffffff;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  min-width: 140px;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 20;
-}
 
-nav ul li .submenu li a {
-  display: block;
-  padding: 10px;
-  color: #333;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-
-nav ul li .submenu li a:hover {
-  background: #f0f0f0;
-}
-
-/* EXIBIR SUBMENU AO PASSAR O MOUSE */
-nav ul li.dropdown:hover .submenu {
-  display: block;
-}

@@ -1,0 +1,124 @@
+
+.bg-light {
+   width:100%;
+    background: linear-gradient(135deg, rgb(255, 255, 255) 0%, #ffffff 100%);
+    border-radius: 10px;
+    margin: 0.4rem;
+    box-shadow: 0 15px 15px black;
+    height: 520px;
+}
+
+#biografia-home{
+    margin-top: 80px;
+}
+
+.sobre-container {
+ 
+    display: flex;
+    gap: 2.5rem;
+    align-items: stretch;
+    margin-top: 1rem;
+}
+
+.imagem-container {
+    /* flex: 0 0 300px; */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.img-perfil {
+    width: 350px;              /* tamanho ideal — pode ajustar */
+    /* height: 350px;           */
+     /* border-radius: 50%;   */
+    opacity: 1;     
+    object-fit: cover;         /* corta a imagem corretamente */
+    display: block;
+    margin: 0 auto;            /* centraliza */
+
+    /* Estilo visual */
+    /* border: 6px solid #C8102E; borda vermelha */
+    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); */
+
+    /* Efeito de transição */
+    /* transition: transform 0.4s ease, box-shadow 0.4s ease; */
+}
+
+/* Efeito ao passar o mouse */
+.img-perfil:hover {
+cursor: pointer;
+    /* transform: scale(1.08);  */
+    /* box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);  */
+}
+
+
+
+
+.texto-sobre {
+    padding: 30px;
+    flex: 1;
+    font-size: 0.85rem;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+}
+
+.biografia-texto {
+    line-height: 1.7;
+    flex: 1;
+    font-size: 1em;
+}
+
+.texto-sobre h2 {
+  font-size: 3em;
+  border-bottom: 3px solid red;
+  color: red;
+}
+
+/* TEXTO JUSTIFICADO CONFORME ABNT - SOBRE MIM */
+
+
+
+
+.btn-gradient {
+    display: inline-flex;
+    margin-left: 0;     /* garante que fique à esquerda */
+    right:55px;
+     align-items: center;
+    justify-content: center;
+
+    padding: 15px 30px;
+    background: linear-gradient(90deg, #012169 0%, #C8102E 50%, #012169 100%);
+    background-size: 200% 100%;
+    background-position: left;
+
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.785em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 15px rgba(1, 33, 105, 0.3);
+
+    /* Removendo sublinhado do <a> */
+    text-decoration: none;
+
+    /* Espaço abaixo (caso precise) */
+    margin-bottom: 30px;
+}
+
+.btn-gradient {
+   display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    margin: 100px auto; /* CENTRALIZA O BOTÃO */
+}
+
+/* Hover opcional (caso queira efeito) */
+.btn-gradient:hover {
+    background-position: right;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(1, 33, 105, 0.4);
+}
