@@ -7,23 +7,11 @@
             gap: 30px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 40vh;
+            min-height: 100vh;
             padding: 40px 20px;
             margin-bottom:20px;
             border-radius:25px ;
         }
-        
-
-
-    .teacher-photo {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin: 0 auto 10px;
-      display: block;
-      /* border: 2px solid var(--site-cor-primaria); */
-    }
 
         .service-card {
             background: white;
@@ -35,25 +23,6 @@
             overflow: hidden;
         }
 
-
-        /* FAIXA AZUL */
-.service-badge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    
-    background:RGB(45, 205, 254);
-    color: #fff;
-
-    text-align: center;
-    font-weight: bold;
-    font-size: 30px;
-
-    padding: 20px 20px;
-    z-index: 2;
-}
-
         .service-card::before {
             content: '';
             position: absolute;
@@ -61,7 +30,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            /* background: linear-gradient(90deg, #4facfe, #00f2fe); */
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
         }
 
         .service-card:hover {
@@ -70,28 +39,29 @@
         }
 
         .teacher-flag {
-            width: 70px;
-            height: 50px;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            /* background: linear-gradient(135deg, #4facfe, #00f2fe); */
-            color: white;
-            position: relative;
-            overflow: hidden;
+            width: 60px;
+            height: 40px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        .teacher-flag::after {
-            content: '';
-            position: relative;
-            z-index: 1;
+        .service-card.ingles .teacher-flag {
+            background-image: url(../img/icons8-united-kingdom-48.png);
+            background-repeat: no-repeat;
         }
 
+        .service-card.espanhol .teacher-flag {
+            background-image: url(../img/icons8-italy-48.png);
+            background-repeat: no-repeat;
+        }
+
+        .service-card.portugues .teacher-flag {
+            background-image: url(../img/icons8-brazil-48.png);
+            background-repeat: no-repeat;
+        }
 
         .teacher-name {
-            font-size: 16px;
+            font-size: 24px;
             font-weight: 700;
             color: #2c3e50;
             margin-bottom: 10px;
@@ -113,7 +83,7 @@
             padding: 12px 0;
             border-bottom: 1px solid #ecf0f1;
             display: flex;
-            /* align-items: center; */
+            align-items: center;
             gap: 12px;
         }
 
@@ -129,7 +99,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 12px;
             color: white;
             font-weight: bold;
         }
@@ -140,8 +110,7 @@
         }
 
         .contact-section {
-            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-             background:RGB(45, 205, 254);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -173,7 +142,7 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
+
             .service-card {
                 padding: 25px 20px;
             }

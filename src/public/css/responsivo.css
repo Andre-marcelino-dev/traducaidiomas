@@ -91,34 +91,9 @@ Celulares - 0 - 768
 
   /* ############################# SERVIÇO ############################ */
 
-  .services-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-      padding: 20px;
-  }
-  
-  .service-card {
-      width: 100%;
-      max-width: 500px;
-  }
 
   /* ############################# PQ NOS ESCOLHER  ############################ */
  
-  /* ############################# ALUNOS (SOBRE.PHP) ############################ */
-  .card-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-  }
-  
-  .card-container .card {
-      width: 100%;
-      max-width: 500px;
-  }
-
   /*############################## DEPOIMENTO ##################################*/
 
 } /* FIM do Notebooks - 993 até 1200 */
@@ -154,7 +129,7 @@ Celulares - 0 - 768
 
 .rodape-centro ul{
    display: flex;
-   flex-wrap: wrap;
+   flex-direction: row;
   gap: 12px;
 
 }
@@ -238,11 +213,10 @@ Celulares - 0 - 768
 
 
 /* ===== RESPONSIVO 0 a 400px ===== */
-@media (max-width: 550px) {
+@media (max-width: 400px) {
  
 
    .rodape p {
-    text-align: center;
     font-size: 0.7em;
     margin-left: 17px;
   }
@@ -328,7 +302,7 @@ Celulares - 0 - 768
         background: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         align-items: center;
-        width: 100%;
+        width: 109%;
   }
 
   .card-infos p {
@@ -356,7 +330,7 @@ Celulares - 0 - 768
      ============================== */
 
   #contacts_form_container {
-    width: 100%;
+    width: 105%;
      padding: 20px; 
     background: #fff;
     border-radius: 12px;
@@ -452,7 +426,7 @@ rodape-redes span i {
 
 /*##################MENU MOBILE##############*/
 .abrir-menu{
-  background-image: url(../img/menu-idiomas.svg);
+  background-image: url(../img/abrir-menu.png);
   background-size: cover;
   padding:20px;
   border:0;
@@ -460,7 +434,7 @@ rodape-redes span i {
   margin-right:10px;
 }
 .fechar-menu{
-  background-image: url(../img/menu-idiomas-fechar.svg);
+  background-image: url(../img/fechar-menu.png);
   background-size: cover;
   padding:20px;
   border:0;
@@ -526,17 +500,14 @@ rodape-redes span i {
   }
 
   .page-title h2 {
-    font-size: 1.875em;
-     line-height: 1.2;
-    
-    line-height: 1.2;
+    font-size: 22px;
+    line-height: 1.3;
     margin-bottom: 10px;
   }
 
   .page-title p {
-  line-height: 2.25;
+    font-size: 16px;
     line-height: 1.4;
-    font-size: 1.2em;
   }
 
   /* Container geral */
@@ -556,162 +527,4 @@ rodape-redes span i {
     justify-content: center;
   }
  
-    }
-
-/* ===== Ajustes globais de responsividade ===== */
-@media (max-width: 992px) {
-  .sobre-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .foto-perfil {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-  }
-
-  .texto-sobre {
-    max-width: 720px;
-  }
-}
-
-@media (max-width: 768px) {
-  #main_container {
-    flex-direction: column;
-    padding: 24px 6%;
-  }
-
-  #contcts_container,
-  #contacts_form_container {
-    width: 100%;
-  }
-
-  #cards_container {
-    width: 100%;
-  }
-
-  #contact_form {
-    grid-template-columns: 1fr;
-  }
-
-  #contact_form .input-group:nth-child(3),
-  #contact_form .input-group:nth-child(4),
-  #contact_form button {
-    grid-column: 1 / 2;
-  }
-
-  .contact-card {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .btn-gradient {
-    position: static;
-    margin: 16px auto 0;
-  }
-
-  .topo .container {
-    flex-wrap: wrap;
-  }
-
-  .topo nav {
-    max-width: 70%;
-  }
-}
-
-@media (max-width: 480px) {
-  .topo h1 {
-    width: 200px;
-    height: 70px;
-  }
-
-  .page-title {
-    padding: 16px;
-  }
-}
-
-/* =========================================
-   AJUSTES RESPONSIVOS COMPLEMENTARES
-   (Adicionados ao final para não alterar a estrutura original)
-   ========================================= */
-
-@media (max-width: 1200px) {
-    /* Remove os posicionamentos absolutos problemáticos */
-    .btn-gradient {
-        position: static !important;
-        margin: 20px auto !important;
-        bottom: auto !important;
-        left: auto !important;
-    }
-    .biografia-texto p, .texto-sobre h2 {
-        position: static !important;
-        bottom: auto !important;
-    }
-}
-
-@media (max-width: 992px) {
-    /* Força os botões e imagens sobre a stack verticalmente em tablets/mobile */
-    .btn-gradient {
-        width: 100% !important;
-        max-width: 300px !important;
-        display: flex !important;
-    }
-}
-
-@media (max-width: 768px) {
-    /* Corrige imagens com largura fixa que transbordam a tela celular */
-    .img-perfil, .foto-container img {
-        width: 50% !important;
-        max-width: 280px !important;
-        height: auto !important;
-        aspect-ratio: 1 / 1 !important;
-        object-fit: cover !important;
-    }
-    
-    /* Corrige o contêiner do sobre que tinha tamanho fixo */
-    .bg-light {
-        height: auto !important;
-        min-height: 520px !important;
-        padding-bottom: 2rem !important;
-    }
-    
-    /* Aproxima os textos da foto no celular */
-    .sobre-container {
-        gap: 1rem !important;
-    }
-    .texto-sobre {
-        padding-top: 5px !important;
-    }
-    
-    /* Corrige o menu mobile que não alinhava bem ou ficava cortado */
-    .topo nav {
-        /* height: 100vh !important; */
-        padding-top: 60px !important;
-    }
-    .fechar-menu {
-        position: absolute !important;
-        top: 10px !important;
-        right: 10px !important;
-    }
-    
-    /* Corrige textos do banner encavalados */
-    .banner-card h1 {
-        font-size: clamp(1.8rem, 5vw, 2.5rem) !important;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Corrige textos grandes no banner p/ telas muito pequenas */
-    .banner-card h1 {
-        font-size: 1.8rem !important;
-    }
-    
-    /* Corrige cards de contato que não quebravam em coluna */
-    .contact-card {
-        flex-direction: column !important;
-        text-align: center !important;
-        height: auto !important;
-    }
-}
+    } 

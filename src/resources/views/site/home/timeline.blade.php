@@ -33,7 +33,7 @@
             <p>Conversar sobre acomodações, alimentação, eventos e fazer pedidos em restaurantes.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
 
       <section class="timeline-section" data-level="1">
@@ -59,7 +59,7 @@
             <p>Descrever viagens, pedir direções, fazer reservas e compreender aspectos culturais.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
 
       <section class="timeline-section" data-level="2">
@@ -85,7 +85,7 @@
             <p>Compreender filmes, séries e notícias sobre temas conhecidos com contexto adequado.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
 
       <section class="timeline-section" data-level="3">
@@ -111,7 +111,7 @@
             <p>Defender pontos de vista, argumentar sobre vantagens e desvantagens de diferentes tópicos.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
 
       <section class="timeline-section" data-level="4">
@@ -137,7 +137,7 @@
             <p>Compreender significados implícitos, humor, expressões idiomáticas e contextos culturais.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
 
       <section class="timeline-section" data-level="5">
@@ -163,6 +163,6 @@
             <p>Comunicar-se com a mesma proficiência de um falante nativo em contextos acadêmicos e profissionais.</p>
           </article>
         </div>
-        {{-- <a href="#" class="timeline-cta">Saiba mais</a> --}}
+        <a href="#" class="timeline-cta">Saiba mais</a>
       </section>
     </div>

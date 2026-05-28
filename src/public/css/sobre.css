@@ -1,12 +1,19 @@
 
 .bg-light {
+  
    width:100%;
     background: linear-gradient(135deg, rgb(255, 255, 255) 0%, #ffffff 100%);
     border-radius: 10px;
     margin: 0.4rem;
     box-shadow: 0 15px 15px black;
     height: 520px;
+   
 }
+
+
+
+
+
 
 #biografia-home{
     margin-top: 80px;
@@ -21,7 +28,7 @@
 }
 
 .imagem-container {
-    /* flex: 0 0 300px; */
+    flex: 0 0 300px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -29,29 +36,27 @@
 
 .img-perfil {
     width: 350px;              /* tamanho ideal — pode ajustar */
-    /* height: 350px;           */
-     /* border-radius: 50%;   */
-    opacity: 1;     
+    height: 350px;             /* mantém a imagem perfeitamente redonda */
+     border-radius: 50%;  
+     opacity: 30%;     
     object-fit: cover;         /* corta a imagem corretamente */
     display: block;
     margin: 0 auto;            /* centraliza */
 
     /* Estilo visual */
     /* border: 6px solid #C8102E; borda vermelha */
-    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
     /* Efeito de transição */
-    /* transition: transform 0.4s ease, box-shadow 0.4s ease; */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* Efeito ao passar o mouse */
 .img-perfil:hover {
 cursor: pointer;
-    /* transform: scale(1.08);  */
-    /* box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);  */
+    transform: scale(1.08);    /* aumenta suavemente */
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6); /* sombra mais forte */
 }
-
-
 
 
 .texto-sobre {
@@ -114,6 +119,7 @@ cursor: pointer;
     align-items: center;
     width: 350px;
     margin: 100px auto; /* CENTRALIZA O BOTÃO */
+
 }
 
 /* Hover opcional (caso queira efeito) */

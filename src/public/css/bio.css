@@ -10,32 +10,50 @@
 }
 
 .sobre-container {
+    
     display: flex;
     gap: 2.5rem;
     align-items: stretch;
     margin-top: 1rem;
    
 }
- 
+
 .foto-container {
-    flex: 0 0 auto;
+    flex: 0 0 300px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+    align-items: flex-start;
 }
 
 .foto-perfil {
-    width: 320px;
-    height: auto;
-    max-width: 100%;
-    border-radius: 0;
+    width: 170%;
+    height: 350px;
+    border-radius: 20px;
     object-fit: cover;
-    border: none;
-    box-shadow: none;
+
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.2);           /* Começa maior, como fumaça */
+    animation: fumaça 2.5s ease forwards;
+}
+
+/* 🔥 Animação fumaça */
+@keyframes fumaça {
+    0% {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(1.2);
+    }
+    50% {
+        opacity: 0.6;
+        filter: blur(10px);
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+        transform: scale(1);
+    }
 }
 
 

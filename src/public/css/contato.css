@@ -15,13 +15,9 @@
     background-repeat: no-repeat;
    
     #contcts_container{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 24px 0px;
+        width: 50%;
    
         h3{
-            text-align:center;
             font-size: 1em;
             font-weight: 500;
         }
@@ -34,34 +30,31 @@
      
    
         h4{
-            text-align: center;
             font-size: 1.2rem;
             font-weight: 500;
              color:#010002;
              margin-top: 16px;
         }
-
-   
    
         #cards_container{
             display: flex;
             flex-direction: column;
             gap:12px;
-            width:100%;
+            width:80%;
    
             margin:24px 0px;
    
             .contact-card{
-              
-               display: flex;
-                justify-content: center;
-                gap: 8px;
+                display: flex;
+                align-items: center;
+                gap:8px;
                 box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
                 background-color: #ffff;
-                padding: 12px 12px;
+                padding: 18px 12px;
                 border-radius: 8px;
                 text-decoration: none;
-                transition: box-shadow 0.3s ease;
+   
+                transition:box-shadow 0.3s ease ;
    
                 &:hover{
                    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);  
@@ -88,12 +81,8 @@
                             line-height: 1rem;
                              color:#010002;
                              
+                           
                         }
-
-                        p {
-                         margin-top: 3px;
-                        margin-bottom: 1rem;
-                            }
    
                         span{
                             font-size: 0.8rem;
@@ -105,14 +94,14 @@
    
                     &.phone{
                         .card-icon{
-                            /* background-color: #faf5ed; */
+                            background-color: #faf5ed;
                             color:#cd9c4b;
                         }
                     }
    
                        &.location{
                         .card-icon{
-                            /* background-color: #dbeafe; */
+                            background-color: #dbeafe;
                             color:#3b82f6;
                         }
                     }
@@ -120,7 +109,7 @@
    
                       &.email{
                         .card-icon{
-                            /* background-color: #ede9fe; */
+                            background-color: #ede9fe;
                             color:#8b5cf6;
                         }
                     }
@@ -136,10 +125,9 @@
             }
    
         .social_media_icons{
-               width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
+            display: flex;
+            gap:12px;
+            margin-top:12px;
    
             .icon-link{
                 width:40px;
@@ -266,19 +254,12 @@
         }
     }
   }
-
-  .page-title {
-    margin:20px 0px;
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-}
-  
+   
   .page-title h2{
-    color:#fff !important;
     text-align: center;
-    /* max-width: 800px; */
-    /* margin: 120px auto; centraliza o bloco também */
+    max-width: 800px;
+    margin: 0 auto; /* centraliza o bloco também */
+    padding: 20px;
   }
     .page-title p{
       font-size:1.25em ;
@@ -289,7 +270,7 @@
   }
 
   .page-title{
-    background: radial-gradient(#012169, #c8102e);
+    background-color: #012169;
     color: white;
   }
    

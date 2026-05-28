@@ -1,34 +1,26 @@
 .informacao {
-  background: radial-gradient(#012169, #c8102e);
-    padding: 40px 20px;
+background: radial-gradient(#012169, #c8102e);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+    margin-top: 20px;
+  height: 320px;
+   
 }
 
-.text_info {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-}
 
-/* TÍTULO */
 .text_info h2 {
- font-size: 1.875em;
-  color:#fff!important;
-letter-spacing: 0.5px;
-    line-height: 1.2;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 20px;
+  text-align: center;
+  font-size: 1.875em;
+  padding: 30px;
+  color:#fff;
 }
 
-/* TEXTO */
 .text_info h3 {
-   color:#fff!important;
-letter-spacing: 0.5px;
-    line-height: 1.2;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 20px;
-    font-size: 1.2em;
+  text-align: center;
+  font-size: 1.1em;
+ 
+  color:#fff;
 }
 
 .text_info .botoes {
