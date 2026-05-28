@@ -2,7 +2,7 @@
     <div class="container">
         <div class="sobre-container">
             <div class="imagem-container">
-                <img src="{{asset('traducaidiomas/img/globo2.png')}}" alt="Professsor Caetano" class="img-perfil">
+                <img src="{{asset('traducaidiomas/img/imagem.jpg')}}" alt="Professsor Caetano" class="img-perfil">
             </div>
             
             <div class="texto-sobre">

@@ -28,13 +28,15 @@
 }
 
 .img-perfil {
-    width: 350px;              /* tamanho ideal — pode ajustar */
-    /* height: 350px;           */
-     /* border-radius: 50%;   */
-    opacity: 1;     
-    object-fit: cover;         /* corta a imagem corretamente */
+  width: 350px;
+    height: 350px;
+    /* border-radius: 41%; */
+    /* opacity: 30%; */
+    object-fit: cover;
     display: block;
-    margin: 0 auto;            /* centraliza */
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 
     /* Estilo visual */
     /* border: 6px solid #C8102E; borda vermelha */
@@ -49,6 +51,19 @@
 cursor: pointer;
     /* transform: scale(1.08);  */
     /* box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);  */
+}
+
+
+.img-perfil{
+    width: 350px;
+    height: 350px;
+    /* border-radius: 41%; */
+    /* opacity: 30%; */
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 

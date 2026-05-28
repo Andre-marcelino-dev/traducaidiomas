@@ -1,0 +1,75 @@
+
+
+
+.idade {
+  width: 100%;
+  background: radial-gradient(#012169, #c8102e);
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.options {
+  display: flex;
+  gap: 20px;
+  width: 90%;
+  max-width: 1100px;
+}
+
+.option {
+  position: relative;
+  flex: 1;
+  height: 650px;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  background-image: var(--optionBackground);
+  cursor: pointer;
+  transition: all 0.5s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.option.active {
+  flex: 3;
+}
+
+.option .shadow {
+  position: absolute;
+  inset: 0;
+  /* background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0)); */
+  z-index: 1;
+}
+
+.option .label {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.5s;
+}
+
+.option.active .label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.option .main {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.option .sub {
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.icon {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
