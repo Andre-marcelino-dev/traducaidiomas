@@ -1,20 +1,20 @@
 <section class="banner animate__animated animate__zoomIn">
-    <?php 
-    $bannerUrl = (isset($configSiteBanner) && !empty($configSiteBanner) && file_exists(__DIR__ . '/../uploads/banner/' . $configSiteBanner)) 
-        ? "uploads/banner/" . htmlspecialchars($configSiteBanner) 
-        : "img/banner.png"; 
+    <?php
+    $bannerUrl = (isset($configSiteBanner) && !empty($configSiteBanner) && file_exists(__DIR__ . '/../uploads/banner/' . $configSiteBanner))
+        ? "uploads/banner/" . htmlspecialchars($configSiteBanner)
+        : "img/banner.png";
     ?>
     <div class="banner-slide" style="--banner-image: url('<?= $bannerUrl ?>');">
         <div class="banner-media" style="background-image: url('<?= $bannerUrl ?>');"></div>
         <div class="banner-overlay"></div>
         <div class="banner-grid container">
             <div class="banner-card">
-                <span class="banner-eyebrow">TraducaIdiomas  English & Professional Skills</span>
+                <span class="banner-eyebrow">TraducaIdiomas English & Professional Skills</span>
                 <h1>Inglês profissional com método claro, foco em resultado e consistencia.</h1>
                 <p>Treinamento para reuniões, entrevistas e apresentações, com metas reais e acompanhamento proximo.</p>
                 <div class="banner-actions">
                     <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
-                    <a class="btn btn-outline-light" href="servicos.php">Ver Serviços</a>
+                    <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
                 </div>
                 <div class="banner-trust">
                     <div class="trust-item">
@@ -49,7 +49,7 @@
         <div class="banner-overlay"></div>
         <div class="banner-grid container">
             <div class="banner-card">
-                <span class="banner-eyebrow">Expertise  Idiomas com estrategia</span>
+                <span class="banner-eyebrow">Expertise Idiomas com estrategia</span>
                 <h1>Da aula aplicação real: comunicação eficiente no seu contexto.</h1>
                 <p>Metodologia pratica, material objetivo e feedback continuo para acelerar sua evolução.</p>
                 <div class="banner-actions">

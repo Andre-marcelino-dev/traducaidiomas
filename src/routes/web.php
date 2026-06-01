@@ -1,27 +1,33 @@
 <?php
-
-
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ContatoController;
-
-
+use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\admin\DashController;
+use App\Http\Controllers\admin\ProfessorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get("/", [HomeController::class,'home'])->name('home');
-Route::get("/sobre", [SobreController::class,'sobre'])->name('sobre');
-// Mude de ->name('servicos') para ->name('servicos.index')
-// Rota principal de serviços (o que você chama no menu)
+Route::get("/", [HomeController::class, 'home'])->name('home');
+Route::get("/sobre", [SobreController::class, 'sobre'])->name('sobre');
 Route::get("/servicos", [ServicosController::class, 'servicos'])->name('servicos');
-
-// Rota dinâmica para as categorias do dropdown
 Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])->name('servicos.categoria');
+Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
+Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
+Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashController::class, 'index'])->name('dash');
+    Route::get('/categorias', [DashController::class, 'index'])->name('categoria');
 
-Route::get("/quiz", [QuizController::class,'quiz'])->name('quiz');
-Route::get("/contato", [ContatoController::class,'contato'])->name('contato');
-
-
-
+    Route::prefix('professores')->name('professores.')->group(function () {
+        Route::get('/',        [ProfessorController::class, 'index'])->name('index');
+        Route::post('/',       [ProfessorController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ProfessorController::class, 'edit'])->name('edit');
+        Route::get('/create', [ProfessorController::class, 'create'])->name('create');
+        Route::get('/{id}',    [ProfessorController::class, 'show'])->name('show');
+        Route::put('/{id}',    [ProfessorController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ProfessorController::class, 'destroy'])->name('destroy');
+    });
+});

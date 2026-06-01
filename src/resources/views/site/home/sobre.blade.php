@@ -2,7 +2,7 @@
     <div class="container">
         <div class="sobre-container">
             <div class="foto-container ">
-                <img src="{{asset('traducaidiomas/img/imagem.jpg')}}" alt="Betina Ruiz - Professora e Escritora" class="foto-perfil">
+                <img src="{{asset('traducaidiomas/img/imagem.jpg')}}" alt="Renato Caetano" class="foto-perfil">
             </div>
             
             <div class="texto-sobre">
@@ -14,7 +14,7 @@
                     
      
                 </div>
-                <a href="sobre.php" class="btn-gradient">SAIBA MAIS</a>
+              <a href="{{ route('sobre') }}" class="btn-gradient">SAIBA MAIS</a>
 
             </div>
         </div>

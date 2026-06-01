@@ -14,7 +14,7 @@
                 <p>Treinamento para reuniões, entrevistas e apresentações, com metas reais e acompanhamento proximo.</p>
                 <div class="banner-actions">
                     <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
-                    <a class="btn btn-outline-light" href="servicos.php">Ver Serviços</a>
+                    <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
                 </div>
                 <div class="banner-trust">
                     <div class="trust-item">
