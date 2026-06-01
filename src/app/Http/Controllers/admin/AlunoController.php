@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
+use App\Models\Aluno;
+use Illuminate\Http\Request;
+
+class AlunoController extends Controller
+{
+    public function index()
+    {
+        $alunos = Aluno::all();
+        return view('admin.alunos.index', compact('alunos'));
+    }
+
+    public function create()
+    {
+        return view('admin.alunos.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nome_aluno'      => 'required|string|max:255',
+            'email_aluno'     => 'required|email|unique:tbl_alunos,email_aluno',
+            'senha_aluno'     => 'required|string|min:6',
+            'telefone_aluno'  => 'nullable|string|max:20',
+            'curso_aluno'     => 'nullable|string|max:100',
+            'data_nasc_aluno' => 'nullable|date',
+            'nivel_aluno'     => 'nullable|string|max:50',
+            'status_aluno'    => 'nullable|string|max:50',
+            'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('foto_aluno')) {
+            $foto = $request->file('foto_aluno');
+            $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
+            $foto->move(public_path('traducaidiomas/alunos'), $nome);
+            $data['foto_aluno'] = $nome;
+        }
+
+        Aluno::create($data);
+
+        return redirect()->route('admin.alunos.index')->with('success', 'Aluno cadastrado com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $aluno = Aluno::findOrFail($id);
+        return view('admin.alunos.edit', compact('aluno'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $aluno = Aluno::findOrFail($id);
+
+        $request->validate([
+            'nome_aluno'      => 'required|string|max:255',
+            'email_aluno'     => 'required|email|unique:tbl_alunos,email_aluno,' . $id . ',id_aluno',
+            'telefone_aluno'  => 'nullable|string|max:20',
+            'curso_aluno'     => 'nullable|string|max:100',
+            'data_nasc_aluno' => 'nullable|date',
+            'nivel_aluno'     => 'nullable|string|max:50',
+            'status_aluno'    => 'nullable|string|max:50',
+            'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('foto_aluno')) {
+            $foto = $request->file('foto_aluno');
+            $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
+            $foto->move(public_path('traducaidiomas/alunos'), $nome);
+            $data['foto_aluno'] = $nome;
+        }
+
+        $aluno->update($data);
+
+        return redirect()->route('admin.alunos.index')->with('success', 'Aluno atualizado com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        Aluno::findOrFail($id)->delete();
+        return redirect()->route('admin.alunos.index')->with('success', 'Aluno excluído com sucesso!');
+    }
+}

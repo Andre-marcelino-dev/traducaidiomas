@@ -3,8 +3,8 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1>Professor</h1>
-            <a href="{{ route('admin.professores.create') }}" class="btn btn-primary">+ Novo Professor</a>
+            <h1>Alunos</h1>
+            <a href="{{ route('admin.alunos.create') }}" class="btn btn-primary">+ Novo Aluno</a>
         </div>
 
         @if (session('success'))
@@ -16,48 +16,70 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-
                             <th>#</th>
                             <th>Foto</th>
                             <th>Nome</th>
-                            <th>Especialidade</th>
                             <th>Email</th>
-
-                            <th>Acoes</th>
+                            <th>Telefone</th>
+                            <th>Curso</th>
+                            <th>Nível</th>
+                            <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($professores as $professor)
+                        @forelse($alunos as $aluno)
                             <tr>
-                                <td>{{ $professor->id_professor }}</td>
+                                <td>{{ $aluno->id_aluno }}</td>
                                 <td>
-                                    @if ($professor->foto_professor)
-                                        <img src="{{ asset('traducaidiomas/professor/' . $professor->foto_professor) }}"
-                                            alt="{{ $professor->nome_professor }}" width="50" height="50"
+                                    @if ($aluno->foto_aluno)
+                                        <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}"
+                                            alt="{{ $aluno->nome_aluno }}" width="50" height="50"
                                             style="object-fit: cover; border-radius: 50%;">
                                     @else
                                         <span class="text-muted">Sem foto</span>
                                     @endif
                                 </td>
-
-                                <td>{{ $professor->nome_professor }}</td>
-                                <td>{{ $professor->especialidade_professor }}</td>
-                                <td>{{ $professor->email_professor }}</td>
-
+                                <td>{{ $aluno->nome_aluno }}</td>
+                                <td>{{ $aluno->email_aluno }}</td>
+                                <td>{{ $aluno->telefone_aluno }}</td>
+                                <td>{{ $aluno->curso_aluno }}</td>
+                                <td>{{ $aluno->nivel_aluno }}</td>
                                 <td>
-                                    <a href="{{ route('admin.professores.edit', $professor->id_professor) }}"
+                                    <form action="{{ route('admin.alunos.update', $aluno->id_aluno) }}" method="POST"
+                                        style="display:inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="nome_aluno" value="{{ $aluno->nome_aluno }}">
+                                        <input type="hidden" name="email_aluno" value="{{ $aluno->email_aluno }}">
+                                        @if ($aluno->status_aluno == 'EM CURSO')
+                                            <input type="hidden" name="status_aluno" value="INATIVO">
+                                            <button type="submit" class="badge bg-success border-0"
+                                                style="cursor:pointer">EM CURSO</button>
+                                        @elseif($aluno->status_aluno == 'INATIVO')
+                                            <input type="hidden" name="status_aluno" value="EM CURSO">
+                                            <button type="submit" class="badge bg-secondary border-0"
+                                                style="cursor:pointer">INATIVO</button>
+                                        @else
+                                            <input type="hidden" name="status_aluno" value="INATIVO">
+                                            <button type="submit" class="badge bg-info border-0"
+                                                style="cursor:pointer">{{ $aluno->status_aluno }}</button>
+                                        @endif
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.alunos.edit', $aluno->id_aluno) }}"
                                         class="btn btn-sm btn-warning">Editar</a>
-
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modalExcluir" data-id="{{ $professor->id_professor }}"
-                                        data-nome="{{ $professor->nome_professor }}">
+                                        data-bs-target="#modalExcluir" data-id="{{ $aluno->id_aluno }}"
+                                        data-nome="{{ $aluno->nome_aluno }}">
                                         Excluir
                                     </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Nenhum professor cadastrado.</td>
+                                <td colspan="9" class="text-center">Nenhum aluno cadastrado.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -65,7 +87,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal Excluir -->
     <div class="modal fade" id="modalExcluir" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -76,8 +98,8 @@
                 </div>
                 <div class="modal-body text-center py-4">
                     <i class="bi bi-person-x-fill text-danger" style="font-size: 3rem;"></i>
-                    <p class="mt-3 fs-5">Tem certeza que deseja excluir o professor</p>
-                    <strong id="nomeProfessorModal" class="fs-5"></strong>
+                    <p class="mt-3 fs-5">Tem certeza que deseja excluir o aluno</p>
+                    <strong id="nomeAlunoModal" class="fs-5"></strong>
                     <p class="text-muted mt-2">Esta ação não poderá ser desfeita.</p>
                 </div>
                 <div class="modal-footer justify-content-center">
@@ -103,8 +125,8 @@
                 const id = button.getAttribute('data-id');
                 const nome = button.getAttribute('data-nome');
 
-                document.getElementById('nomeProfessorModal').textContent = nome;
-                document.getElementById('formExcluir').action = `/admin/professores/${id}`;
+                document.getElementById('nomeAlunoModal').textContent = nome;
+                document.getElementById('formExcluir').action = `/admin/alunos/${id}`;
             });
         </script>
     @endpush

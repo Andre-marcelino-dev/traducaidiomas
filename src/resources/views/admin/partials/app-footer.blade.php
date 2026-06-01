@@ -6,7 +6,7 @@
         <!--begin::Copyright-->
         <strong>
           Copyright &copy; 2014-2026&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">Confeitaria Davilla</a>.
+          <a href="https://adminlte.io" class="text-decoration-none">Traducaidiomas</a>.
         </strong>
         Todos os direitos reservados.
         <!--end::Copyright-->

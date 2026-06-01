@@ -161,13 +161,13 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline">Renato Caetano</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                   <img
-                    src="{{ asset('dash/assets/img/user1-128x128.jpg') }}"
+                   src="{{ asset('dash/assets/img/user1-128x128.jpg') }}"
                     class="rounded-circle shadow"
                     alt="User Image"
                   />
