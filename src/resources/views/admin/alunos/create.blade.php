@@ -25,23 +25,32 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Nome</label>
-                            <input type="text" name="nome_aluno" class="form-control" value="{{ old('nome_aluno') }}" required>
+                            <input type="text" name="nome_aluno" class="form-control" value="{{ old('nome_aluno') }}"
+                                required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email_aluno" class="form-control" value="{{ old('email_aluno') }}" required>
+                            <input type="email" name="email_aluno" class="form-control" value="{{ old('email_aluno') }}"
+                                required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Senha</label>
-                            <input type="password" name="senha_aluno" class="form-control" required>
+                            <input type="password" name="senha_aluno" class="form-control" required minlength="6">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Confirmar Senha</label>
+                            <input type="password" name="senha_aluno_confirmation" class="form-control" required
+                                minlength="6">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Telefone</label>
-                            <input type="text" name="telefone_aluno" class="form-control" value="{{ old('telefone_aluno') }}">
+                            <input type="text" name="telefone_aluno" class="form-control"
+                                value="{{ old('telefone_aluno') }}">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Data de Nascimento</label>
-                            <input type="date" name="data_nasc_aluno" class="form-control" value="{{ old('data_nasc_aluno') }}">
+                            <input type="date" name="data_nasc_aluno" class="form-control"
+                                value="{{ old('data_nasc_aluno') }}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Curso</label>

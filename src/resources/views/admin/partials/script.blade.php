@@ -24,10 +24,10 @@
       };
       document.addEventListener('DOMContentLoaded', function () {
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
- 
+
         // Disable OverlayScrollbars on mobile devices to prevent touch interference
         const isMobile = window.innerWidth <= 992;
- 
+
         if (
           sidebarWrapper &&
           OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
@@ -44,41 +44,41 @@
       });
     </script>
     <!--end::OverlayScrollbars Configure-->
- 
+
     <!-- OPTIONAL SCRIPTS -->
- 
+
     <!-- sortablejs -->
     <script
       src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
       crossorigin="anonymous"
     ></script>
- 
+
     <!-- sortablejs -->
     <script>
       new Sortable(document.querySelector('.connectedSortable'), {
         group: 'shared',
         handle: '.card-header',
       });
- 
+
       const cardHeaders = document.querySelectorAll('.connectedSortable .card-header');
       cardHeaders.forEach((cardHeader) => {
         cardHeader.style.cursor = 'move';
       });
     </script>
- 
+
     <!-- apexcharts -->
     <script
       src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
       integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
       crossorigin="anonymous"
     ></script>
- 
+
     <!-- ChartJS -->
     <script>
       // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
       // IT'S ALL JUST JUNK FOR DEMO
       // ++++++++++++++++++++++++++++++++++++++++++
- 
+
       const sales_chart_options = {
         series: [
           {
@@ -125,14 +125,14 @@
           },
         },
       };
- 
+
       const sales_chart = new ApexCharts(
         document.querySelector('#revenue-chart'),
         sales_chart_options,
       );
       sales_chart.render();
     </script>
- 
+
     <!-- jsvectormap -->
     <script
       src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"
@@ -144,7 +144,23 @@
       integrity="sha256-XPpPaZlU8S/HWf7FZLAncLg2SAkP8ScUTII89x9D3lY="
       crossorigin="anonymous"
     ></script>
- 
+
+
+     {{-- restante do script.blade.php acima --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                const alerts = document.querySelectorAll('#flash-success, #flash-error');
+                alerts.forEach(function (alert) {
+                    alert.style.transition = 'opacity 0.8s ease';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 800);
+                });
+            }, 3000);
+        });
+    </script>
+
     <!-- jsvectormap -->
     <!-- <script>
       // World map by jsVectorMap
@@ -152,7 +168,7 @@
         selector: '#world-map',
         map: 'world',
       });
- 
+
       // Sparkline charts
       const option_sparkline1 = {
         series: [
@@ -178,10 +194,10 @@
         },
         colors: ['#DCE6EC'],
       };
- 
+
       const sparkline1 = new ApexCharts(document.querySelector('#sparkline-1'), option_sparkline1);
       sparkline1.render();
- 
+
       const option_sparkline2 = {
         series: [
           {
@@ -206,10 +222,10 @@
         },
         colors: ['#DCE6EC'],
       };
- 
+
       const sparkline2 = new ApexCharts(document.querySelector('#sparkline-2'), option_sparkline2);
       sparkline2.render();
- 
+
       const option_sparkline3 = {
         series: [
           {
@@ -234,7 +250,7 @@
         },
         colors: ['#DCE6EC'],
       };
- 
+
       const sparkline3 = new ApexCharts(document.querySelector('#sparkline-3'), option_sparkline3);
       sparkline3.render();
     </script> -->

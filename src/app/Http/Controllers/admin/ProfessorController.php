@@ -21,43 +21,47 @@ class ProfessorController extends Controller
         return view('admin.professores.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nome_professor'           => 'required|string|max:100',
-            'especialidade_professor'  => 'nullable|string|max:100',
-            'experiencia_professor'    => 'nullable|string|max:50',
-            'bio_professor'            => 'nullable|string',
-            'foto_professor'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'email_professor'          => 'required|email|max:100|unique:tbl_professor,email_professor',
-            'curso_professor'          => 'nullable|string|max:50',
-            'nivel_professor'          => 'nullable|string|max:20',
-            'telefone_professor'       => 'nullable|string|max:14',
-            'senha_professor'          => 'required|string|min:6',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'nome_professor'          => 'required|string|max:100',
+        'especialidade_professor' => 'required|string|max:100',
+        'experiencia_professor'   => 'required|string|max:50',
+        'bio_professor'           => 'required|string',
+        'foto_professor'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'email_professor'         => 'required|email|max:100|unique:tbl_professor,email_professor',
+        'curso_professor'         => 'required|string|max:50',
+        'nivel_professor'         => 'required|string|max:20',
+        'telefone_professor'      => 'required|string|max:14',
+        'senha_professor'         => 'required|string|min:6|confirmed',
+    ]);
 
-        $dados = $request->except(['foto_professor', 'senha_professor']);
-        $dados['senha_professor'] = Hash::make($request->senha_professor);
+    $dados = $request->except(['foto_professor']);
+    $dados['senha_professor'] = Hash::make($request->senha_professor);
 
-        if ($request->hasFile('foto_professor')) {
-            $arquivo = $request->file('foto_professor');
-            $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
-            $diretorioDestino = public_path('traducaidiomas/professor/');
+    if ($request->hasFile('foto_professor')) {
 
-            if (!file_exists($diretorioDestino)) {
-                @mkdir($diretorioDestino, 0777, true);
-            }
-            
-            @move_uploaded_file($arquivo->getRealPath(), $diretorioDestino . $nomeFoto);
-            $dados['foto_professor'] = 'traducaidiomas/professor/' . $nomeFoto;
+        $arquivo = $request->file('foto_professor');
+
+        $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
+
+        $diretorioDestino = public_path('traducaidiomas/professor/');
+
+        if (!file_exists($diretorioDestino)) {
+            mkdir($diretorioDestino, 0777, true);
         }
 
-        Professor::create($dados);
+        $arquivo->move($diretorioDestino, $nomeFoto);
 
-        return redirect()->route('admin.professores.index')
-            ->with('success', 'Professor cadastrado com sucesso!');
+        $dados['foto_professor'] = 'traducaidiomas/professor/' . $nomeFoto;
     }
 
+Professor::create($dados);
+
+return redirect()
+    ->route('admin.professores.index')
+    ->with('success', 'Professor cadastrado com sucesso!');  
+}
     public function show($id)
     {
         $professor = Professor::find($id);
@@ -93,15 +97,15 @@ class ProfessorController extends Controller
 
         $request->validate([
             'nome_professor'           => 'required|string|max:100',
-            'especialidade_professor'  => 'nullable|string|max:100',
-            'experiencia_professor'    => 'nullable|string|max:50',
-            'bio_professor'            => 'nullable|string',
+            'especialidade_professor'  => 'required|string|max:100',
+            'experiencia_professor'    => 'required|string|max:50',
+            'bio_professor'            => 'required|string',
             'foto_professor'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'email_professor'          => 'required|email|max:100|unique:tbl_professor,email_professor,' . $professor->id_professor . ',id_professor',
-            'curso_professor'          => 'nullable|string|max:50',
-            'nivel_professor'          => 'nullable|string|max:20',
-            'telefone_professor'       => 'nullable|string|max:14',
-            'senha_professor'          => 'nullable|string|min:6', 
+            'curso_professor'          => 'required|string|max:50',
+            'nivel_professor'          => 'required|string|max:20',
+            'telefone_professor'       => 'required|string|max:14',
+            'senha_professor' => 'nullable|string|min:6|confirmed',
         ]);
 
         $dados = $request->except(['foto_professor', 'senha_professor']);
@@ -122,8 +126,9 @@ class ProfessorController extends Controller
             if (!file_exists($diretorioDestino)) {
                 @mkdir($diretorioDestino, 0777, true);
             }
-            
-            @move_uploaded_file($arquivo->getRealPath(), $diretorioDestino . $nomeFoto);
+                // dd($request->file('foto_professor'));
+
+           $arquivo->move($diretorioDestino, $nomeFoto);
             $dados['foto_professor'] = 'traducaidiomas/professor/' . $nomeFoto;
         }
 

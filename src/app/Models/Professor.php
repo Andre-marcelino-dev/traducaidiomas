@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Professor extends Model
+class Professor extends Authenticatable
 {
     protected $table      = 'tbl_professor';
     protected $primaryKey = 'id_professor';
@@ -28,4 +28,10 @@ class Professor extends Model
     protected $hidden = [
         'senha_professor',
     ];
+
+    // Diz ao Laravel que o campo de senha se chama senha_professor
+    public function getAuthPassword()
+    {
+        return $this->senha_professor;
+    }
 }

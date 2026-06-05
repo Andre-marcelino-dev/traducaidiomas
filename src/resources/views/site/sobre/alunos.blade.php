@@ -15,7 +15,7 @@
 
                 <div class="student-info">
                     <h2>{{ $aluno->nome_aluno }}</h2>
-                    <div class="student-id">Matricula: ALUNO-{{ $aluno->id_aluno }}</div>
+                    <div class="student-id">Matricula: ALUNO-{{ ($aluno->id_matricula && $aluno->data_matricula) ? \Carbon\Carbon::parse($aluno->data_matricula)->format('Y') . str_pad($aluno->id_matricula, 4, '0', STR_PAD_LEFT) : 'Sem Matrícula' }}</div>
                 </div>
             </div>
 
@@ -31,13 +31,11 @@
                     </div>
                     <div class="info-group">
                         <span class="label">Status</span>
-                        <span class="value">{{ $aluno->status_aluno }}</span>
+                        <span class="value">{{ $aluno->status_aluno ?? 'EM CURSO' }}</span>
                     </div>
                 </div>
 
-                <div class="language-badge">
-                    {{ $aluno->curso_aluno }}
-                </div>
+         
 
                 <div class="validity">
                     Email: {{ $aluno->email_aluno }}

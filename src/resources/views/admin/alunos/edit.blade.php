@@ -32,6 +32,17 @@
                         <label class="form-label">Email</label>
                         <input type="email" name="email_aluno" class="form-control" value="{{ $aluno->email_aluno }}" required>
                     </div>
+
+                    <!-- Senha: deixar em branco para não alterar -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nova Senha <span class="text-muted fs-6">(deixe em branco para não alterar)</span></label>
+                        <input type="password" name="senha_aluno" class="form-control" minlength="6">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Confirmar Nova Senha</label>
+                        <input type="password" name="senha_aluno_confirmation" class="form-control" minlength="6">
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Telefone</label>
                         <input type="text" name="telefone_aluno" class="form-control" value="{{ $aluno->telefone_aluno }}">
@@ -60,9 +71,6 @@
                             <option value="INATIVO" {{ $aluno->status_aluno == 'INATIVO' ? 'selected' : '' }}>INATIVO</option>
                         </select>
                     </div>
-
-                    
-
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Foto</label>

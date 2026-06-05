@@ -8,7 +8,7 @@
         </div>
 
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success" id="flash-success">{{ session('success') }}</div>
         @endif
 
 <<<<<<< Updated upstream
@@ -17,13 +17,11 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-
                             <th>#</th>
                             <th>Foto</th>
                             <th>Nome</th>
                             <th>Especialidade</th>
                             <th>Email</th>
-
                             <th>Acoes</th>
                         </tr>
                     </thead>
@@ -40,15 +38,12 @@
                                         <span class="text-muted">Sem foto</span>
                                     @endif
                                 </td>
-
                                 <td>{{ $professor->nome_professor }}</td>
                                 <td>{{ $professor->especialidade_professor }}</td>
                                 <td>{{ $professor->email_professor }}</td>
-
                                 <td>
                                     <a href="{{ route('admin.professores.edit', $professor->id_professor) }}"
                                         class="btn btn-sm btn-warning">Editar</a>
-
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#modalExcluir" data-id="{{ $professor->id_professor }}"
                                         data-nome="{{ $professor->nome_professor }}">
@@ -66,7 +61,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal Excluir -->
     <div class="modal fade" id="modalExcluir" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -109,6 +104,7 @@
             });
         </script>
     @endpush
+
 @endsection
 =======
     <div class="card">

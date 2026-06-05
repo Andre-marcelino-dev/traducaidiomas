@@ -7,8 +7,9 @@
             <a href="{{ route('admin.alunos.create') }}" class="btn btn-primary">+ Novo Aluno</a>
         </div>
 
+
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success" id="flash-success">{{ session('success') }}</div>
         @endif
 
         <div class="card">
@@ -117,6 +118,8 @@
             </div>
         </div>
     </div>
+
+
 
     @push('scripts')
         <script>

@@ -21,18 +21,19 @@ class AlunoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome_aluno'      => 'required|string|max:255',
-            'email_aluno'     => 'required|email|unique:tbl_alunos,email_aluno',
-            'senha_aluno'     => 'required|string|min:6',
-            'telefone_aluno'  => 'nullable|string|max:20',
-            'curso_aluno'     => 'nullable|string|max:100',
-            'data_nasc_aluno' => 'nullable|date',
-            'nivel_aluno'     => 'nullable|string|max:50',
-            'status_aluno'    => 'nullable|string|max:50',
-            'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nome_aluno'               => 'required|string|max:255',
+            'email_aluno'              => 'required|email|unique:tbl_alunos,email_aluno',
+            'senha_aluno'              => 'required|string|min:6|confirmed',
+            'telefone_aluno'           => 'nullable|string|max:20',
+            'curso_aluno'              => 'nullable|string|max:100',
+            'data_nasc_aluno'          => 'nullable|date',
+            'nivel_aluno'              => 'nullable|string|max:50',
+            'status_aluno'             => 'nullable|string|max:50',
+            'foto_aluno'               => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $data = $request->all();
+        $data['senha_aluno'] = bcrypt($request->senha_aluno);
 
         if ($request->hasFile('foto_aluno')) {
             $foto = $request->file('foto_aluno');
@@ -59,6 +60,7 @@ class AlunoController extends Controller
         $request->validate([
             'nome_aluno'      => 'required|string|max:255',
             'email_aluno'     => 'required|email|unique:tbl_alunos,email_aluno,' . $id . ',id_aluno',
+            'senha_aluno'     => 'nullable|string|min:6|confirmed',
             'telefone_aluno'  => 'nullable|string|max:20',
             'curso_aluno'     => 'nullable|string|max:100',
             'data_nasc_aluno' => 'nullable|date',
@@ -67,7 +69,12 @@ class AlunoController extends Controller
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['senha_aluno', 'senha_aluno_confirmation']);
+
+        // Só atualiza a senha se foi preenchida
+        if ($request->filled('senha_aluno')) {
+            $data['senha_aluno'] = bcrypt($request->senha_aluno);
+        }
 
         if ($request->hasFile('foto_aluno')) {
             $foto = $request->file('foto_aluno');

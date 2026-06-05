@@ -24,3 +24,16 @@
 
   <script src="./js/animacao.js"></script>
   <script src="./js/quiz.js"></script>
+
+  {{-- resources/views/partials/script.blade.php --}}
+
+<script>
+    setTimeout(function () {
+        const alerts = document.querySelectorAll('#flash-success, #flash-error');
+        alerts.forEach(function (alert) {
+            alert.style.transition = 'opacity 0.8s ease';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 800);
+        });
+    }, 3000);
+</script>

@@ -1,7 +1,7 @@
 <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Confeitaria |  Davilla </title>
+    <title>Traduca | Idiomas</title>
  
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -84,8 +84,9 @@
 <script>
     const titles = [
         '✨ Bem-vindo | Traducaidiomas',
-       
-       
+        '✨ Inglês | Avançado',
+        '✨ Espanhol | Intermediário',
+        '✨ Italiano | Iniciante'
     ];
  
     let i = 0;
