@@ -9,12 +9,23 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfessorController extends Controller
 {
-    public function index()
-    {
-        $professores = Professor::all();
+public function index()
+{
+    $professores      = Professor::all();
+    $totalCursos      = $professores->pluck('curso_professor')->unique()->filter()->count();
+    $mediaExperiencia = $professores->avg(fn($p) => (int) filter_var($p->experiencia_professor, FILTER_SANITIZE_NUMBER_INT)) ?? 0;
 
-        return view('admin.professores.index', compact('professores'));
-    }
+    $alunos         = \App\Models\Aluno::all();
+    $totalAlunos    = $alunos->count();
+    $iniciantes     = $alunos->where('nivel_aluno', 'Iniciante')->count();
+    $intermediarios = $alunos->where('nivel_aluno', 'Intermediário')->count();
+    $avancados      = $alunos->where('nivel_aluno', 'Avançado')->count();
+
+    return view('admin.professores.index', compact(
+        'professores', 'totalCursos', 'mediaExperiencia',
+        'totalAlunos', 'iniciantes', 'intermediarios', 'avancados'
+    ));
+}
 
     public function create()
     {

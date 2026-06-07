@@ -50,7 +50,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}',      [AlunoController::class, 'show'])->name('show');
             Route::put('/{id}',      [AlunoController::class, 'update'])->name('update');
             Route::delete('/{id}',   [AlunoController::class, 'destroy'])->name('destroy');
+            Route::put('/{id}/status',     [AlunoController::class, 'updateStatus'])->name('updateStatus'); // <-- adicione esta
         });
 
     });
+});
+// Aulas
+Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::resource('aulas', \App\Http\Controllers\admin\AulaController::class)->parameters(['aulas' => 'id']);
 });

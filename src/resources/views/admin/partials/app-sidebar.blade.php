@@ -42,6 +42,17 @@
                                 <p>Alunos</p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.aulas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Aulas</p>
+                            </a>
+                        </li>
+
+
+
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>

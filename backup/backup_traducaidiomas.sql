@@ -168,7 +168,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +177,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1);
+INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2026_06_06_141209_add_link_teams_to_aulas_table',2);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,7 +231,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('1Egmmrk4tFKjVqCKdu14HHQ1Ho9FBTGSzlkdrf9N',NULL,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0','eyJfdG9rZW4iOiJBMzgxT3dRZzBYWXJsNEtpMml3SElJUDRnU2NuQnd0cmxjMXNleTQwIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDgxXC9hZG1pblwvYWx1bm9zIiwicm91dGUiOiJhZG1pbi5hbHVub3MuaW5kZXgifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==',1780596100),('a0xukWbBS9ys48FCYqTjoQUn4qyvBksdgg4QfWWG',NULL,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0','eyJfdG9rZW4iOiI4eE9XazAyNGlSYzJlTXVOSUFWN2pDWmI5Z1pSS2RSS2hPTWk5anBTIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDgxXC9zb2JyZSIsInJvdXRlIjoic29icmUifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==',1780681142),('zzpmeFJF7eoDjUw57i0366S33sBe9Z4M3RWCy2F9',NULL,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0','eyJfdG9rZW4iOiJRc3VFNnVRaDA2aTF4RDJ3VnFickl2cXpFbTU0VzdYOERCT3hLZ0FVIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDgxXC9hZG1pbiIsInJvdXRlIjoiYWRtaW4uZGFzaCJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19',1780615574);
+INSERT INTO `sessions` VALUES ('s71LerVwtbvei6hUYD3BHxYh1X0NWk73VTOPMK3O',1,'172.18.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0','eyJfdG9rZW4iOiJLQWdyYldGODIwZ3g5WGYybURLRTNqZlRKc2ZQSTRWeFkxTGJaSml3IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDgxXC9hZG1pblwvcHJvZmVzc29yZXMiLCJyb3V0ZSI6ImFkbWluLnByb2Zlc3NvcmVzLmluZGV4In0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvbG9jYWxob3N0OjgwODFcL2FkbWluIn0sImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjF9',1780863316);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,7 +295,7 @@ CREATE TABLE `tbl_alunos` (
   `atualizado_em_aluno` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_aluno`),
   UNIQUE KEY `email_aluno` (`email_aluno`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -304,7 +304,7 @@ CREATE TABLE `tbl_alunos` (
 
 LOCK TABLES `tbl_alunos` WRITE;
 /*!40000 ALTER TABLE `tbl_alunos` DISABLE KEYS */;
-INSERT INTO `tbl_alunos` VALUES (1,'Caio Ferreira','caioferreira@gmail.com','$2y$12$lAMA2qovvl7CNyVju4oF/O2uy1oaYGLh41p8uz3quofIUOuFnN9A.','(11)94002-4582','Inglês','2010-05-17','Iniciante','caio-ferreira.png','EM CURSO','2026-03-17 09:05:05','2026-06-04 18:01:40'),(2,'Paulo Vicente','paulovicente@gmail.com','4132','(11)99972-7631','Espanhol','2003-04-23','Intermediário','paulo-vicente.png','CONCLUÍDO','2026-03-17 09:11:06','2026-06-01 22:54:49'),(3,'Lorena Marques','lorenamarques@gmail.com','$2y$12$miOtovjMk2d5fg6NacHP/OgCZS8SAXEH2ESaNihz6p/TJVxidbQgm','(11)99345-0123','Inglês','2016-10-07','Avançado','lorena-marques.png','EM CURSO','2026-03-17 09:28:46','2026-06-04 18:01:36'),(4,'Biatriz silva','bia.s@gmail.com','789456','1196699988','Inglês','2019-01-02','Iniciante','biatriz-silva.png','EM CURSO','2026-06-01 22:29:53','2026-06-01 22:54:24');
+INSERT INTO `tbl_alunos` VALUES (1,'Caio Ferreira','caioferreira@gmail.com','$2y$12$lAMA2qovvl7CNyVju4oF/O2uy1oaYGLh41p8uz3quofIUOuFnN9A.','(11)94002-4582','Inglês','2010-05-17','Intermediário','caio-ferreira.png','EM CURSO','2026-03-17 09:05:05','2026-06-07 20:14:42'),(2,'Paulo Vicente','paulovicente@gmail.com','4132','(11)99972-7631','Italiano','2003-04-23','Intermediário','paulo-vicente.png','INATIVO','2026-03-17 09:11:06','2026-06-07 20:14:26'),(3,'Lorena Marques','lorenamarques@gmail.com','$2y$12$miOtovjMk2d5fg6NacHP/OgCZS8SAXEH2ESaNihz6p/TJVxidbQgm','(11)99345-0123','Inglês','2016-10-07','Avançado','lorena-marques.png','EM CURSO','2026-03-17 09:28:46','2026-06-04 18:01:36'),(4,'Biatriz silva','bia.s@gmail.com','789456','1196699988','Inglês','2019-01-02','Iniciante','biatriz-silva.png','INATIVO','2026-06-01 22:29:53','2026-06-07 15:19:17'),(5,'Cesar Marcelino','cesar.m@gmail.com','$2y$12$4ZB6mZGFDItTt/Dn3ttO1eN/XcZa8k0fbwDNe4.i10boLSSa0BWGK','117777-7785','Italiano','1965-02-11','Iniciante','cesar-marcelino.png','CONCLUIDO','2026-06-07 14:53:36','2026-06-07 20:14:49');
 /*!40000 ALTER TABLE `tbl_alunos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -322,6 +322,7 @@ CREATE TABLE `tbl_aulas` (
   `descricao_aulas` text COLLATE utf8mb4_general_ci NOT NULL,
   `data_aulas` date NOT NULL,
   `hora_aulas` time NOT NULL,
+  `link_teams` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `cursos_aulas` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `status_aulas` varchar(10) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'ATIVO',
   `criado_em_aulas` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -332,7 +333,7 @@ CREATE TABLE `tbl_aulas` (
   KEY `fk_aulas_curso` (`id_curso`),
   CONSTRAINT `fk_aulas_curso` FOREIGN KEY (`id_curso`) REFERENCES `tbl_cursos` (`id_curso`),
   CONSTRAINT `fk_aulas_professor` FOREIGN KEY (`id_professor`) REFERENCES `tbl_professor` (`id_professor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -341,6 +342,7 @@ CREATE TABLE `tbl_aulas` (
 
 LOCK TABLES `tbl_aulas` WRITE;
 /*!40000 ALTER TABLE `tbl_aulas` DISABLE KEYS */;
+INSERT INTO `tbl_aulas` VALUES (4,1,'Italiano','Textos narrativos','2026-12-22','18:40:00',NULL,'Italiano','ATIVO','2026-06-07 19:33:19','2026-06-07 19:33:19',3);
 /*!40000 ALTER TABLE `tbl_aulas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -449,7 +451,7 @@ CREATE TABLE `tbl_matricula` (
   CONSTRAINT `fk_matricula_aluno` FOREIGN KEY (`id_aluno`) REFERENCES `tbl_alunos` (`id_aluno`),
   CONSTRAINT `fk_matricula_curso` FOREIGN KEY (`id_curso`) REFERENCES `tbl_cursos` (`id_curso`),
   CONSTRAINT `fk_matricula_nivel` FOREIGN KEY (`id_nivel`) REFERENCES `tbl_niveis` (`id_nivel`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -458,7 +460,7 @@ CREATE TABLE `tbl_matricula` (
 
 LOCK TABLES `tbl_matricula` WRITE;
 /*!40000 ALTER TABLE `tbl_matricula` DISABLE KEYS */;
-INSERT INTO `tbl_matricula` VALUES (1,4,2,3,'2024-10-17 00:00:00'),(2,1,2,1,'2020-10-17 00:00:00'),(3,2,3,2,'2020-10-17 00:00:00'),(4,3,2,3,'2000-10-17 00:00:00');
+INSERT INTO `tbl_matricula` VALUES (1,4,2,3,'2024-10-17 00:00:00'),(2,1,2,1,'2020-10-17 00:00:00'),(3,2,3,2,'2020-10-17 00:00:00'),(4,3,2,3,'2000-10-17 00:00:00'),(5,5,3,1,'1980-10-17 00:00:00');
 /*!40000 ALTER TABLE `tbl_matricula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -582,7 +584,7 @@ CREATE TABLE `tbl_professor` (
 
 LOCK TABLES `tbl_professor` WRITE;
 /*!40000 ALTER TABLE `tbl_professor` DISABLE KEYS */;
-INSERT INTO `tbl_professor` VALUES (1,'Renato Caetano','Aulas de inglês escrita','15anos','Sou Renato Caetano, consultor e professor trilíngue formado em Letras, com experiência em ensino, tradução e design instrucional. Atualmente, curso Design Instrucional no Senac-SP.','renato-caetano.png','contato@traduca.com.br','Inglês','Avançado','(11)97582-1177','$2y$12$NtH8KXEvE5/mBFywdw.Fjej1lOckxucQwywYqPh/bq9YEUeqt1sde','2026-03-17 08:55:19','2026-06-04 17:48:09');
+INSERT INTO `tbl_professor` VALUES (1,'Renato Caetano','Aulas de inglês escrita','10 anos','Sou Renato Caetano, consultor e professor trilíngue formado em Letras, com experiência em ensino, tradução e design instrucional. Atualmente, curso Design Instrucional no Senac-SP.','renato-caetano.png','contato@traduca.com.br','Inglês','Avançado','(11)97582-1177','$2y$12$NtH8KXEvE5/mBFywdw.Fjej1lOckxucQwywYqPh/bq9YEUeqt1sde','2026-03-17 08:55:19','2026-06-07 17:15:16');
 /*!40000 ALTER TABLE `tbl_professor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -696,4 +698,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-05 14:51:11
+-- Dump completed on 2026-06-07 17:16:33

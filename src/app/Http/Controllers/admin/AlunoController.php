@@ -23,12 +23,12 @@ class AlunoController extends Controller
         $request->validate([
             'nome_aluno'               => 'required|string|max:255',
             'email_aluno'              => 'required|email|unique:tbl_alunos,email_aluno',
-            'senha_aluno'              => 'required|string|min:6|confirmed',
-            'telefone_aluno'           => 'nullable|string|max:20',
-            'curso_aluno'              => 'nullable|string|max:100',
-            'data_nasc_aluno'          => 'nullable|date',
-            'nivel_aluno'              => 'nullable|string|max:50',
-            'status_aluno'             => 'nullable|string|max:50',
+            'senha_aluno'              => 'nullable|string|min:6|confirmed',
+            'telefone_aluno'           => 'required|string|max:20',
+            'curso_aluno'              => 'required|string|max:100',
+            'data_nasc_aluno'          => 'required|date',
+            'nivel_aluno'              => 'required|string|max:50',
+            'status_aluno'             => 'required|string|max:50',
             'foto_aluno'               => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -61,11 +61,11 @@ class AlunoController extends Controller
             'nome_aluno'      => 'required|string|max:255',
             'email_aluno'     => 'required|email|unique:tbl_alunos,email_aluno,' . $id . ',id_aluno',
             'senha_aluno'     => 'nullable|string|min:6|confirmed',
-            'telefone_aluno'  => 'nullable|string|max:20',
-            'curso_aluno'     => 'nullable|string|max:100',
-            'data_nasc_aluno' => 'nullable|date',
-            'nivel_aluno'     => 'nullable|string|max:50',
-            'status_aluno'    => 'nullable|string|max:50',
+            'telefone_aluno'  => 'required|string|max:20',
+            'curso_aluno'     => 'required|string|max:100',
+            'data_nasc_aluno' => 'required|date',
+            'nivel_aluno'     => 'required|string|max:50',
+            'status_aluno'    => 'required|string|max:50',
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -87,6 +87,17 @@ class AlunoController extends Controller
 
         return redirect()->route('admin.alunos.index')->with('success', 'Aluno atualizado com sucesso!');
     }
+
+
+
+    public function updateStatus(Request $request, $id)
+{
+    $aluno = Aluno::findOrFail($id);
+    $aluno->status_aluno = $request->status_aluno;
+    $aluno->save();
+
+    return back()->with('success', 'Status atualizado!');
+}
 
     public function destroy($id)
     {

@@ -111,22 +111,18 @@
         font-weight: 600;
         display: flex; align-items: center; gap: .3rem;
     }
+    .mc { border-radius:18px; padding:1.4rem 1.6rem; position:relative; overflow:hidden; color:#fff; }
+            .mc::after { content:''; position:absolute; top:-30px; right:-30px; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,.1); }
+            .mc-blue  { background:linear-gradient(135deg,#4f46e5,#7c3aed); }
+            .mc-green { background:linear-gradient(135deg,#059669,#10b981); }
+            .mc-amber { background:linear-gradient(135deg,#d97706,#f59e0b); }
+            .mc-rose  { background:linear-gradient(135deg,#e11d48,#f43f5e); }
+            .mc-icon  { font-size:1.8rem; margin-bottom:.4rem; opacity:.9; }
+            .mc-val   { font-size:2.4rem; font-weight:900; line-height:1; }
+            .mc-lbl   { font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin:.25rem 0 .4rem; }
+            .mc-trend { font-size:.72rem; opacity:.75; }
 
-    .metric-card-blue   { background: #eef3ff; color: #1e3a8a; }
-    .metric-card-blue   .metric-icon { background: #dbeafe; color: #2563eb; }
-    .metric-card-blue   .metric-trend { color: #2563eb; }
 
-    .metric-card-emerald { background: #ecfdf5; color: #064e3b; }
-    .metric-card-emerald .metric-icon { background: #d1fae5; color: #059669; }
-    .metric-card-emerald .metric-trend { color: #059669; }
-
-    .metric-card-amber  { background: #fffbeb; color: #78350f; }
-    .metric-card-amber  .metric-icon { background: #fef3c7; color: #d97706; }
-    .metric-card-amber  .metric-trend { color: #d97706; }
-
-    .metric-card-rose   { background: #fff1f2; color: #881337; }
-    .metric-card-rose   .metric-icon { background: #ffe4e6; color: #e11d48; }
-    .metric-card-rose   .metric-trend { color: #e11d48; }
 
     /* ── RECENT TABLE ── */
     .recent-card {
@@ -286,3 +282,5 @@
     .fade-up:nth-child(3) { animation-delay: .15s; }
     .fade-up:nth-child(4) { animation-delay: .2s; }
     .fade-up:nth-child(5) { animation-delay: .25s; }
+
+  

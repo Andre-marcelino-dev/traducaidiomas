@@ -47,26 +47,27 @@
                                 <td>{{ $aluno->curso_aluno }}</td>
                                 <td>{{ $aluno->nivel_aluno }}</td>
                                 <td>
-                                    <form action="{{ route('admin.alunos.update', $aluno->id_aluno) }}" method="POST"
-                                        style="display:inline">
+                                    {{-- ANTES - apague isso: --}}
+                                <td>
+                                    <form action="{{ route('admin.alunos.updateStatus', $aluno->id_aluno) }}"
+                                        method="POST" style="display:inline">
                                         @csrf
                                         @method('PUT')
-                                        <input type="hidden" name="nome_aluno" value="{{ $aluno->nome_aluno }}">
-                                        <input type="hidden" name="email_aluno" value="{{ $aluno->email_aluno }}">
-                                        @if ($aluno->status_aluno == 'EM CURSO')
-                                            <input type="hidden" name="status_aluno" value="INATIVO">
-                                            <button type="submit" class="badge bg-success border-0"
-                                                style="cursor:pointer">EM CURSO</button>
-                                        @elseif($aluno->status_aluno == 'INATIVO')
-                                            <input type="hidden" name="status_aluno" value="EM CURSO">
-                                            <button type="submit" class="badge bg-secondary border-0"
-                                                style="cursor:pointer">INATIVO</button>
-                                        @else
-                                            <input type="hidden" name="status_aluno" value="INATIVO">
-                                            <button type="submit" class="badge bg-info border-0"
-                                                style="cursor:pointer">{{ $aluno->status_aluno }}</button>
-                                        @endif
+                                        <select name="status_aluno" onchange="this.form.submit()"
+                                            class="border-0 fw-bold text-white rounded px-2 py-1"
+                                            style="cursor:pointer; background-color: {{ $aluno->status_aluno == 'EM CURSO' ? '#28a745' : ($aluno->status_aluno == 'CONCLUIDO' ? '#17a2b8' : '#dc3545') }}">
+                                            <option value="EM CURSO"
+                                                {{ $aluno->status_aluno == 'EM CURSO' ? 'selected' : '' }}>EM CURSO
+                                            </option>
+                                            <option value="CONCLUIDO"
+                                                {{ $aluno->status_aluno == 'CONCLUIDO' ? 'selected' : '' }}>CONCLUÍDO
+                                            </option>
+                                            <option value="INATIVO"
+                                                {{ $aluno->status_aluno == 'INATIVO' ? 'selected' : '' }}>INATIVO
+                                            </option>
+                                        </select>
                                     </form>
+                                </td>
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.alunos.edit', $aluno->id_aluno) }}"
