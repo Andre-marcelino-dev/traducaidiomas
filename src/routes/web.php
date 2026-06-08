@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
 use App\Http\Controllers\admin\AlunoController;
+use App\Http\Controllers\admin\MatriculaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [HomeController::class, 'home'])->name('home');
@@ -31,6 +32,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/',          [DashController::class, 'index'])->name('dash');
         Route::get('/categorias',[DashController::class, 'index'])->name('categoria');
+        Route::get('/home',      [DashController::class, 'index'])->name('home');
 
         Route::prefix('professores')->name('professores.')->group(function () {
             Route::get('/',          [ProfessorController::class, 'index'])->name('index');
@@ -53,9 +55,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{id}/status',     [AlunoController::class, 'updateStatus'])->name('updateStatus'); // <-- adicione esta
         });
 
+        Route::prefix('matriculas')->name('matriculas.')->group(function () {
+            Route::get('/', [MatriculaController::class, 'index'])->name('index');
+            Route::post('/', [MatriculaController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [MatriculaController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [MatriculaController::class, 'update'])->name('update');
+            Route::delete('/{id}', [MatriculaController::class, 'destroy'])->name('destroy');
+        });
+
     });
 });
 // Aulas
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::resource('aulas', \App\Http\Controllers\admin\AulaController::class)->parameters(['aulas' => 'id']);
+
+    Route::get('/matriculas', [\App\Http\Controllers\admin\MatriculaController::class, 'index'])->name('matriculas.index');
 });

@@ -77,6 +77,31 @@
     />
  
    
+    <style>
+      .app-sidebar .nav-link {
+        border-radius: 12px;
+        margin: 0.2rem 0.75rem;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .app-sidebar .nav-link:hover {
+        transform: translateX(4px);
+      }
+
+      .app-sidebar .nav-link.active,
+      .app-sidebar .nav-link.is-selected {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+        color: #fff !important;
+        box-shadow: 0 10px 24px rgba(79, 70, 229, 0.28);
+      }
+
+      .app-sidebar .nav-link.active .nav-icon,
+      .app-sidebar .nav-link.is-selected .nav-icon,
+      .app-sidebar .nav-link.active p,
+      .app-sidebar .nav-link.is-selected p {
+        color: inherit !important;
+      }
+    </style>
   </head>
  
   <title>Traduca | Idiomas</title>

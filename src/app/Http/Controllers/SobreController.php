@@ -10,9 +10,9 @@ class SobreController extends Controller
     public function sobre()
     {
         $alunos = DB::table('tbl_alunos')
-            ->leftJoin('tbl_matricula', 'tbl_alunos.id_aluno', '=', 'tbl_matricula.id_aluno')
-            ->leftJoin('tbl_cursos', 'tbl_matricula.id_curso', '=', 'tbl_cursos.id_curso')
-            ->leftJoin('tbl_niveis', 'tbl_matricula.id_nivel', '=', 'tbl_niveis.id_nivel')
+            ->join('tbl_matricula', 'tbl_alunos.id_aluno', '=', 'tbl_matricula.id_aluno')
+            ->join('tbl_cursos', 'tbl_matricula.id_curso', '=', 'tbl_cursos.id_curso')
+            ->join('tbl_niveis', 'tbl_matricula.id_nivel', '=', 'tbl_niveis.id_nivel')
             ->select(
                 'tbl_alunos.*', 
                 'tbl_matricula.id_matricula', 

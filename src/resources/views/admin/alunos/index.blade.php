@@ -31,7 +31,7 @@
                     <tbody>
                         @forelse($alunos as $aluno)
                             <tr>
-                                <td>{{ $aluno->id_aluno }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($aluno->foto_aluno)
                                         <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}"
