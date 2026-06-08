@@ -59,3 +59,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::resource('aulas', \App\Http\Controllers\admin\AulaController::class)->parameters(['aulas' => 'id']);
 });
+
+// Serviços Admin
+Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::resource('servicos', \App\Http\Controllers\admin\ServicoController::class)->parameters(['servicos' => 'id']);
+});
