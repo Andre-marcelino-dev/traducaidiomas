@@ -1,0 +1,223 @@
+/* Garanta que o container use Flexbox e ocupe a largura total */
+.services-container {
+    display: flex;
+    flex-wrap: wrap; /* Essencial para o responsivo */
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Garanta que os cards tenham uma largura definida */
+.service-card {
+    display: block;
+    flex: 0 1 calc(33.333% - 20px); /* Tenta colocar 3 por linha */
+    min-width: 250px;              /* Não deixa o card ficar muito espremido */
+    box-sizing: border-box;        /* Garante que o padding não aumente a largura */
+}
+
+
+        /* Container da Faixa Azul */
+.faixa-azul {
+    background-color: #007bff; /* Azul vibrante */
+    padding: 15px 20px;
+    margin: -20px -20px 20px -20px; /* Ajusta para encostar nas bordas do card */
+    border-radius: 8px 8px 0 0; /* Arredonda apenas o topo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título com Destaque Centralizado */
+.titulo-servico-destaque {
+    color:#ffff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Ajuste opcional para o card não cortar a faixa */
+.service-card {
+    overflow: hidden; /* Garante que a faixa azul respeite o arredondamento do card */
+    padding-top: 20px;
+}
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .teacher-flag {
+            width: 60px;
+            height: 40px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .service-card.ingles .teacher-flag {
+            background-image: url(../img/icons8-united-kingdom-48.png);
+            background-repeat: no-repeat;
+        }
+
+        .service-card.espanhol .teacher-flag {
+            background-image: url(../img/icons8-italy-48.png);
+            background-repeat: no-repeat;
+        }
+
+        .service-card.portugues .teacher-flag {
+            background-image: url(../img/icons8-brazil-48.png);
+            background-repeat: no-repeat;
+        }
+
+        .teacher-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .teacher-title {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .services-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .services-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .services-list li:last-child {
+            border-bottom: none;
+        }
+
+        .service-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .service-desc {
+            font-weight: 500;
+            color: #34495e;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .contact-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: scale(1.05);
+        }
+
+        /* Dispositivos Móveis (Celulares e Tablets pequenos) */
+@media (max-width: 768px) {
+    .services-container {
+        padding: 10px; /* Reduz o respiro lateral no celular */
+        gap: 15px;
+    }
+
+    .service-card {
+        flex: 1 1 100%; /* Ocupa 100% da largura disponível */
+        max-width: 100%; /* Remove a trava de largura máxima no mobile */
+        margin: 0;      /* Remove margens laterais desnecessárias */
+        padding: 1.2rem; /* Compacta o conteúdo interno */
+    }
+
+    /* Ajuste de fontes para telas pequenas */
+    .titulo-servico-destaque {
+        font-size: 1.2rem;
+    }
+
+    .teacher-name {
+        font-size: 1rem;
+    }
+
+    .service-desc {
+        font-size: 0.9rem;
+    }
+
+    /* Garante que o botão de WhatsApp fique fácil de clicar no touch */
+    .contact-btn {
+        width: 100%;
+        display: block;
+        text-align: center;
+        padding: 12px;
+    }
+}
+
+/* Celulares muito pequenos (iPhone SE, etc) */
+@media (max-width: 480px) {
+    .faixa-azul {
+        padding: 5px;
+    }
+    
+    .service-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
+}
+        

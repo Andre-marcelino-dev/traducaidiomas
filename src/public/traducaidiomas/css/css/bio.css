@@ -1,0 +1,115 @@
+.bg-light {
+   width: 100%;
+   height: 650;
+   background-color: #333;
+    /* border-radius: 10px; */
+    margin: 0.4rem;
+    box-shadow: 0 4px 15px black;
+    height: 160px;
+
+}
+
+.sobre-container {
+    display: flex;
+    gap: 2.5rem;
+    align-items: stretch;
+    margin-top: 1rem;
+   
+}
+ 
+.foto-container {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.foto-perfil {
+    width: 320px;
+    height: auto;
+    max-width: 100%;
+    border-radius: 0;
+    object-fit: cover;
+    border: none;
+    box-shadow: none;
+}
+
+
+
+.texto-sobre {
+    flex: 1;
+    font-size: 0.85rem;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+}
+
+.biografia-texto {
+    line-height: 1.7;
+    flex: 1;
+    font-size: 15px;
+}
+.biografia-texto a {
+    width: 50px;
+}
+
+/* TEXTO JUSTIFICADO CONFORME ABNT - SOBRE MIM */
+.texto-sobre p {
+    margin-top: 50px;
+    display: inline-flex;
+    font-size:1.875em;
+    /* padding: 50px; */
+    margin-bottom: 1rem;
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 1.6;
+}
+
+.biografia-texto em {
+    font-style: italic;
+    color: rgb(112, 82, 0);
+    display: block;
+    text-align: center;
+    margin: 0.5rem 0;
+}
+
+
+.btn-gradient {
+    margin-top: 80px;
+    display: inline-flex;
+    margin-left: 0;     /* garante que fique à esquerda */
+    right:55px;
+     align-items: center;
+    justify-content: center;
+
+    padding: 15px 30px;
+    background: linear-gradient(90deg, #012169 0%, #C8102E 50%, #012169 100%);
+    background-size: 200% 100%;
+    background-position: left;
+
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.785em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 15px rgba(1, 33, 105, 0.3);
+
+    /* Removendo sublinhado do <a> */
+    text-decoration: none;
+
+    /* Espaço abaixo (caso precise) */
+    margin-bottom: 30px;
+}
+
+/* Hover opcional (caso queira efeito) */
+.btn-gradient:hover {
+    background-position: right;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(1, 33, 105, 0.4);
+}

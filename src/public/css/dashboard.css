@@ -1,0 +1,286 @@
+    .dash-greeting-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 16px;
+        padding: 2rem 2.5rem;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        border: none;
+    }
+
+    .dash-greeting-card::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 220px; height: 220px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.04);
+    }
+
+    .dash-greeting-card::after {
+        content: '';
+        position: absolute;
+        bottom: -80px; right: 80px;
+        width: 300px; height: 300px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.03);
+    }
+
+    .dash-hora {
+        font-size: .75rem;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        opacity: .6;
+        margin-bottom: .4rem;
+    }
+
+    .dash-nome {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: .3rem;
+    }
+
+    .dash-sub {
+        font-size: .85rem;
+        opacity: .55;
+        margin: 0;
+    }
+
+    .dash-badge-prof {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        background: rgba(255,255,255,.1);
+        border: 1px solid rgba(255,255,255,.15);
+        backdrop-filter: blur(8px);
+        padding: .35rem .85rem;
+        border-radius: 50px;
+        font-size: .72rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        margin-top: 1.2rem;
+        color: rgba(255,255,255,.8);
+    }
+
+    .dash-badge-prof i { color: #e2b96f; }
+
+    /* ── METRIC CARDS ── */
+    .metric-card {
+        border: none;
+        border-radius: 14px;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s;
+        height: 100%;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(0,0,0,.12) !important;
+    }
+
+    .metric-card .metric-icon {
+        width: 52px; height: 52px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .metric-card .metric-value {
+        font-size: 2.2rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: .3rem;
+    }
+
+    .metric-card .metric-label {
+        font-size: .78rem;
+        font-weight: 500;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        opacity: .6;
+        margin: 0;
+    }
+
+    .metric-card .metric-trend {
+        position: absolute;
+        bottom: 1.2rem; right: 1.5rem;
+        font-size: .72rem;
+        font-weight: 600;
+        display: flex; align-items: center; gap: .3rem;
+    }
+    .mc { border-radius:18px; padding:1.4rem 1.6rem; position:relative; overflow:hidden; color:#fff; }
+            .mc::after { content:''; position:absolute; top:-30px; right:-30px; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,.1); }
+            .mc-blue  { background:linear-gradient(135deg,#4f46e5,#7c3aed); }
+            .mc-green { background:linear-gradient(135deg,#059669,#10b981); }
+            .mc-amber { background:linear-gradient(135deg,#d97706,#f59e0b); }
+            .mc-rose  { background:linear-gradient(135deg,#e11d48,#f43f5e); }
+            .mc-icon  { font-size:1.8rem; margin-bottom:.4rem; opacity:.9; }
+            .mc-val   { font-size:2.4rem; font-weight:900; line-height:1; }
+            .mc-lbl   { font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin:.25rem 0 .4rem; }
+            .mc-trend { font-size:.72rem; opacity:.75; }
+
+
+
+    /* ── RECENT TABLE ── */
+    .recent-card {
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 16px rgba(0,0,0,.06);
+    }
+
+    .recent-card .card-header {
+        background: #fff;
+        border-bottom: 1px solid #f1f5f9;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .recent-card .card-header h5 {
+        font-size: .85rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: #334155;
+        margin: 0;
+    }
+
+    .recent-card .card-header a {
+        font-size: .75rem;
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .recent-table th {
+        font-size: .7rem;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        border: none;
+        padding: .75rem 1.5rem;
+        background: #f8fafc;
+    }
+
+    .recent-table td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+        border-color: #f1f5f9;
+        font-size: .875rem;
+        color: #334155;
+    }
+
+    .recent-table tbody tr:hover { background: #f8fafc; }
+
+    .prof-avatar {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .prof-avatar-placeholder {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #fff; font-size: .8rem; font-weight: 700;
+    }
+
+    .badge-nivel {
+        font-size: .68rem;
+        font-weight: 600;
+        padding: .3rem .7rem;
+        border-radius: 50px;
+        letter-spacing: .04em;
+    }
+
+    .badge-basico    { background: #dbeafe; color: #1d4ed8; }
+    .badge-intermediario { background: #fef3c7; color: #b45309; }
+    .badge-avancado  { background: #d1fae5; color: #065f46; }
+    .badge-fluente   { background: #ede9fe; color: #5b21b6; }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-action {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        text-decoration: none;
+        color: #334155;
+        transition: all .2s;
+        background: #fff;
+        margin-bottom: .75rem;
+    }
+
+    .quick-action:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: #f5f3ff;
+        transform: translateX(4px);
+    }
+
+    .quick-action .qa-icon {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .quick-action .qa-label { font-size: .85rem; font-weight: 600; }
+    .quick-action .qa-desc  { font-size: .72rem; color: #94a3b8; margin: 0; }
+    .quick-action .qa-arrow { margin-left: auto; opacity: .4; font-size: .8rem; }
+
+    /* ── STAT MINI ── */
+    .stat-mini {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .9rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .stat-mini:last-child { border-bottom: none; }
+
+    .stat-mini-label { font-size: .8rem; color: #64748b; }
+    .stat-mini-value { font-size: .95rem; font-weight: 700; color: #1e293b; }
+
+    .progress-thin {
+        height: 5px;
+        border-radius: 99px;
+        background: #f1f5f9;
+        overflow: hidden;
+        margin-top: .4rem;
+    }
+
+    .progress-thin-bar {
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        transition: width .8s ease;
+    }
+
+    /* Animações */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(16px);
+        animation: fadeUp .5s ease forwards;
+    }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .fade-up:nth-child(1) { animation-delay: .05s; }
+    .fade-up:nth-child(2) { animation-delay: .1s; }
+    .fade-up:nth-child(3) { animation-delay: .15s; }
+    .fade-up:nth-child(4) { animation-delay: .2s; }
+    .fade-up:nth-child(5) { animation-delay: .25s; }
+
+  

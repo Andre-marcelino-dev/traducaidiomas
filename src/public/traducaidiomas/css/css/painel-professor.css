@@ -1,0 +1,329 @@
+/* ==================== ESTILOS DO PAINEL DO PROFESSOR/ADMIN ==================== */
+
+/* CRUD */
+.nav-tabs {
+    border-bottom: 2px solid var(--cor-primaria);
+}
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-bottom-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+}
+
+.nav-tabs .nav-link.active {
+    background: none;
+    color: white;
+    border-bottom-color: var(--cor-primaria);
+    background: var(--cor-primaria);
+    border-radius: 6px 6px 0 0;
+}
+
+/* Tabela de CRUD */
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.btn-sm {
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+}
+
+.btn-primary {
+    background: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+}
+
+.btn-primary:hover {
+    background: var(--cor-secundaria);
+    border-color: var(--cor-secundaria);
+}
+
+/* Modal */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    border: none;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* Configurações */
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Preview de Cores */
+.color-preview {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.color-preview:hover {
+    transform: scale(1.02);
+}
+
+/* Calendário */
+.calendar-grid {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    background: var(--cor-primaria);
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-day-header {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    padding: 10px;
+}
+
+.calendar-day {
+    min-height: 100px;
+    padding: 8px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-day:hover {
+    background: #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-day.today {
+    background: rgba(13, 110, 253, 0.1);
+    border: 2px solid var(--cor-primaria);
+    font-weight: bold;
+}
+
+.calendar-day.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendar-day.has-events {
+    background: rgba(13, 110, 253, 0.05);
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.event-count {
+    background: var(--cor-primaria);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+}
+
+.day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.event-indicator {
+    padding: 3px 5px;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event-more-badge {
+    background: #6c757d;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 10px;
+    text-align: center;
+}
+
+/* Legenda */
+.calendar-legend {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+/* Languages Container */
+.languages-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.languages-content {
+    text-align: center;
+}
+
+.languages-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+    color: var(--cor-primaria);
+}
+
+.languages-subtitle {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+}
+
+.language-card {
+    padding: 15px;
+    background: var(--cor-primaria);
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-card:hover {
+    background: var(--cor-secundaria);
+    transform: scale(1.05);
+}
+
+/* Gráficos */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-top: 15px;
+}
+
+/* Alert customizado */
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@media (max-width: 768px) {
+    .calendar-body {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .calendar-day {
+        min-height: 80px;
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .languages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

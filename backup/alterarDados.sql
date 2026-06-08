@@ -1,0 +1,5 @@
+START TRANSACTION;
+
+ALTER TABLE tbl_servicos ADD COLUMN status_produto VARCHAR(10) NOT NULL DEFAULT 'ATIVO' AFTER imagem_servico;
+
+COMMIT;

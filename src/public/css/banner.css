@@ -1,0 +1,49 @@
+
+        .banner {
+            position: relative;
+            width: 100%;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 487px;
+            object-fit: cover;
+            display: block;
+            
+        }
+
+        .banner h1 {
+            position: absolute;
+            bottom: 320px;
+            left: 45%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 0;
+            text-align: center;
+            width: 90%;
+            font-weight: bold;
+        }
+
+        .banner span {
+            color: red;
+        }
+
+        .banner .slick-next {
+            right: 80px;
+            z-index: 5;
+        }
+
+        .banner .slick-prev {
+            left: 35px;
+            z-index: 5;
+        }
+
+        .banner .slick-prev:before,
+        .banner .slick-next:before {
+            font-size: 60px;
+            color: var(--cor_principal);
+        }
+
+        
