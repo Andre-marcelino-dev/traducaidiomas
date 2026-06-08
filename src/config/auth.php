@@ -19,6 +19,11 @@ return [
             'driver'   => 'session',
             'provider' => 'admins',
         ],
+
+        'aluno' => [
+            'driver'   => 'session',
+            'provider' => 'alunos',
+        ],
     ],
 
     'providers' => [
@@ -30,6 +35,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model'  => App\Models\Professor::class,
+        ],
+
+        'alunos' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\Aluno::class,
         ],
     ],
 

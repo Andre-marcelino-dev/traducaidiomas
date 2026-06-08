@@ -33,7 +33,7 @@
                                 <td>{{ $servico->id_servico }}</td>
                                 <td>
                                     @if ($servico->imagem_servico)
-                                        <img src="{{ asset('storage/' . $servico->imagem_servico) }}"
+                                        <img src="{{ asset('traducaidiomas/servicos/' . $servico->imagem_servico) }}"
                                             alt="{{ $servico->titulo_servico }}" width="60" height="60"
                                             style="object-fit: cover; border-radius: 6px;">
                                     @else

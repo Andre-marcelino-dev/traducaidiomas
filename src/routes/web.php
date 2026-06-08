@@ -8,6 +8,8 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
 use App\Http\Controllers\admin\AlunoController;
+use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
+use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [HomeController::class, 'home'])->name('home');
@@ -50,11 +52,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}',      [AlunoController::class, 'show'])->name('show');
             Route::put('/{id}',      [AlunoController::class, 'update'])->name('update');
             Route::delete('/{id}',   [AlunoController::class, 'destroy'])->name('destroy');
-            Route::put('/{id}/status',     [AlunoController::class, 'updateStatus'])->name('updateStatus'); // <-- adicione esta
+            Route::put('/{id}/status', [AlunoController::class, 'updateStatus'])->name('updateStatus');
         });
 
     });
 });
+
 // Aulas
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::resource('aulas', \App\Http\Controllers\admin\AulaController::class)->parameters(['aulas' => 'id']);
@@ -63,4 +66,20 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 // Serviços Admin
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::resource('servicos', \App\Http\Controllers\admin\ServicoController::class)->parameters(['servicos' => 'id']);
+});
+
+// ── Rotas do Aluno ──
+Route::prefix('aluno')->name('aluno.')->group(function () {
+
+    // Públicas
+    Route::get('/login',  [AlunoAuthController::class, 'login'])->name('login');
+    Route::post('/login', [AlunoAuthController::class, 'autenticar'])->name('autenticar');
+    Route::post('/logout',[AlunoAuthController::class, 'logout'])->name('logout');
+
+    // Protegidas
+    Route::middleware('auth:aluno')->group(function () {
+        Route::get('/', [AlunoDashController::class, 'index'])->name('dash');
+        Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
+    });
+
 });

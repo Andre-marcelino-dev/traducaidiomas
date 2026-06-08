@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Servico;  // ← essa linha precisa estar aqui
+use App\Models\Servico;
 
 class ServicoController extends Controller
 {
@@ -35,13 +35,16 @@ class ServicoController extends Controller
             'contato_text_servico'    => 'required|string|max:255',
             'ordenar_servico'         => 'required|integer',
             'imagem_servico'          => 'nullable|image|max:2048',
-            'status_servico'         =>  'required|string|max:10',
+            'status_servico'          => 'required|string|max:10',
         ]);
 
-        $data = $request->all();
+        $data = $request->except('imagem_servico');
 
         if ($request->hasFile('imagem_servico')) {
-            $data['imagem_servico'] = $request->file('imagem_servico')->store('servicos', 'public');
+            $file     = $request->file('imagem_servico');
+            $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
         }
 
         Servico::create($data);
@@ -55,45 +58,54 @@ class ServicoController extends Controller
         return view('admin.servicos.edit', compact('servico'));
     }
 
-  public function update(Request $request, $id)
-{
-    $servico = Servico::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $servico = Servico::findOrFail($id);
 
-    $request->validate([
-        'titulo_servico'          => 'required|string|max:100',
-        'subtitulo_servico'       => 'required|string|max:100',
-        'lista_beneficios_servico'=> 'required|string',
-        'cta_titulo_servico'      => 'required|string|max:255',
-        'cta_texto_servico'       => 'required|string|max:255',
-        'link_whatsapp'           => 'required|string|max:255',
-        'classe_estilo_servico'   => 'required|string|max:50',
-        'lingua_servico'          => 'required|string|max:100',
-        'titulo_professor_servico'=> 'required|string|max:255',
-        'conteudo_servico'        => 'required|string',
-        'preco_servico'           => 'required|string|max:100',
-        'contato_text_servico'    => 'required|string|max:255',
-        'ordenar_servico'         => 'required|integer',
-        'imagem_servico'          => 'nullable|image|max:2048',
-        'status_servico'          => 'required|string|max:10',
-    ]);
+        $request->validate([
+            'titulo_servico'          => 'required|string|max:100',
+            'subtitulo_servico'       => 'required|string|max:100',
+            'lista_beneficios_servico'=> 'required|string',
+            'cta_titulo_servico'      => 'required|string|max:255',
+            'cta_texto_servico'       => 'required|string|max:255',
+            'link_whatsapp'           => 'required|string|max:255',
+            'classe_estilo_servico'   => 'required|string|max:50',
+            'lingua_servico'          => 'required|string|max:100',
+            'titulo_professor_servico'=> 'required|string|max:255',
+            'conteudo_servico'        => 'required|string',
+            'preco_servico'           => 'required|string|max:100',
+            'contato_text_servico'    => 'required|string|max:255',
+            'ordenar_servico'         => 'required|integer',
+            'imagem_servico'          => 'nullable|image|max:2048',
+            'status_servico'          => 'required|string|max:10',
+        ]);
 
-    // 👇 AQUI É A MUDANÇA PRINCIPAL
-    $data = $request->except('imagem_servico');
+        $data = $request->except('imagem_servico');
 
-    if ($request->hasFile('imagem_servico')) {
-        $data['imagem_servico'] = $request->file('imagem_servico')->store('servicos', 'public');
+        if ($request->hasFile('imagem_servico')) {
+            if ($servico->imagem_servico && file_exists(public_path($servico->imagem_servico))) {
+                unlink(public_path($servico->imagem_servico));
+            }
+
+            $file     = $request->file('imagem_servico');
+            $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
+        }
+
+        $servico->update($data);
+
+        return redirect()->route('admin.servicos.index')->with('success', 'Serviço atualizado com sucesso!');
     }
-
-    $servico->update($data);
-
-    return redirect()
-        ->route('admin.servicos.index')
-        ->with('success', 'Serviço atualizado com sucesso!');
-}
 
     public function destroy($id)
     {
         $servico = Servico::findOrFail($id);
+
+        if ($servico->imagem_servico && file_exists(public_path($servico->imagem_servico))) {
+            unlink(public_path($servico->imagem_servico));
+        }
+
         $servico->delete();
 
         return redirect()->route('admin.servicos.index')->with('success', 'Serviço excluído com sucesso!');
