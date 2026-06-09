@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Aluno;      // <-- IMPORTANTE: Importando o Model Aluno
-use App\Models\Professor;  // <-- IMPORTANTE: Importando o Model Professor
+use App\Models\Aluno;
+use App\Models\Professor;
 
 class Agenda extends Model
 {
     protected $table = 'tbl_agenda';
     protected $primaryKey = 'id_agenda';
-    
+
     public $timestamps = true;
 
     const CREATED_AT = 'criado_em_agenda';
@@ -29,17 +29,15 @@ class Agenda extends Model
         'link_aula_agenda',
     ];
 
-    /**
-     * Relacionamento com o Aluno
-     */
+    protected $casts = [
+        'data_evento_agenda' => 'date',
+    ];
+
     public function aluno()
     {
         return $this->belongsTo(Aluno::class, 'id_aluno', 'id_aluno');
     }
 
-    /**
-     * Relacionamento com o Professor
-     */
     public function professor()
     {
         return $this->belongsTo(Professor::class, 'id_professor', 'id_professor');

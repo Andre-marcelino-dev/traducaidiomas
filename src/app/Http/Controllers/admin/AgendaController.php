@@ -3,88 +3,97 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
 use App\Models\Aluno;
-use App\Models\Curso;
-use App\Models\Matricula; // Alterado para o singular para alinhar com o arquivo do Model
-use App\Models\Nivel;
+use App\Models\Professor;
 use Illuminate\Http\Request;
 
-class MatriculaController extends Controller
+class AgendaController extends Controller
 {
     public function index()
     {
-        // Busca as matrículas trazendo os relacionamentos do aluno, curso e nível
-        $matriculas = Matricula::with(['aluno', 'curso', 'nivel'])
-            ->orderBy('data_matricula')
-            ->orderBy('id_matricula')
+        $agendas = Agenda::with(['aluno', 'professor'])
+            ->orderBy('data_evento_agenda')
             ->get();
 
-        return view('admin.matriculas.matriculas', [
-            'matriculas' => $matriculas,
+      return view('admin.agendas.index', [ // era admin.agendas.index
+            'agendas' => $agendas,
+            'totalAgendamentos' => Agenda::count(),
+            'agendamentosPendentes' => Agenda::where('status_agenda', 'pendente')->count(),
+            'reagendamentos' => Agenda::where('status_agenda', 'reagendado')->count(),
+            'agendamentosHoje' => Agenda::whereDate('data_evento_agenda', now())->count(),
+        ]);
+    }
+
+    public function create()
+    {
+           return view('admin.agendas.model.create', [ // era admin.agendas.create
             'alunos' => Aluno::orderBy('nome_aluno')->get(),
-            'cursos' => Curso::orderBy('nome_curso')->get(),
-            // 'niveis' => Nivel::orderBy('nome_nivel')->get(),
-            'matriculaEdit' => null,
+            'professores' => Professor::orderBy('nome_professor')->get(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $dados = $this->validar($request);
+        $data = $request->validate([
+            'id_aluno' => 'required|integer',
+            'id_professor' => 'required|integer',
+            'titulo_agenda' => 'required|string',
+            'descricao_agenda' => 'nullable|string',
+            'data_evento_agenda' => 'required|date',
+            'hora_inicio_agenda' => 'required',
+            'hora_fim_agenda' => 'required',
+            'status_agenda' => 'required',
+            'link_aula_agenda' => 'nullable|string',
+        ]);
 
-        // Cria a matrícula usando o Model corrigido no singular
-        Matricula::create($dados);
+        Agenda::create($data);
 
         return redirect()
-            ->route('admin.matriculas.index')
-            ->with('success', 'Matrícula cadastrada com sucesso!');
+            ->route('admin.agendas.index')
+            ->with('success', 'Agendamento criado com sucesso!');
     }
 
     public function edit($id)
     {
-        $matriculas = Matricula::with(['aluno', 'curso', 'nivel'])
-            ->orderBy('data_matricula')
-            ->orderBy('id_matricula')
-            ->get();
+        $agenda = Agenda::findOrFail($id);
 
-        return view('admin.matriculas.matriculas', [
-            'matriculas' => $matriculas,
+       return view('admin.agendas.model.edit', [ // ← faltou o .model.
+            'agenda' => $agenda,
             'alunos' => Aluno::orderBy('nome_aluno')->get(),
-            'cursos' => Curso::orderBy('nome_curso')->get(),
-            // 'niveis' => Nivel::orderBy('nome_nivel')->get(),
-            'matriculaEdit' => Matricula::findOrFail($id),
+            'professores' => Professor::orderBy('nome_professor')->get(),
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $matricula = Matricula::findOrFail($id);
-        $dados = $this->validar($request);
+        $agenda = Agenda::findOrFail($id);
 
-        $matricula->update($dados);
+        $data = $request->validate([
+            'id_aluno' => 'required|integer',
+            'id_professor' => 'required|integer',
+            'titulo_agenda' => 'required|string',
+            'descricao_agenda' => 'nullable|string',
+            'data_evento_agenda' => 'required|date',
+            'hora_inicio_agenda' => 'required',
+            'hora_fim_agenda' => 'required',
+            'status_agenda' => 'required',
+            'link_aula_agenda' => 'nullable|string',
+        ]);
+
+        $agenda->update($data);
 
         return redirect()
-            ->route('admin.matriculas.index')
-            ->with('success', 'Matrícula atualizada com sucesso!');
+            ->route('admin.agendas.index')
+            ->with('success', 'Agendamento atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
-        Matricula::findOrFail($id)->delete();
+        Agenda::findOrFail($id)->delete();
 
         return redirect()
-            ->route('admin.matriculas.index')
-            ->with('success', 'Matrícula removida com sucesso!');
-    }
-
-    private function validar(Request $request): array
-    {
-        // Validação tipada para garantir integridade antes de salvar no banco
-        return $request->validate([
-            'id_aluno' => 'required|integer',
-            'id_curso' => 'required|integer',
-            'id_nivel' => 'required|integer',
-            'data_matricula' => 'required|date',
-        ]);
+            ->route('admin.agendas.index')
+            ->with('success', 'Agendamento removido com sucesso!');
     }
 }
