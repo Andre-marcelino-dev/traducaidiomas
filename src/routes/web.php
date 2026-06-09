@@ -8,7 +8,8 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
 use App\Http\Controllers\admin\AlunoController;
-use App\Http\Controllers\admin\ServicoController;
+use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
+use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [HomeController::class, 'home'])->name('home');
@@ -43,16 +44,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}',   [ProfessorController::class, 'destroy'])->name('destroy');
         });
 
-        Route::prefix('servicos')->name('servicos.')->group(function () {
-            Route::get('/',          [ServicoController::class, 'index'])->name('index');
-            Route::post('/',         [ServicoController::class, 'store'])->name('store');
-            Route::get('/create',    [ServicoController::class, 'create'])->name('create');
-            Route::get('/{id}/edit', [ServicoController::class, 'edit'])->name('edit');
-            Route::get('/{id}',      [ServicoController::class, 'show'])->name('show');
-            Route::put('/{id}',      [ServicoController::class, 'update'])->name('update');
-            Route::delete('/{id}',   [ServicoController::class, 'destroy'])->name('destroy');
-        });
-
         Route::prefix('alunos')->name('alunos.')->group(function () {
             Route::get('/',          [AlunoController::class, 'index'])->name('index');
             Route::post('/',         [AlunoController::class, 'store'])->name('store');
@@ -61,12 +52,34 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}',      [AlunoController::class, 'show'])->name('show');
             Route::put('/{id}',      [AlunoController::class, 'update'])->name('update');
             Route::delete('/{id}',   [AlunoController::class, 'destroy'])->name('destroy');
-            Route::put('/{id}/status',     [AlunoController::class, 'updateStatus'])->name('updateStatus'); // <-- adicione esta
+            Route::put('/{id}/status', [AlunoController::class, 'updateStatus'])->name('updateStatus');
         });
 
     });
 });
+
 // Aulas
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::resource('aulas', \App\Http\Controllers\admin\AulaController::class)->parameters(['aulas' => 'id']);
+});
+
+// Serviços Admin
+Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::resource('servicos', \App\Http\Controllers\admin\ServicoController::class)->parameters(['servicos' => 'id']);
+});
+
+// ── Rotas do Aluno ──
+Route::prefix('aluno')->name('aluno.')->group(function () {
+
+    // Públicas
+    Route::get('/login',  [AlunoAuthController::class, 'login'])->name('login');
+    Route::post('/login', [AlunoAuthController::class, 'autenticar'])->name('autenticar');
+    Route::post('/logout',[AlunoAuthController::class, 'logout'])->name('logout');
+
+    // Protegidas
+    Route::middleware('auth:aluno')->group(function () {
+        Route::get('/', [AlunoDashController::class, 'index'])->name('dash');
+        Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
+    });
+
 });

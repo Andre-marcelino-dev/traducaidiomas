@@ -74,7 +74,7 @@
                                     @include('admin.servicos.modal.edit', ['servico' => $linha])
 
                                     @if ($linha->status_servico === 'ATIVO')
-                                    <form action="{{ route('admin.servicos.destroy', $linha->id_servico) }}" method="POST" style="display: inline-block;">
+                                    <form action="{{ route('admin.servicos.destroy', $linha->id_servico) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Tem certeza que deseja deletar este serviço?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">

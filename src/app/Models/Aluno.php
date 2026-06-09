@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Aluno extends Model
+class Aluno extends Authenticatable
 {
     protected $table = 'tbl_alunos';
     protected $primaryKey = 'id_aluno';
@@ -25,4 +25,9 @@ class Aluno extends Model
     protected $hidden = [
         'senha_aluno',
     ];
+
+    public function getAuthPassword()
+    {
+        return $this->senha_aluno;
+    }
 }
