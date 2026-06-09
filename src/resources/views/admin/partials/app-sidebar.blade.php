@@ -43,6 +43,18 @@
                             </a>
                         </li>
 
+
+                          <li class="nav-item">
+                            <a href="{{ route('admin.matriculas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Matriculas</p>
+                            </a>
+                        </li>
+
+
+
+
+
                         <li class="nav-item">
                             <a href="{{ route('admin.aulas.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
@@ -59,6 +71,15 @@
                                 <p>Serviços</p>
                             </a>
                         </li>
+
+
+
+                       <li class="nav-item">
+                            <a href="{{ route('admin.agendas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Agenda</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
              
@@ -66,6 +87,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-box-seam-fill"></i>
                         <p>
+
                             GESTÃO COMERCIAL
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
