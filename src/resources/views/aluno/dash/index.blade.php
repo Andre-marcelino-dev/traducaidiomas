@@ -283,7 +283,7 @@
                                     <i class="fas fa-book-open"></i>
                                 </div>
                                 <div>
-                                    <div class="qa-label">Minhas Aulas</div>
+                                    <div class="qa-label">{{ $aluno->curso_aluno }}</div>
                                     <p class="qa-desc">Ver aulas disponíveis</p>
                                 </div>
                                 <i class="fas fa-chevron-right qa-arrow"></i>

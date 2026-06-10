@@ -80,6 +80,17 @@
                                 <p>Agenda</p>
                             </a>
                         </li>
+
+
+                        
+                       <li class="nav-item">
+                            <a href="{{ route('admin.materiais.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Materiais</p>
+                            </a>
+                        </li>
+
+
                     </ul>
                 </li>
              

@@ -12,9 +12,11 @@ use App\Http\Controllers\admin\AlunoController;
 use App\Http\Controllers\admin\AgendaController;
 use App\Http\Controllers\admin\AulaController;
 use App\Http\Controllers\admin\ServicoController as adminServicoController;
-use App\Http\Controllers\admin\MatriculaController; // Importação unificada com o 'admin' minúsculo
+use App\Http\Controllers\admin\MatriculaController;
+use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
+use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -77,13 +79,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/professor/{id}',   [AgendaController::class, 'porProfessor'])->name('porProfessor');
         });
 
-        // CRUD Matrículas (Agora completo, padronizado e protegido por login!)
+        // CRUD Matrículas
         Route::prefix('matriculas')->name('matriculas.')->group(function () {
             Route::get('/',          [MatriculaController::class, 'index'])->name('index');
             Route::post('/',         [MatriculaController::class, 'store'])->name('store');
             Route::get('/{id}/edit', [MatriculaController::class, 'edit'])->name('edit');
             Route::put('/{id}',      [MatriculaController::class, 'update'])->name('update');
             Route::delete('/{id}',   [MatriculaController::class, 'destroy'])->name('destroy');
+        });
+
+        // CRUD Materiais
+        Route::prefix('materiais')->name('materiais.')->group(function () {
+            Route::get('/',                  [AdminMateriaisController::class, 'index'])->name('index');
+            
+            // ROTA DE DOWNLOAD ADICIONADA AQUI:
+            Route::get('/{id}/download',     [AdminMateriaisController::class, 'download'])->name('download');
+            
+            Route::post('/',                 [AdminMateriaisController::class, 'store'])->name('store');
+            Route::get('/create',            [AdminMateriaisController::class, 'create'])->name('create');
+            Route::get('/{id}/edit',         [AdminMateriaisController::class, 'edit'])->name('edit');
+            Route::get('/{id}',              [AdminMateriaisController::class, 'show'])->name('show');
+            Route::put('/{id}',              [AdminMateriaisController::class, 'update'])->name('update');
+            Route::delete('/{id}',           [AdminMateriaisController::class, 'destroy'])->name('destroy');
         });
 
         // Recursos Adicionais do Admin (Aulas e Serviços)
@@ -106,6 +123,11 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
     Route::middleware('auth:aluno')->group(function () {
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
+
+        // Materiais (somente leitura)
+        Route::get('/materiais',                    [AlunoMateriaisController::class, 'index'])->name('materiais.index');
+        Route::get('/materiais/{id}',               [AlunoMateriaisController::class, 'show'])->name('materiais.show');
+        Route::get('/materiais/{id}/download',      [AlunoMateriaisController::class, 'download'])->name('materiais.download');
     });
 
 });
