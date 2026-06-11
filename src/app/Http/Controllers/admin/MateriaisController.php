@@ -7,7 +7,6 @@ use App\Models\Materiais;
 use App\Models\Professor;
 use App\Models\Curso;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class MateriaisController extends Controller
 {
@@ -38,8 +37,17 @@ class MateriaisController extends Controller
             'id_curso'            => 'nullable|exists:tbl_cursos,id_curso',
         ]);
 
-        if ($request->file('arquivo_materiais')) {
-            $dados['arquivo_materiais'] = $request->file('arquivo_materiais')->store('materiais', 'public');
+        if ($request->hasFile('arquivo_materiais')) {
+            $arquivo     = $request->file('arquivo_materiais');
+            $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
+            $destino     = public_path('traducaidiomas/materiais');
+
+            if (!file_exists($destino)) {
+                mkdir($destino, 0755, true);
+            }
+
+            $arquivo->move($destino, $nomeArquivo);
+            $dados['arquivo_materiais'] = 'traducaidiomas/materiais/' . $nomeArquivo;
         } else {
             $dados['arquivo_materiais'] = null;
         }
@@ -59,7 +67,7 @@ class MateriaisController extends Controller
 
     public function edit($id)
     {
-        $materiais = Materiais::findOrFail($id);
+        $materiais   = Materiais::findOrFail($id);
         $professores = Professor::all();
         $cursos      = Curso::all();
 
@@ -80,11 +88,21 @@ class MateriaisController extends Controller
 
         $materiais = Materiais::findOrFail($id);
 
-        if ($request->file('arquivo_materiais')) {
-            if ($materiais->arquivo_materiais) {
-                Storage::disk('public')->delete($materiais->arquivo_materiais);
+        if ($request->hasFile('arquivo_materiais')) {
+            if ($materiais->arquivo_materiais && file_exists(public_path($materiais->arquivo_materiais))) {
+                unlink(public_path($materiais->arquivo_materiais));
             }
-            $dados['arquivo_materiais'] = $request->file('arquivo_materiais')->store('materiais', 'public');
+
+            $arquivo     = $request->file('arquivo_materiais');
+            $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
+            $destino     = public_path('traducaidiomas/materiais');
+
+            if (!file_exists($destino)) {
+                mkdir($destino, 0755, true);
+            }
+
+            $arquivo->move($destino, $nomeArquivo);
+            $dados['arquivo_materiais'] = 'traducaidiomas/materiais/' . $nomeArquivo;
         } else {
             $dados['arquivo_materiais'] = $materiais->arquivo_materiais;
         }
@@ -99,8 +117,8 @@ class MateriaisController extends Controller
     {
         $materiais = Materiais::findOrFail($id);
 
-        if ($materiais->arquivo_materiais) {
-            Storage::disk('public')->delete($materiais->arquivo_materiais);
+        if ($materiais->arquivo_materiais && file_exists(public_path($materiais->arquivo_materiais))) {
+            unlink(public_path($materiais->arquivo_materiais));
         }
 
         $materiais->delete();
@@ -110,13 +128,13 @@ class MateriaisController extends Controller
     }
 
     public function download($id)
-{
-    $material = Materiais::findOrFail($id);
+    {
+        $material = Materiais::findOrFail($id);
 
-    if ($material->arquivo_materiais && \Illuminate\Support\Facades\Storage::disk('public')->exists($material->arquivo_materiais)) {
-        return \Illuminate\Support\Facades\Storage::disk('public')->download($material->arquivo_materiais);
+        if ($material->arquivo_materiais && file_exists(public_path($material->arquivo_materiais))) {
+            return response()->download(public_path($material->arquivo_materiais));
+        }
+
+        return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
     }
-
-    return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
-}
 }

@@ -34,6 +34,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
  
 WORKDIR /var/www/html 
  
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 CMD ["php-fpm"] 
  
 # Instala extensões PHP necessárias para o Laravel 

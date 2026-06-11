@@ -6,19 +6,19 @@
 <body>
     <div class="page-wrapper">
         @include('partials.preloader')
- 
+
         @include('partials.header')
- 
+
         <main>
         @yield('content')
-       
-       
+
+
     </main>
- 
+
    @include('partials.footer')
- 
+
 </div>
- 
+
 <!-- Scroll To Top -->
 <div class="scroll-to-top scroll-to-target" data-target="html">
     <svg viewBox="0 0 500 500">
@@ -35,9 +35,9 @@
     </svg>
     <span class="fa fa-angle-up"></span>
 </div>
- 
- 
-   
+
+
+
     @include('partials.script')
     @stack('plugins')
     <script src="{{asset('davilla/js/script.js')}}"></script>

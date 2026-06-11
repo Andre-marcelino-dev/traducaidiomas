@@ -1,5 +1,7 @@
 @extends('admin.layout.admin')
 
+
+
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
@@ -287,6 +289,15 @@
 
         </div>
     </div>
+
+
+
+
+
+
+
+
+
 
     <script>
         // Relógio em tempo real no greeting

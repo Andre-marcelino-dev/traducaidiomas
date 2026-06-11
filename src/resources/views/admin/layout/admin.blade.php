@@ -6,10 +6,12 @@
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 
     <div class="app-wrapper">
-        
+
         @include('admin.partials.app-header')
 
         @include('admin.partials.app-sidebar')
+
+      
 
         <main class="app-main">
             @yield('content')
