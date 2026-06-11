@@ -111,13 +111,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('reagendamentos.index');
         Route::get('reagendamentos/{reagendamento}', [AdminReagendamentoController::class, 'show'])
             ->name('reagendamentos.show');
-        
-        // Ajustado para aceitar via PUT e com o padrão de nomes da View (.aceitar e .recusar)
         Route::put('reagendamentos/{id}/aceitar', [AdminReagendamentoController::class, 'aceitar'])
             ->name('reagendamentos.aceitar');
         Route::put('reagendamentos/{id}/recusar', [AdminReagendamentoController::class, 'recusar'])
             ->name('reagendamentos.recusar');
-            
+        Route::delete('reagendamentos/{id}', [AdminReagendamentoController::class, 'destroy'])
+            ->name('reagendamentos.destroy');
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Aluno extends Authenticatable
 {
+    use Notifiable;
+
     protected $table = 'tbl_alunos';
     protected $primaryKey = 'id_aluno';
     public $timestamps = false;
