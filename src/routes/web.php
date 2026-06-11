@@ -5,6 +5,8 @@ use App\Http\Controllers\SobreController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\aluno\ReagendamentoController as AlunoReagendamentoController;
+use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
@@ -90,25 +92,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // CRUD Materiais
         Route::prefix('materiais')->name('materiais.')->group(function () {
-            Route::get('/',                  [AdminMateriaisController::class, 'index'])->name('index');
-            
-            // ROTA DE DOWNLOAD ADICIONADA AQUI:
-            Route::get('/{id}/download',     [AdminMateriaisController::class, 'download'])->name('download');
-            
-            Route::post('/',                 [AdminMateriaisController::class, 'store'])->name('store');
-            Route::get('/create',            [AdminMateriaisController::class, 'create'])->name('create');
-            Route::get('/{id}/edit',         [AdminMateriaisController::class, 'edit'])->name('edit');
-            Route::get('/{id}',              [AdminMateriaisController::class, 'show'])->name('show');
-            Route::put('/{id}',              [AdminMateriaisController::class, 'update'])->name('update');
-            Route::delete('/{id}',           [AdminMateriaisController::class, 'destroy'])->name('destroy');
+            Route::get('/',              [AdminMateriaisController::class, 'index'])->name('index');
+            Route::get('/{id}/download', [AdminMateriaisController::class, 'download'])->name('download');
+            Route::post('/',             [AdminMateriaisController::class, 'store'])->name('store');
+            Route::get('/create',        [AdminMateriaisController::class, 'create'])->name('create');
+            Route::get('/{id}/edit',     [AdminMateriaisController::class, 'edit'])->name('edit');
+            Route::get('/{id}',          [AdminMateriaisController::class, 'show'])->name('show');
+            Route::put('/{id}',          [AdminMateriaisController::class, 'update'])->name('update');
+            Route::delete('/{id}',       [AdminMateriaisController::class, 'destroy'])->name('destroy');
         });
 
         // Recursos Adicionais do Admin (Aulas e Serviços)
         Route::resource('aulas', AulaController::class)->parameters(['aulas' => 'id']);
         Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id']);
 
-    });
+        // ── Reagendamentos (Admin) ──
+        Route::get('reagendamentos', [AdminReagendamentoController::class, 'index'])
+            ->name('reagendamentos.index');
+        Route::get('reagendamentos/{reagendamento}', [AdminReagendamentoController::class, 'show'])
+            ->name('reagendamentos.show');
+        
+        // Ajustado para aceitar via PUT e com o padrão de nomes da View (.aceitar e .recusar)
+        Route::put('reagendamentos/{id}/aceitar', [AdminReagendamentoController::class, 'aceitar'])
+            ->name('reagendamentos.aceitar');
+        Route::put('reagendamentos/{id}/recusar', [AdminReagendamentoController::class, 'recusar'])
+            ->name('reagendamentos.recusar');
+            
+        Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
+            ->name('reagendamento.notificacoes');
 
+    });
 });
 
 // ── Rotas do Aluno ──
@@ -121,13 +134,22 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
 
     // Painel Aluno (Protegidas por Middleware)
     Route::middleware('auth:aluno')->group(function () {
+
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
 
         // Materiais (somente leitura)
-        Route::get('/materiais',                    [AlunoMateriaisController::class, 'index'])->name('materiais.index');
-        Route::get('/materiais/{id}',               [AlunoMateriaisController::class, 'show'])->name('materiais.show');
-        Route::get('/materiais/{id}/download',      [AlunoMateriaisController::class, 'download'])->name('materiais.download');
-    });
+        Route::get('/materiais',               [AlunoMateriaisController::class, 'index'])->name('materiais.index');
+        Route::get('/materiais/{id}',          [AlunoMateriaisController::class, 'show'])->name('materiais.show');
+        Route::get('/materiais/{id}/download', [AlunoMateriaisController::class, 'download'])->name('materiais.download');
 
+        // ── Reagendamentos (Aluno) ──
+        Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
+            ->name('reagendamento.solicitar');
+        Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicatados'])
+            ->name('reagendamentos.index');
+        Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
+            ->name('reagendamento.notificacoes');
+
+    });
 });
