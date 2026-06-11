@@ -70,8 +70,6 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3 fade-up">
-
-                    {{-- // INICIO CARDS ALUNO ANIMADO --}}
                     <div class="mc mc-green fade-up">
                         <div class="mc-icon">🎓</div>
                         <div class="mc-val" id="totalAlunos" data-target="{{ $totalAlunos }}">0</div>
@@ -80,10 +78,8 @@
                             👥 <span id="alunos-trend">carregando...</span>
                         </div>
                     </div>
-                    {{-- // FIM CARDS ALUNO ANIMADO --}}
                 </div>
                 <div class="col-sm-6 col-xl-3 fade-up">
-                       {{-- // INICIO CARDS ALUNO ANIMADO --}}
                     <div class="mc mc-green fade-up">
                         <div class="mc-icon">🎓</div>
                         <div class="mc-val" id="totalAulas" data-target="">0</div>
@@ -92,7 +88,6 @@
                             👥 <span id="aulas-trend">carregando...</span>
                         </div>
                     </div>
-                    {{-- // FIM CARDS ALUNO ANIMADO --}}
                 </div>
                 <div class="col-sm-6 col-xl-3 fade-up">
                     <div class="metric-card metric-card-rose shadow-sm">
@@ -102,7 +97,6 @@
                         <div class="metric-value">{{ now()->format('d/m/Y') }}</div>
                         <p class="metric-label">Hoje</p>
                         <div class="metric-trend">
-
                             @php
                                 $hora = now('America/Sao_Paulo')->hour;
                                 if ($hora >= 5 && $hora < 12) {
@@ -116,9 +110,7 @@
                                     $saudacao = 'Boa noite';
                                 }
                             @endphp
-
                             {{ $icone }} {{ $saudacao }} — {{ now('America/Sao_Paulo')->format('H:i') }}
-
                         </div>
                     </div>
                 </div>
@@ -132,8 +124,7 @@
                     <div class="recent-card card">
                         <div class="card-header">
                             <h5><i class="fas fa-chalkboard-user me-2 text-primary"></i>Professores Recentes</h5>
-                            <a href="{{ route('admin.professores.index') }}">Ver todos <i
-                                    class="fas fa-arrow-right ms-1"></i></a>
+                            <a href="{{ route('admin.professores.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
                         <div class="table-responsive">
                             <table class="table recent-table mb-0">
@@ -170,15 +161,14 @@
                                             <td>{{ $prof->especialidade_professor ?? '—' }}</td>
                                             <td>
                                                 @php $nivel = strtolower($prof->nivel_professor ?? ''); @endphp
-                                                <span
-                                                    class="badge-nivel
-                                            {{ $nivel == 'básico' || $nivel == 'basico'
-                                                ? 'badge-basico'
-                                                : ($nivel == 'intermediário' || $nivel == 'intermediario'
-                                                    ? 'badge-intermediario'
-                                                    : ($nivel == 'avançado' || $nivel == 'avancado'
-                                                        ? 'badge-avancado'
-                                                        : 'badge-fluente')) }}">
+                                                <span class="badge-nivel
+                                                    {{ $nivel == 'básico' || $nivel == 'basico'
+                                                        ? 'badge-basico'
+                                                        : ($nivel == 'intermediário' || $nivel == 'intermediario'
+                                                            ? 'badge-intermediario'
+                                                            : ($nivel == 'avançado' || $nivel == 'avancado'
+                                                                ? 'badge-avancado'
+                                                                : 'badge-fluente')) }}">
                                                     {{ $prof->nivel_professor ?? '—' }}
                                                 </span>
                                             </td>
@@ -246,40 +236,50 @@
                                 </div>
                                 <i class="fas fa-chevron-right qa-arrow"></i>
                             </a>
+
+                            {{-- ── NOVO: Reagendamentos ── --}}
+                            <a href="{{ route('admin.reagendamentos.index') }}" class="quick-action">
+                                <div class="qa-icon" style="background:#fef3c7;color:#d97706;">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div>
+                                    <div class="qa-label d-flex align-items-center gap-2">
+                                        Reagendamentos
+                                        <span class="badge bg-warning text-dark d-none" id="badgeReagendamentos"
+                                            style="font-size:.7rem;border-radius:20px;padding:2px 7px;">0</span>
+                                    </div>
+                                    <p class="qa-desc">Solicitações dos alunos</p>
+                                </div>
+                                <i class="fas fa-chevron-right qa-arrow"></i>
+                            </a>
+
                         </div>
                     </div>
 
                     {{-- Perfil do admin --}}
                     <div class="card recent-card">
                         <div class="card-header">
-                            <h5><i class="fas fa-id-badge me-2 text-info"></i>{{ auth('admin')->user()->nome_professor }}
-                            </h5>
+                            <h5><i class="fas fa-id-badge me-2 text-info"></i>{{ auth('admin')->user()->nome_professor }}</h5>
                         </div>
                         <div class="card-body p-3">
                             <div class="stat-mini">
-                                <span class="stat-mini-label"><i
-                                        class="fas fa-user me-2 text-muted"></i>{{ auth('admin')->user()->nome_professor }}</span>
-                                <span class="stat-mini-value"
-                                    style="font-size:.8rem;">{{ auth('admin')->user()->nome_professor }}</span>
+                                <span class="stat-mini-label"><i class="fas fa-user me-2 text-muted"></i>Nome</span>
+                                <span class="stat-mini-value" style="font-size:.8rem;">{{ auth('admin')->user()->nome_professor }}</span>
                             </div>
                             <div class="stat-mini">
                                 <span class="stat-mini-label"><i class="fas fa-envelope me-2 text-muted"></i>E-mail</span>
-                                <span class="stat-mini-value"
-                                    style="font-size:.75rem;">{{ auth('admin')->user()->email_professor }}</span>
+                                <span class="stat-mini-value" style="font-size:.75rem;">{{ auth('admin')->user()->email_professor }}</span>
                             </div>
                             <div class="stat-mini">
-                                <span class="stat-mini-label"><i
-                                        class="fas fa-briefcase me-2 text-muted"></i>Experiência</span>
+                                <span class="stat-mini-label"><i class="fas fa-briefcase me-2 text-muted"></i>Experiência</span>
                                 <span class="stat-mini-value">
                                     {{ auth('admin')->user()->experiencia_professor }}
                                     {{ auth('admin')->user()->experiencia_professor == 1 ? 'ano' : 'anos' }}
                                 </span>
                             </div>
                             <div class="stat-mini">
-                                <span class="stat-mini-label"><i
-                                        class="fas fa-star me-2 text-muted"></i>Especialidade</span>
-                                <span class="stat-mini-value"
-                                    style="font-size:.8rem;">{{ auth('admin')->user()->especialidade_professor ?? '—' }}</span>
+                                <span class="stat-mini-label"><i class="fas fa-star me-2 text-muted"></i>Especialidade</span>
+                                <span class="stat-mini-value" style="font-size:.8rem;">{{ auth('admin')->user()->especialidade_professor ?? '—' }}</span>
                             </div>
                         </div>
                     </div>
@@ -299,13 +299,15 @@
 
 
 
+
+    {{-- Relógio em tempo real --}}
+
     <script>
-        // Relógio em tempo real no greeting
         function atualizarHora() {
             const agora = new Date();
             const horas = String(agora.getHours()).padStart(2, '0');
-            const min = String(agora.getMinutes()).padStart(2, '0');
-            const seg = String(agora.getSeconds()).padStart(2, '0');
+            const min   = String(agora.getMinutes()).padStart(2, '0');
+            const seg   = String(agora.getSeconds()).padStart(2, '0');
             const el = document.getElementById('dash-hora');
             if (el) el.textContent = horas + ':' + min + ':' + seg;
         }
@@ -313,33 +315,34 @@
         setInterval(atualizarHora, 1000);
     </script>
 
+    {{-- Animação dos contadores --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Alunos
             var el = document.getElementById('totalAlunos');
             var trend = document.getElementById('alunos-trend');
-            if (!el) return;
-            var target = parseInt(el.dataset.target) || 0;
-            var start = performance.now();
-
-            function tick(now) {
-                var p = Math.min((now - start) / 1000, 1);
-                var ease = 1 - Math.pow(1 - p, 3);
-                el.textContent = Math.round(ease * target);
-                if (p < 1) requestAnimationFrame(tick);
-                else trend.textContent = target + (target !== 1 ? ' cadastrados' : ' cadastrado');
+            if (el) {
+                var target = parseInt(el.dataset.target) || 0;
+                var start  = performance.now();
+                function tick(now) {
+                    var p    = Math.min((now - start) / 1000, 1);
+                    var ease = 1 - Math.pow(1 - p, 3);
+                    el.textContent = Math.round(ease * target);
+                    if (p < 1) requestAnimationFrame(tick);
+                    else trend.textContent = target + (target !== 1 ? ' cadastrados' : ' cadastrado');
+                }
+                requestAnimationFrame(tick);
             }
-            requestAnimationFrame(tick);
-
 
             // Professores
-            var elP = document.getElementById('totalProfessores');
+            var elP    = document.getElementById('totalProfessores');
             var trendP = document.getElementById('prof-trend');
             if (elP) {
                 var targetP = parseInt(elP.dataset.target) || 0;
-                var startP = performance.now();
-
+                var startP  = performance.now();
                 function tickP(now) {
-                    var p = Math.min((now - startP) / 1000, 1);
+                    var p    = Math.min((now - startP) / 1000, 1);
                     var ease = 1 - Math.pow(1 - p, 3);
                     elP.textContent = Math.round(ease * targetP);
                     if (p < 1) requestAnimationFrame(tickP);
@@ -349,4 +352,26 @@
             }
         });
     </script>
+
+    {{-- Badge de reagendamentos pendentes (atualiza a cada 30s) --}}
+    <script>
+        function atualizarBadgeReagendamento() {
+            fetch('{{ route("admin.reagendamento.notificacoes") }}')
+                .then(r => r.json())
+                .then(data => {
+                    const badge = document.getElementById('badgeReagendamentos');
+                    if (!badge) return;
+                    if (data.count > 0) {
+                        badge.textContent = data.count;
+                        badge.classList.remove('d-none');
+                    } else {
+                        badge.classList.add('d-none');
+                    }
+                })
+                .catch(() => {}); // silencia erros de rede
+        }
+        atualizarBadgeReagendamento();
+        setInterval(atualizarBadgeReagendamento, 30000);
+    </script>
+
 @endsection
