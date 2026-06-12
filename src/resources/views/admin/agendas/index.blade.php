@@ -2,6 +2,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
 
 <div class="app-content-header">
     <div class="container-fluid">
@@ -57,6 +58,21 @@
                     <div class="mc-val">{{ $agendamentosHoje ?? 0 }}</div>
                     <p>Hoje</p>
                 </div>
+            </div>
+        </div>
+
+        {{-- CALENDÁRIO --}}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Calendário de Agendamentos</h5>
+
+                <a href="{{ route('admin.agendas.create') }}" class="btn btn-success btn-sm">
+                    Novo
+                </a>
+            </div>
+
+            <div class="card-body">
+                <div id="calendar"></div>
             </div>
         </div>
 
@@ -174,6 +190,9 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/pt-br.global.min.js"></script>
+
 <script>
 document.getElementById('modalExcluir').addEventListener('show.bs.modal', function(event) {
     const button = event.relatedTarget;
@@ -182,6 +201,24 @@ document.getElementById('modalExcluir').addEventListener('show.bs.modal', functi
 
     document.getElementById('tituloAgendaModal').textContent = titulo;
     document.getElementById('formExcluir').action = `/admin/agendas/${id}`;
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'pt-br',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        events: "{{ route('admin.agendas.eventos') }}",
+    });
+
+    calendar.render();
 });
 </script>
 

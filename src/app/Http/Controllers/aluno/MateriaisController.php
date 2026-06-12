@@ -109,14 +109,30 @@ class MateriaisController extends Controller
             ->with('success', 'Material removido com sucesso!');
     }
 
-    public function download($id)
-{
-    $material = Materiais::findOrFail($id);
 
-    if ($material->arquivo_materiais && \Illuminate\Support\Facades\Storage::disk('public')->exists($material->arquivo_materiais)) {
-        return \Illuminate\Support\Facades\Storage::disk('public')->download($material->arquivo_materiais);
+    public function verArquivo($id)
+    {
+        $material = Materiais::findOrFail($id);
+
+        $caminho = public_path($material->arquivo_materiais);
+
+        if ($material->arquivo_materiais && file_exists($caminho)) {
+            return response()->file($caminho);
+        }
+
+        return redirect()->back()->with("error", "Arquivo não encontrado no servidor.");
     }
 
-    return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
-}
+    public function download($id)
+    {
+        $material = Materiais::findOrFail($id);
+
+        $caminho = public_path($material->arquivo_materiais);
+
+        if ($material->arquivo_materiais && file_exists($caminho)) {
+            return response()->download($caminho);
+        }
+
+        return redirect()->back()->with("error", "Arquivo não encontrado no servidor.");
+    }
 }

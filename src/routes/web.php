@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
+use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -72,6 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/',                 [AgendaController::class, 'index'])->name('index');
             Route::post('/',                [AgendaController::class, 'store'])->name('store');
             Route::get('/create',           [AgendaController::class, 'create'])->name('create');
+            Route::get('/eventos',          [AgendaController::class, 'eventos'])->name('eventos');
             Route::get('/{id}/edit',        [AgendaController::class, 'edit'])->name('edit');
             Route::get('/{id}',             [AgendaController::class, 'show'])->name('show');
             Route::put('/{id}',             [AgendaController::class, 'update'])->name('update');
@@ -137,10 +139,14 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
 
+        // Minhas Aulas
+        Route::get('/aulas', [AlunoAulaController::class, 'index'])->name('aulas.index');
+
         // Materiais (somente leitura)
         Route::get('/materiais',               [AlunoMateriaisController::class, 'index'])->name('materiais.index');
         Route::get('/materiais/{id}',          [AlunoMateriaisController::class, 'show'])->name('materiais.show');
         Route::get('/materiais/{id}/download', [AlunoMateriaisController::class, 'download'])->name('materiais.download');
+        Route::get('/materiais/{id}/visualizar', [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
