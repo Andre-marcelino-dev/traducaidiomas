@@ -34,6 +34,7 @@ Route::get("/servicos", [ServicosController::class, 'servicos'])->name('servicos
 Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])->name('servicos.categoria');
 Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
+Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
 Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
 
 // ── Rotas do Administrador (Admin) ──
@@ -90,11 +91,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // CRUD Matrículas
         Route::prefix('matriculas')->name('matriculas.')->group(function () {
-            Route::get('/',          [MatriculaController::class, 'index'])->name('index');
-            Route::post('/',         [MatriculaController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [MatriculaController::class, 'edit'])->name('edit');
-            Route::put('/{id}',      [MatriculaController::class, 'update'])->name('update');
-            Route::delete('/{id}',   [MatriculaController::class, 'destroy'])->name('destroy');
+            Route::get('/',            [MatriculaController::class, 'index'])->name('index');
+            Route::post('/',           [MatriculaController::class, 'store'])->name('store');
+            Route::get('/{id}/edit',   [MatriculaController::class, 'edit'])->name('edit');
+            Route::put('/{id}',        [MatriculaController::class, 'update'])->name('update');
+            Route::delete('/{id}',     [MatriculaController::class, 'destroy'])->name('destroy');
             Route::put('/{id}/status', [MatriculaController::class, 'updateStatus'])->name('updateStatus');
         });
 
@@ -135,7 +136,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
-
         // ── Atividades ──
         Route::prefix('atividades')->name('atividades.')->group(function () {
             Route::get('/',              [AdminAtividadeController::class, 'index'])->name('index');
@@ -172,17 +172,17 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::put('/perfil/senha', [AlunoAuthController::class, 'atualizarSenha'])->name('perfil.senha');
 
         // Minhas Aulas
-        Route::get('/aulas', [AlunoAulaController::class, 'index'])->name('aulas.index');
+        Route::get('/aulas',    [AlunoAulaController::class, 'index'])->name('aulas.index');
         Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
         Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
         Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
         Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
 
         // Materiais (somente leitura)
-        Route::get('/materiais',               [AlunoMateriaisController::class, 'index'])->name('materiais.index');
-        Route::get('/materiais/{id}',          [AlunoMateriaisController::class, 'show'])->name('materiais.show');
-        Route::get('/materiais/{id}/download', [AlunoMateriaisController::class, 'download'])->name('materiais.download');
-        Route::get('/materiais/{id}/visualizar', [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
+        Route::get('/materiais',                   [AlunoMateriaisController::class, 'index'])->name('materiais.index');
+        Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
+        Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
+        Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
@@ -191,6 +191,5 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             ->name('reagendamentos.index');
         Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
-
     });
 });
