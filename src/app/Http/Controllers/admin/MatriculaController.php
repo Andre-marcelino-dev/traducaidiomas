@@ -21,6 +21,7 @@ class MatriculaController extends Controller
             'matriculasHoje'   => Matricula::whereDate('data_matricula', now())->count(),
             'alunosAtivos'  => Aluno::where('status_aluno', 'EM CURSO')->count(),
             'alunosInativos' => Aluno::where('status_aluno', 'INATIVO')->count(),
+            'matriculasCongeladas' => Matricula::where('status_matricula', 'CONGELADO')->count(),
         ];
     }
 
@@ -69,6 +70,15 @@ class MatriculaController extends Controller
         return redirect()
             ->route('admin.matriculas.index')
             ->with('success', 'Matrícula atualizada com sucesso!');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $matricula = Matricula::findOrFail($id);
+        $matricula->update(['status_matricula' => $request->status_matricula]);
+        return redirect()
+            ->route('admin.matriculas.index')
+            ->with('success', 'Status atualizado com sucesso!');
     }
 
     public function destroy($id)

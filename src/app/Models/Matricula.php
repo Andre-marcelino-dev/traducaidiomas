@@ -17,6 +17,7 @@ class Matricula extends Model
         'id_curso',
         'id_nivel',
         'data_matricula',
+        'status_matricula',
     ];
 
     public function aluno()

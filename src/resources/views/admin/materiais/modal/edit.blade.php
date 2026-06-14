@@ -138,7 +138,7 @@
                                             <div class="d-flex align-items-center gap-2 mb-2 p-2 bg-light rounded">
                                                 <i class="fas fa-file-alt text-primary"></i>
                                                 <span style="font-size:.85rem;">Arquivo atual:</span>
-                                                <a href="{{ asset('storage/' . $materiais->arquivo_materiais) }}"
+                                                <a href="{{ asset($materiais->arquivo_materiais) }}"
                                                    target="_blank" class="text-primary fw-semibold" style="font-size:.85rem;">
                                                     Visualizar / Baixar
                                                 </a>

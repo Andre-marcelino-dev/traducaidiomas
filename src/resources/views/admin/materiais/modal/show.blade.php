@@ -74,7 +74,7 @@
                                 @if($materiais->arquivo_materiais)
                                     <div class="col-12">
                                         <p class="text-muted mb-1" style="font-size:.75rem;">ARQUIVO</p>
-                                        <a href="{{ asset('storage/' . $materiais->arquivo_materiais) }}" target="_blank"
+                                        <a href="{{ asset($materiais->arquivo_materiais) }}" target="_blank"
                                            class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-download me-1"></i> Baixar arquivo
                                         </a>

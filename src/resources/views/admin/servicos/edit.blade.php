@@ -89,7 +89,7 @@
                         <label class="form-label">Imagem</label>
                         @if ($servico->imagem_servico)
                         <div class="mb-2">
-                            <img src="{{ asset('storage/' . $servico->imagem_servico) }}" width="100" style="border-radius:6px">
+                            <img src="{{ asset($servico->imagem_servico) }}" width="100" style="border-radius:6px">
                         </div>
                         @endif
                         <input type="file" name="imagem_servico" class="form-control" accept="image/*">

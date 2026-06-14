@@ -10,11 +10,26 @@ use Illuminate\Http\Request;
 
 class PresencaController extends Controller
 {
-    public function index()
-    {
-        $aulas = Aula::with('professor')->orderBy('data_aulas', 'desc')->get();
-        return view('admin.presenca.index', compact('aulas'));
+public function index()
+{
+    $aulas = Aula::with('professor')->orderBy('data_aulas', 'desc')->get();
+
+    foreach ($aulas as $aula) {
+        $registros = Presenca::where('id_aulas', $aula->id_aulas)
+            ->where('data_registro_presenca', date('Y-m-d'))
+            ->get();
+
+        $aula->presentes = $registros->where('status_presenca', 'presente')->count();
+        $aula->faltas = $registros->where('status_presenca', 'falta')->count();
+        $aula->justificados = $registros->where('status_presenca', 'justificado')->count();
     }
+
+    $registrosHoje = Presenca::with('aluno', 'aula')
+        ->where('data_registro_presenca', date('Y-m-d'))
+        ->get();
+
+    return view('admin.presenca.index', compact('aulas', 'registrosHoje'));
+}
 
     public function alunos($id_aulas)
     {

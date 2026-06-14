@@ -1,26 +1,17 @@
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-    
+
     <div class="sidebar-brand">
         <a href="#" class="brand-link">
-            <img
-              src="{{ asset('traducaidiomas/img/logo.png') }}"
-              alt="Traduca Idiomas"
-              class="brand-image opacity-75 shadow"
-            />
+            <img src="{{ asset('traducaidiomas/img/logo.png') }}" alt="Traduca Idiomas"
+                class="brand-image opacity-75 shadow" />
             <span class="brand-text fw-light">Traducaidiomas</span>
         </a>
     </div>
-    
+
     <div class="sidebar-wrapper">
         <nav class="mt-2">
-            <ul
-              class="nav sidebar-menu flex-column"
-              data-lte-toggle="treeview"
-              role="navigation"
-              aria-label="Main navigation"
-              data-accordion="false"
-              id="navigation"
-            >
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation"
+                aria-label="Main navigation" data-accordion="false" id="navigation">
                 <li class="nav-item menu-open">
                     <a href="#" class="nav-link active">
                         <i class="nav-icon bi bi-speedometer"></i>
@@ -44,7 +35,7 @@
                         </li>
 
 
-                          <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ route('admin.matriculas.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Matriculas</p>
@@ -63,6 +54,13 @@
                         </li>
 
 
+                        <li class="nav-item">
+                            <a href="{{ route('admin.presenca.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Presença</p>
+                            </a>
+                        </li>
+
 
 
                         <li class="nav-item">
@@ -74,7 +72,7 @@
 
 
 
-                       <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ route('admin.agendas.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Agenda</p>
@@ -82,18 +80,25 @@
                         </li>
 
 
-                        
-                       <li class="nav-item">
+
+                        <li class="nav-item">
                             <a href="{{ route('admin.materiais.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Materiais</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.atividades.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-clipboard-check"></i>
+                                <p>Atividades</p>
+                            </a>
+                        </li>
+
 
 
                     </ul>
                 </li>
-             
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-box-seam-fill"></i>
@@ -129,9 +134,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.site.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
-                                <p>Banners</p>
+                                <p>Gerenciar Site</p>
                             </a>
                         </li>
                     </ul>

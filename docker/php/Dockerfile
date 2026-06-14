@@ -45,3 +45,9 @@ RUN docker-php-ext-install \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer 
  
 WORKDIR /var/www/html 
+# Cria pastas de upload e define permissões
+RUN mkdir -p /var/www/html/public/traducaidiomas/professor \
+    && mkdir -p /var/www/html/public/traducaidiomas/alunos \
+    && mkdir -p /var/www/html/public/traducaidiomas/materiais \
+    && mkdir -p /var/www/html/public/traducaidiomas/servicos \
+    && chmod -R 777 /var/www/html/public/traducaidiomas

@@ -35,19 +35,15 @@
 }
 
 .img-perfil {
-    width: 350px;              /* tamanho ideal — pode ajustar */
-    height: 350px;             /* mantém a imagem perfeitamente redonda */
-     border-radius: 50%;  
-     opacity: 30%;     
-    object-fit: cover;         /* corta a imagem corretamente */
+    width: 320px;
+    height: 420px;
+    border-radius: 12px;
+    opacity: 1;
+    object-fit: cover;
+    object-position: top;
     display: block;
-    margin: 0 auto;            /* centraliza */
-
-    /* Estilo visual */
-    /* border: 6px solid #C8102E; borda vermelha */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-
-    /* Efeito de transição */
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 

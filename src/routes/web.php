@@ -16,10 +16,15 @@ use App\Http\Controllers\admin\AulaController;
 use App\Http\Controllers\admin\ServicoController as adminServicoController;
 use App\Http\Controllers\admin\MatriculaController;
 use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
+use App\Http\Controllers\admin\PresencaController;
+use App\Http\Controllers\admin\SiteController;
+use App\Http\Controllers\admin\AtividadeController as AdminAtividadeController;
+use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
+use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -90,6 +95,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}/edit', [MatriculaController::class, 'edit'])->name('edit');
             Route::put('/{id}',      [MatriculaController::class, 'update'])->name('update');
             Route::delete('/{id}',   [MatriculaController::class, 'destroy'])->name('destroy');
+            Route::put('/{id}/status', [MatriculaController::class, 'updateStatus'])->name('updateStatus');
         });
 
         // CRUD Materiais
@@ -102,6 +108,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}',          [AdminMateriaisController::class, 'show'])->name('show');
             Route::put('/{id}',          [AdminMateriaisController::class, 'update'])->name('update');
             Route::delete('/{id}',       [AdminMateriaisController::class, 'destroy'])->name('destroy');
+        });
+
+        // Presença
+        Route::prefix('presenca')->name('presenca.')->group(function () {
+            Route::get('/',                  [PresencaController::class, 'index'])->name('index');
+            Route::get('/{id_aulas}/alunos', [PresencaController::class, 'alunos'])->name('alunos');
+            Route::post('/salvar',           [PresencaController::class, 'salvar'])->name('salvar');
         });
 
         // Recursos Adicionais do Admin (Aulas e Serviços)
@@ -122,6 +135,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
+
+        // ── Atividades ──
+        Route::prefix('atividades')->name('atividades.')->group(function () {
+            Route::get('/',              [AdminAtividadeController::class, 'index'])->name('index');
+            Route::get('/create',        [AdminAtividadeController::class, 'create'])->name('create');
+            Route::post('/',             [AdminAtividadeController::class, 'store'])->name('store');
+            Route::get('/{id}',          [AdminAtividadeController::class, 'show'])->name('show');
+            Route::delete('/{id}',       [AdminAtividadeController::class, 'destroy'])->name('destroy');
+            Route::put('/corrigir/{id}', [AdminAtividadeController::class, 'corrigir'])->name('corrigir');
+        });
+
+        // ── Gerenciamento do Site ──
+        Route::prefix('site')->name('site.')->group(function () {
+            Route::get('/', [SiteController::class, 'index'])->name('index');
+            Route::put('/', [SiteController::class, 'update'])->name('update');
+        });
     });
 });
 
@@ -138,9 +167,16 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
 
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
+        Route::put('/perfil/foto',  [AlunoAuthController::class, 'atualizarFoto'])->name('perfil.foto');
+        Route::put('/perfil/email', [AlunoAuthController::class, 'atualizarEmail'])->name('perfil.email');
+        Route::put('/perfil/senha', [AlunoAuthController::class, 'atualizarSenha'])->name('perfil.senha');
 
         // Minhas Aulas
         Route::get('/aulas', [AlunoAulaController::class, 'index'])->name('aulas.index');
+        Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
+        Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
+        Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
+        Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
 
         // Materiais (somente leitura)
         Route::get('/materiais',               [AlunoMateriaisController::class, 'index'])->name('materiais.index');
