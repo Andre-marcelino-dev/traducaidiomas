@@ -8,9 +8,10 @@ class Servico extends Model
 {
     protected $table = 'tbl_servicos';
     protected $primaryKey = 'id_servico';
-    public $timestamps = false;
+
+     public $timestamps = false; // 👈 ISSO AQUI CORRIGE O ERRO
+
     protected $fillable = [
-        'id_servico',
         'id_professor',
         'titulo_servico',
         'subtitulo_servico',
@@ -26,11 +27,5 @@ class Servico extends Model
         'contato_text_servico',
         'ordenar_servico',
         'imagem_servico',
-        'status_servico'
     ];
-
-        public function professor()
-        {
-            return $this->belongsTo(Professor::class, 'id_professor', 'id_professor');
-        }
 }

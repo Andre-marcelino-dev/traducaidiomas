@@ -47,8 +47,6 @@
                                 <td>{{ $aluno->curso_aluno }}</td>
                                 <td>{{ $aluno->nivel_aluno }}</td>
                                 <td>
-                                    {{-- ANTES - apague isso: --}}
-                                <td>
                                     <form action="{{ route('admin.alunos.updateStatus', $aluno->id_aluno) }}"
                                         method="POST" style="display:inline">
                                         @csrf
@@ -67,7 +65,6 @@
                                             </option>
                                         </select>
                                     </form>
-                                </td>
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.alunos.edit', $aluno->id_aluno) }}"

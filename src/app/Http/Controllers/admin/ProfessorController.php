@@ -64,7 +64,7 @@ public function store(Request $request)
 
         $arquivo->move($diretorioDestino, $nomeFoto);
 
-        $dados['foto_professor'] = 'traducaidiomas/professor/' . $nomeFoto;
+        $dados['foto_professor'] = $nomeFoto;
     }
 
 Professor::create($dados);
@@ -140,7 +140,7 @@ return redirect()
                 // dd($request->file('foto_professor'));
 
            $arquivo->move($diretorioDestino, $nomeFoto);
-            $dados['foto_professor'] = 'traducaidiomas/professor/' . $nomeFoto;
+            $dados['foto_professor'] = $nomeFoto;
         }
 
         $professor->update($dados);

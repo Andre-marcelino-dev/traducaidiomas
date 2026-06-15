@@ -8953,7 +8953,8 @@ textarea.form-control-lg {
 
 .bg-body-secondary {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
+  /* background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important; */
+  background: linear-gradient(135deg, #059669 0%, #06b6d4 100%) !important;
 }
 
 .bg-body-tertiary {

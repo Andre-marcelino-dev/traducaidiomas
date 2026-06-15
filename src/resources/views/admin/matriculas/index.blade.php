@@ -49,6 +49,12 @@
                         <p>Alunos Inativos</p>
                     </div>
                 </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="mc shadow" style="background: linear-gradient(135deg, #fd7e14, #e65c00);">
+                        <div class="mc-val">{{ $matriculasCongeladas ?? 0 }}</div>
+                        <p>Matrículas Congeladas</p>
+                    </div>
+                </div>
             </div>
 
             {{-- FORMULÁRIO (novo ou editar) --}}
@@ -149,6 +155,7 @@
                                 <th>Curso</th>
                                 <th>Nível</th>
                                 <th>Data</th>
+                                <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -160,6 +167,21 @@
                                     <td>{{ $matricula->nivel?->nome_nivel ?? '—' }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($matricula->data_matricula)->format('d/m/Y') }}
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('admin.matriculas.updateStatus', $matricula->id_matricula) }}" method="POST" style="display:inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status_matricula" onchange="this.form.submit()"
+                                                class="border-0 fw-bold text-white rounded px-2 py-1"
+                                                style="cursor:pointer; font-size:0.75rem; background-color: {{
+                                                    $matricula->status_matricula == 'ATIVO' ? '#28a745' :
+                                                    ($matricula->status_matricula == 'CONGELADO' ? '#fd7e14' : '#dc3545') }}">
+                                                <option value="ATIVO" {{ $matricula->status_matricula == 'ATIVO' ? 'selected' : '' }}>✅ ATIVO</option>
+                                                <option value="CONGELADO" {{ $matricula->status_matricula == 'CONGELADO' ? 'selected' : '' }}>❄️ CONGELADO</option>
+                                                <option value="CANCELADO" {{ $matricula->status_matricula == 'CANCELADO' ? 'selected' : '' }}>❌ CANCELADO</option>
+                                            </select>
+                                        </form>
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.matriculas.edit', $matricula->id_matricula) }}"
@@ -187,26 +209,37 @@
     </div>
 
     {{-- MODAL --}}
-    <div class="modal fade" id="modalExcluir">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5>Excluir</h5>
+    <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <p>Excluir matrícula do aluno:</p>
-                    <strong id="nomeAlunoModal"></strong>
+                <div class="modal-body text-center px-4 pb-2">
+                    <div class="mb-3">
+                        <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold mb-1">Confirmar Exclusão</h5>
+                    <p class="text-muted mb-1">Você está prestes a excluir a matrícula de:</p>
+                    <p class="fw-bold fs-5 text-dark" id="nomeAlunoModal"></p>
+                    <p class="text-muted small">Esta ação não poderá ser desfeita.</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-0 justify-content-center gap-2 pb-4">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                    </button>
                     <form id="formExcluir" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger">Sim</button>
+                        <button class="btn btn-danger px-4">
+                            <i class="fas fa-trash me-1"></i> Excluir
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 
     <script>
         document.getElementById('modalExcluir').addEventListener('show.bs.modal', function(event) {
