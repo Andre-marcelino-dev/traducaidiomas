@@ -55,6 +55,12 @@
                 </a>
             </li>
             <li class="cart-btn">
+                <a href="{{ route('aluno.login') }}">
+                    <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    <span class="count"></span>
+                </a>
+            </li>
+            <li class="cart-btn">
                 <a href="{{ route('admin.login') }}">
                     <i class="fa fa-user-shield" style="font-size: 30px;"></i>
                     <span class="count"></span>

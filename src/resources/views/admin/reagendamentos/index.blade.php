@@ -252,7 +252,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form action="{{ route('aluno.reagendamento.solicitar') }}" method="POST">
+                <form action="{{ route('admin.reagendamentos.store') }}" method="POST">
                     @csrf
                     <div class="modal-body px-4 py-3">
 
