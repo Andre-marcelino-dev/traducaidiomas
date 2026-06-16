@@ -81,9 +81,7 @@
             <div class="card-header d-flex justify-content-between">
                 <h5>Lista de Agendamentos</h5>
 
-                <a href="{{ route('admin.agendas.create') }}" class="btn btn-success btn-sm">
-                    Novo
-                </a>
+          
             </div>
 
             <div class="table-responsive">

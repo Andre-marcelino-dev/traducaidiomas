@@ -123,16 +123,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id']);
 
         // ── Reagendamentos (Admin) ──
-        Route::get('reagendamentos', [AdminReagendamentoController::class, 'index'])
-            ->name('reagendamentos.index');
-        Route::get('reagendamentos/{reagendamento}', [AdminReagendamentoController::class, 'show'])
-            ->name('reagendamentos.show');
-        Route::put('reagendamentos/{id}/aceitar', [AdminReagendamentoController::class, 'aceitar'])
-            ->name('reagendamentos.aceitar');
-        Route::put('reagendamentos/{id}/recusar', [AdminReagendamentoController::class, 'recusar'])
-            ->name('reagendamentos.recusar');
-        Route::delete('reagendamentos/{id}', [AdminReagendamentoController::class, 'destroy'])
-            ->name('reagendamentos.destroy');
+        Route::prefix('reagendamentos')->name('reagendamentos.')->group(function () {
+            Route::get('/',                        [AdminReagendamentoController::class, 'index'])->name('index');
+            Route::post('/',                       [AdminReagendamentoController::class, 'store'])->name('store');
+            Route::get('/{reagendamento}',         [AdminReagendamentoController::class, 'show'])->name('show');
+            Route::put('/{reagendamento}/aceitar', [AdminReagendamentoController::class, 'aceitar'])->name('aceitar');
+            Route::put('/{reagendamento}/recusar', [AdminReagendamentoController::class, 'recusar'])->name('recusar');
+            Route::delete('/{reagendamento}',      [AdminReagendamentoController::class, 'destroy'])->name('destroy');
+        });
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
