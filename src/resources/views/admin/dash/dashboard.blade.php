@@ -1,727 +1,495 @@
 @extends('admin.layout.admin')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-    {{-- HEADER --}}
-    <div class="app-content-header">
-        <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <h3 class="mb-0 fw-bold">Dashboard</h3>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-end mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
+{{-- ══ BREADCRUMB ══ --}}
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-6"><h3 class="mb-0 fw-bold">Dashboard</h3></div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end mb-0">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+<div class="container-fluid">
+
+    {{-- ══ ROW 1 — GREETING ══ --}}
+    <div class="row mb-4 fade-up">
+        <div class="col-12">
+            <div class="dash-greeting-card shadow">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <p class="dash-hora" id="dash-hora"></p>
+                        <h2 class="dash-nome">
+                            @php $h = now()->format('H'); $saudacao = $h < 12 ? 'Bom dia' : ($h < 18 ? 'Boa tarde' : 'Boa noite'); @endphp
+                            {{ $saudacao }}, {{ explode(' ', auth('admin')->user()->nome_professor)[0] }}! 👋
+                        </h2>
+                        <p class="dash-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
+                        <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+                            <div class="dash-badge-prof"><i class="fas fa-shield-halved"></i> Administrador do sistema</div>
+                            @if($totalReagendamentosPendentes > 0)
+                                <a href="{{ route('admin.reagendamentos.index') }}" class="dash-badge-prof" style="background:rgba(244,63,94,.2);border-color:rgba(244,63,94,.3);color:#fda4af;text-decoration:none;">
+                                    <i class="fas fa-bell"></i> {{ $totalReagendamentosPendentes }} reagendamento{{ $totalReagendamentosPendentes > 1 ? 's' : '' }} pendente{{ $totalReagendamentosPendentes > 1 ? 's' : '' }}
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-none d-md-flex justify-content-end">
+                        <img src="{{ asset('traducaidiomas/professor/' . auth('admin')->user()->foto_professor) }}"
+                            style="width:110px;height:110px;object-fit:cover;border-radius:16px;border:3px solid rgba(255,255,255,.15);box-shadow:0 8px 24px rgba(0,0,0,.25);"
+                            alt="{{ auth('admin')->user()->nome_professor }}">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="app-content">
-        <div class="container-fluid">
+    {{-- ══ ROW 2 — MÉTRICAS ══ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-xl fade-up">
+            <div class="mc mc-blue shadow-sm h-100">
+                <div class="mc-icon"><i class="fas fa-chalkboard-user"></i></div>
+                <div class="mc-val" id="ctr-prof" data-target="{{ $totalProfessores }}">0</div>
+                <p class="mc-lbl">Professores</p>
+                <div class="mc-trend"><i class="fas fa-circle me-1" style="font-size:.4rem;"></i> cadastrados</div>
+            </div>
+        </div>
+        <div class="col-6 col-xl fade-up">
+            <div class="mc mc-green shadow-sm h-100">
+                <div class="mc-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="mc-val" id="ctr-alunos" data-target="{{ $totalAlunos }}">0</div>
+                <p class="mc-lbl">Alunos</p>
+                <div class="mc-trend"><i class="fas fa-circle-check me-1"></i> {{ $alunosAtivos }} ativos</div>
+            </div>
+        </div>
+        <div class="col-6 col-xl fade-up">
+            <div class="mc mc-amber shadow-sm h-100">
+                <div class="mc-icon"><i class="fas fa-book-open-reader"></i></div>
+                <div class="mc-val" id="ctr-aulas" data-target="{{ $totalAulas }}">0</div>
+                <p class="mc-lbl">Aulas</p>
+                <div class="mc-trend"><i class="fas fa-calendar-day me-1"></i> {{ $aulasHoje->count() }} hoje</div>
+            </div>
+        </div>
+        <div class="col-6 col-xl fade-up">
+            <div class="mc mc-sky shadow-sm h-100">
+                <div class="mc-icon"><i class="fas fa-id-card-clip"></i></div>
+                <div class="mc-val" id="ctr-mat" data-target="{{ $matriculasAtivas }}">0</div>
+                <p class="mc-lbl">Matrículas Ativas</p>
+                <div class="mc-trend"><i class="fas fa-circle me-1" style="font-size:.4rem;"></i> em andamento</div>
+            </div>
+        </div>
+        <div class="col-6 col-xl fade-up">
+            <div class="mc shadow-sm h-100" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
+                <div class="mc-icon"><i class="fas fa-user-check"></i></div>
+                <div class="mc-val">{{ $taxaPresenca }}%</div>
+                <p class="mc-lbl">Taxa de Presença</p>
+                <div class="mc-trend" style="margin-top:.4rem;">
+                    <div style="flex:1;height:5px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden;">
+                        <div style="width:{{ $taxaPresenca }}%;height:100%;background:#10b981;border-radius:99px;transition:width 1s;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            {{-- ── GREETING ── --}}
-            <div class="row mb-4 fade-up">
-                <div class="col-12">
-                    <div class="dash-greeting-card shadow-sm">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <p class="dash-hora" id="dash-hora"></p>
-                                <h2 class="dash-nome">
-                                    @php
-                                        $h = now()->format('H');
-                                        $saudacao = $h < 12 ? 'Bom dia' : ($h < 18 ? 'Boa tarde' : 'Boa noite');
-                                    @endphp
-                                    {{ $saudacao }}, {{ explode(' ', auth('admin')->user()->nome_professor)[0] }}! 👋
-                                </h2>
-                                <p class="dash-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
-                                <div class="dash-badge-prof">
-                                    <i class="fas fa-shield-halved"></i>
-                                    Administrador do sistema
+    {{-- ══ ROW 3 — AULAS HOJE + GRÁFICO MENSAL ══ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-lg-4 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header">
+                    <h6>
+                        <span style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;animation:pulse 2s infinite;"></span>
+                        Aulas Hoje
+                    </h6>
+                    <span style="background:#f0fdf4;color:#065f46;font-size:.68rem;font-weight:700;padding:.2rem .65rem;border-radius:50px;">{{ $aulasHoje->count() }} aula{{ $aulasHoje->count() !== 1 ? 's' : '' }}</span>
+                </div>
+                <div class="card-body p-3">
+                    @forelse($aulasHoje as $aula)
+                        @php $ht = \Carbon\Carbon::parse($aula->hora_aulas); @endphp
+                        <div class="schedule-item">
+                            <div class="schedule-time">
+                                <div class="hour">{{ $ht->format('H:i') }}</div>
+                            </div>
+                            <div class="schedule-dot"></div>
+                            <div class="schedule-info flex-grow-1 overflow-hidden">
+                                <div class="title">{{ Str::limit($aula->titulo_aulas, 28) }}</div>
+                                <div class="sub">
+                                    @if($aula->cursos_aulas) {{ $aula->cursos_aulas }} &nbsp;·&nbsp; @endif
+                                    @if($aula->professor) {{ $aula->professor->nome_professor }} @endif
                                 </div>
                             </div>
-                            <div class="col-md-4 d-none d-md-flex justify-content-end">
-                                <img src="{{ asset('traducaidiomas/professor/' . auth('admin')->user()->foto_professor) }}"
-                                    style="width:120px;height:120px;object-fit:cover;border-radius:16px;border:3px solid rgba(255,255,255,.15);"
-                                    alt="{{ auth('admin')->user()->nome_professor }}">
+                        </div>
+                    @empty
+                        <div class="today-empty">
+                            <i class="fas fa-mug-hot fa-2x opacity-25"></i>
+                            <span>Nenhuma aula agendada para hoje</span>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-chart-line text-primary"></i> Aulas nos Últimos 6 Meses</h6>
+                </div>
+                <div class="card-body py-3 px-3">
+                    <canvas id="chartAulas" style="max-height:220px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ══ ROW 4 — GRÁFICOS ══ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header"><h6><i class="fas fa-user-check text-success"></i> Presença Geral</h6></div>
+                <div class="card-body d-flex align-items-center justify-content-center py-2">
+                    <canvas id="chartPresenca" style="max-height:200px;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header"><h6><i class="fas fa-layer-group text-info"></i> Alunos por Nível</h6></div>
+                <div class="card-body d-flex align-items-center justify-content-center py-2">
+                    <canvas id="chartNiveis" style="max-height:200px;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header"><h6><i class="fas fa-star-half-stroke text-warning"></i> Distribuição de Notas</h6></div>
+                <div class="card-body py-2 px-3">
+                    <canvas id="chartNotas" style="max-height:200px;"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header"><h6><i class="fas fa-language" style="color:#6366f1;"></i> Alunos por Idioma</h6></div>
+                <div class="card-body p-3">
+                    @php $maxCurso = $alunosPorCurso->max('total') ?: 1; @endphp
+                    @forelse($alunosPorCurso as $i => $curso)
+                        @php $cores = ['#6366f1','#10b981','#f59e0b','#0ea5e9','#f43f5e','#8b5cf6']; $cor = $cores[$i % count($cores)]; $pct = round($curso->total / $maxCurso * 100); @endphp
+                        <div class="course-bar-item">
+                            <div class="course-bar-label">
+                                <span>{{ $curso->nome_curso }}</span>
+                                <span style="font-weight:700;color:{{ $cor }};">{{ $curso->total }}</span>
+                            </div>
+                            <div class="course-bar-track">
+                                <div class="course-bar-fill" style="width:{{ $pct }}%;background:{{ $cor }};"></div>
                             </div>
                         </div>
-                    </div>
+                    @empty
+                        <div class="today-empty"><i class="fas fa-inbox opacity-25"></i><span>Sem dados</span></div>
+                    @endforelse
                 </div>
             </div>
+        </div>
+    </div>
 
-            {{-- ── METRIC CARDS ── --}}
-            <div class="row g-3 mb-4">
-                <div class="col-sm-6 col-xl-3 fade-up">
-                    <div class="mc mc-blue fade-up">
-                        <div class="mc-icon">👨‍🏫</div>
-                        <div class="mc-val" id="totalProfessores" data-target="{{ $totalProfessores }}">0</div>
-                        <p class="mc-lbl">Professores</p>
-                        <div class="mc-trend">
-                            👥 <span id="prof-trend">carregando...</span>
-                        </div>
-                    </div>
+    {{-- ══ ROW 5 — ALUNOS RECENTES + AÇÕES + FRASES ══ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8 fade-up">
+            <div class="d-card">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-user-graduate text-success"></i> Alunos Recentes</h6>
+                    <a href="{{ route('admin.alunos.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
-                <div class="col-sm-6 col-xl-3 fade-up">
-                    <div class="mc mc-green fade-up">
-                        <div class="mc-icon">🎓</div>
-                        <div class="mc-val" id="totalAlunos" data-target="{{ $totalAlunos }}">0</div>
-                        <p class="mc-lbl">Alunos</p>
-                        <div class="mc-trend">
-                            👥 <span id="alunos-trend">carregando...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3 fade-up">
-                    <div class="mc mc-green fade-up">
-                        <div class="mc-icon">🎓</div>
-                        <div class="mc-val" id="totalAulas" data-target="{{ $totalAulas }}">0</div>
-                        <p class="mc-lbl">Aulas</p>
-                        <div class="mc-trend">
-                            👥 <span id="aulas-trend">carregando...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3 fade-up">
-                    <div class="metric-card metric-card-rose shadow-sm">
-                        <div class="metric-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="metric-value">{{ now()->format('d/m/Y') }}</div>
-                        <p class="metric-label">Hoje</p>
-                        <div class="metric-trend">
-                            @php
-                                $hora = now('America/Sao_Paulo')->hour;
-                                if ($hora >= 5 && $hora < 12) {
-                                    $icone = '🌅';
-                                    $saudacao = 'Bom dia';
-                                } elseif ($hora >= 12 && $hora < 18) {
-                                    $icone = '☀️';
-                                    $saudacao = 'Boa tarde';
-                                } else {
-                                    $icone = '🌙';
-                                    $saudacao = 'Boa noite';
-                                }
-                            @endphp
-                            {{ $icone }} {{ $saudacao }} — {{ now('America/Sao_Paulo')->format('H:i') }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- ── GRÁFICOS ── --}}
-            <div class="row g-3 mb-4">
-
-                {{-- Presença geral --}}
-                <div class="col-lg-3 col-md-6 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-user-check me-2 text-success"></i>Presença Geral</h5>
-                        </div>
-                        <div class="card-body d-flex align-items-center justify-content-center py-3">
-                            <canvas id="chartPresenca" style="max-height:220px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Alunos por nível --}}
-                <div class="col-lg-3 col-md-6 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-layer-group me-2 text-info"></i>Alunos por Nível</h5>
-                        </div>
-                        <div class="card-body d-flex align-items-center justify-content-center py-3">
-                            <canvas id="chartNiveis" style="max-height:220px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Distribuição de notas --}}
-                <div class="col-lg-6 col-md-12 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-star-half-stroke me-2 text-warning"></i>Distribuição de Notas</h5>
-                        </div>
-                        <div class="card-body py-3">
-                            <canvas id="chartNotas" style="max-height:220px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Aulas por mês --}}
-                <div class="col-12 fade-up">
-                    <div class="card recent-card">
-                        <div class="card-header">
-                            <h5><i class="fas fa-calendar-days me-2 text-primary"></i>Aulas nos Últimos 6 Meses</h5>
-                        </div>
-                        <div class="card-body py-3">
-                            <canvas id="chartAulas" style="max-height:200px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- ── ALUNOS RECENTES + PRÓXIMAS AULAS ── --}}
-            <div class="row g-3 mb-4">
-
-                {{-- Alunos recentes --}}
-                <div class="col-lg-8 fade-up">
-                    <div class="recent-card card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-user-graduate me-2 text-success"></i>Alunos Recentes</h5>
-                            <a href="{{ route('admin.alunos.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table recent-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Aluno</th>
-                                        <th>Curso</th>
-                                        <th>Nível</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($alunosRecentes as $aluno)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    @if($aluno->foto_aluno)
-                                                        <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}"
-                                                            class="prof-avatar" alt="{{ $aluno->nome_aluno }}">
-                                                    @else
-                                                        <div class="prof-avatar-placeholder">
-                                                            {{ strtoupper(substr($aluno->nome_aluno, 0, 2)) }}
-                                                        </div>
-                                                    @endif
-                                                    <div>
-                                                        <div style="font-weight:600;font-size:.875rem;">{{ $aluno->nome_aluno }}</div>
-                                                        <div style="font-size:.72rem;color:#94a3b8;">{{ $aluno->email_aluno }}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ $aluno->curso_aluno ?? '—' }}</td>
-                                            <td>
-                                                @php $nv = strtolower($aluno->nivel_aluno ?? ''); @endphp
-                                                <span class="badge-nivel
-                                                    {{ str_contains($nv,'básico') || str_contains($nv,'basico') || str_contains($nv,'inic')
-                                                        ? 'badge-basico'
-                                                        : (str_contains($nv,'inter') ? 'badge-intermediario'
-                                                        : (str_contains($nv,'avan') ? 'badge-avancado' : 'badge-fluente')) }}">
-                                                    {{ $aluno->nivel_aluno ?? '—' }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                @if(strtoupper($aluno->status_aluno ?? '') === 'EM CURSO')
-                                                    <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1" style="font-size:.7rem;">Ativo</span>
-                                                @elseif(in_array(strtoupper($aluno->status_aluno ?? ''), ['CONCLUÍDO', 'CONCLUIDO']))
-                                                    <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1" style="font-size:.7rem;">Concluído</span>
-                                                @else
-                                                    <span class="badge bg-danger-subtle text-danger rounded-pill px-2 py-1" style="font-size:.7rem;">Inativo</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center py-4 text-muted">
-                                                <i class="fas fa-inbox fa-2x mb-2 d-block opacity-25"></i>
-                                                Nenhum aluno cadastrado ainda
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Próximas aulas --}}
-                <div class="col-lg-4 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-calendar-clock me-2 text-primary"></i>Próximas Aulas</h5>
-                            <a href="{{ route('admin.aulas.index') }}">Ver todas <i class="fas fa-arrow-right ms-1"></i></a>
-                        </div>
-                        <div class="card-body p-3">
-                            @forelse($proximasAulas as $aula)
-                                @php
-                                    $data = \Carbon\Carbon::parse($aula->data_aulas);
-                                    $hoje = now()->isToday() && $data->isToday();
-                                @endphp
-                                <div class="d-flex align-items-start gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
-                                    <div class="text-center rounded-2 px-2 py-1 flex-shrink-0"
-                                        style="background:{{ $hoje ? '#eef3ff' : '#f8fafc' }};min-width:46px;">
-                                        <div style="font-size:.65rem;color:#64748b;text-transform:uppercase;font-weight:600;">
-                                            {{ $data->translatedFormat('M') }}
-                                        </div>
-                                        <div style="font-size:1.3rem;font-weight:700;color:{{ $hoje ? '#4f46e5' : '#1e293b' }};line-height:1.1;">
-                                            {{ $data->format('d') }}
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                            {{ $aula->titulo_aulas }}
-                                        </div>
-                                        <div style="font-size:.75rem;color:#94a3b8;">
-                                            <i class="fas fa-clock me-1"></i>{{ substr($aula->hora_aulas, 0, 5) }}
-                                            @if($aula->cursos_aulas)
-                                                &nbsp;·&nbsp; {{ $aula->cursos_aulas }}
+                <div class="table-responsive">
+                    <table class="table recent-table mb-0">
+                        <thead><tr><th>Aluno</th><th>Curso</th><th>Nível</th><th>Status</th></tr></thead>
+                        <tbody>
+                            @forelse($alunosRecentes as $aluno)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if($aluno->foto_aluno)
+                                                <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}" class="prof-avatar" alt="">
+                                            @else
+                                                <div class="prof-avatar-placeholder">{{ strtoupper(substr($aluno->nome_aluno, 0, 2)) }}</div>
                                             @endif
-                                        </div>
-                                    </div>
-                                    @if($hoje)
-                                        <span class="badge bg-primary-subtle text-primary rounded-pill px-2" style="font-size:.65rem;white-space:nowrap;">Hoje</span>
-                                    @endif
-                                </div>
-                            @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="fas fa-calendar-xmark fa-2x mb-2 d-block opacity-25"></i>
-                                    <small>Nenhuma aula agendada</small>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- ── TABELA + SIDEBAR ── --}}
-            <div class="row g-3">
-
-                {{-- Tabela professores recentes --}}
-                <div class="col-lg-8 fade-up">
-                    <div class="recent-card card">
-                        <div class="card-header">
-                            <h5><i class="fas fa-chalkboard-user me-2 text-primary"></i>Professores Recentes</h5>
-                            <a href="{{ route('admin.professores.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table recent-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Professor</th>
-                                        <th>Especialidade</th>
-                                        <th>Nível</th>
-                                        <th>Experiência</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($professoresRecentes as $prof)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    @if ($prof->foto_professor)
-                                                        <img src="{{ asset('traducaidiomas/professor/' . $prof->foto_professor) }}"
-                                                            class="prof-avatar" alt="{{ $prof->nome_professor }}">
-                                                    @else
-                                                        <div class="prof-avatar-placeholder">
-                                                            {{ strtoupper(substr($prof->nome_professor, 0, 2)) }}
-                                                        </div>
-                                                    @endif
-                                                    <div>
-                                                        <div class="fw-600" style="font-weight:600;font-size:.875rem;">
-                                                            {{ $prof->nome_professor }}</div>
-                                                        <div style="font-size:.72rem;color:#94a3b8;">
-                                                            {{ $prof->email_professor }}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ $prof->especialidade_professor ?? '—' }}</td>
-                                            <td>
-                                                @php $nivel = strtolower($prof->nivel_professor ?? ''); @endphp
-                                                <span class="badge-nivel
-                                                    {{ $nivel == 'básico' || $nivel == 'basico'
-                                                        ? 'badge-basico'
-                                                        : ($nivel == 'intermediário' || $nivel == 'intermediario'
-                                                            ? 'badge-intermediario'
-                                                            : ($nivel == 'avançado' || $nivel == 'avancado'
-                                                                ? 'badge-avancado'
-                                                                : 'badge-fluente')) }}">
-                                                    {{ $prof->nivel_professor ?? '—' }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                {{ $prof->experiencia_professor }}
-                                                {{ $prof->experiencia_professor == 1 ? 'ano' : 'anos' }}
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.professores.edit', $prof->id_professor) }}"
-                                                    class="btn btn-sm btn-light rounded-circle" title="Editar">
-                                                    <i class="fas fa-pen fa-xs"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center py-4 text-muted">
-                                                <i class="fas fa-inbox fa-2x mb-2 d-block opacity-25"></i>
-                                                Nenhum professor cadastrado ainda
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Sidebar direita --}}
-                <div class="col-lg-4 fade-up">
-
-                    {{-- Ações rápidas --}}
-                    <div class="card recent-card mb-3">
-                        <div class="card-header">
-                            <h5><i class="fas fa-bolt me-2 text-warning"></i>Ações Rápidas</h5>
-                        </div>
-                        <div class="card-body p-3">
-                            <a href="{{ route('admin.professores.create') }}" class="quick-action">
-                                <div class="qa-icon" style="background:#eef3ff;color:#4f46e5;">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div>
-                                    <div class="qa-label">Novo Professor</div>
-                                    <p class="qa-desc">Cadastrar professor</p>
-                                </div>
-                                <i class="fas fa-chevron-right qa-arrow"></i>
-                            </a>
-                            <a href="{{ route('admin.professores.index') }}" class="quick-action">
-                                <div class="qa-icon" style="background:#ecfdf5;color:#059669;">
-                                    <i class="fas fa-list"></i>
-                                </div>
-                                <div>
-                                    <div class="qa-label">Ver Professores</div>
-                                    <p class="qa-desc">Listar todos</p>
-                                </div>
-                                <i class="fas fa-chevron-right qa-arrow"></i>
-                            </a>
-                            <a href="{{ route('admin.alunos.index') }}" class="quick-action">
-                                <div class="qa-icon" style="background:#fffbeb;color:#d97706;">
-                                    <i class="fas fa-user-graduate"></i>
-                                </div>
-                                <div>
-                                    <div class="qa-label">Ver Alunos</div>
-                                    <p class="qa-desc">Listar todos</p>
-                                </div>
-                                <i class="fas fa-chevron-right qa-arrow"></i>
-                            </a>
-
-                            {{-- ── NOVO: Reagendamentos ── --}}
-                            <a href="{{ route('admin.reagendamentos.index') }}" class="quick-action">
-                                <div class="qa-icon" style="background:#fef3c7;color:#d97706;">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <div>
-                                    <div class="qa-label d-flex align-items-center gap-2">
-                                        Reagendamentos
-                                        <span class="badge bg-warning text-dark d-none" id="badgeReagendamentos"
-                                            style="font-size:.7rem;border-radius:20px;padding:2px 7px;">0</span>
-                                    </div>
-                                    <p class="qa-desc">Solicitações dos alunos</p>
-                                </div>
-                                <i class="fas fa-chevron-right qa-arrow"></i>
-                            </a>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- ── REAGENDAMENTOS PENDENTES + RANKING DE NOTAS ── --}}
-            <div class="row g-3 mt-1 mb-4">
-
-                {{-- Reagendamentos pendentes --}}
-                <div class="col-lg-6 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-calendar-xmark me-2 text-danger"></i>Reagendamentos Pendentes</h5>
-                            <a href="{{ route('admin.reagendamentos.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
-                        </div>
-                        <div class="card-body p-3">
-                            @forelse($reagendamentosPendentes as $reag)
-                                <div class="d-flex align-items-start gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
-                                    <div class="flex-shrink-0 rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width:38px;height:38px;background:#fff1f2;color:#f43f5e;font-size:.8rem;font-weight:700;">
-                                        {{ strtoupper(substr($reag->aluno->nome_aluno ?? '?', 0, 2)) }}
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                            {{ $reag->aluno->nome_aluno ?? 'Aluno removido' }}
-                                        </div>
-                                        <div style="font-size:.75rem;color:#94a3b8;">
-                                            <i class="fas fa-arrow-right-arrow-left me-1"></i>
-                                            {{ $reag->data_original ? \Carbon\Carbon::parse($reag->data_original)->format('d/m') : '—' }}
-                                            &rarr;
-                                            {{ $reag->data_sugerida ? \Carbon\Carbon::parse($reag->data_sugerida)->format('d/m/Y') : '—' }}
-                                        </div>
-                                        @if($reag->motivo)
-                                            <div style="font-size:.72rem;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                                {{ Str::limit($reag->motivo, 50) }}
+                                            <div>
+                                                <div style="font-weight:600;font-size:.875rem;">{{ $aluno->nome_aluno }}</div>
+                                                <div style="font-size:.7rem;color:#94a3b8;">{{ $aluno->email_aluno }}</div>
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td style="font-size:.82rem;">{{ $aluno->curso_aluno ?? '—' }}</td>
+                                    <td>
+                                        @php $nv = strtolower($aluno->nivel_aluno ?? ''); @endphp
+                                        <span class="badge-nivel {{ str_contains($nv,'básic')||str_contains($nv,'basic')||str_contains($nv,'inic') ? 'badge-basico' : (str_contains($nv,'inter') ? 'badge-intermediario' : (str_contains($nv,'avan') ? 'badge-avancado' : 'badge-fluente')) }}">
+                                            {{ $aluno->nivel_aluno ?? '—' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if(strtoupper($aluno->status_aluno ?? '') === 'EM CURSO')
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2" style="font-size:.68rem;">Ativo</span>
+                                        @elseif(in_array(strtoupper($aluno->status_aluno ?? ''),['CONCLUÍDO','CONCLUIDO']))
+                                            <span class="badge bg-info-subtle text-info rounded-pill px-2" style="font-size:.68rem;">Concluído</span>
+                                        @else
+                                            <span class="badge bg-danger-subtle text-danger rounded-pill px-2" style="font-size:.68rem;">Inativo</span>
                                         @endif
-                                    </div>
-                                    <a href="{{ route('admin.reagendamentos.index') }}"
-                                        class="btn btn-sm flex-shrink-0"
-                                        style="background:#fff1f2;color:#f43f5e;border:none;font-size:.72rem;padding:4px 10px;border-radius:20px;white-space:nowrap;">
-                                        Responder
-                                    </a>
-                                </div>
+                                    </td>
+                                </tr>
                             @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="fas fa-circle-check fa-2x mb-2 d-block text-success opacity-50"></i>
-                                    <small>Nenhum reagendamento pendente</small>
-                                </div>
+                                <tr><td colspan="4" class="text-center py-5 text-muted"><i class="fas fa-inbox fa-2x mb-2 d-block opacity-25"></i>Nenhum aluno cadastrado ainda</td></tr>
                             @endforelse
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
 
-                {{-- Ranking de notas --}}
-                <div class="col-lg-6 fade-up">
-                    <div class="card recent-card h-100">
-                        <div class="card-header">
-                            <h5><i class="fas fa-trophy me-2 text-warning"></i>Ranking de Notas</h5>
+        <div class="col-lg-4 fade-up">
+            <div class="d-card mb-3">
+                <div class="d-card-header"><h6><i class="fas fa-bolt text-warning"></i> Ações Rápidas</h6></div>
+                <div class="card-body p-3">
+                    <a href="{{ route('admin.professores.create') }}" class="quick-action">
+                        <div class="qa-icon" style="background:#eef3ff;color:#4f46e5;"><i class="fas fa-user-plus"></i></div>
+                        <div><div class="qa-label">Novo Professor</div><p class="qa-desc">Cadastrar professor</p></div>
+                        <i class="fas fa-chevron-right qa-arrow"></i>
+                    </a>
+                    <a href="{{ route('admin.alunos.index') }}" class="quick-action">
+                        <div class="qa-icon" style="background:#ecfdf5;color:#059669;"><i class="fas fa-user-graduate"></i></div>
+                        <div><div class="qa-label">Ver Alunos</div><p class="qa-desc">Listar todos</p></div>
+                        <i class="fas fa-chevron-right qa-arrow"></i>
+                    </a>
+                    <a href="{{ route('admin.presenca.index') }}" class="quick-action">
+                        <div class="qa-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fas fa-clipboard-check"></i></div>
+                        <div><div class="qa-label">Registrar Presença</div><p class="qa-desc">Chamada de aulas</p></div>
+                        <i class="fas fa-chevron-right qa-arrow"></i>
+                    </a>
+                    <a href="{{ route('admin.reagendamentos.index') }}" class="quick-action">
+                        <div class="qa-icon" style="background:#fef3c7;color:#d97706;"><i class="fas fa-calendar-alt"></i></div>
+                        <div>
+                            <div class="qa-label d-flex align-items-center gap-2">
+                                Reagendamentos
+                                <span class="badge bg-warning text-dark d-none" id="badgeReagendamentos" style="font-size:.65rem;border-radius:20px;padding:1px 6px;">0</span>
+                            </div>
+                            <p class="qa-desc">Solicitações dos alunos</p>
                         </div>
-                        <div class="card-body p-3">
-                            @forelse($topAlunos as $i => $item)
-                                @php
-                                    $medalhas = ['🥇','🥈','🥉'];
-                                    $medalha  = $medalhas[$i] ?? '#' . ($i + 1);
-                                    $media    = round($item->media, 1);
-                                    $pct      = min(100, $media * 10);
-                                    $cor      = $media >= 9 ? '#22c55e' : ($media >= 7 ? '#3b82f6' : ($media >= 5 ? '#f59e0b' : '#f87171'));
-                                @endphp
-                                <div class="d-flex align-items-center gap-3 mb-3">
-                                    <span style="font-size:1.25rem;width:28px;text-align:center;flex-shrink:0;">{{ $medalha }}</span>
-                                    <div class="flex-shrink-0 rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width:36px;height:36px;background:#f8fafc;font-size:.75rem;font-weight:700;color:#475569;border:1px solid #e2e8f0;">
-                                        {{ strtoupper(substr($item->aluno->nome_aluno ?? '?', 0, 2)) }}
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span style="font-size:.82rem;font-weight:600;">{{ $item->aluno->nome_aluno ?? 'Aluno' }}</span>
-                                            <span style="font-size:.82rem;font-weight:700;color:{{ $cor }};">{{ $media }}</span>
-                                        </div>
-                                        <div style="height:5px;background:#f1f5f9;border-radius:99px;overflow:hidden;">
-                                            <div style="width:{{ $pct }}%;height:100%;background:{{ $cor }};border-radius:99px;transition:width .6s;"></div>
-                                        </div>
-                                        <div style="font-size:.68rem;color:#94a3b8;">{{ $item->total_atividades }} {{ $item->total_atividades == 1 ? 'atividade' : 'atividades' }}</div>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="fas fa-star fa-2x mb-2 d-block opacity-25"></i>
-                                    <small>Nenhuma nota registrada ainda</small>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
+                        <i class="fas fa-chevron-right qa-arrow"></i>
+                    </a>
                 </div>
-
             </div>
 
+            <div class="d-card" id="card-frases">
+                <div class="d-card-header" style="background:linear-gradient(135deg,#f8faff,#eef3ff);">
+                    <h6><i class="fas fa-language" style="color:#6366f1;"></i> Frase do Momento</h6>
+                </div>
+                <div class="card-body p-4 text-center" style="min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <div id="frase-flag" style="font-size:1.4rem;margin-bottom:6px;">🇺🇸</div>
+                    <p id="frase-texto" style="font-size:.92rem;font-weight:600;color:#1e293b;min-height:40px;margin:0 0 8px;line-height:1.45;transition:opacity .4s;"></p>
+                    <div id="frase-divisor" style="width:36px;height:2px;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:99px;margin:0 auto 8px;opacity:0;transition:opacity .4s;"></div>
+                    <p id="frase-traducao" style="font-size:.8rem;color:#6366f1;font-style:italic;min-height:32px;margin:0;opacity:0;transition:opacity .4s;"></p>
+                </div>
+            </div>
         </div>
     </div>
 
-    {{-- Chart.js --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        Chart.defaults.font.family = "'Inter','Segoe UI',sans-serif";
-        Chart.defaults.color = '#64748b';
+    {{-- ══ ROW 6 — PROFESSORES + RANKING ══ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8 fade-up">
+            <div class="d-card">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-chalkboard-user text-primary"></i> Professores Recentes</h6>
+                    <a href="{{ route('admin.professores.index') }}">Ver todos <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table recent-table mb-0">
+                        <thead><tr><th>Professor</th><th>Especialidade</th><th>Nível</th><th>Experiência</th><th></th></tr></thead>
+                        <tbody>
+                            @forelse($professoresRecentes as $prof)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if($prof->foto_professor)
+                                                <img src="{{ asset('traducaidiomas/professor/' . $prof->foto_professor) }}" class="prof-avatar" alt="">
+                                            @else
+                                                <div class="prof-avatar-placeholder">{{ strtoupper(substr($prof->nome_professor, 0, 2)) }}</div>
+                                            @endif
+                                            <div>
+                                                <div style="font-weight:600;font-size:.875rem;">{{ $prof->nome_professor }}</div>
+                                                <div style="font-size:.7rem;color:#94a3b8;">{{ $prof->email_professor }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="font-size:.82rem;">{{ $prof->especialidade_professor ?? '—' }}</td>
+                                    <td>
+                                        @php $nivel = strtolower($prof->nivel_professor ?? ''); @endphp
+                                        <span class="badge-nivel {{ in_array($nivel,['basico','básico']) ? 'badge-basico' : (in_array($nivel,['intermediario','intermediário']) ? 'badge-intermediario' : (in_array($nivel,['avancado','avançado']) ? 'badge-avancado' : 'badge-fluente')) }}">
+                                            {{ $prof->nivel_professor ?? '—' }}
+                                        </span>
+                                    </td>
+                                    <td style="font-size:.82rem;">{{ $prof->experiencia_professor }} {{ $prof->experiencia_professor == 1 ? 'ano' : 'anos' }}</td>
+                                    <td><a href="{{ route('admin.professores.edit', $prof->id_professor) }}" class="btn btn-sm btn-light rounded-circle" title="Editar"><i class="fas fa-pen fa-xs"></i></a></td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="5" class="text-center py-5 text-muted"><i class="fas fa-inbox fa-2x mb-2 d-block opacity-25"></i>Nenhum professor cadastrado</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-        // ── 1. Presença (pizza) ──────────────────────────────────────────────
-        new Chart(document.getElementById('chartPresenca'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Presentes', 'Ausentes'],
-                datasets: [{
-                    data: [{{ $presencaPresentes }}, {{ $presencaAusentes }}],
-                    backgroundColor: ['#22c55e', '#f87171'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                cutout: '65%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14 } }
-                }
-            }
-        });
+        <div class="col-lg-4 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header"><h6><i class="fas fa-trophy text-warning"></i> Ranking de Notas</h6></div>
+                <div class="card-body p-3">
+                    @forelse($topAlunos as $i => $item)
+                        @php $medalhas = ['🥇','🥈','🥉']; $medalha = $medalhas[$i] ?? '#'.($i+1); $media = round($item->media, 1); $cor = $media >= 9 ? '#22c55e' : ($media >= 7 ? '#3b82f6' : ($media >= 5 ? '#f59e0b' : '#f87171')); @endphp
+                        <div class="rank-item">
+                            <span class="rank-medal">{{ $medalha }}</span>
+                            <div class="rank-avatar">{{ strtoupper(substr($item->aluno->nome_aluno ?? '?', 0, 2)) }}</div>
+                            <div class="rank-info">
+                                <div class="name">{{ $item->aluno->nome_aluno ?? 'Aluno' }}</div>
+                                <div class="acts">{{ $item->total_atividades }} {{ $item->total_atividades == 1 ? 'atividade' : 'atividades' }}</div>
+                            </div>
+                            <div class="rank-score" style="color:{{ $cor }};">{{ $media }}</div>
+                        </div>
+                    @empty
+                        <div class="today-empty"><i class="fas fa-star opacity-25 fa-2x"></i><span>Nenhuma nota registrada</span></div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // ── 2. Alunos por nível (rosca) ──────────────────────────────────────
-        @php
-            $niveisLabels = $alunosPorNivel->keys()->map(fn($n) => $n ?: 'Não informado');
-            $niveisValues = $alunosPorNivel->values();
-            $niveisColors = ['#6366f1','#0ea5e9','#f59e0b','#10b981','#f43f5e','#a78bfa'];
-        @endphp
-        new Chart(document.getElementById('chartNiveis'), {
-            type: 'doughnut',
-            data: {
-                labels: {!! json_encode($niveisLabels) !!},
-                datasets: [{
-                    data: {!! json_encode($niveisValues) !!},
-                    backgroundColor: {!! json_encode(array_slice($niveisColors, 0, count($niveisValues))) !!},
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                cutout: '65%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
-                }
-            }
-        });
+    {{-- ══ ROW 7 — REAGENDAMENTOS + PRÓXIMAS AULAS ══ --}}
+    <div class="row g-3 mb-5">
+        <div class="col-lg-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-calendar-xmark text-danger"></i> Reagendamentos Pendentes</h6>
+                    @if($totalReagendamentosPendentes > 0)
+                        <span class="alert-pill"><i class="fas fa-circle-exclamation"></i> {{ $totalReagendamentosPendentes }}</span>
+                    @endif
+                </div>
+                <div class="card-body p-3">
+                    @forelse($reagendamentosPendentes as $reag)
+                        <div class="reag-item">
+                            <div class="reag-avatar">{{ strtoupper(substr($reag->aluno->nome_aluno ?? '?', 0, 2)) }}</div>
+                            <div class="reag-info flex-grow-1 overflow-hidden">
+                                <div class="name">{{ $reag->aluno->nome_aluno ?? 'Aluno removido' }}</div>
+                                <div class="dates">
+                                    <i class="fas fa-arrow-right-arrow-left me-1"></i>
+                                    {{ $reag->data_original ? \Carbon\Carbon::parse($reag->data_original)->format('d/m') : '—' }} &rarr;
+                                    {{ $reag->data_sugerida ? \Carbon\Carbon::parse($reag->data_sugerida)->format('d/m/Y') : '—' }}
+                                </div>
+                                @if($reag->motivo)<div class="motivo">{{ Str::limit($reag->motivo, 45) }}</div>@endif
+                            </div>
+                            <a href="{{ route('admin.reagendamentos.index') }}" class="reag-btn">Responder</a>
+                        </div>
+                    @empty
+                        <div class="today-empty"><i class="fas fa-circle-check fa-2x text-success opacity-50"></i><span>Nenhum reagendamento pendente</span></div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
 
-        // ── 3. Distribuição de notas (barras) ────────────────────────────────
-        new Chart(document.getElementById('chartNotas'), {
-            type: 'bar',
-            data: {
-                labels: {!! json_encode(array_keys($notasFaixas)) !!},
-                datasets: [{
-                    label: 'Atividades',
-                    data: {!! json_encode(array_values($notasFaixas)) !!},
-                    backgroundColor: ['#f87171','#fb923c','#facc15','#4ade80'],
-                    borderRadius: 6,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false } }
-                },
-                plugins: { legend: { display: false } }
-            }
-        });
+        <div class="col-lg-6 fade-up">
+            <div class="d-card h-100">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-calendar-clock text-primary"></i> Próximas Aulas</h6>
+                    <a href="{{ route('admin.aulas.index') }}">Ver todas <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+                <div class="card-body p-3">
+                    @forelse($proximasAulas as $aula)
+                        @php $data = \Carbon\Carbon::parse($aula->data_aulas); @endphp
+                        <div class="d-flex align-items-start gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
+                            <div class="text-center rounded-2 px-2 py-1 flex-shrink-0" style="background:#f8fafc;min-width:46px;">
+                                <div style="font-size:.6rem;color:#64748b;text-transform:uppercase;font-weight:700;letter-spacing:.05em;">{{ $data->translatedFormat('M') }}</div>
+                                <div style="font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1.1;">{{ $data->format('d') }}</div>
+                            </div>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $aula->titulo_aulas }}</div>
+                                <div style="font-size:.73rem;color:#94a3b8;"><i class="fas fa-clock me-1"></i>{{ substr($aula->hora_aulas, 0, 5) }}@if($aula->cursos_aulas) &nbsp;·&nbsp; {{ $aula->cursos_aulas }}@endif</div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="today-empty"><i class="fas fa-calendar-xmark fa-2x opacity-25"></i><span>Nenhuma aula agendada</span></div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
 
-        // ── 4. Aulas por mês (linha) ─────────────────────────────────────────
-        @php
-            $mesesLabels = $aulasPorMes->keys()->map(function($m) {
-                $meses = ['01'=>'Jan','02'=>'Fev','03'=>'Mar','04'=>'Abr','05'=>'Mai','06'=>'Jun',
-                          '07'=>'Jul','08'=>'Ago','09'=>'Set','10'=>'Out','11'=>'Nov','12'=>'Dez'];
-                [$ano, $num] = explode('-', $m);
-                return ($meses[$num] ?? $num) . '/' . substr($ano, 2);
-            });
-        @endphp
-        new Chart(document.getElementById('chartAulas'), {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($mesesLabels) !!},
-                datasets: [{
-                    label: 'Aulas realizadas',
-                    data: {!! json_encode($aulasPorMes->values()) !!},
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99,102,241,.12)',
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#6366f1',
-                    pointRadius: 5
-                }]
-            },
-            options: {
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false } }
-                },
-                plugins: { legend: { display: false } }
-            }
-        });
-    </script>
+</div>
+</div>
 
-    {{-- Relógio em tempo real --}}
-    <script>
-        function atualizarHora() {
-            const agora = new Date();
-            const horas = String(agora.getHours()).padStart(2, '0');
-            const min   = String(agora.getMinutes()).padStart(2, '0');
-            const seg   = String(agora.getSeconds()).padStart(2, '0');
-            const el = document.getElementById('dash-hora');
-            if (el) el.textContent = horas + ':' + min + ':' + seg;
-        }
-        atualizarHora();
-        setInterval(atualizarHora, 1000);
-    </script>
+{{-- ══ SCRIPTS ══ --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+Chart.defaults.font.family = "'Inter','Segoe UI',sans-serif";
+Chart.defaults.color = '#64748b';
 
-    {{-- Animação dos contadores --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+new Chart(document.getElementById('chartPresenca'), {
+    type: 'doughnut',
+    data: { labels: ['Presentes','Ausentes'], datasets: [{ data: [{{ $presencaPresentes }}, {{ $presencaAusentes }}], backgroundColor: ['#10b981','#f43f5e'], borderWidth: 3, borderColor: '#fff' }] },
+    options: { cutout: '68%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } } } }
+});
 
-            // Alunos
-            var el = document.getElementById('totalAlunos');
-            var trend = document.getElementById('alunos-trend');
-            if (el) {
-                var target = parseInt(el.dataset.target) || 0;
-                var start  = performance.now();
-                function tick(now) {
-                    var p    = Math.min((now - start) / 1000, 1);
-                    var ease = 1 - Math.pow(1 - p, 3);
-                    el.textContent = Math.round(ease * target);
-                    if (p < 1) requestAnimationFrame(tick);
-                    else trend.textContent = target + (target !== 1 ? ' cadastrados' : ' cadastrado');
-                }
-                requestAnimationFrame(tick);
-            }
+@php $niveisLabels = $alunosPorNivel->keys()->map(fn($n) => $n ?: 'N/A'); $niveisValues = $alunosPorNivel->values(); $niveisColors = ['#6366f1','#0ea5e9','#f59e0b','#10b981','#f43f5e','#a78bfa']; @endphp
+new Chart(document.getElementById('chartNiveis'), {
+    type: 'doughnut',
+    data: { labels: {!! json_encode($niveisLabels) !!}, datasets: [{ data: {!! json_encode($niveisValues) !!}, backgroundColor: {!! json_encode(array_slice($niveisColors, 0, count($niveisValues))) !!}, borderWidth: 3, borderColor: '#fff' }] },
+    options: { cutout: '68%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } } } }
+});
 
-            // Professores
-            var elP    = document.getElementById('totalProfessores');
-            var trendP = document.getElementById('prof-trend');
-            if (elP) {
-                var targetP = parseInt(elP.dataset.target) || 0;
-                var startP  = performance.now();
-                function tickP(now) {
-                    var p    = Math.min((now - startP) / 1000, 1);
-                    var ease = 1 - Math.pow(1 - p, 3);
-                    elP.textContent = Math.round(ease * targetP);
-                    if (p < 1) requestAnimationFrame(tickP);
-                    else trendP.textContent = targetP + (targetP !== 1 ? ' cadastrados' : ' cadastrado');
-                }
-                requestAnimationFrame(tickP);
-            }
+new Chart(document.getElementById('chartNotas'), {
+    type: 'bar',
+    data: { labels: {!! json_encode(array_keys($notasFaixas)) !!}, datasets: [{ label: 'Atividades', data: {!! json_encode(array_values($notasFaixas)) !!}, backgroundColor: ['#f87171','#fb923c','#facc15','#4ade80'], borderRadius: 8, borderSkipped: false }] },
+    options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+});
 
-            // Aulas
-            var elA    = document.getElementById('totalAulas');
-            var trendA = document.getElementById('aulas-trend');
-            if (elA) {
-                var targetA = parseInt(elA.dataset.target) || 0;
-                var startA  = performance.now();
-                function tickA(now) {
-                    var p    = Math.min((now - startA) / 1000, 1);
-                    var ease = 1 - Math.pow(1 - p, 3);
-                    elA.textContent = Math.round(ease * targetA);
-                    if (p < 1) requestAnimationFrame(tickA);
-                    else trendA.textContent = targetA + (targetA !== 1 ? ' cadastradas' : ' cadastrada');
-                }
-                requestAnimationFrame(tickA);
-            }
-        });
-    </script>
+@php $mesesLabels = $aulasPorMes->keys()->map(function($m) { $ms = ['01'=>'Jan','02'=>'Fev','03'=>'Mar','04'=>'Abr','05'=>'Mai','06'=>'Jun','07'=>'Jul','08'=>'Ago','09'=>'Set','10'=>'Out','11'=>'Nov','12'=>'Dez']; [$a,$n] = explode('-',$m); return ($ms[$n]??$n).'/'.substr($a,2); }); @endphp
+new Chart(document.getElementById('chartAulas'), {
+    type: 'line',
+    data: { labels: {!! json_encode($mesesLabels) !!}, datasets: [{ label: 'Aulas', data: {!! json_encode($aulasPorMes->values()) !!}, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,.1)', fill: true, tension: 0.4, pointBackgroundColor: '#6366f1', pointRadius: 5, pointHoverRadius: 7 }] },
+    options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+});
+</script>
 
-    {{-- Badge de reagendamentos pendentes (atualiza a cada 30s) --}}
-    <script>
-        function atualizarBadgeReagendamento() {
-            fetch('{{ route("admin.reagendamento.notificacoes") }}')
-                .then(r => r.json())
-                .then(data => {
-                    const badge = document.getElementById('badgeReagendamentos');
-                    if (!badge) return;
-                    if (data.count > 0) {
-                        badge.textContent = data.count;
-                        badge.classList.remove('d-none');
-                    } else {
-                        badge.classList.add('d-none');
-                    }
-                })
-                .catch(() => {}); // silencia erros de rede
-        }
-        atualizarBadgeReagendamento();
-        setInterval(atualizarBadgeReagendamento, 30000);
-    </script>
+<script>
+function atualizarHora() {
+    const a = new Date(), el = document.getElementById('dash-hora');
+    if (el) el.textContent = String(a.getHours()).padStart(2,'0')+':'+String(a.getMinutes()).padStart(2,'0')+':'+String(a.getSeconds()).padStart(2,'0');
+}
+atualizarHora(); setInterval(atualizarHora, 1000);
+
+document.addEventListener('DOMContentLoaded', function(){
+    [['ctr-prof',{{ $totalProfessores }}],['ctr-alunos',{{ $totalAlunos }}],['ctr-aulas',{{ $totalAulas }}],['ctr-mat',{{ $matriculasAtivas }}]].forEach(function([id, target]){
+        const el = document.getElementById(id); if (!el) return;
+        const s = performance.now();
+        (function tick(now){ const p = Math.min((now-s)/900,1), e = 1-Math.pow(1-p,3); el.textContent = Math.round(e*target); if(p<1) requestAnimationFrame(tick); })(s);
+    });
+});
+
+function atualizarBadge() {
+    fetch('{{ route("admin.reagendamento.notificacoes") }}').then(r=>r.json()).then(d=>{ const b=document.getElementById('badgeReagendamentos'); if(!b)return; d.count>0?(b.textContent=d.count,b.classList.remove('d-none')):b.classList.add('d-none'); }).catch(()=>{});
+}
+atualizarBadge(); setInterval(atualizarBadge, 30000);
+
+(function(){
+    const fr=[{en:"Knowledge is power.",pt:"Conhecimento é poder."},{en:"Practice makes perfect.",pt:"A prática leva à perfeição."},{en:"Every expert was once a beginner.",pt:"Todo especialista já foi iniciante."},{en:"Language is the road map of a culture.",pt:"A língua é o mapa de uma cultura."},{en:"To have another language is to possess a second soul.",pt:"Ter outro idioma é possuir uma segunda alma."},{en:"Learning never exhausts the mind.",pt:"O aprendizado nunca esgota a mente."},{en:"The limits of my language are the limits of my world.",pt:"Os limites da minha língua são os limites do meu mundo."},{en:"Fluency comes one word at a time.",pt:"A fluência vem uma palavra de cada vez."}];
+    let idx=0;
+    const eT=document.getElementById('frase-texto'),eP=document.getElementById('frase-traducao'),eD=document.getElementById('frase-divisor'),eF=document.getElementById('frase-flag');
+    function tw(el,text,cb){el.textContent='';let i=0;const t=setInterval(()=>{el.textContent+=text[i++];if(i>=text.length){clearInterval(t);cb&&cb();}},42);}
+    function show(){const f=fr[idx%fr.length];eT.style.opacity=eP.style.opacity=eD.style.opacity='0';eF.textContent='🇺🇸';setTimeout(()=>{eT.style.opacity='1';tw(eT,f.en,()=>{setTimeout(()=>{eD.style.opacity='1';eF.textContent='🇧🇷';setTimeout(()=>{eP.style.opacity='1';tw(eP,f.pt,()=>{setTimeout(()=>{eT.style.opacity=eP.style.opacity=eD.style.opacity='0';setTimeout(()=>{idx++;show();},500);},3000);});},200);},700);});},300);}
+    document.addEventListener('DOMContentLoaded', show);
+})();
+</script>
 
 @endsection

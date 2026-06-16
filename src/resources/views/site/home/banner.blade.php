@@ -9,9 +9,9 @@
         <div class="banner-overlay"></div>
         <div class="banner-grid container">
             <div class="banner-card">
-                <span class="banner-eyebrow">TraducaIdiomas  English & Professional Skills</span>
-                <h1>Inglês profissional com método claro, foco em resultado e consistencia.</h1>
-                <p>Treinamento para reuniões, entrevistas e apresentações, com metas reais e acompanhamento proximo.</p>
+                <span class="banner-eyebrow">{{ $siteConfig['banner1_eyebrow'] }}</span>
+                <h1>{{ $siteConfig['banner1_titulo'] }}</h1>
+                <p>{{ $siteConfig['banner1_subtitulo'] }}</p>
                 <div class="banner-actions">
                     <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
                     <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
@@ -49,9 +49,9 @@
         <div class="banner-overlay"></div>
         <div class="banner-grid container">
             <div class="banner-card">
-                <span class="banner-eyebrow">Expertise  Idiomas com estrategia</span>
-                <h1>Da aula aplicação real: comunicação eficiente no seu contexto.</h1>
-                <p>Metodologia pratica, material objetivo e feedback continuo para acelerar sua evolução.</p>
+                <span class="banner-eyebrow">{{ $siteConfig['banner2_eyebrow'] }}</span>
+                <h1>{{ $siteConfig['banner2_titulo'] }}</h1>
+                <p>{{ $siteConfig['banner2_subtitulo'] }}</p>
                 <div class="banner-actions">
                     <a class="btn btn-primary" href="contato.php">Falar com Especialista</a>
                     <a class="btn btn-outline-light" href="sobre.php">Conheça a Escola</a>

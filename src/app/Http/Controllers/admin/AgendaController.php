@@ -120,12 +120,24 @@ class AgendaController extends Controller
             $fim = \Carbon\Carbon::parse($agenda->hora_fim_agenda)->format('H:i:s');
 
             return [
-                'id'    => $agenda->id_agenda,
-                'title' => ($agenda->aluno?->nome_aluno ?? 'Sem aluno') . ' - ' . $agenda->titulo_agenda,
-                'start' => $data . 'T' . $inicio,
-                'end'   => $data . 'T' . $fim,
-                'color' => $cor,
-                'url'   => route('admin.agendas.edit', $agenda->id_agenda),
+                'id'              => $agenda->id_agenda,
+                'title'           => ($agenda->aluno?->nome_aluno ?? 'Sem aluno') . ' - ' . $agenda->titulo_agenda,
+                'start'           => $data . 'T' . $inicio,
+                'end'             => $data . 'T' . $fim,
+                'color'           => $cor,
+                'extendedProps'   => [
+                    'foto'       => $agenda->aluno?->foto_aluno,
+                    'aluno'      => $agenda->aluno?->nome_aluno ?? '—',
+                    'curso'      => $agenda->aluno?->curso_aluno ?? '—',
+                    'nivel'      => $agenda->aluno?->nivel_aluno ?? '—',
+                    'professor'  => $agenda->professor?->nome_professor ?? '—',
+                    'titulo'     => $agenda->titulo_agenda,
+                    'data'       => \Carbon\Carbon::parse($agenda->data_evento_agenda)->format('d/m/Y'),
+                    'inicio'     => \Carbon\Carbon::parse($agenda->hora_inicio_agenda)->format('H:i'),
+                    'fim'        => \Carbon\Carbon::parse($agenda->hora_fim_agenda)->format('H:i'),
+                    'status'     => $agenda->status_agenda ?? '—',
+                    'editUrl'    => route('admin.agendas.edit', $agenda->id_agenda),
+                ],
             ];
         });
 

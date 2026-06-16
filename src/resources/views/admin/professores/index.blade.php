@@ -188,6 +188,98 @@
         </div>
     </div>
 
+    {{-- ── Frases EN ↔ PT ── --}}
+    <div class="row fade-up mt-4">
+        <div class="col-12">
+            <div class="card recent-card" id="card-frases-prof" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);border:none;overflow:hidden;">
+                <div class="card-body p-0" style="position:relative;">
+                    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(99,102,241,.12);border-radius:50%;pointer-events:none;"></div>
+                    <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:rgba(167,139,250,.08);border-radius:50%;pointer-events:none;"></div>
+
+                    <div class="d-flex align-items-center justify-content-between p-4" style="position:relative;z-index:1;">
+                        <div style="flex:1;padding-right:2rem;">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span style="font-size:1.1rem;" id="fp-flag">🇺🇸</span>
+                                <span style="font-size:.7rem;font-weight:700;letter-spacing:.1em;color:#a78bfa;text-transform:uppercase;">Frase do Momento</span>
+                            </div>
+                            <p id="fp-en" style="font-size:1.1rem;font-weight:600;color:#f1f5f9;margin:0 0 10px;min-height:32px;line-height:1.5;"></p>
+                            <div id="fp-div" style="width:36px;height:2px;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:99px;margin-bottom:10px;opacity:0;transition:opacity .4s;"></div>
+                            <p id="fp-pt" style="font-size:.9rem;color:#a78bfa;font-style:italic;margin:0;min-height:28px;opacity:0;transition:opacity .4s;"></p>
+                        </div>
+                        <div style="flex-shrink:0;" class="d-none d-md-block">
+                            <i class="fas fa-language" style="font-size:4rem;color:rgba(99,102,241,.25);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function(){
+        const frases = [
+            { en: "Knowledge is power.", pt: "Conhecimento é poder." },
+            { en: "Practice makes perfect.", pt: "A prática leva à perfeição." },
+            { en: "Every expert was once a beginner.", pt: "Todo especialista já foi iniciante." },
+            { en: "Language is the road map of a culture.", pt: "A língua é o mapa de uma cultura." },
+            { en: "To have another language is to possess a second soul.", pt: "Ter outro idioma é possuir uma segunda alma." },
+            { en: "Learning never exhausts the mind.", pt: "O aprendizado nunca esgota a mente." },
+            { en: "The limits of my language are the limits of my world.", pt: "Os limites da minha língua são os limites do meu mundo." },
+            { en: "A different language is a different vision of life.", pt: "Um idioma diferente é uma visão diferente da vida." },
+            { en: "Fluency comes one word at a time.", pt: "A fluência vem uma palavra de cada vez." },
+            { en: "Invest in yourself — it pays the best interest.", pt: "Invista em si mesmo — é o melhor retorno." },
+        ];
+        let idx = 0;
+        const elEn   = document.getElementById('fp-en');
+        const elPt   = document.getElementById('fp-pt');
+        const elDiv  = document.getElementById('fp-div');
+        const elFlag = document.getElementById('fp-flag');
+
+        function typewriter(el, text, cb) {
+            el.textContent = '';
+            let i = 0;
+            const t = setInterval(function(){
+                el.textContent += text[i++];
+                if (i >= text.length) { clearInterval(t); if (cb) cb(); }
+            }, 40);
+        }
+
+        function mostrar() {
+            const f = frases[idx % frases.length];
+            elEn.style.opacity  = '0';
+            elPt.style.opacity  = '0';
+            elDiv.style.opacity = '0';
+            elFlag.textContent  = '🇺🇸';
+
+            setTimeout(function(){
+                elEn.style.opacity = '1';
+                typewriter(elEn, f.en, function(){
+                    setTimeout(function(){
+                        elDiv.style.opacity = '1';
+                        elFlag.textContent  = '🇧🇷';
+                        setTimeout(function(){
+                            elPt.style.opacity = '1';
+                            typewriter(elPt, f.pt, function(){
+                                setTimeout(function(){
+                                    elEn.style.transition  = 'opacity .4s';
+                                    elPt.style.transition  = 'opacity .4s';
+                                    elDiv.style.transition = 'opacity .4s';
+                                    elEn.style.opacity  = '0';
+                                    elPt.style.opacity  = '0';
+                                    elDiv.style.opacity = '0';
+                                    setTimeout(function(){ idx++; mostrar(); }, 500);
+                                }, 3000);
+                            });
+                        }, 200);
+                    }, 700);
+                });
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', mostrar);
+    })();
+    </script>
+
     </div>
     </div>
 
