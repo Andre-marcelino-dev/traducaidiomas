@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Aula;
 use App\Models\Aluno;
+use App\Models\Matricula;
 use App\Models\Presenca;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,10 @@ public function index()
     {
         $aula = Aula::findOrFail($id_aulas);
 
-        $alunos = Aluno::where('curso_aluno', $aula->cursos_aulas)
+        $alunos = Aluno::whereHas('matriculas', function ($q) use ($aula) {
+                $q->where('id_curso', $aula->id_curso)
+                  ->where('status_matricula', '!=', 'CONGELADO');
+            })
             ->where('status_aluno', 'EM CURSO')
             ->get();
 

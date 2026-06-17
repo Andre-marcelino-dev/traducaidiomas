@@ -46,7 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Painel Admin (Protegidas por Middleware)
-    Route::middleware('auth:admin')->group(function () {
+    Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
 
         Route::get('/',           [DashController::class, 'index'])->name('dash');
         Route::get('/categorias', [DashController::class, 'index'])->name('categoria');
@@ -161,7 +161,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
     Route::post('/logout', [AlunoAuthController::class, 'logout'])->name('logout');
 
     // Painel Aluno (Protegidas por Middleware)
-    Route::middleware('auth:aluno')->group(function () {
+    Route::middleware(['auth:aluno', 'session.timeout:aluno'])->group(function () {
 
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');

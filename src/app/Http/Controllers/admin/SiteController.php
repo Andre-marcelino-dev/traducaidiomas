@@ -31,6 +31,7 @@ class SiteController extends Controller
 
     public function update(Request $request)
     {
+        \Log::info('SITE UPDATE - dados recebidos:', $request->all());
         $campos = [
             'banner1_titulo', 'banner1_subtitulo', 'banner1_eyebrow',
             'banner2_titulo', 'banner2_subtitulo', 'banner2_eyebrow',
@@ -40,6 +41,7 @@ class SiteController extends Controller
         ];
 
         foreach ($campos as $campo) {
+            \Log::info('Processando campo: ' . $campo . ' | has: ' . ($request->has($campo) ? 'sim' : 'nao'));
             if ($request->has($campo) && $request->input($campo) !== null) {
                 ConfiguracaoPainel::set($campo, (string) $request->input($campo));
             }
@@ -54,9 +56,8 @@ class SiteController extends Controller
 
         if ($request->hasFile('logo_painel')) {
             $file = $request->file('logo_painel');
-            $nome = 'logo.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/img/'), $nome);
-            ConfiguracaoPainel::set('logo_painel', $nome);
+            $file->move(public_path('traducaidiomas/img/'), 'logo.png');
+            ConfiguracaoPainel::set('logo_painel', 'logo.png');
         }
 
         if ($request->hasFile('banner1_imagem')) {
@@ -73,6 +74,7 @@ class SiteController extends Controller
             ConfiguracaoPainel::set('banner2_imagem', $nome);
         }
 
+        \Log::info('Chegou ao final do update sem exceção');
         return redirect()->route('admin.site.index')->with('success', 'Site atualizado com sucesso!');
     }
 }

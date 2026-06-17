@@ -35,7 +35,7 @@
                     <div class="row g-3 align-items-center">
                         <div class="col-md-4 text-center">
                             <p class="text-muted small mb-1">Logo Atual</p>
-                            <img src="{{ asset('traducaidiomas/img/logo.png') }}" style="max-height:80px;" class="rounded">
+                            <img src="{{ asset('traducaidiomas/img/' . ($config['logo_painel'] ?: 'logo.png')) }}" style="max-height:80px;" class="rounded">
                         </div>
                         <div class="col-md-8">
                             <label class="form-label fw-bold">Substituir Logo (painel e site)</label>
@@ -142,7 +142,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
 
             {{-- PÁGINA SOBRE - TEXTO COMPLETO --}}

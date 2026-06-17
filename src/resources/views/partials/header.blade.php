@@ -1,6 +1,10 @@
 <header class="topo">
     <div class="container">
-        <h1>TraducaIdiomas</h1>
+        @if(!empty($siteConfig['logo_painel']))
+            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_painel']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        @else
+            <h1>TraducaIdiomas</h1>
+        @endif
         <?php
         $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
         ?>
