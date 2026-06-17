@@ -20,11 +20,17 @@ public function index()
     $cursos = Curso::all();
 
     $totalCursos = Curso::count();
+    $totalAulas = $aulas->count();
+    $aulasAtivas = $aulas->where('status_aulas', 'ATIVO')->count();
+    $aulasHoje = $aulas->filter(fn($a) => $a->data_aulas === now()->toDateString())->count();
 
     return view('admin.aulas.index', compact(
         'aulas',
         'cursos',
-        'totalCursos'
+        'totalCursos',
+        'totalAulas',
+        'aulasAtivas',
+        'aulasHoje'
     ));
 }
 

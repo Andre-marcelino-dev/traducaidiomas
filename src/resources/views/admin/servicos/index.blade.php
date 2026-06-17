@@ -1,112 +1,107 @@
 @extends('admin.layout.admin')
 
 @section('content')
+
+<div class="app-content-header">
     <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1>Serviços</h1>
-            <a href="{{ route('admin.servicos.create') }}" class="btn btn-primary">+ Novo Serviço</a>
+        <div class="row align-items-center">
+            <div class="col-sm-6"><h3 class="mb-0 fw-bold">Serviços</h3></div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dash') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Serviços</li>
+                </ol>
+            </div>
         </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
 
         @if (session('success'))
-            <div class="alert alert-success" id="flash-success">{{ session('success') }}</div>
+            <div class="alert alert-success alert-styled alert-dismissible fade show mb-3">
+                <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         @endif
 
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
+        <div class="d-card fade-up">
+            <div class="d-card-header">
+                <h6><i class="fas fa-concierge-bell text-primary"></i> Lista de Serviços</h6>
+                <a href="{{ route('admin.servicos.create') }}" class="tbl-btn-novo">
+                    <i class="fas fa-plus"></i> Novo Serviço
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table recent-table mb-0">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Imagem</th>
                             <th>Título</th>
-                            <th>Subtítulo</th>
                             <th>Língua</th>
                             <th>Preço</th>
-                            <th>Ordem</th>
-                            <th>Status</th>
-                            <th>Ações</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($servicos as $servico)
                             <tr>
-                                <td>{{ $servico->id_servico }}</td>
                                 <td>
                                     @if ($servico->imagem_servico)
                                         <img src="{{ asset($servico->imagem_servico) }}"
                                             alt="{{ $servico->titulo_servico }}" width="60" height="60"
-                                            style="object-fit: cover; border-radius: 6px;">
+                                            style="object-fit:cover;border-radius:10px;border:2px solid #e2e8f0;">
                                     @else
-                                        <span class="text-muted">Sem imagem</span>
+                                        <span style="color:#cbd5e1;font-size:.8rem;">Sem imagem</span>
                                     @endif
                                 </td>
-                                <td>{{ $servico->titulo_servico }}</td>
-                                <td>{{ $servico->subtitulo_servico }}</td>
-                                <td>{{ $servico->lingua_servico }}</td>
-                                <td>{{ $servico->preco_servico }}</td>
-                                <td>{{ $servico->ordenar_servico }}</td>
-                                <td>{{ $servico->status_servico }}</td>
-
                                 <td>
-                                    <a href="{{ route('admin.servicos.edit', $servico->id_servico) }}"
-                                        class="btn btn-sm btn-warning">Editar</a>
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modalExcluir" data-id="{{ $servico->id_servico }}"
-                                        data-titulo="{{ $servico->titulo_servico }}">
-                                        Excluir
-                                    </button>
+                                    <div style="font-weight:600;font-size:.875rem;">{{ $servico->titulo_servico }}</div>
+                                    @if($servico->subtitulo_servico)
+                                        <div style="font-size:.72rem;color:#94a3b8;">{{ $servico->subtitulo_servico }}</div>
+                                    @endif
+                                </td>
+                                <td><span class="tbl-badge"><i class="fas fa-language me-1"></i>{{ $servico->lingua_servico }}</span></td>
+                                <td><span style="font-weight:700;font-size:.875rem;">R$ {{ number_format((float) $servico->preco_servico, 2, ',', '.') }}</span></td>
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a href="{{ route('admin.servicos.edit', $servico->id_servico) }}" class="tbl-btn-editar">
+                                            <i class="fas fa-pen-to-square"></i> Editar
+                                        </a>
+                                        <form action="{{ route('admin.servicos.destroy', $servico->id_servico) }}" method="POST" class="d-inline form-delete">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="tbl-btn-excluir"
+                                                data-titulo="{{ $servico->titulo_servico }}"
+                                                onclick="abrirModalExcluir(this)">
+                                                <i class="fas fa-trash-alt"></i> Excluir
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Nenhum serviço cadastrado.</td>
+                                <td colspan="5">
+                                    <div class="tbl-empty">
+                                        <i class="fas fa-concierge-bell tbl-empty-icon"></i>
+                                        <span class="tbl-empty-text">Nenhum serviço cadastrado ainda</span>
+                                        <a href="{{ route('admin.servicos.create') }}" class="tbl-empty-btn">
+                                            <i class="fas fa-plus"></i> Cadastrar primeiro serviço
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
-    <!-- Modal Excluir -->
-    <div class="modal fade" id="modalExcluir" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center py-4">
-                    <i class="bi bi-gear-fill text-danger" style="font-size: 3rem;"></i>
-                    <p class="mt-3 fs-5">Tem certeza que deseja excluir o serviço</p>
-                    <strong id="tituloServicoModal" class="fs-5"></strong>
-                    <p class="text-muted mt-2">Esta ação não poderá ser desfeita.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i>Cancelar
-                    </button>
-                    <form id="formExcluir" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="bi bi-trash-fill me-1"></i>Sim, excluir
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 
-    @push('scripts')
-        <script>
-            document.getElementById('modalExcluir').addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                const titulo = button.getAttribute('data-titulo');
-                document.getElementById('tituloServicoModal').textContent = titulo;
-                document.getElementById('formExcluir').action = `/admin/servicos/${id}`;
-            });
-        </script>
-    @endpush
+@include('admin.partials.modal-delete', ['delTitulo' => 'Excluir Serviço', 'delDescricao' => 'Você está prestes a excluir o serviço:'])
+
 @endsection

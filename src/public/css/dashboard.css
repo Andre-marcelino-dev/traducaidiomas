@@ -520,3 +520,473 @@
 .metric-card .metric-label { font-size: .78rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; opacity: .6; margin: 0; }
 .metric-card .metric-trend { position: absolute; bottom: 1.2rem; right: 1.5rem; font-size: .72rem; font-weight: 600; display: flex; align-items: center; gap: .3rem; }
 .metric-card-rose { background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%); color: #fff; }
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD PREMIUM ENHANCEMENTS
+   ═══════════════════════════════════════════════ */
+
+/* ── GREETING ANIMATED BG ─────────────────────── */
+@keyframes greetingShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.dash-greeting-card {
+    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a3e, #0d2847);
+    background-size: 400% 400%;
+    animation: greetingShimmer 12s ease infinite;
+}
+
+.dash-greeting-card .dash-nome {
+    background: linear-gradient(135deg, #fff 0%, #e0e7ff 50%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── PRÓXIMAS AULAS ENHANCED ──────────────────── */
+.prox-aula-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: .5rem;
+    border-radius: 12px;
+    border: 1px solid var(--slate-100);
+    background: #fff;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+}
+
+.prox-aula-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--indigo);
+    border-radius: 0 3px 3px 0;
+    opacity: 0;
+    transition: opacity .25s;
+}
+
+.prox-aula-item:hover {
+    border-color: rgba(99,102,241,.2);
+    background: #fafaff;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(99,102,241,.08);
+}
+
+.prox-aula-item:hover::before { opacity: 1; }
+
+.prox-aula-item:last-child { margin-bottom: 0; }
+
+.prox-aula-date {
+    min-width: 52px;
+    text-align: center;
+    padding: .5rem .4rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #eef3ff, #e0e7ff);
+    flex-shrink: 0;
+}
+
+.prox-aula-date .month {
+    font-size: .55rem;
+    color: var(--indigo);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.prox-aula-date .day {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--navy-dark);
+    line-height: 1.1;
+}
+
+.prox-aula-info .title {
+    font-weight: 600;
+    font-size: .88rem;
+    color: var(--slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prox-aula-info .meta {
+    font-size: .73rem;
+    color: var(--slate-400);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* ── SCHEDULE ITEM HOVER ──────────────────────── */
+.schedule-item {
+    transition: all .2s;
+    border-radius: 8px;
+    padding: .8rem .5rem;
+    margin: 0 -.5rem;
+}
+
+.schedule-item:hover {
+    background: var(--slate-50);
+}
+
+/* ── RANK ITEM HOVER ──────────────────────────── */
+.rank-item {
+    transition: all .2s;
+    border-radius: 8px;
+    padding: .65rem .5rem;
+    margin: 0 -.5rem;
+}
+
+.rank-item:hover {
+    background: var(--slate-50);
+}
+
+/* ── REAG ITEM HOVER ──────────────────────────── */
+.reag-item {
+    transition: all .2s;
+    border-radius: 8px;
+    padding: .75rem .5rem;
+    margin: 0 -.5rem;
+}
+
+.reag-item:hover {
+    background: var(--slate-50);
+}
+
+/* ── SECTION LABEL ENHANCED ───────────────────── */
+.dash-section-title {
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--slate-400);
+    margin-bottom: 1rem;
+    padding-left: .25rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.dash-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--slate-200), transparent);
+}
+
+/* ── PULSE KEYFRAME ───────────────────────────── */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+
+/* ── EDIT BTN MINI (for tables in dashboard) ──── */
+.dash-edit-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1.5px solid var(--slate-200);
+    background: #fff;
+    color: var(--slate-400);
+    transition: all .2s;
+    font-size: .72rem;
+    text-decoration: none;
+}
+
+.dash-edit-btn:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+    background: #f5f3ff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(99,102,241,.15);
+}
+
+/* ── GREETING PHOTO GLOW ──────────────────────── */
+.dash-photo {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 3px solid rgba(255,255,255,.15);
+    box-shadow: 0 8px 24px rgba(0,0,0,.25), 0 0 40px rgba(99,102,241,.15);
+    transition: transform .3s, box-shadow .3s;
+}
+
+.dash-photo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(0,0,0,.3), 0 0 60px rgba(99,102,241,.25);
+}
+
+/* ── LIVE INDICATOR ───────────────────────────── */
+.dash-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 3px rgba(16,185,129,.2);
+}
+
+/* ── QUICK ACTION ENHANCED ────────────────────── */
+.quick-action {
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99,102,241,.04), transparent);
+    transition: left .5s;
+}
+
+.quick-action:hover::before {
+    left: 100%;
+}
+
+/* ── PRÓXIMAS AULAS CARDS ─────────────────────── */
+.prox-card {
+    background: #fff;
+    border: 1.5px solid var(--slate-100);
+    border-radius: 14px;
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all .25s;
+    height: 100%;
+}
+
+.prox-card:hover {
+    border-color: var(--accent-light);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px var(--accent-bg);
+}
+
+.prox-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent-light));
+    border-radius: 4px 0 0 4px;
+}
+
+.prox-card-date {
+    min-width: 52px;
+    text-align: center;
+    padding: .5rem;
+    border-radius: 12px;
+    background: var(--accent-bg);
+    flex-shrink: 0;
+}
+
+.prox-card-month {
+    font-size: .55rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.prox-card-day {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1.1;
+}
+
+.prox-card-body { flex: 1; min-width: 0; }
+
+.prox-card-title {
+    font-weight: 700;
+    font-size: .88rem;
+    color: var(--slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: .25rem;
+}
+
+.prox-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    font-size: .7rem;
+    color: var(--slate-400);
+}
+
+.prox-card-meta i { margin-right: .2rem; }
+
+.prox-card-arrow {
+    color: var(--slate-200);
+    font-size: .8rem;
+    flex-shrink: 0;
+    transition: all .25s;
+}
+
+.prox-card:hover .prox-card-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+}
+
+/* ── REAGENDAMENTO CARDS ──────────────────────── */
+.reag-card {
+    background: #fff;
+    border: 1.5px solid #fecdd3;
+    border-radius: 14px;
+    padding: 1.1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+}
+
+.reag-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e11d48, #f43f5e, #fb7185);
+}
+
+.reag-card:hover {
+    border-color: #f43f5e;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(244,63,94,.12);
+}
+
+.reag-card-top {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    margin-bottom: .6rem;
+}
+
+.reag-card-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #e11d48;
+    flex-shrink: 0;
+}
+
+.reag-card-info { min-width: 0; flex: 1; }
+
+.reag-card-name {
+    font-weight: 700;
+    font-size: .85rem;
+    color: var(--slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reag-card-dates {
+    font-size: .7rem;
+    color: var(--slate-400);
+}
+
+.reag-card-motivo {
+    font-size: .75rem;
+    color: var(--slate-400);
+    line-height: 1.4;
+    margin-bottom: .75rem;
+    flex: 1;
+    padding: .5rem .65rem;
+    background: #fff5f5;
+    border-radius: 8px;
+    border-left: 3px solid #fecdd3;
+}
+
+.reag-card-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .2s;
+    margin-top: auto;
+}
+
+.reag-card-btn:hover {
+    box-shadow: 0 4px 12px rgba(244,63,94,.35);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* ── OK BANNER (empty state) ──────────────────── */
+.dash-ok-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1.5px solid #bbf7d0;
+    transition: all .2s;
+}
+
+.dash-ok-banner:hover {
+    box-shadow: 0 4px 16px rgba(16,185,129,.1);
+}
+
+.dash-ok-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.dash-ok-title {
+    font-weight: 700;
+    font-size: .95rem;
+    color: #065f46;
+}
+
+.dash-ok-sub {
+    font-size: .78rem;
+    color: #16a34a;
+    opacity: .7;
+}

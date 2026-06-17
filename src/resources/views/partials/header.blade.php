@@ -1,7 +1,7 @@
 <header class="topo">
     <div class="container">
-        @if(!empty($siteConfig['logo_painel']))
-            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_painel']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        @if(!empty($siteConfig['logo_site']))
+            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
         @else
             <h1>TraducaIdiomas</h1>
         @endif

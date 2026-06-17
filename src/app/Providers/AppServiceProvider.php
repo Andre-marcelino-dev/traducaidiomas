@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
                 'sobre_texto'        => ConfiguracaoPainel::get('sobre_texto', 'Sou Renato Caetano, consultor e professor trilíngue formado em Letras, com experiência em ensino, tradução e design instrucional.'),
                 'sobre_foto'         => ConfiguracaoPainel::get('sobre_foto', ''),
                 'logo_painel'        => ConfiguracaoPainel::get('logo_painel', ''),
+                'logo_site'          => ConfiguracaoPainel::get('logo_site', ''),
             ]);
         });
     }

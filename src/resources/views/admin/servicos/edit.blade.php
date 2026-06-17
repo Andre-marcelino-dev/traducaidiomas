@@ -64,15 +64,6 @@
 
 
 
-                    <div class="col-md-6">
-                        <label class="form-label">Status</label>
-                        <select name="status_servico" class="form-control" required>
-                            <option value="1" {{ old('status_servico', $servico->status_servico) == 1 ? 'selected' : '' }}>Ativo</option>
-                            <option value="0" {{ old('status_servico', $servico->status_servico) == 0 ? 'selected' : '' }}>Inativo</option>
-                        </select>
-                    </div>
-
-
                     <div class="col-md-2">
                         <label class="form-label">Ordem</label>
                         <input type="number" name="ordenar_servico" class="form-control" value="{{ old('ordenar_servico', $servico->ordenar_servico) }}">

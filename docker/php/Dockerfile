@@ -50,4 +50,6 @@ RUN mkdir -p /var/www/html/public/traducaidiomas/professor \
     && mkdir -p /var/www/html/public/traducaidiomas/alunos \
     && mkdir -p /var/www/html/public/traducaidiomas/materiais \
     && mkdir -p /var/www/html/public/traducaidiomas/servicos \
+    && mkdir -p /var/www/html/public/traducaidiomas/img \
+    && mkdir -p /var/www/html/public/traducaidiomas/banners \
     && chmod -R 777 /var/www/html/public/traducaidiomas

@@ -1,7 +1,6 @@
 @extends('admin.layout.admin')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 {{-- ══ BREADCRUMB ══ --}}
 <div class="app-content-header">
@@ -34,6 +33,7 @@
                         </h2>
                         <p class="dash-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
                         <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+                            <div class="dash-badge-prof"><span class="dash-live-dot me-1"></span> Online agora</div>
                             <div class="dash-badge-prof"><i class="fas fa-shield-halved"></i> Administrador do sistema</div>
                             @if($totalReagendamentosPendentes > 0)
                                 <a href="{{ route('admin.reagendamentos.index') }}" class="dash-badge-prof" style="background:rgba(244,63,94,.2);border-color:rgba(244,63,94,.3);color:#fda4af;text-decoration:none;">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-4 d-none d-md-flex justify-content-end">
                         <img src="{{ asset('traducaidiomas/professor/' . auth('admin')->user()->foto_professor) }}"
-                            style="width:110px;height:110px;object-fit:cover;border-radius:16px;border:3px solid rgba(255,255,255,.15);box-shadow:0 8px 24px rgba(0,0,0,.25);"
+                            class="dash-photo"
                             alt="{{ auth('admin')->user()->nome_professor }}">
                     </div>
                 </div>
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="col-6 col-xl fade-up">
-            <div class="mc mc-sky shadow-sm h-100">
+            <div class="mc mc-rose shadow-sm h-100">
                 <div class="mc-icon"><i class="fas fa-id-card-clip"></i></div>
                 <div class="mc-val" id="ctr-mat" data-target="{{ $matriculasAtivas }}">0</div>
                 <p class="mc-lbl">Matrículas Ativas</p>
@@ -99,6 +99,8 @@
             </div>
         </div>
     </div>
+
+    <div class="dash-section-title fade-up">Visão de Hoje & Tendências</div>
 
     {{-- ══ ROW 3 — AULAS HOJE + GRÁFICO MENSAL ══ --}}
     <div class="row g-3 mb-4">
@@ -147,6 +149,8 @@
             </div>
         </div>
     </div>
+
+    <div class="dash-section-title fade-up">Análises & Distribuição</div>
 
     {{-- ══ ROW 4 — GRÁFICOS ══ --}}
     <div class="row g-3 mb-4">
@@ -198,6 +202,8 @@
         </div>
     </div>
 
+    <div class="dash-section-title fade-up">Alunos & Ações Rápidas</div>
+
     {{-- ══ ROW 5 — ALUNOS RECENTES + AÇÕES + FRASES ══ --}}
     <div class="row g-3 mb-4">
         <div class="col-lg-8 fade-up">
@@ -234,11 +240,11 @@
                                     </td>
                                     <td>
                                         @if(strtoupper($aluno->status_aluno ?? '') === 'EM CURSO')
-                                            <span class="badge bg-success-subtle text-success rounded-pill px-2" style="font-size:.68rem;">Ativo</span>
+                                            <span class="tbl-status tbl-status-ativo"><span class="tbl-status-dot"></span> Ativo</span>
                                         @elseif(in_array(strtoupper($aluno->status_aluno ?? ''),['CONCLUÍDO','CONCLUIDO']))
-                                            <span class="badge bg-info-subtle text-info rounded-pill px-2" style="font-size:.68rem;">Concluído</span>
+                                            <span class="tbl-status tbl-status-concluido"><span class="tbl-status-dot"></span> Concluído</span>
                                         @else
-                                            <span class="badge bg-danger-subtle text-danger rounded-pill px-2" style="font-size:.68rem;">Inativo</span>
+                                            <span class="tbl-status tbl-status-inativo"><span class="tbl-status-dot"></span> Inativo</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -298,6 +304,8 @@
         </div>
     </div>
 
+    <div class="dash-section-title fade-up">Equipe & Desempenho</div>
+
     {{-- ══ ROW 6 — PROFESSORES + RANKING ══ --}}
     <div class="row g-3 mb-4">
         <div class="col-lg-8 fade-up">
@@ -333,7 +341,7 @@
                                         </span>
                                     </td>
                                     <td style="font-size:.82rem;">{{ $prof->experiencia_professor }} {{ $prof->experiencia_professor == 1 ? 'ano' : 'anos' }}</td>
-                                    <td><a href="{{ route('admin.professores.edit', $prof->id_professor) }}" class="btn btn-sm btn-light rounded-circle" title="Editar"><i class="fas fa-pen fa-xs"></i></a></td>
+                                    <td><a href="{{ route('admin.professores.edit', $prof->id_professor) }}" class="dash-edit-btn" title="Editar"><i class="fas fa-pen"></i></a></td>
                                 </tr>
                             @empty
                                 <tr><td colspan="5" class="text-center py-5 text-muted"><i class="fas fa-inbox fa-2x mb-2 d-block opacity-25"></i>Nenhum professor cadastrado</td></tr>
@@ -367,63 +375,108 @@
         </div>
     </div>
 
-    {{-- ══ ROW 7 — REAGENDAMENTOS + PRÓXIMAS AULAS ══ --}}
-    <div class="row g-3 mb-5">
-        <div class="col-lg-6 fade-up">
-            <div class="d-card h-100">
+    <div class="dash-section-title fade-up">Agenda & Reagendamentos</div>
+
+    {{-- ══ ROW 7 — REAGENDAMENTOS ══ --}}
+    @if($reagendamentosPendentes->count() > 0)
+    <div class="row g-3 mb-4">
+        <div class="col-12 fade-up">
+            <div class="d-card">
                 <div class="d-card-header">
                     <h6><i class="fas fa-calendar-xmark text-danger"></i> Reagendamentos Pendentes</h6>
-                    @if($totalReagendamentosPendentes > 0)
-                        <span class="alert-pill"><i class="fas fa-circle-exclamation"></i> {{ $totalReagendamentosPendentes }}</span>
-                    @endif
+                    <span class="alert-pill"><i class="fas fa-circle-exclamation"></i> {{ $totalReagendamentosPendentes }}</span>
                 </div>
                 <div class="card-body p-3">
-                    @forelse($reagendamentosPendentes as $reag)
-                        <div class="reag-item">
-                            <div class="reag-avatar">{{ strtoupper(substr($reag->aluno->nome_aluno ?? '?', 0, 2)) }}</div>
-                            <div class="reag-info flex-grow-1 overflow-hidden">
-                                <div class="name">{{ $reag->aluno->nome_aluno ?? 'Aluno removido' }}</div>
-                                <div class="dates">
-                                    <i class="fas fa-arrow-right-arrow-left me-1"></i>
-                                    {{ $reag->data_original ? \Carbon\Carbon::parse($reag->data_original)->format('d/m') : '—' }} &rarr;
-                                    {{ $reag->data_sugerida ? \Carbon\Carbon::parse($reag->data_sugerida)->format('d/m/Y') : '—' }}
+                    <div class="row g-3">
+                        @foreach($reagendamentosPendentes as $reag)
+                        <div class="col-md-6 col-xl-3">
+                            <div class="reag-card">
+                                <div class="reag-card-top">
+                                    <div class="reag-card-avatar">{{ strtoupper(substr($reag->aluno->nome_aluno ?? '?', 0, 2)) }}</div>
+                                    <div class="reag-card-info">
+                                        <div class="reag-card-name">{{ $reag->aluno->nome_aluno ?? 'Aluno removido' }}</div>
+                                        <div class="reag-card-dates">
+                                            <i class="fas fa-arrow-right-arrow-left me-1"></i>
+                                            {{ $reag->data_original ? \Carbon\Carbon::parse($reag->data_original)->format('d/m') : '—' }} &rarr;
+                                            {{ $reag->data_sugerida ? \Carbon\Carbon::parse($reag->data_sugerida)->format('d/m/Y') : '—' }}
+                                        </div>
+                                    </div>
                                 </div>
-                                @if($reag->motivo)<div class="motivo">{{ Str::limit($reag->motivo, 45) }}</div>@endif
+                                @if($reag->motivo)
+                                    <div class="reag-card-motivo">{{ Str::limit($reag->motivo, 60) }}</div>
+                                @endif
+                                <a href="{{ route('admin.reagendamentos.index') }}" class="reag-card-btn">
+                                    <i class="fas fa-reply me-1"></i> Responder
+                                </a>
                             </div>
-                            <a href="{{ route('admin.reagendamentos.index') }}" class="reag-btn">Responder</a>
                         </div>
-                    @empty
-                        <div class="today-empty"><i class="fas fa-circle-check fa-2x text-success opacity-50"></i><span>Nenhum reagendamento pendente</span></div>
-                    @endforelse
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    @else
+    <div class="row g-3 mb-4">
+        <div class="col-12 fade-up">
+            <div class="dash-ok-banner">
+                <div class="dash-ok-icon"><i class="fas fa-circle-check"></i></div>
+                <div>
+                    <div class="dash-ok-title">Tudo em dia!</div>
+                    <div class="dash-ok-sub">Nenhum reagendamento pendente no momento</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
-        <div class="col-lg-6 fade-up">
-            <div class="d-card h-100">
-                <div class="d-card-header">
-                    <h6><i class="fas fa-calendar-clock text-primary"></i> Próximas Aulas</h6>
-                    <a href="{{ route('admin.aulas.index') }}">Ver todas <i class="fas fa-arrow-right ms-1"></i></a>
-                </div>
-                <div class="card-body p-3">
-                    @forelse($proximasAulas as $aula)
-                        @php $data = \Carbon\Carbon::parse($aula->data_aulas); @endphp
-                        <div class="d-flex align-items-start gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
-                            <div class="text-center rounded-2 px-2 py-1 flex-shrink-0" style="background:#f8fafc;min-width:46px;">
-                                <div style="font-size:.6rem;color:#64748b;text-transform:uppercase;font-weight:700;letter-spacing:.05em;">{{ $data->translatedFormat('M') }}</div>
-                                <div style="font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1.1;">{{ $data->format('d') }}</div>
-                            </div>
-                            <div class="flex-grow-1 overflow-hidden">
-                                <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ $aula->titulo_aulas }}</div>
-                                <div style="font-size:.73rem;color:#94a3b8;"><i class="fas fa-clock me-1"></i>{{ substr($aula->hora_aulas, 0, 5) }}@if($aula->cursos_aulas) &nbsp;·&nbsp; {{ $aula->cursos_aulas }}@endif</div>
-                            </div>
+    {{-- ══ ROW 8 — PRÓXIMAS AULAS (CARDS) ══ --}}
+    <div class="row g-3 mb-5">
+        @forelse($proximasAulas as $i => $aula)
+            @php
+                $data = \Carbon\Carbon::parse($aula->data_aulas);
+                $cores = [
+                    ['#6366f1','#818cf8','rgba(99,102,241,.1)'],
+                    ['#059669','#10b981','rgba(16,185,129,.1)'],
+                    ['#d97706','#f59e0b','rgba(245,158,11,.1)'],
+                    ['#0284c7','#0ea5e9','rgba(14,165,233,.1)'],
+                    ['#7c3aed','#a78bfa','rgba(167,139,250,.1)'],
+                ];
+                $cor = $cores[$i % count($cores)];
+            @endphp
+            <div class="col-md-6 col-xl fade-up">
+                <div class="prox-card" style="--accent:{{ $cor[0] }};--accent-light:{{ $cor[1] }};--accent-bg:{{ $cor[2] }};">
+                    <div class="prox-card-accent"></div>
+                    <div class="prox-card-date">
+                        <div class="prox-card-month">{{ $data->translatedFormat('M') }}</div>
+                        <div class="prox-card-day">{{ $data->format('d') }}</div>
+                    </div>
+                    <div class="prox-card-body">
+                        <div class="prox-card-title">{{ $aula->titulo_aulas }}</div>
+                        <div class="prox-card-meta">
+                            <span><i class="fas fa-clock"></i> {{ substr($aula->hora_aulas, 0, 5) }}</span>
+                            @if($aula->cursos_aulas)
+                                <span><i class="fas fa-language"></i> {{ $aula->cursos_aulas }}</span>
+                            @endif
                         </div>
-                    @empty
-                        <div class="today-empty"><i class="fas fa-calendar-xmark fa-2x opacity-25"></i><span>Nenhuma aula agendada</span></div>
-                    @endforelse
+                    </div>
+                    <div class="prox-card-arrow"><i class="fas fa-chevron-right"></i></div>
                 </div>
             </div>
-        </div>
+        @empty
+            <div class="col-12 fade-up">
+                <div class="dash-ok-banner" style="background:linear-gradient(135deg,#f8fafc,#eef3ff);border-color:#e0e7ff;">
+                    <div class="dash-ok-icon" style="background:#eef3ff;color:#6366f1;"><i class="fas fa-calendar-check"></i></div>
+                    <div>
+                        <div class="dash-ok-title">Agenda livre</div>
+                        <div class="dash-ok-sub">Nenhuma aula agendada nos próximos dias</div>
+                    </div>
+                    <a href="{{ route('admin.aulas.create') }}" class="tbl-btn-novo ms-auto">
+                        <i class="fas fa-plus"></i> Nova Aula
+                    </a>
+                </div>
+            </div>
+        @endforelse
     </div>
 
 </div>

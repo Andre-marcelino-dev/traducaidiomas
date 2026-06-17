@@ -3,9 +3,9 @@
     <div class="sidebar-brand">
         <a href="#" class="brand-link">
             @php
-                $logoFile = \App\Models\ConfiguracaoPainel::get('logo_painel') ?: 'logo.png';
-                $logoPath = public_path('traducaidiomas/img/' . $logoFile);
-                $logoVer  = file_exists($logoPath) ? filemtime($logoPath) : time();
+            $logoFile = \App\Models\ConfiguracaoPainel::get('logo_painel') ?: 'logo.png';
+            $logoPath = public_path('traducaidiomas/img/' . $logoFile);
+            $logoVer = file_exists($logoPath) ? filemtime($logoPath) : time();
             @endphp
             <img src="{{ asset('traducaidiomas/img/' . $logoFile) }}?v={{ $logoVer }}" alt="Traduca Idiomas"
                 class="brand-image opacity-75 shadow" />
@@ -104,30 +104,6 @@
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon bi bi-box-seam-fill"></i>
-                        <p>
-
-                            GESTÃO COMERCIAL
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Clientes</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Pedidos</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">

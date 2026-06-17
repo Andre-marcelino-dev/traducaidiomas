@@ -126,8 +126,9 @@ return redirect()
         }
 
         if ($request->hasFile('foto_professor')) {
-            if ($professor->foto_professor && file_exists(public_path($professor->foto_professor))) {
-                @unlink(public_path($professor->foto_professor));
+            $fotoAntiga = public_path('traducaidiomas/professor/' . $professor->foto_professor);
+            if ($professor->foto_professor && file_exists($fotoAntiga)) {
+                @unlink($fotoAntiga);
             }
 
             $arquivo = $request->file('foto_professor');
@@ -158,8 +159,9 @@ return redirect()
                 ->with('error', 'Professor não encontrado.');
         }
 
-        if ($professor->foto_professor && file_exists(public_path($professor->foto_professor))) {
-            @unlink(public_path($professor->foto_professor));
+        $fotoPath = public_path('traducaidiomas/professor/' . $professor->foto_professor);
+        if ($professor->foto_professor && file_exists($fotoPath)) {
+            @unlink($fotoPath);
         }
 
         $professor->delete();
