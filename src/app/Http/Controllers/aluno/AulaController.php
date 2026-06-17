@@ -41,17 +41,9 @@ class AulaController extends Controller
             return \Carbon\Carbon::parse($aula->data_aulas . ' ' . $aula->hora_aulas);
         })->first();
 
-        $idProfessores = $aulas->pluck('id_professor')->unique()->filter();
-
-        $materiais = Materiais::where(function ($q) use ($idCursos, $idProfessores) {
-                $q->whereIn('id_curso', $idCursos)
-                  ->orWhereIn('id_professor', $idProfessores);
-            })
+        $materiais = Materiais::whereIn('id_curso', $idCursos)
             ->orderByDesc('id_materiais')
             ->get();
-          if ($materiais->isEmpty()) {
-            $materiais = Materiais::orderByDesc('id_materiais')->get();
-        }
         return view('aluno.aulas.index', compact('aulas', 'proximaAula', 'materiais', 'aluno'));
     }
 }

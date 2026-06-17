@@ -18,6 +18,9 @@ services:
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     depends_on:
       - mysql
     networks:

@@ -29,7 +29,7 @@ class ContatoController extends Controller
     \Mail::raw(
         "Nome: {$request->nome}\nE-mail: {$request->email}\nAssunto: {$request->assunto}\n\nMensagem:\n{$request->mensagem}",
         function ($message) use ($request) {
-            $message->to('contato@adminfo.dev.br')
+            $message->to('anddrem89@gmail.com')
         ->subject("Contato: {$request->assunto}");
         }
     );
