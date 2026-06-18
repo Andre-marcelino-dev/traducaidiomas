@@ -86,6 +86,12 @@ class MatriculaController extends Controller
             ]);
         }
 
+        if ($request->has('status_matricula')) {
+            $dados['status_matricula'] = $request->validate([
+                'status_matricula' => 'required|in:ATIVO,CONGELADO,CANCELADO',
+            ])['status_matricula'];
+        }
+
         $matricula->update($dados);
 
         return redirect()

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SessionTimeout
 {
-    const TIMEOUT = 60; // segundos de inatividade
+    const TIMEOUT = 1800; // 30 minutos de inatividade
 
     public function handle(Request $request, Closure $next, string $guard = 'admin'): mixed
     {

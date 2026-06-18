@@ -110,8 +110,18 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Data</label>
-                            <input type="date" name="data_matricula" class="form-control" value="{{ $matriculaEdit?->data_matricula ?? '' }}">
+                            <input type="date" name="data_matricula" class="form-control" value="{{ $matriculaEdit ? \Carbon\Carbon::parse($matriculaEdit->data_matricula)->format('Y-m-d') : '' }}">
                         </div>
+                        @if ($matriculaEdit)
+                            <div class="col-md-3">
+                                <label class="form-label">Status</label>
+                                <select name="status_matricula" class="form-control">
+                                    <option value="ATIVO" {{ $matriculaEdit->status_matricula == 'ATIVO' ? 'selected' : '' }}>ATIVO</option>
+                                    <option value="CONGELADO" {{ $matriculaEdit->status_matricula == 'CONGELADO' ? 'selected' : '' }}>CONGELADO</option>
+                                    <option value="CANCELADO" {{ $matriculaEdit->status_matricula == 'CANCELADO' ? 'selected' : '' }}>CANCELADO</option>
+                                </select>
+                            </div>
+                        @endif
                     </div>
 
                     @if ($errors->any())
