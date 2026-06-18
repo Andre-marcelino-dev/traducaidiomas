@@ -45,6 +45,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AuthController::class, 'autenticar'])->name('autenticar');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // Primeiro Acesso
+    Route::get('/verificar',          [AuthController::class, 'verificar'])->name('verificar');
+    Route::post('/verificar',         [AuthController::class, 'verificarAcesso'])->name('verificar.acesso');
+    Route::get('/criar-credenciais',  [AuthController::class, 'criarCredenciais'])->name('criar-credenciais');
+    Route::post('/criar-credenciais', [AuthController::class, 'salvarCredenciais'])->name('salvar-credenciais');
+
+    // Recuperação de Senha
+    Route::get('/recuperar-senha',  [AuthController::class, 'recuperarSenha'])->name('recuperar-senha');
+    Route::post('/recuperar-senha', [AuthController::class, 'processarRecuperacao'])->name('processar-recuperacao');
+    Route::get('/redefinir-senha',  [AuthController::class, 'redefinirSenha'])->name('redefinir-senha');
+    Route::post('/redefinir-senha', [AuthController::class, 'salvarNovaSenha'])->name('salvar-nova-senha');
+
     // Painel Admin (Protegidas por Middleware)
     Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
 

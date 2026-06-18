@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso do Aluno</title>
+    <title>Primeiro Acesso</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,8 +12,8 @@
             --ink:        #0f0e0d;
             --paper:      #f5f0e8;
             --cream:      #ede7d9;
-            --accent:     #2b6cb0;
-            --accent-dim: #2a5a9b;
+            --accent:     #c0392b;
+            --accent-dim: #9b2e22;
             --muted:      #7a7065;
             --line:       #d0c9bc;
         }
@@ -113,38 +113,6 @@
             margin-bottom: 2.5rem;
         }
 
-        .rodape-painel {
-            border-top: 1px solid rgba(255,255,255,.1);
-            padding-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .avatar-stack { display: flex; }
-
-        .avatar-stack span {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: var(--accent);
-            border: 2px solid var(--ink);
-            margin-left: -8px;
-            font-size: .65rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-        }
-
-        .avatar-stack span:first-child  { margin-left: 0; background: #3e6a8e; }
-        .avatar-stack span:nth-child(2) { background: #2b6cb0; }
-        .avatar-stack span:nth-child(3) { background: #1a4a7a; }
-
-        .rodape-texto { font-size: .75rem; color: rgba(255,255,255,.4); line-height: 1.5; }
-
         .panel-direito {
             display: flex;
             align-items: center;
@@ -183,8 +151,8 @@
         .subtitulo { font-size: .875rem; color: var(--muted); margin-bottom: 2rem; }
 
         .alerta-erro {
-            background: #ebf4ff;
-            border: 1px solid #bee3f8;
+            background: #fdf0ef;
+            border: 1px solid #f5c2be;
             border-left: 3px solid var(--accent);
             color: var(--accent-dim);
             font-size: .8rem;
@@ -219,9 +187,8 @@
             pointer-events: none;
         }
 
-        input[type="email"],
-        input[type="password"],
-        input[type="text"] {
+        input[type="text"],
+        input[type="tel"] {
             width: 100%;
             padding: .8rem 1rem .8rem 2.75rem;
             background: var(--cream);
@@ -236,25 +203,13 @@
         }
 
         input:focus {
-            border-color: var(--accent);
+            border-color: var(--ink);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(43,108,176,.1);
+            box-shadow: 0 0 0 3px rgba(15,14,13,.07);
         }
 
         input.is-invalido { border-color: var(--accent); }
         .erro-campo { font-size: .72rem; color: var(--accent); margin-top: .3rem; }
-
-        .toggle-senha {
-            position: absolute;
-            right: 1rem; top: 50%;
-            transform: translateY(-50%);
-            background: none; border: none;
-            cursor: pointer; padding: 0;
-            color: var(--muted);
-            display: flex; align-items: center;
-            transition: color .15s;
-        }
-        .toggle-senha:hover { color: var(--ink); }
 
         .btn-entrar {
             width: 100%;
@@ -272,6 +227,7 @@
             transition: background .2s, transform .1s;
             position: relative;
             overflow: hidden;
+            margin-top: .5rem;
         }
 
         .btn-entrar:hover { background: #2a2927; }
@@ -293,17 +249,17 @@
 
         @keyframes girar { to { transform: rotate(360deg); } }
 
-        .divisor {
-            display: flex; align-items: center; gap: 1rem;
-            margin: 1.5rem 0;
-            font-size: .7rem; letter-spacing: .08em;
-            text-transform: uppercase; color: var(--muted);
+        .link-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .8rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-top: 1.5rem;
+            transition: color .15s;
         }
-        .divisor::before, .divisor::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-
-        .info-suporte { text-align: center; font-size: .75rem; color: var(--muted); }
-        .info-suporte a { color: var(--ink); text-decoration: none; font-weight: 500; border-bottom: 1px solid var(--line); }
-        .info-suporte a:hover { border-color: var(--ink); }
+        .link-voltar:hover { color: var(--ink); }
 
         .card-login > * { opacity: 0; transform: translateY(12px); animation: surgir .5s ease forwards; }
         .card-login > *:nth-child(1) { animation-delay: .05s; }
@@ -312,7 +268,6 @@
         .card-login > *:nth-child(4) { animation-delay: .22s; }
         .card-login > *:nth-child(5) { animation-delay: .27s; }
         .card-login > *:nth-child(6) { animation-delay: .32s; }
-        .card-login > *:nth-child(7) { animation-delay: .37s; }
 
         @keyframes surgir { to { opacity: 1; transform: translateY(0); } }
 
@@ -325,31 +280,19 @@
 </head>
 <body>
 
-    {{-- PAINEL ESQUERDO --}}
     <div class="panel-esquerdo">
-        <div class="numero-grande">A</div>
-        <div class="badge-sistema">Portal do Aluno</div>
+        <div class="numero-grande">1</div>
+        <div class="badge-sistema">Primeiro Acesso</div>
         <h2 class="tagline">
-            Aprenda<br>
-            <em>novos</em><br>
-            idiomas
+            Configure<br>
+            seu <em>acesso</em><br>
+            ao sistema
         </h2>
         <p class="descricao">
-            Acesse suas aulas, acompanhe seu progresso e evolua no seu ritmo.
+            Informe seus dados cadastrais para verificar se você já possui credenciais de acesso.
         </p>
-        <div class="rodape-painel">
-            <div class="avatar-stack">
-                <span>AL</span>
-                <span>EN</span>
-                <span>IT</span>
-            </div>
-            <p class="rodape-texto">
-                Acesso exclusivo<br>para alunos matriculados
-            </p>
-        </div>
     </div>
 
-    {{-- PAINEL DIREITO --}}
     <div class="panel-direito">
         <div class="card-login">
 
@@ -362,23 +305,13 @@
                     </svg>
                 </div>
                 <div class="logo-nome">
-                    Portal do Aluno
+                    Primeiro Acesso
                     <span>TraducaIdiomas</span>
-                    <span>Área do Aluno</span>
                 </div>
             </div>
 
-            <h1 class="titulo">Bem-vindo de volta</h1>
-            <p class="subtitulo">Insira suas credenciais para continuar</p>
-
-            @if(session('sessao_expirada'))
-                <div class="alerta-erro">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    Sessão encerrada por inatividade. Faça login novamente.
-                </div>
-            @endif
+            <h1 class="titulo">Verificar cadastro</h1>
+            <p class="subtitulo">Informe seu nome e telefone para verificar seu acesso</p>
 
             @if(session('error'))
                 <div class="alerta-erro">
@@ -389,95 +322,79 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('aluno.autenticar') }}" id="formLogin" novalidate>
+            <form method="POST" action="{{ route('admin.verificar.acesso') }}" id="formVerificar" novalidate>
                 @csrf
 
                 <div class="grupo">
-                    <label for="email_aluno">E-mail</label>
+                    <label for="nome_professor">Nome completo</label>
                     <div class="campo-wrapper">
                         <svg class="campo-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
                         </svg>
-                        <input type="email" id="email_aluno" name="email_aluno"
-                            value="{{ old('email_aluno') }}"
-                            placeholder="aluno@email.com"
-                            autocomplete="email"
-                            class="{{ $errors->has('email_aluno') ? 'is-invalido' : '' }}">
+                        <input type="text" id="nome_professor" name="nome_professor"
+                            value="{{ old('nome_professor') }}"
+                            placeholder="Seu nome completo"
+                            class="{{ $errors->has('nome_professor') ? 'is-invalido' : '' }}">
                     </div>
-                    @error('email_aluno')
+                    @error('nome_professor')
                         <p class="erro-campo">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="grupo">
-                    <label for="senha_aluno">Senha</label>
+                    <label for="telefone_professor">Telefone</label>
                     <div class="campo-wrapper">
                         <svg class="campo-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
                         </svg>
-                        <input type="password" id="senha_aluno" name="senha_aluno"
-                            placeholder="••••••••"
-                            autocomplete="current-password"
-                            class="{{ $errors->has('senha_aluno') ? 'is-invalido' : '' }}">
-                        <button type="button" class="toggle-senha" onclick="toggleSenha()" aria-label="Mostrar senha">
-                            <svg id="icone-olho" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </button>
+                        <input type="tel" id="telefone_professor" name="telefone_professor"
+                            value="{{ old('telefone_professor') }}"
+                            placeholder="(00) 00000-0000"
+                            class="{{ $errors->has('telefone_professor') ? 'is-invalido' : '' }}">
                     </div>
-                    @error('senha_aluno')
+                    @error('telefone_professor')
                         <p class="erro-campo">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <button type="submit" class="btn-entrar" id="btnEntrar">
-                    <span class="texto-btn">Entrar no portal</span>
+                <button type="submit" class="btn-entrar" id="btnVerificar">
+                    <span class="texto-btn">Verificar meu cadastro</span>
                     <div class="spinner"></div>
                 </button>
             </form>
 
-            <div class="divisor">ou</div>
-
-            <p class="info-suporte">
-                Problemas de acesso? <a href="mailto:suporte@escola.edu.br">Fale com o suporte</a>
-            </p>
+            <a href="{{ route('admin.login') }}" class="link-voltar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Voltar ao login
+            </a>
 
         </div>
     </div>
 
     <script>
-        function toggleSenha() {
-            const campo = document.getElementById('senha_aluno');
-            const icone = document.getElementById('icone-olho');
-            if (campo.type === 'password') {
-                campo.type = 'text';
-                icone.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
-            } else {
-                campo.type = 'password';
-                icone.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+        // Máscara de telefone
+        const telefoneInput = document.getElementById('telefone_professor');
+        telefoneInput.addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 6) {
+                this.value = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+            } else if (v.length > 2) {
+                this.value = '(' + v.slice(0,2) + ') ' + v.slice(2);
+            } else if (v.length > 0) {
+                this.value = '(' + v;
             }
-        }
 
-        // Validação de email em tempo real
-        const emailInput = document.getElementById('email_aluno');
-        const formLogin = document.getElementById('formLogin');
-
-        function validarEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        emailInput.addEventListener('input', function() {
-            const val = this.value.trim();
             const erroExistente = this.parentElement.parentElement.querySelector('.erro-campo-js');
-            if (val.length > 0 && !validarEmail(val)) {
+            if (v.length > 0 && v.length < 10) {
                 this.classList.add('is-invalido');
                 if (!erroExistente) {
                     const p = document.createElement('p');
                     p.className = 'erro-campo erro-campo-js';
-                    p.textContent = 'Digite um e-mail válido (ex: nome@email.com)';
+                    p.textContent = 'Digite um telefone válido (ex: (11) 99999-9999)';
                     this.parentElement.parentElement.appendChild(p);
                 }
             } else {
@@ -486,14 +403,23 @@
             }
         });
 
-        formLogin.addEventListener('submit', function(e) {
-            const val = emailInput.value.trim();
-            if (val.length > 0 && !validarEmail(val)) {
+        // Bloquear teclas que não são números no telefone
+        telefoneInput.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which || e.keyCode);
+            if (!/[\d]/.test(char) && e.which !== 8 && e.which !== 0) {
                 e.preventDefault();
-                emailInput.focus();
+            }
+        });
+
+        const formVerificar = document.getElementById('formVerificar');
+        formVerificar.addEventListener('submit', function(e) {
+            const tel = telefoneInput.value.replace(/\D/g, '');
+            if (tel.length < 10) {
+                e.preventDefault();
+                telefoneInput.focus();
                 return;
             }
-            document.getElementById('btnEntrar').classList.add('carregando');
+            document.getElementById('btnVerificar').classList.add('carregando');
         });
     </script>
 
