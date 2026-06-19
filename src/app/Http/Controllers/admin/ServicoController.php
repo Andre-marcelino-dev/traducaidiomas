@@ -38,6 +38,7 @@ class ServicoController extends Controller
         ]);
 
         $data = $request->except(['imagem_servico', '_token']);
+        $data['id_professor'] = auth('admin')->id();
 
         if ($request->hasFile('imagem_servico')) {
             $file     = $request->file('imagem_servico');
