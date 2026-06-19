@@ -47,15 +47,12 @@ public function store(Request $request)
         'senha_professor'         => 'required|string|min:6|confirmed',
     ]);
 
-    $dados = $request->except(['foto_professor']);
+    $dados = $request->except(['foto_professor', '_token', 'senha_professor_confirmation']);
     $dados['senha_professor'] = Hash::make($request->senha_professor);
 
     if ($request->hasFile('foto_professor')) {
-
         $arquivo = $request->file('foto_professor');
-
         $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
-
         $diretorioDestino = public_path('traducaidiomas/professor/');
 
         if (!file_exists($diretorioDestino)) {
@@ -63,11 +60,12 @@ public function store(Request $request)
         }
 
         $arquivo->move($diretorioDestino, $nomeFoto);
-
         $dados['foto_professor'] = $nomeFoto;
+    } else {
+        $dados['foto_professor'] = '';
     }
 
-Professor::create($dados);
+    Professor::create($dados);
 
 return redirect()
     ->route('admin.professores.index')

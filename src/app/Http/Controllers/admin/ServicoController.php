@@ -37,13 +37,15 @@ class ServicoController extends Controller
             'imagem_servico'          => 'nullable|image|max:2048',
         ]);
 
-        $data = $request->except('imagem_servico');
+        $data = $request->except(['imagem_servico', '_token']);
 
         if ($request->hasFile('imagem_servico')) {
             $file     = $request->file('imagem_servico');
             $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('traducaidiomas/servicos'), $filename);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
+        } else {
+            $data['imagem_servico'] = '';
         }
 
         Servico::create($data);

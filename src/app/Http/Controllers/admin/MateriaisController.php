@@ -30,11 +30,11 @@ class MateriaisController extends Controller
         $dados = $request->validate([
             'id_professor'        => 'required|exists:tbl_professor,id_professor',
             'titulo_materiais'    => 'required|string|max:255',
-            'descricao_materiais' => 'nullable|string',
+            'descricao_materiais' => 'required|string',
             'arquivo_materiais'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip|max:20480',
             'curso_materiais'     => 'nullable|string|max:255',
-            'nivel_material'      => 'nullable|string|max:100',
-            'id_curso'            => 'nullable|exists:tbl_cursos,id_curso',
+            'nivel_material'      => 'required|string|max:100',
+            'id_curso'            => 'required|exists:tbl_cursos,id_curso',
         ]);
 
         if ($request->hasFile('arquivo_materiais')) {
@@ -49,7 +49,7 @@ class MateriaisController extends Controller
             $arquivo->move($destino, $nomeArquivo);
             $dados['arquivo_materiais'] = 'traducaidiomas/materiais/' . $nomeArquivo;
         } else {
-            $dados['arquivo_materiais'] = null;
+            $dados['arquivo_materiais'] = '';
         }
 
         Materiais::create($dados);
@@ -79,11 +79,11 @@ class MateriaisController extends Controller
         $dados = $request->validate([
             'id_professor'        => 'required|exists:tbl_professor,id_professor',
             'titulo_materiais'    => 'required|string|max:255',
-            'descricao_materiais' => 'nullable|string',
+            'descricao_materiais' => 'required|string',
             'arquivo_materiais'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip|max:20480',
             'curso_materiais'     => 'nullable|string|max:255',
-            'nivel_material'      => 'nullable|string|max:100',
-            'id_curso'            => 'nullable|exists:tbl_cursos,id_curso',
+            'nivel_material'      => 'required|string|max:100',
+            'id_curso'            => 'required|exists:tbl_cursos,id_curso',
         ]);
 
         $materiais = Materiais::findOrFail($id);

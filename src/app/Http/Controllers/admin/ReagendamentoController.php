@@ -58,7 +58,7 @@ class ReagendamentoController extends Controller
         Reagendamento::create([
             'aluno_id' => $request->aluno_id,
             'aula_id' => $request->aula_id,
-            'professor_id' => $aula->professor_id,
+            'professor_id' => $aula->id_professor,
             'data_original' => $aula->data_aulas,
             'motivo' => $request->motivo,
             'status' => 'pendente',
