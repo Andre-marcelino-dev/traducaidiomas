@@ -63,7 +63,7 @@
                                     @endif
                                 </td>
                                 <td><span class="tbl-badge"><i class="fas fa-language me-1"></i>{{ $servico->lingua_servico }}</span></td>
-                                <td><span style="font-weight:700;font-size:.875rem;">R$ {{ number_format((float) $servico->preco_servico, 2, ',', '.') }}</span></td>
+                                <td><span style="font-weight:700;font-size:.875rem;">{{ $servico->preco_servico }}</span></td>
                                 <td class="text-center">
                                     <div class="d-flex align-items-center justify-content-center gap-2">
                                         <a href="{{ route('admin.servicos.edit', $servico->id_servico) }}" class="tbl-btn-editar">

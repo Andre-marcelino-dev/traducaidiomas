@@ -35,7 +35,6 @@ class ServicoController extends Controller
             'contato_text_servico'    => 'required|string|max:255',
             'ordenar_servico'         => 'required|integer',
             'imagem_servico'          => 'nullable|image|max:2048',
-            'status_servico'          => 'required|string|max:10',
         ]);
 
         $data = $request->except('imagem_servico');
@@ -77,7 +76,6 @@ class ServicoController extends Controller
             'contato_text_servico'    => 'required|string|max:255',
             'ordenar_servico'         => 'required|integer',
             'imagem_servico'          => 'nullable|image|max:2048',
-            'status_servico'          => 'required|string|max:10',
         ]);
 
         $data = $request->except('imagem_servico');
