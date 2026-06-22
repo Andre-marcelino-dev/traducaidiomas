@@ -4,6 +4,7 @@ namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
 use App\Models\Materiais;
+use App\Models\Matricula;
 use App\Models\Professor;
 use App\Models\Curso;
 use Illuminate\Http\Request;
@@ -11,11 +12,26 @@ use Illuminate\Support\Facades\Storage;
 
 class MateriaisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $materiais = Materiais::with(['professor', 'curso'])->latest('criado_em_materiais')->paginate(15);
+        $aluno = auth('aluno')->user();
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
 
-        return view('admin.materiais.index', compact('materiais'));
+        $query = Materiais::with(['professor', 'curso'])->whereIn('id_curso', $idCursos);
+
+        if ($request->filled('nivel')) {
+            $query->where('nivel_material', $request->nivel);
+        }
+        if ($request->filled('id_curso')) {
+            $query->where('id_curso', $request->id_curso);
+        }
+        if ($request->filled('busca')) {
+            $query->where('titulo_materiais', 'like', '%' . $request->busca . '%');
+        }
+
+        $materiais = $query->latest('criado_em_materiais')->paginate(12);
+
+        return view('admin.materiais.alunoindex', compact('materiais'));
     }
 
     public function create()
@@ -54,7 +70,7 @@ class MateriaisController extends Controller
     {
         $materiais = Materiais::with(['professor', 'curso'])->findOrFail($id);
 
-        return view('admin.materiais.modal.show', compact('materiais'));
+        return view('admin.materiais.modal.showaluno', compact('materiais'));
     }
 
     public function edit($id)
@@ -120,7 +136,7 @@ class MateriaisController extends Controller
             return response()->file($caminho);
         }
 
-        return redirect()->back()->with("error", "Arquivo não encontrado no servidor.");
+        return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
     }
 
     public function download($id)
@@ -130,9 +146,10 @@ class MateriaisController extends Controller
         $caminho = public_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
-            return response()->download($caminho);
+            $ext = pathinfo($caminho, PATHINFO_EXTENSION);
+            return response()->download($caminho, $material->titulo_materiais . '.' . $ext);
         }
 
-        return redirect()->back()->with("error", "Arquivo não encontrado no servidor.");
+        return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
     }
 }

@@ -23,7 +23,7 @@ class AlunoController extends Controller
         $request->validate([
             'nome_aluno'               => 'required|string|max:255',
             'email_aluno'              => 'required|email|unique:tbl_alunos,email_aluno',
-            'senha_aluno'              => 'nullable|string|min:6|confirmed',
+            'senha_aluno'              => 'required|string|min:6|confirmed',
             'telefone_aluno'           => 'required|string|max:20',
             'curso_aluno'              => 'required|string|max:100',
             'data_nasc_aluno'          => 'required|date',
@@ -32,14 +32,25 @@ class AlunoController extends Controller
             'foto_aluno'               => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->only([
+            'nome_aluno', 'email_aluno', 'telefone_aluno',
+            'curso_aluno', 'data_nasc_aluno', 'nivel_aluno', 'status_aluno',
+        ]);
         $data['senha_aluno'] = bcrypt($request->senha_aluno);
 
         if ($request->hasFile('foto_aluno')) {
             $foto = $request->file('foto_aluno');
             $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('traducaidiomas/alunos'), $nome);
+            $destino = public_path('traducaidiomas/alunos');
+
+            if (!file_exists($destino)) {
+                mkdir($destino, 0777, true);
+            }
+
+            $foto->move($destino, $nome);
             $data['foto_aluno'] = $nome;
+        } else {
+            $data['foto_aluno'] = '';
         }
 
         Aluno::create($data);
@@ -69,9 +80,11 @@ class AlunoController extends Controller
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except(['senha_aluno', 'senha_aluno_confirmation']);
+        $data = $request->only([
+            'nome_aluno', 'email_aluno', 'telefone_aluno',
+            'curso_aluno', 'data_nasc_aluno', 'nivel_aluno', 'status_aluno',
+        ]);
 
-        // Só atualiza a senha se foi preenchida
         if ($request->filled('senha_aluno')) {
             $data['senha_aluno'] = bcrypt($request->senha_aluno);
         }
@@ -79,7 +92,13 @@ class AlunoController extends Controller
         if ($request->hasFile('foto_aluno')) {
             $foto = $request->file('foto_aluno');
             $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('traducaidiomas/alunos'), $nome);
+            $destino = public_path('traducaidiomas/alunos');
+
+            if (!file_exists($destino)) {
+                mkdir($destino, 0777, true);
+            }
+
+            $foto->move($destino, $nome);
             $data['foto_aluno'] = $nome;
         }
 

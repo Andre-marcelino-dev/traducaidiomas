@@ -1,6 +1,10 @@
 <header class="topo">
     <div class="container">
-        <h1>TraducaIdiomas</h1>
+        @if(!empty($siteConfig['logo_site']))
+            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        @else
+            <h1>TraducaIdiomas</h1>
+        @endif
         <?php
         $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
         ?>
@@ -52,6 +56,12 @@
             <li>
                 <a href="#">
                     <img src="{{ asset('traducaidiomas/img/linkedinLogo.svg') }}" alt="Logo linkedin" width="35">
+                </a>
+            </li>
+            <li class="cart-btn">
+                <a href="{{ route('aluno.login') }}">
+                    <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    <span class="count"></span>
                 </a>
             </li>
             <li class="cart-btn">

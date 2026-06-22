@@ -30,6 +30,11 @@
 
 <link rel="stylesheet" href="{{ asset('dash/css/adminlte.css')}}" />
 
+<!--begin::Dashboard & Admin Tables-->
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}" />
+<!--end::Dashboard & Admin Tables-->
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"

@@ -26,21 +26,49 @@
             @csrf
             @method('PUT')
 
-            {{-- LOGO --}}
+            {{-- LOGO PAINEL --}}
             <div class="card mb-4 shadow-sm">
                 <div class="card-header fw-bold" style="background:#1a1a2e; color:#fff;">
-                    🏷️ Logo do Sistema
+                    🏷️ Logo do Painel Administrativo
                 </div>
                 <div class="card-body">
                     <div class="row g-3 align-items-center">
                         <div class="col-md-4 text-center">
-                            <p class="text-muted small mb-1">Logo Atual</p>
-                            <img src="{{ asset('traducaidiomas/img/logo.png') }}" style="max-height:80px;" class="rounded">
+                            <p class="text-muted small mb-1">Logo Atual do Painel</p>
+                            @if($config['logo_painel'])
+                                <img src="{{ asset('traducaidiomas/img/' . $config['logo_painel']) }}?v={{ time() }}" style="max-height:80px;" class="rounded">
+                            @else
+                                <span class="text-muted small">Nenhuma logo cadastrada</span>
+                            @endif
                         </div>
                         <div class="col-md-8">
-                            <label class="form-label fw-bold">Substituir Logo (painel e site)</label>
+                            <label class="form-label fw-bold">Substituir Logo do Painel</label>
                             <input type="file" name="logo_painel" class="form-control" accept="image/*">
-                            <small class="text-muted">Recomendado: PNG transparente, mínimo 200x60px</small>
+                            <small class="text-muted">Aparece na barra lateral do admin. Recomendado: PNG transparente, mínimo 200x60px</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- LOGO SITE --}}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header fw-bold" style="background:#1a1a2e; color:#fff;">
+                    🌐 Logo do Site Público
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-4 text-center">
+                            <p class="text-muted small mb-1">Logo Atual do Site</p>
+                            @if($config['logo_site'])
+                                <img src="{{ asset('traducaidiomas/img/' . $config['logo_site']) }}?v={{ time() }}" style="max-height:80px;" class="rounded">
+                            @else
+                                <span class="text-muted small">Nenhuma logo cadastrada</span>
+                            @endif
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Substituir Logo do Site</label>
+                            <input type="file" name="logo_site" class="form-control" accept="image/*">
+                            <small class="text-muted">Aparece no cabeçalho do site público. Recomendado: PNG transparente, mínimo 200x60px</small>
                         </div>
                     </div>
                 </div>
@@ -142,7 +170,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
 
             {{-- PÁGINA SOBRE - TEXTO COMPLETO --}}

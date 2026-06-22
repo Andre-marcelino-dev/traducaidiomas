@@ -33,4 +33,9 @@ class Aluno extends Authenticatable
     {
         return $this->senha_aluno;
     }
+
+    public function matriculas()
+    {
+        return $this->hasMany(Matricula::class, 'id_aluno', 'id_aluno');
+    }
 }

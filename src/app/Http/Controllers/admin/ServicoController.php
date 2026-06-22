@@ -35,16 +35,18 @@ class ServicoController extends Controller
             'contato_text_servico'    => 'required|string|max:255',
             'ordenar_servico'         => 'required|integer',
             'imagem_servico'          => 'nullable|image|max:2048',
-            'status_servico'          => 'required|string|max:10',
         ]);
 
-        $data = $request->except('imagem_servico');
+        $data = $request->except(['imagem_servico', '_token']);
+        $data['id_professor'] = auth('admin')->id();
 
         if ($request->hasFile('imagem_servico')) {
             $file     = $request->file('imagem_servico');
             $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('traducaidiomas/servicos'), $filename);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
+        } else {
+            $data['imagem_servico'] = '';
         }
 
         Servico::create($data);
@@ -77,7 +79,6 @@ class ServicoController extends Controller
             'contato_text_servico'    => 'required|string|max:255',
             'ordenar_servico'         => 'required|integer',
             'imagem_servico'          => 'nullable|image|max:2048',
-            'status_servico'          => 'required|string|max:10',
         ]);
 
         $data = $request->except('imagem_servico');

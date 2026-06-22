@@ -41,6 +41,16 @@ class MatriculaController extends Controller
     {
         $dados = $this->validar($request);
 
+        $jaMatriculado = Matricula::where('id_aluno', $dados['id_aluno'])
+            ->where('id_curso', $dados['id_curso'])
+            ->exists();
+
+        if ($jaMatriculado) {
+            return back()->withInput()->withErrors([
+                'id_aluno' => 'Este aluno já possui matrícula neste curso.',
+            ]);
+        }
+
         Matricula::create($dados);
 
         return redirect()
@@ -64,6 +74,23 @@ class MatriculaController extends Controller
     {
         $matricula = Matricula::findOrFail($id);
         $dados = $this->validar($request);
+
+        $jaMatriculado = Matricula::where('id_aluno', $dados['id_aluno'])
+            ->where('id_curso', $dados['id_curso'])
+            ->where('id_matricula', '!=', $id)
+            ->exists();
+
+        if ($jaMatriculado) {
+            return back()->withInput()->withErrors([
+                'id_aluno' => 'Este aluno já possui matrícula neste curso.',
+            ]);
+        }
+
+        if ($request->has('status_matricula')) {
+            $dados['status_matricula'] = $request->validate([
+                'status_matricula' => 'required|in:ATIVO,CONGELADO,CANCELADO',
+            ])['status_matricula'];
+        }
 
         $matricula->update($dados);
 

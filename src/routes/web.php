@@ -46,7 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Painel Admin (Protegidas por Middleware)
-    Route::middleware('auth:admin')->group(function () {
+    Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
 
         Route::get('/',           [DashController::class, 'index'])->name('dash');
         Route::get('/categorias', [DashController::class, 'index'])->name('categoria');
@@ -123,16 +123,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id']);
 
         // ── Reagendamentos (Admin) ──
-        Route::get('reagendamentos', [AdminReagendamentoController::class, 'index'])
-            ->name('reagendamentos.index');
-        Route::get('reagendamentos/{reagendamento}', [AdminReagendamentoController::class, 'show'])
-            ->name('reagendamentos.show');
-        Route::put('reagendamentos/{id}/aceitar', [AdminReagendamentoController::class, 'aceitar'])
-            ->name('reagendamentos.aceitar');
-        Route::put('reagendamentos/{id}/recusar', [AdminReagendamentoController::class, 'recusar'])
-            ->name('reagendamentos.recusar');
-        Route::delete('reagendamentos/{id}', [AdminReagendamentoController::class, 'destroy'])
-            ->name('reagendamentos.destroy');
+        Route::prefix('reagendamentos')->name('reagendamentos.')->group(function () {
+            Route::get('/',                        [AdminReagendamentoController::class, 'index'])->name('index');
+            Route::post('/',                       [AdminReagendamentoController::class, 'store'])->name('store');
+            Route::get('/{reagendamento}',         [AdminReagendamentoController::class, 'show'])->name('show');
+            Route::put('/{reagendamento}/aceitar', [AdminReagendamentoController::class, 'aceitar'])->name('aceitar');
+            Route::put('/{reagendamento}/recusar', [AdminReagendamentoController::class, 'recusar'])->name('recusar');
+            Route::delete('/{reagendamento}',      [AdminReagendamentoController::class, 'destroy'])->name('destroy');
+        });
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
@@ -163,7 +161,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
     Route::post('/logout', [AlunoAuthController::class, 'logout'])->name('logout');
 
     // Painel Aluno (Protegidas por Middleware)
-    Route::middleware('auth:aluno')->group(function () {
+    Route::middleware(['auth:aluno', 'session.timeout:aluno'])->group(function () {
 
         Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
         Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');

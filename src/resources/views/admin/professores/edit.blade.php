@@ -83,13 +83,19 @@
                             <img src="{{ asset('traducaidiomas/professor/' . $professor->foto_professor) }}"
                                 alt="{{ $professor->nome_professor }}" width="50" height="50"
                                 style="object-fit: cover; border-radius: 50%;">
+                        @else
                             <p class="text-muted">Nenhuma foto cadastrada.</p>
                         @endif
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Nova Foto</label>
-                        <input type="file" name="foto_professor" class="form-control">
+                        <input type="file" name="foto_professor" class="form-control
+                            @error('foto_professor') is-invalid @enderror">
+                        @error('foto_professor')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Formatos aceitos: JPG, PNG, WebP. Tamanho máximo: 2MB.</small>
                     </div>
 
                     <button type="submit" class="btn btn-primary">

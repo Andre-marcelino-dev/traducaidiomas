@@ -20,11 +20,17 @@ public function index()
     $cursos = Curso::all();
 
     $totalCursos = Curso::count();
+    $totalAulas = $aulas->count();
+    $aulasAtivas = $aulas->where('status_aulas', 'ATIVO')->count();
+    $aulasHoje = $aulas->filter(fn($a) => $a->data_aulas === now()->toDateString())->count();
 
     return view('admin.aulas.index', compact(
         'aulas',
         'cursos',
-        'totalCursos'
+        'totalCursos',
+        'totalAulas',
+        'aulasAtivas',
+        'aulasHoje'
     ));
 }
 
@@ -50,7 +56,10 @@ public function store(Request $request)
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
     ]);
 
-    Aula::create($request->all());
+    Aula::create($request->only([
+        'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
+        'id_professor', 'id_curso', 'link_teams', 'cursos_aulas', 'status_aulas',
+    ]));
 
     return redirect()
         ->route('admin.aulas.index')
@@ -63,7 +72,7 @@ public function store(Request $request)
     $professores = Professor::orderBy('nome_professor')->get();
     $cursos = Curso::orderBy('nome_curso')->get();
 
-    return view('admin.aulas..modal.edit', compact(
+    return view('admin.aulas.modal.edit', compact(
         'aula',
         'professores',
         'cursos'
@@ -86,7 +95,10 @@ public function store(Request $request)
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
     ]);
 
-    $aula->update($request->all());
+    $aula->update($request->only([
+        'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
+        'id_professor', 'id_curso', 'link_teams', 'cursos_aulas', 'status_aulas',
+    ]));
 
     return redirect()
         ->route('admin.aulas.index')

@@ -63,17 +63,6 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Nível</label>
-                            <select name="status_aluno" class="form-select">
-                                <option value="EM CURSO" {{ $aluno->status_aluno == 'EM CURSO' ? 'selected' : '' }}>EM
-                                    CURSO</option>
-                                <option value="CONCLUIDO" {{ $aluno->status_aluno == 'CONCLUIDO' ? 'selected' : '' }}>
-                                    CONCLUÍDO</option>
-                                <option value="INATIVO" {{ $aluno->status_aluno == 'INATIVO' ? 'selected' : '' }}>INATIVO
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Nível</label>
                             <select name="nivel_aluno" class="form-select">
                                 <option value="Iniciante" {{ $aluno->nivel_aluno == 'Iniciante' ? 'selected' : '' }}>
                                     Iniciante</option>

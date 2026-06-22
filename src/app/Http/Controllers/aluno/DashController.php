@@ -34,9 +34,9 @@ class DashController extends Controller
 
         // Busca reagendamentos pendentes e confirmados do aluno
         $reagendamentos = Reagendamento::with('aula')
-            ->where('id_aluno', $aluno->id_aluno)
-            ->whereIn('status_reagendamento', ['pendente', 'confirmado'])
-            ->orderByDesc('criado_em_reagendamento')
+            ->where('aluno_id', $aluno->id_aluno)
+            ->whereIn('status', ['pendente', 'confirmado'])
+            ->orderByDesc('created_at')
             ->get();
 
         return view('aluno.dash.index', compact('aluno', 'aulas', 'totalAulas', 'notificacoes', 'reagendamentos'));

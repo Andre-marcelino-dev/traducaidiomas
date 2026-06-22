@@ -1,134 +1,168 @@
 @extends('admin.layout.admin')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1>Alunos</h1>
-            <a href="{{ route('admin.alunos.create') }}" class="btn btn-primary">+ Novo Aluno</a>
-        </div>
 
-
-        @if (session('success'))
-            <div class="alert alert-success" id="flash-success">{{ session('success') }}</div>
-        @endif
-
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Foto</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Telefone</th>
-                            <th>Curso</th>
-                            <th>Nível</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($alunos as $aluno)
-                            <tr>
-                                <td>{{ $aluno->id_aluno }}</td>
-                                <td>
-                                    @if ($aluno->foto_aluno)
-                                        <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}"
-                                            alt="{{ $aluno->nome_aluno }}" width="50" height="50"
-                                            style="object-fit: cover; border-radius: 50%;">
-                                    @else
-                                        <span class="text-muted">Sem foto</span>
-                                    @endif
-                                </td>
-                                <td>{{ $aluno->nome_aluno }}</td>
-                                <td>{{ $aluno->email_aluno }}</td>
-                                <td>{{ $aluno->telefone_aluno }}</td>
-                                <td>{{ $aluno->curso_aluno }}</td>
-                                <td>{{ $aluno->nivel_aluno }}</td>
-                                <td>
-                                    <form action="{{ route('admin.alunos.updateStatus', $aluno->id_aluno) }}"
-                                        method="POST" style="display:inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="status_aluno" onchange="this.form.submit()"
-                                            class="border-0 fw-bold text-white rounded px-2 py-1"
-                                            style="cursor:pointer; background-color: {{ $aluno->status_aluno == 'EM CURSO' ? '#28a745' : ($aluno->status_aluno == 'CONCLUIDO' ? '#17a2b8' : '#dc3545') }}">
-                                            <option value="EM CURSO"
-                                                {{ $aluno->status_aluno == 'EM CURSO' ? 'selected' : '' }}>EM CURSO
-                                            </option>
-                                            <option value="CONCLUIDO"
-                                                {{ $aluno->status_aluno == 'CONCLUIDO' ? 'selected' : '' }}>CONCLUÍDO
-                                            </option>
-                                            <option value="INATIVO"
-                                                {{ $aluno->status_aluno == 'INATIVO' ? 'selected' : '' }}>INATIVO
-                                            </option>
-                                        </select>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.alunos.edit', $aluno->id_aluno) }}"
-                                        class="btn btn-sm btn-warning">Editar</a>
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modalExcluir" data-id="{{ $aluno->id_aluno }}"
-                                        data-nome="{{ $aluno->nome_aluno }}">
-                                        Excluir
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="text-center">Nenhum aluno cadastrado.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Excluir -->
-    <div class="modal fade" id="modalExcluir" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center py-4">
-                    <i class="bi bi-person-x-fill text-danger" style="font-size: 3rem;"></i>
-                    <p class="mt-3 fs-5">Tem certeza que deseja excluir o aluno</p>
-                    <strong id="nomeAlunoModal" class="fs-5"></strong>
-                    <p class="text-muted mt-2">Esta ação não poderá ser desfeita.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i>Cancelar
-                    </button>
-                    <form id="formExcluir" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="bi bi-trash-fill me-1"></i>Sim, excluir
-                        </button>
-                    </form>
+    <div class="app-content-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6"><h3 class="mb-0 fw-bold">Alunos</h3></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-end mb-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dash') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Alunos</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="app-content">
+        <div class="container-fluid">
 
+            @if (session('success'))
+                <div class="alert alert-success alert-styled alert-dismissible fade show mb-3">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
-    @push('scripts')
-        <script>
-            document.getElementById('modalExcluir').addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                const nome = button.getAttribute('data-nome');
+            {{-- METRIC CARDS --}}
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-xl-3 fade-up">
+                    <div class="mc mc-blue shadow">
+                        <div class="mc-icon"><i class="fas fa-user-graduate"></i></div>
+                        <div class="mc-val">{{ $alunos->count() }}</div>
+                        <p class="mc-lbl">Total de Alunos</p>
+                        <div class="mc-trend"><i class="fas fa-arrow-trend-up me-1"></i>cadastrados</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 fade-up">
+                    <div class="mc mc-green shadow">
+                        <div class="mc-icon"><i class="fas fa-circle-check"></i></div>
+                        <div class="mc-val">{{ $alunos->where('status_aluno', 'EM CURSO')->count() }}</div>
+                        <p class="mc-lbl">Em Curso</p>
+                        <div class="mc-trend"><i class="fas fa-book-open me-1"></i>estudando</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 fade-up">
+                    <div class="mc mc-amber shadow">
+                        <div class="mc-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="mc-val">{{ $alunos->where('status_aluno', 'CONCLUIDO')->count() }}</div>
+                        <p class="mc-lbl">Concluídos</p>
+                        <div class="mc-trend"><i class="fas fa-medal me-1"></i>curso finalizado</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 fade-up">
+                    <div class="mc mc-rose shadow">
+                        <div class="mc-icon"><i class="fas fa-user-xmark"></i></div>
+                        <div class="mc-val">{{ $alunos->where('status_aluno', 'INATIVO')->count() }}</div>
+                        <p class="mc-lbl">Inativos</p>
+                        <div class="mc-trend"><i class="fas fa-clock me-1"></i>sem atividade</div>
+                    </div>
+                </div>
+            </div>
 
-                document.getElementById('nomeAlunoModal').textContent = nome;
-                document.getElementById('formExcluir').action = `/admin/alunos/${id}`;
-            });
-        </script>
-    @endpush
+            {{-- TABLE --}}
+            <div class="d-card fade-up">
+                <div class="d-card-header">
+                    <h6><i class="fas fa-user-graduate text-primary"></i> Lista de Alunos</h6>
+                    <a href="{{ route('admin.alunos.create') }}" class="tbl-btn-novo">
+                        <i class="fas fa-plus"></i> Novo Aluno
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table recent-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Telefone</th>
+                                <th>Curso</th>
+                                <th>Nível</th>
+                                <th>Status</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($alunos as $aluno)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if ($aluno->foto_aluno)
+                                                <img src="{{ asset('traducaidiomas/alunos/' . $aluno->foto_aluno) }}"
+                                                    alt="{{ $aluno->nome_aluno }}" class="prof-avatar">
+                                            @else
+                                                <div class="prof-avatar-placeholder">{{ strtoupper(mb_substr($aluno->nome_aluno, 0, 2)) }}</div>
+                                            @endif
+                                            <div>
+                                                <div style="font-weight:600;font-size:.875rem;">{{ $aluno->nome_aluno }}</div>
+                                                <div style="font-size:.72rem;color:#94a3b8;">{{ $aluno->email_aluno }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ $aluno->telefone_aluno ?? '—' }}</td>
+                                    <td><span class="tbl-badge">{{ $aluno->curso_aluno ?? '—' }}</span></td>
+                                    <td>{{ $aluno->nivel_aluno ?? '—' }}</td>
+                                    <td>
+                                        @php
+                                            $statusClass = match($aluno->status_aluno) {
+                                                'EM CURSO'  => 'tbl-status-emcurso',
+                                                'CONCLUIDO' => 'tbl-status-concluido',
+                                                'INATIVO'   => 'tbl-status-inativo',
+                                                default     => 'tbl-status-pendente',
+                                            };
+                                        @endphp
+                                        <form action="{{ route('admin.alunos.updateStatus', $aluno->id_aluno) }}" method="POST" style="display:inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="tbl-status {{ $statusClass }}" style="position:relative;">
+                                                <span class="tbl-status-dot"></span>
+                                                <select name="status_aluno" onchange="this.form.submit()"
+                                                    style="all:unset;cursor:pointer;font:inherit;color:inherit;background:transparent;letter-spacing:inherit;text-transform:inherit;">
+                                                    <option value="EM CURSO" {{ $aluno->status_aluno == 'EM CURSO' ? 'selected' : '' }}>EM CURSO</option>
+                                                    <option value="CONCLUIDO" {{ $aluno->status_aluno == 'CONCLUIDO' ? 'selected' : '' }}>CONCLUÍDO</option>
+                                                    <option value="INATIVO" {{ $aluno->status_aluno == 'INATIVO' ? 'selected' : '' }}>INATIVO</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <a href="{{ route('admin.alunos.edit', $aluno->id_aluno) }}" class="tbl-btn-editar">
+                                                <i class="fas fa-pen-to-square"></i> Editar
+                                            </a>
+                                            <form action="{{ route('admin.alunos.destroy', $aluno->id_aluno) }}" method="POST" class="d-inline form-delete">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="tbl-btn-excluir"
+                                                    data-nome="{{ $aluno->nome_aluno }}"
+                                                    onclick="abrirModalExcluir(this)">
+                                                    <i class="fas fa-trash-alt"></i> Excluir
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="tbl-empty">
+                                            <i class="fas fa-user-graduate tbl-empty-icon"></i>
+                                            <span class="tbl-empty-text">Nenhum aluno cadastrado ainda.</span>
+                                            <a href="{{ route('admin.alunos.create') }}" class="tbl-empty-btn">
+                                                <i class="fas fa-plus"></i> Cadastrar Aluno
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @include('admin.partials.modal-delete', ['delTitulo' => 'Excluir Aluno', 'delDescricao' => 'Você está prestes a excluir o aluno:'])
+
 @endsection

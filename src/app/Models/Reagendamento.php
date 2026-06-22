@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reagendamento extends Model
 {
-    protected $table = 'tbl_reagendamentos';
+    protected $table = 'reagendamentos';
 
     protected $fillable = [
-        'id_aluno',
-        'id_aulas',
-        'id_professor',
-        'data_original_reagendamento',
-        'data_sugerida_reagendamento',
-        'data_nova_reagendamento',
-        'motivo_reagendamento',
-        'resposta_professor_reagendamento',
-        'status_reagendamento',
-        'notificado_professor_reagendamento',
-        'notificado_aluno_reagendamento',
+        'aluno_id',
+        'aula_id',
+        'professor_id',
+        'data_original',
+        'data_sugerida',
+        'data_nova',
+        'motivo',
+        'resposta_professor',
+        'status',
+        'notificado_professor',
+        'notificado_aluno',
     ];
 
    public function aluno()

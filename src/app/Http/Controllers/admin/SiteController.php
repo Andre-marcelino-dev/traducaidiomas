@@ -25,12 +25,14 @@ class SiteController extends Controller
             'cor_primaria'       => ConfiguracaoPainel::get('cor_primaria', '#0d6efd'),
             'cor_secundaria'     => ConfiguracaoPainel::get('cor_secundaria', '#198754'),
             'logo_painel'        => ConfiguracaoPainel::get('logo_painel', ''),
+            'logo_site'          => ConfiguracaoPainel::get('logo_site', ''),
         ];
         return view('admin.site.index', compact('config'));
     }
 
     public function update(Request $request)
     {
+        \Log::info('SITE UPDATE - dados recebidos:', $request->all());
         $campos = [
             'banner1_titulo', 'banner1_subtitulo', 'banner1_eyebrow',
             'banner2_titulo', 'banner2_subtitulo', 'banner2_eyebrow',
@@ -40,39 +42,56 @@ class SiteController extends Controller
         ];
 
         foreach ($campos as $campo) {
+            \Log::info('Processando campo: ' . $campo . ' | has: ' . ($request->has($campo) ? 'sim' : 'nao'));
             if ($request->has($campo) && $request->input($campo) !== null) {
                 ConfiguracaoPainel::set($campo, (string) $request->input($campo));
             }
         }
 
+        $dirImg     = public_path('traducaidiomas/img/');
+        $dirBanners = public_path('traducaidiomas/banners/');
+
+        if (!is_dir($dirImg)) {
+            mkdir($dirImg, 0775, true);
+        }
+        if (!is_dir($dirBanners)) {
+            mkdir($dirBanners, 0775, true);
+        }
+
         if ($request->hasFile('sobre_foto')) {
             $file = $request->file('sobre_foto');
             $nome = 'sobre_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/img/'), $nome);
+            $file->move($dirImg, $nome);
             ConfiguracaoPainel::set('sobre_foto', $nome);
         }
 
         if ($request->hasFile('logo_painel')) {
             $file = $request->file('logo_painel');
-            $nome = 'logo.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/img/'), $nome);
-            ConfiguracaoPainel::set('logo_painel', $nome);
+            $file->move($dirImg, 'logo_painel.png');
+            ConfiguracaoPainel::set('logo_painel', 'logo_painel.png');
+        }
+
+        if ($request->hasFile('logo_site')) {
+            $file = $request->file('logo_site');
+            $file->move($dirImg, 'logo_site.png');
+            ConfiguracaoPainel::set('logo_site', 'logo_site.png');
         }
 
         if ($request->hasFile('banner1_imagem')) {
             $file = $request->file('banner1_imagem');
             $nome = 'banner1_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/banners/'), $nome);
+            $file->move($dirBanners, $nome);
             ConfiguracaoPainel::set('banner1_imagem', $nome);
         }
 
         if ($request->hasFile('banner2_imagem')) {
             $file = $request->file('banner2_imagem');
             $nome = 'banner2_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/banners/'), $nome);
+            $file->move($dirBanners, $nome);
             ConfiguracaoPainel::set('banner2_imagem', $nome);
         }
 
+        \Log::info('Chegou ao final do update sem exceção');
         return redirect()->route('admin.site.index')->with('success', 'Site atualizado com sucesso!');
     }
 }
