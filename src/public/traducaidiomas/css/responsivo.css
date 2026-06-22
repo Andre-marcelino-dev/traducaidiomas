@@ -127,6 +127,62 @@ Celulares - 0 - 768
 /* Celulares - 0 - 400 - 768 */
 @media (max-width: 768px) {
 
+  nav ul li .submenu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: none;
+    border-radius: 0;
+    min-width: auto;
+    padding: 0;
+    margin: 0;
+    display: none;
+    overflow: visible;
+  }
+
+  nav ul li .submenu::after {
+    display: none;
+  }
+
+  nav ul li.dropdown:hover .submenu {
+    display: block;
+    transform: none;
+  }
+
+  .submenu-header {
+    padding: 10px 16px 6px;
+    font-size: 0.65em;
+    border-bottom: none;
+  }
+
+  .submenu-list {
+    padding: 0;
+    border-left: 3px solid #012169;
+    margin-left: 12px;
+  }
+
+  .submenu-list li a {
+    padding: 10px 14px !important;
+    gap: 10px;
+  }
+
+  .submenu-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 0.9em;
+    border-radius: 8px;
+  }
+
+  .submenu-text strong {
+    font-size: 0.8em;
+  }
+
+  .submenu-text small {
+    font-size: 0.7em;
+  }
+
 .rodape-centro ul{
    display: flex;
    flex-direction: row;

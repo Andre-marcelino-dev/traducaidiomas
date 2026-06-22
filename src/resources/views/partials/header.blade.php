@@ -19,17 +19,25 @@
                 <li><a href="{{ route('sobre') }}" class="<?= $pgAtual == 'sobre.php' ? 'ativo' : '' ?>"> Sobre</a></li>
 
                 <li class="dropdown">
-                    <a href="{{ route('servicos') }}">Serviços</a>
-                    <ul class="submenu">
-                        @foreach ($categorias as $linha)
-                            <li>
-                                {{-- O link envia o ID, mas o texto exibido é apenas o título --}}
-                                <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
-                                    {{ Str::title($linha->titulo_servico) }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <a href="{{ route('servicos') }}">Serviços <span class="dropdown-arrow">›</span></a>
+                    <div class="submenu">
+                        <span class="submenu-header">Nossos Serviços</span>
+                        <ul class="submenu-list">
+                            @foreach ($categorias as $linha)
+                                <li>
+                                    <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
+                                        <span class="submenu-icon">
+                                            <i class="fa-solid fa-language"></i>
+                                        </span>
+                                        <span class="submenu-text">
+                                            <strong>{{ Str::title($linha->titulo_servico) }}</strong>
+                                            <small>{{ $linha->subtitulo_servico }}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </li>
 
                 <li><a href="{{ route('quiz') }}" class="<?= $pgAtual == 'quiz.php' ? 'ativo' : '' ?>">Quiz</a></li>
@@ -59,10 +67,15 @@
                 </a>
             </li>
             <li class="cart-btn">
-                <a href="{{ route('aluno.login') }}">
-                    <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
-                    <span class="count"></span>
-                </a>
+                @if(auth('aluno')->check() && auth('aluno')->user()->matriculas()->where('status_matricula', 'ATIVO')->exists())
+                    <a href="{{ route('aluno.dash') }}">
+                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    </a>
+                @else
+                    <a href="{{ route('aluno.login') }}">
+                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    </a>
+                @endif
             </li>
             <li class="cart-btn">
                 <a href="{{ route('admin.login') }}">

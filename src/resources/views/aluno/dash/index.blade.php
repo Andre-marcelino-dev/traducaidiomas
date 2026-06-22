@@ -259,6 +259,86 @@
         </div>
     @endif
 
+    {{-- ══ FEEDBACK DOS CURSOS ══ --}}
+    @if($matriculas->isNotEmpty())
+        <div class="dash-section-title fade-up">Avalie seus Professores</div>
+        <div class="row g-3 mb-4">
+            @foreach($matriculas as $mat)
+                @php $fb = $feedbacks[$mat->id_curso] ?? null; @endphp
+                <div class="col-md-6 col-xl-4 fade-up">
+                    <div class="d-card h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center gap-3 mb-3 pb-3" style="border-bottom:1px solid #f1f5f9;">
+                                <div style="width:44px;height:44px;border-radius:12px;background:#eef3ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fas fa-language" style="font-size:1.2rem;color:#4f46e5;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight:700;font-size:.9rem;color:#1e293b;">{{ $mat->curso->nome_curso ?? $aluno->curso_aluno }}</div>
+                                    <div style="font-size:.75rem;color:#94a3b8;">
+                                        <i class="fas fa-chalkboard-user me-1"></i>{{ $mat->professor_nome }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if($fb)
+                                <div style="text-align:center;padding:.5rem 0;">
+                                    <div class="fb-stars-display" style="font-size:1.5rem;margin-bottom:.5rem;">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fa{{ $i <= $fb->nota ? 's' : 'r' }} fa-star" style="color:{{ $i <= $fb->nota ? '#f59e0b' : '#e2e8f0' }};"></i>
+                                        @endfor
+                                    </div>
+                                    @if($fb->comentario)
+                                        <p style="font-size:.8rem;color:#64748b;font-style:italic;margin:0;">
+                                            "{{ Str::limit($fb->comentario, 100) }}"
+                                        </p>
+                                    @endif
+                                    <span style="display:inline-block;margin-top:.5rem;font-size:.7rem;color:#10b981;font-weight:600;">
+                                        <i class="fas fa-check-circle me-1"></i>Avaliação enviada
+                                    </span>
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;border-radius:8px;"
+                                            onclick="this.closest('.d-card').querySelector('.fb-form').style.display='block'; this.style.display='none';">
+                                            <i class="fas fa-pen me-1"></i>Editar avaliação
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <form action="{{ route('aluno.feedback.store') }}" method="POST" class="fb-form" style="{{ $fb ? 'display:none;' : '' }}">
+                                @csrf
+                                <input type="hidden" name="id_curso" value="{{ $mat->id_curso }}">
+                                <input type="hidden" name="id_professor" value="{{ $mat->professor_id }}">
+
+                                <div style="text-align:center;margin-bottom:.75rem;">
+                                    <label style="font-size:.8rem;font-weight:600;color:#475569;display:block;margin-bottom:.5rem;">
+                                        Como foi sua experiência?
+                                    </label>
+                                    <div class="fb-stars" data-curso="{{ $mat->id_curso }}">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <label style="cursor:pointer;font-size:1.6rem;margin:0 2px;transition:transform .15s;">
+                                                <input type="radio" name="nota" value="{{ $i }}" style="display:none;" {{ ($fb && $fb->nota == $i) ? 'checked' : '' }}>
+                                                <i class="far fa-star fb-star" data-value="{{ $i }}" style="color:#e2e8f0;transition:color .2s;"></i>
+                                            </label>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <textarea name="comentario" rows="2" class="form-control" style="border-radius:10px;resize:none;font-size:.82rem;"
+                                        placeholder="Deixe um comentário sobre a aula... (opcional)" maxlength="500">{{ $fb?->comentario }}</textarea>
+                                </div>
+
+                                <button type="submit" class="tbl-btn-novo w-100 justify-content-center" style="border-radius:10px;">
+                                    <i class="fas fa-paper-plane"></i> {{ $fb ? 'Atualizar Avaliação' : 'Enviar Avaliação' }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     <div class="dash-section-title fade-up">Ações Rápidas & Perfil</div>
 
     {{-- ══ AÇÕES RÁPIDAS + PERFIL ══ --}}
@@ -447,6 +527,48 @@
     atualizarHora(); setInterval(atualizarHora, 1000);
 
     document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.fb-stars').forEach(function(container) {
+            var stars = container.querySelectorAll('.fb-star');
+            var radios = container.querySelectorAll('input[type=radio]');
+
+            radios.forEach(function(r) {
+                if (r.checked) {
+                    var v = parseInt(r.value);
+                    stars.forEach(function(s) {
+                        var sv = parseInt(s.dataset.value);
+                        s.className = sv <= v ? 'fas fa-star fb-star' : 'far fa-star fb-star';
+                        s.style.color = sv <= v ? '#f59e0b' : '#e2e8f0';
+                    });
+                }
+            });
+
+            stars.forEach(function(star) {
+                star.addEventListener('mouseenter', function() {
+                    var val = parseInt(this.dataset.value);
+                    stars.forEach(function(s) {
+                        var sv = parseInt(s.dataset.value);
+                        s.className = sv <= val ? 'fas fa-star fb-star' : 'far fa-star fb-star';
+                        s.style.color = sv <= val ? '#f59e0b' : '#e2e8f0';
+                    });
+                });
+
+                star.addEventListener('click', function() {
+                    var val = parseInt(this.dataset.value);
+                    container.querySelectorAll('input[value="'+val+'"]')[0].checked = true;
+                });
+            });
+
+            container.addEventListener('mouseleave', function() {
+                var checked = container.querySelector('input[type=radio]:checked');
+                var val = checked ? parseInt(checked.value) : 0;
+                stars.forEach(function(s) {
+                    var sv = parseInt(s.dataset.value);
+                    s.className = sv <= val ? 'fas fa-star fb-star' : 'far fa-star fb-star';
+                    s.style.color = sv <= val ? '#f59e0b' : '#e2e8f0';
+                });
+            });
+        });
+
         var motivo = document.getElementById('motivo');
         var count = document.getElementById('motivoCount');
         if (motivo && count) {

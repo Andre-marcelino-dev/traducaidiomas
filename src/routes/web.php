@@ -25,6 +25,7 @@ use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
+use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -193,6 +194,9 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
         Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
         Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
+
+        // ── Feedback (Aluno) ──
+        Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
 
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])

@@ -30,6 +30,8 @@
 
 <link rel="stylesheet" href="{{ asset('dash/css/adminlte.css')}}" />
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+
 <!--begin::Dashboard & Admin Tables-->
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}" />

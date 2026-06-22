@@ -4,6 +4,7 @@ namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aula;
+use App\Models\Feedback;
 use App\Models\Matricula;
 use App\Models\Notificacao;
 use App\Models\Reagendamento;
@@ -39,6 +40,21 @@ class DashController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('aluno.dash.index', compact('aluno', 'aulas', 'totalAulas', 'notificacoes', 'reagendamentos'));
+        $matriculas = Matricula::with('curso')
+            ->where('id_aluno', $aluno->id_aluno)
+            ->where('status_matricula', 'ATIVO')
+            ->get();
+
+        foreach ($matriculas as $mat) {
+            $aulaProf = Aula::where('id_curso', $mat->id_curso)->whereNotNull('id_professor')->first();
+            $mat->professor_id = $aulaProf?->id_professor;
+            $mat->professor_nome = $aulaProf?->professor?->nome_professor ?? 'Professor';
+        }
+
+        $feedbacks = Feedback::where('id_aluno', $aluno->id_aluno)
+            ->get()
+            ->keyBy('id_curso');
+
+        return view('aluno.dash.index', compact('aluno', 'aulas', 'totalAulas', 'notificacoes', 'reagendamentos', 'matriculas', 'feedbacks'));
     }
 }
