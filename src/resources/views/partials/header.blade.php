@@ -1,9 +1,9 @@
 <header class="topo">
     <div class="container">
         @if(!empty($siteConfig['logo_site']))
-            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
         @else
-            <h1>TraducaIdiomas</h1>
+        <h1>TraducaIdiomas</h1>
         @endif
         <?php
         $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
@@ -22,12 +22,12 @@
                     <a href="{{ route('servicos') }}">Serviços</a>
                     <ul class="submenu">
                         @foreach ($categorias as $linha)
-                            <li>
-                                {{-- O link envia o ID, mas o texto exibido é apenas o título --}}
-                                <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
-                                    {{ Str::title($linha->titulo_servico) }}
-                                </a>
-                            </li>
+                        <li>
+                            {{-- O link envia o ID, mas o texto exibido é apenas o título --}}
+                            <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
+                                {{ Str::title($linha->titulo_servico) }}
+                            </a>
+                        </li>
                         @endforeach
                     </ul>
                 </li>
@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="https://wa.me/5511999612140" target="_blank">
                     <img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}" alt="Logo whatsapp" width="35">
                 </a>
             </li>
