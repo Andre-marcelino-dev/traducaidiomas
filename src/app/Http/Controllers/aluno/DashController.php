@@ -5,6 +5,10 @@ namespace App\Http\Controllers\aluno;
 use App\Http\Controllers\Controller;
 use App\Models\Aula;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+use App\Models\Feedback;
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 =======
 use App\Models\Feedback;
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
@@ -44,8 +48,11 @@ class DashController extends Controller
             ->get();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         return view('aluno.dash.index', compact('aluno', 'aulas', 'totalAulas', 'notificacoes', 'reagendamentos'));
 =======
+=======
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
         $matriculas = Matricula::with('curso')
             ->where('id_aluno', $aluno->id_aluno)
             ->where('status_matricula', 'ATIVO')
@@ -62,6 +69,9 @@ class DashController extends Controller
             ->keyBy('id_curso');
 
         return view('aluno.dash.index', compact('aluno', 'aulas', 'totalAulas', 'notificacoes', 'reagendamentos', 'matriculas', 'feedbacks'));
+<<<<<<< HEAD
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
+=======
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
     }
 }

@@ -26,6 +26,10 @@ use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 =======
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
@@ -50,7 +54,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
     // Primeiro Acesso
     Route::get('/verificar',          [AuthController::class, 'verificar'])->name('verificar');
     Route::post('/verificar',         [AuthController::class, 'verificarAcesso'])->name('verificar.acesso');
@@ -63,6 +70,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/redefinir-senha',  [AuthController::class, 'redefinirSenha'])->name('redefinir-senha');
     Route::post('/redefinir-senha', [AuthController::class, 'salvarNovaSenha'])->name('salvar-nova-senha');
 
+<<<<<<< HEAD
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
+=======
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
     // Painel Admin (Protegidas por Middleware)
     Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
@@ -202,6 +212,12 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        // ── Feedback (Aluno) ──
+        Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
+
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 =======
         // ── Feedback (Aluno) ──
         Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');

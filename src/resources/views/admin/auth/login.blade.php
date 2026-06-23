@@ -73,7 +73,10 @@
             @endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             @if(session('success'))
                 <div class="alerta-sucesso">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -92,6 +95,9 @@
                 </div>
             @endif
 
+<<<<<<< HEAD
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
+=======
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             <form method="POST" action="{{ route('admin.autenticar') }}" id="formLogin" novalidate>
                 @csrf
@@ -138,12 +144,18 @@
                 </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
            
 =======
+=======
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 <div class="linha-opcoes">
                     <span></span>
                     <a href="{{ route('admin.recuperar-senha') }}" class="link-esqueceu">Esqueceu a senha?</a>
                 </div>
+<<<<<<< HEAD
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
+=======
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 
                 <button type="submit" class="btn-entrar" id="btnEntrar">
@@ -156,7 +168,11 @@
 
             <p class="info-suporte">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Problemas de acesso? <a href="mailto:suporte@escola.edu.br">Fale com o suporte</a>
+=======
+                Primeiro acesso? <a href="{{ route('admin.verificar') }}">Cadastre suas credenciais</a>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 =======
                 Primeiro acesso? <a href="{{ route('admin.verificar') }}">Cadastre suas credenciais</a>
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
@@ -179,8 +195,11 @@
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         document.getElementById('formLogin').addEventListener('submit', function() {
 =======
+=======
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
         // Validação de email em tempo real
         const emailInput = document.getElementById('email_professor');
         const formLogin = document.getElementById('formLogin');
@@ -213,6 +232,9 @@
                 emailInput.focus();
                 return;
             }
+<<<<<<< HEAD
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
+=======
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             document.getElementById('btnEntrar').classList.add('carregando');
         });

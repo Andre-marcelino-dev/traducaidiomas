@@ -64,7 +64,11 @@
                                 </td>
                                 <td><span class="tbl-badge"><i class="fas fa-language me-1"></i>{{ $servico->lingua_servico }}</span></td>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 <td><span style="font-weight:700;font-size:.875rem;">R$ {{ number_format((float) $servico->preco_servico, 2, ',', '.') }}</span></td>
+=======
+                                <td><span style="font-weight:700;font-size:.875rem;">{{ $servico->preco_servico }}</span></td>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 =======
                                 <td><span style="font-weight:700;font-size:.875rem;">{{ $servico->preco_servico }}</span></td>
 >>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
