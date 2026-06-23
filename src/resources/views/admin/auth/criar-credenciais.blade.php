@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso do Aluno</title>
+    <title>Criar Credenciais</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,8 +12,8 @@
             --ink:        #0f0e0d;
             --paper:      #f5f0e8;
             --cream:      #ede7d9;
-            --accent:     #2b6cb0;
-            --accent-dim: #2a5a9b;
+            --accent:     #c0392b;
+            --accent-dim: #9b2e22;
             --muted:      #7a7065;
             --line:       #d0c9bc;
         }
@@ -63,7 +63,7 @@
             display: inline-flex;
             align-items: center;
             gap: .5rem;
-            background: var(--accent);
+            background: #2e7d32;
             color: #fff;
             font-size: .7rem;
             font-weight: 500;
@@ -101,7 +101,7 @@
             margin-bottom: 1rem;
         }
 
-        .tagline em { font-style: normal; color: var(--accent); }
+        .tagline em { font-style: normal; color: #4caf50; }
 
         .descricao {
             font-size: .875rem;
@@ -112,38 +112,6 @@
             z-index: 1;
             margin-bottom: 2.5rem;
         }
-
-        .rodape-painel {
-            border-top: 1px solid rgba(255,255,255,.1);
-            padding-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .avatar-stack { display: flex; }
-
-        .avatar-stack span {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: var(--accent);
-            border: 2px solid var(--ink);
-            margin-left: -8px;
-            font-size: .65rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-        }
-
-        .avatar-stack span:first-child  { margin-left: 0; background: #3e6a8e; }
-        .avatar-stack span:nth-child(2) { background: #2b6cb0; }
-        .avatar-stack span:nth-child(3) { background: #1a4a7a; }
-
-        .rodape-texto { font-size: .75rem; color: rgba(255,255,255,.4); line-height: 1.5; }
 
         .panel-direito {
             display: flex;
@@ -182,9 +150,23 @@
         h1.titulo { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; line-height: 1.2; margin-bottom: .5rem; }
         .subtitulo { font-size: .875rem; color: var(--muted); margin-bottom: 2rem; }
 
+        .info-professor {
+            background: var(--cream);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: .75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: .85rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .info-professor strong { font-weight: 500; }
+
         .alerta-erro {
-            background: #ebf4ff;
-            border: 1px solid #bee3f8;
+            background: #fdf0ef;
+            border: 1px solid #f5c2be;
             border-left: 3px solid var(--accent);
             color: var(--accent-dim);
             font-size: .8rem;
@@ -236,9 +218,9 @@
         }
 
         input:focus {
-            border-color: var(--accent);
+            border-color: var(--ink);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(43,108,176,.1);
+            box-shadow: 0 0 0 3px rgba(15,14,13,.07);
         }
 
         input.is-invalido { border-color: var(--accent); }
@@ -272,6 +254,7 @@
             transition: background .2s, transform .1s;
             position: relative;
             overflow: hidden;
+            margin-top: .5rem;
         }
 
         .btn-entrar:hover { background: #2a2927; }
@@ -293,17 +276,17 @@
 
         @keyframes girar { to { transform: rotate(360deg); } }
 
-        .divisor {
-            display: flex; align-items: center; gap: 1rem;
-            margin: 1.5rem 0;
-            font-size: .7rem; letter-spacing: .08em;
-            text-transform: uppercase; color: var(--muted);
+        .link-voltar {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .8rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-top: 1.5rem;
+            transition: color .15s;
         }
-        .divisor::before, .divisor::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-
-        .info-suporte { text-align: center; font-size: .75rem; color: var(--muted); }
-        .info-suporte a { color: var(--ink); text-decoration: none; font-weight: 500; border-bottom: 1px solid var(--line); }
-        .info-suporte a:hover { border-color: var(--ink); }
+        .link-voltar:hover { color: var(--ink); }
 
         .card-login > * { opacity: 0; transform: translateY(12px); animation: surgir .5s ease forwards; }
         .card-login > *:nth-child(1) { animation-delay: .05s; }
@@ -325,31 +308,19 @@
 </head>
 <body>
 
-    {{-- PAINEL ESQUERDO --}}
     <div class="panel-esquerdo">
-        <div class="numero-grande">A</div>
-        <div class="badge-sistema">Portal do Aluno</div>
+        <div class="numero-grande">2</div>
+        <div class="badge-sistema">Cadastro</div>
         <h2 class="tagline">
-            Aprenda<br>
-            <em>novos</em><br>
-            idiomas
+            Crie suas<br>
+            <em>credenciais</em><br>
+            de acesso
         </h2>
         <p class="descricao">
-            Acesse suas aulas, acompanhe seu progresso e evolua no seu ritmo.
+            Defina seu e-mail e senha para acessar o painel administrativo.
         </p>
-        <div class="rodape-painel">
-            <div class="avatar-stack">
-                <span>AL</span>
-                <span>EN</span>
-                <span>IT</span>
-            </div>
-            <p class="rodape-texto">
-                Acesso exclusivo<br>para alunos matriculados
-            </p>
-        </div>
     </div>
 
-    {{-- PAINEL DIREITO --}}
     <div class="panel-direito">
         <div class="card-login">
 
@@ -362,23 +333,21 @@
                     </svg>
                 </div>
                 <div class="logo-nome">
-                    Portal do Aluno
+                    Criar Credenciais
                     <span>TraducaIdiomas</span>
-                    <span>Área do Aluno</span>
                 </div>
             </div>
 
-            <h1 class="titulo">Bem-vindo de volta</h1>
-            <p class="subtitulo">Insira suas credenciais para continuar</p>
+            <h1 class="titulo">Criar acesso</h1>
+            <p class="subtitulo">Defina seu e-mail e senha para acessar o sistema</p>
 
-            @if(session('sessao_expirada'))
-                <div class="alerta-erro">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    Sessão encerrada por inatividade. Faça login novamente.
-                </div>
-            @endif
+            <div class="info-professor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Professor: <strong>{{ $professor->nome_professor }}</strong>
+            </div>
 
             @if(session('error'))
                 <div class="alerta-erro">
@@ -389,84 +358,95 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('aluno.autenticar') }}" id="formLogin" novalidate>
+            <form method="POST" action="{{ route('admin.salvar-credenciais') }}" id="formCriar" novalidate>
                 @csrf
 
                 <div class="grupo">
-                    <label for="email_aluno">E-mail</label>
+                    <label for="email_professor">E-mail</label>
                     <div class="campo-wrapper">
                         <svg class="campo-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                             <polyline points="22,6 12,13 2,6"/>
                         </svg>
-                        <input type="email" id="email_aluno" name="email_aluno"
-                            value="{{ old('email_aluno') }}"
-                            placeholder="aluno@email.com"
+                        <input type="email" id="email_professor" name="email_professor"
+                            value="{{ old('email_professor') }}"
+                            placeholder="seu.email@exemplo.com"
                             autocomplete="email"
-                            class="{{ $errors->has('email_aluno') ? 'is-invalido' : '' }}">
+                            class="{{ $errors->has('email_professor') ? 'is-invalido' : '' }}">
                     </div>
-                    @error('email_aluno')
+                    @error('email_professor')
                         <p class="erro-campo">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="grupo">
-                    <label for="senha_aluno">Senha</label>
+                    <label for="senha_professor">Senha</label>
                     <div class="campo-wrapper">
                         <svg class="campo-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>
-                        <input type="password" id="senha_aluno" name="senha_aluno"
-                            placeholder="••••••••"
-                            autocomplete="current-password"
-                            class="{{ $errors->has('senha_aluno') ? 'is-invalido' : '' }}">
-                        <button type="button" class="toggle-senha" onclick="toggleSenha()" aria-label="Mostrar senha">
-                            <svg id="icone-olho" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <input type="password" id="senha_professor" name="senha_professor"
+                            placeholder="Mínimo 6 caracteres"
+                            autocomplete="new-password"
+                            class="{{ $errors->has('senha_professor') ? 'is-invalido' : '' }}">
+                        <button type="button" class="toggle-senha" onclick="toggleSenha('senha_professor', 'icone-olho-1')" aria-label="Mostrar senha">
+                            <svg id="icone-olho-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                 <circle cx="12" cy="12" r="3"/>
                             </svg>
                         </button>
                     </div>
-                    @error('senha_aluno')
+                    @error('senha_professor')
                         <p class="erro-campo">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <button type="submit" class="btn-entrar" id="btnEntrar">
-                    <span class="texto-btn">Entrar no portal</span>
+                <div class="grupo">
+                    <label for="senha_professor_confirmation">Confirmar senha</label>
+                    <div class="campo-wrapper">
+                        <svg class="campo-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <input type="password" id="senha_professor_confirmation" name="senha_professor_confirmation"
+                            placeholder="Repita a senha"
+                            autocomplete="new-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-entrar" id="btnCriar">
+                    <span class="texto-btn">Criar minhas credenciais</span>
                     <div class="spinner"></div>
                 </button>
             </form>
 
-            <div class="divisor">ou</div>
-
-            <p class="info-suporte">
-                Problemas de acesso? <a href="mailto:suporte@escola.edu.br">Fale com o suporte</a>
-            </p>
+            <a href="{{ route('admin.verificar') }}" class="link-voltar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Voltar
+            </a>
 
         </div>
     </div>
 
     <script>
-        function toggleSenha() {
-            const campo = document.getElementById('senha_aluno');
-            const icone = document.getElementById('icone-olho');
+        function toggleSenha(campoId, iconeId) {
+            const campo = document.getElementById(campoId);
+            const icone = document.getElementById(iconeId);
             if (campo.type === 'password') {
                 campo.type = 'text';
-                icone.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+                icone.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
             } else {
                 campo.type = 'password';
-                icone.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+                icone.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
             }
         }
 
-<<<<<<< HEAD
-        document.getElementById('formLogin').addEventListener('submit', function() {
-=======
         // Validação de email em tempo real
-        const emailInput = document.getElementById('email_aluno');
-        const formLogin = document.getElementById('formLogin');
+        const emailInput = document.getElementById('email_professor');
+        const formCriar = document.getElementById('formCriar');
 
         function validarEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -489,15 +469,14 @@
             }
         });
 
-        formLogin.addEventListener('submit', function(e) {
+        formCriar.addEventListener('submit', function(e) {
             const val = emailInput.value.trim();
             if (val.length > 0 && !validarEmail(val)) {
                 e.preventDefault();
                 emailInput.focus();
                 return;
             }
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-            document.getElementById('btnEntrar').classList.add('carregando');
+            document.getElementById('btnCriar').classList.add('carregando');
         });
     </script>
 

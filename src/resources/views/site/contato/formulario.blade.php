@@ -41,7 +41,11 @@
                 </div>
                 <div class="card-infos">
                     <p>E-mail</p>
+<<<<<<< HEAD
                     <span> email@gmail.com </span>
+=======
+                    <span> contato.traducaidiomas@adminfo.dev.br</span>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 </div>
             </a>
             <!-- ################ FIM CARD EMAIL##############  -->
@@ -53,7 +57,11 @@
                 </div>
                 <div class="card-infos">
                     <p>whatsapp</p>
+<<<<<<< HEAD
                     <span> (11)99999-9999-999 </span>
+=======
+                    <span> (11)99612140</span>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 </div>
             </a>
             <!-- ################ FIM CARD WHATSAP##############  -->

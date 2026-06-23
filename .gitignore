@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # .gitignore -- raiz do projeto tipi05-davilla 
  
 *.log 
@@ -36,5 +37,45 @@ _ide_helper.php
 Homestead.json 
 Homestead.yaml
 Thumbs.db
+=======
+# .gitignore -- raiz do projeto tipi05-davilla 
+ 
+*.log 
+.DS_Store 
+Thumbs.db 
+ 
+src/.env 
+src/.env.backup 
+src/.env.production 
+ 
+src/.phpactor.json 
+src/.phpunit.result.cache 
+src/.fleet 
+src/.idea 
+src/.nova 
+src/.phpunit.cache 
+src/.vscode 
+src/.zed 
+src/auth.json 
+ 
+src/node_modules 
+src/vendor 
+ 
+src/public/build 
+src/public/hot 
+src/public/storage 
+ 
+src/storage/*.key 
+src/storage/pail 
+src/storage/logs/*.log 
+ 
+src/bootstrap/cache/* 
+!src/bootstrap/cache/.gitignore 
+ 
+_ide_helper.php 
+Homestead.json 
+Homestead.yaml
+Thumbs.db
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 *:Zone.Identifiersrc/.env
 main

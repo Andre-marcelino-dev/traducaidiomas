@@ -25,6 +25,10 @@ use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
+<<<<<<< HEAD
+=======
+use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -45,6 +49,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AuthController::class, 'autenticar'])->name('autenticar');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+<<<<<<< HEAD
+=======
+    // Primeiro Acesso
+    Route::get('/verificar',          [AuthController::class, 'verificar'])->name('verificar');
+    Route::post('/verificar',         [AuthController::class, 'verificarAcesso'])->name('verificar.acesso');
+    Route::get('/criar-credenciais',  [AuthController::class, 'criarCredenciais'])->name('criar-credenciais');
+    Route::post('/criar-credenciais', [AuthController::class, 'salvarCredenciais'])->name('salvar-credenciais');
+
+    // Recuperação de Senha
+    Route::get('/recuperar-senha',  [AuthController::class, 'recuperarSenha'])->name('recuperar-senha');
+    Route::post('/recuperar-senha', [AuthController::class, 'processarRecuperacao'])->name('processar-recuperacao');
+    Route::get('/redefinir-senha',  [AuthController::class, 'redefinirSenha'])->name('redefinir-senha');
+    Route::post('/redefinir-senha', [AuthController::class, 'salvarNovaSenha'])->name('salvar-nova-senha');
+
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
     // Painel Admin (Protegidas por Middleware)
     Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
 
@@ -182,6 +201,12 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
         Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
+<<<<<<< HEAD
+=======
+        // ── Feedback (Aluno) ──
+        Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
+
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
             ->name('reagendamento.solicitar');

@@ -137,6 +137,52 @@
     text-align: right;
 }
 
+<<<<<<< HEAD
+=======
+/* FEEDBACK */
+.card-feedback {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.feedback-stars {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 6px;
+}
+
+.feedback-stars .fa-star {
+    font-size: 16px;
+    color: #f59e0b;
+}
+
+.feedback-stars .far.fa-star {
+    color: #d1d5db;
+}
+
+.feedback-comment {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+    margin: 0 0 6px;
+    line-height: 1.4;
+}
+
+.feedback-prof {
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.feedback-prof i {
+    margin-right: 3px;
+    color: #6366f1;
+}
+
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 @media (max-width: 768px) {
     .card-container {
         padding: 20px;

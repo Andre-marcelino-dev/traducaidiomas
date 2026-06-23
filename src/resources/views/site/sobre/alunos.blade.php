@@ -40,6 +40,27 @@
                 <div class="validity">
                     Email: {{ $aluno->email_aluno }}
                 </div>
+<<<<<<< HEAD
+=======
+
+                @if($aluno->nota)
+                <div class="card-feedback">
+                    <div class="feedback-stars">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fa{{ $i <= $aluno->nota ? 's' : 'r' }} fa-star"></i>
+                        @endfor
+                    </div>
+                    @if($aluno->comentario)
+                        <p class="feedback-comment">"{{ Str::limit($aluno->comentario, 80) }}"</p>
+                    @endif
+                    @if($aluno->nome_professor)
+                        <span class="feedback-prof">
+                            <i class="fas fa-chalkboard-user"></i> {{ $aluno->nome_professor }}
+                        </span>
+                    @endif
+                </div>
+                @endif
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             </div>
         </div>
         @endforeach

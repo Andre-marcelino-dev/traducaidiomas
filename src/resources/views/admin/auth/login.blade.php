@@ -72,6 +72,27 @@
                 </div>
             @endif
 
+<<<<<<< HEAD
+=======
+            @if(session('success'))
+                <div class="alerta-sucesso">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('info'))
+                <div class="alerta-info">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    {{ session('info') }}
+                </div>
+            @endif
+
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             <form method="POST" action="{{ route('admin.autenticar') }}" id="formLogin" novalidate>
                 @csrf
 
@@ -116,7 +137,14 @@
                     @enderror
                 </div>
 
+<<<<<<< HEAD
            
+=======
+                <div class="linha-opcoes">
+                    <span></span>
+                    <a href="{{ route('admin.recuperar-senha') }}" class="link-esqueceu">Esqueceu a senha?</a>
+                </div>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 
                 <button type="submit" class="btn-entrar" id="btnEntrar">
                     <span class="texto-btn">Entrar no sistema</span>
@@ -127,7 +155,11 @@
             <div class="divisor">ou</div>
 
             <p class="info-suporte">
+<<<<<<< HEAD
                 Problemas de acesso? <a href="mailto:suporte@escola.edu.br">Fale com o suporte</a>
+=======
+                Primeiro acesso? <a href="{{ route('admin.verificar') }}">Cadastre suas credenciais</a>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             </p>
 
         </div>
@@ -146,7 +178,42 @@
             }
         }
 
+<<<<<<< HEAD
         document.getElementById('formLogin').addEventListener('submit', function() {
+=======
+        // Validação de email em tempo real
+        const emailInput = document.getElementById('email_professor');
+        const formLogin = document.getElementById('formLogin');
+
+        function validarEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        emailInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            const erroExistente = this.parentElement.parentElement.querySelector('.erro-campo-js');
+            if (val.length > 0 && !validarEmail(val)) {
+                this.classList.add('is-invalido');
+                if (!erroExistente) {
+                    const p = document.createElement('p');
+                    p.className = 'erro-campo erro-campo-js';
+                    p.textContent = 'Digite um e-mail válido (ex: nome@email.com)';
+                    this.parentElement.parentElement.appendChild(p);
+                }
+            } else {
+                this.classList.remove('is-invalido');
+                if (erroExistente) erroExistente.remove();
+            }
+        });
+
+        formLogin.addEventListener('submit', function(e) {
+            const val = emailInput.value.trim();
+            if (val.length > 0 && !validarEmail(val)) {
+                e.preventDefault();
+                emailInput.focus();
+                return;
+            }
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             document.getElementById('btnEntrar').classList.add('carregando');
         });
     </script>

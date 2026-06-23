@@ -1,9 +1,15 @@
 <header class="topo">
     <div class="container">
         @if(!empty($siteConfig['logo_site']))
+<<<<<<< HEAD
         <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
         @else
         <h1>TraducaIdiomas</h1>
+=======
+            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        @else
+            <h1>TraducaIdiomas</h1>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
         @endif
         <?php
         $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
@@ -19,6 +25,7 @@
                 <li><a href="{{ route('sobre') }}" class="<?= $pgAtual == 'sobre.php' ? 'ativo' : '' ?>"> Sobre</a></li>
 
                 <li class="dropdown">
+<<<<<<< HEAD
                     <a href="{{ route('servicos') }}">Serviços</a>
                     <ul class="submenu">
                         @foreach ($categorias as $linha)
@@ -30,6 +37,27 @@
                         </li>
                         @endforeach
                     </ul>
+=======
+                    <a href="{{ route('servicos') }}">Serviços <span class="dropdown-arrow">›</span></a>
+                    <div class="submenu">
+                        <span class="submenu-header">Nossos Serviços</span>
+                        <ul class="submenu-list">
+                            @foreach ($categorias as $linha)
+                                <li>
+                                    <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
+                                        <span class="submenu-icon">
+                                            <i class="fa-solid fa-language"></i>
+                                        </span>
+                                        <span class="submenu-text">
+                                            <strong>{{ Str::title($linha->titulo_servico) }}</strong>
+                                            <small>{{ $linha->subtitulo_servico }}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 </li>
 
                 <li><a href="{{ route('quiz') }}" class="<?= $pgAtual == 'quiz.php' ? 'ativo' : '' ?>">Quiz</a></li>
@@ -49,7 +77,11 @@
                 </a>
             </li>
             <li>
+<<<<<<< HEAD
                 <a href="https://wa.me/5511999612140" target="_blank">
+=======
+                <a href="#">
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                     <img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}" alt="Logo whatsapp" width="35">
                 </a>
             </li>
@@ -59,10 +91,22 @@
                 </a>
             </li>
             <li class="cart-btn">
+<<<<<<< HEAD
                 <a href="{{ route('aluno.login') }}">
                     <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
                     <span class="count"></span>
                 </a>
+=======
+                @if(auth('aluno')->check() && auth('aluno')->user()->matriculas()->where('status_matricula', 'ATIVO')->exists())
+                    <a href="{{ route('aluno.dash') }}">
+                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    </a>
+                @else
+                    <a href="{{ route('aluno.login') }}">
+                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                    </a>
+                @endif
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             </li>
             <li class="cart-btn">
                 <a href="{{ route('admin.login') }}">
@@ -75,4 +119,8 @@
 
 
         <script src="{{ asset('traducaidiomas/js/idiomas.js') }}"></script>
+<<<<<<< HEAD
 </header>
+=======
+</header>
+>>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
