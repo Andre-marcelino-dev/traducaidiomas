@@ -1,13 +1,11 @@
 
 .bg-light {
-  
-   width:100%;
+    width: 100%;
     background: linear-gradient(135deg, rgb(255, 255, 255) 0%, #ffffff 100%);
     border-radius: 10px;
-    margin: 0.4rem;
+    margin: 0.4rem 0;
     box-shadow: 0 15px 15px black;
     height: 520px;
-   
 }
 
 

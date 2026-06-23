@@ -1,9 +1,9 @@
 <header class="topo">
     <div class="container">
         @if(!empty($siteConfig['logo_site']))
-            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
+        <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
         @else
-            <h1>TraducaIdiomas</h1>
+        <h1>TraducaIdiomas</h1>
         @endif
         <?php
         $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
@@ -24,17 +24,17 @@
                         <span class="submenu-header">Nossos Serviços</span>
                         <ul class="submenu-list">
                             @foreach ($categorias as $linha)
-                                <li>
-                                    <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
-                                        <span class="submenu-icon">
-                                            <i class="fa-solid fa-language"></i>
-                                        </span>
-                                        <span class="submenu-text">
-                                            <strong>{{ Str::title($linha->titulo_servico) }}</strong>
-                                            <small>{{ $linha->subtitulo_servico }}</small>
-                                        </span>
-                                    </a>
-                                </li>
+                            <li>
+                                <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
+                                    <span class="submenu-icon">
+                                        <i class="fa-solid fa-language"></i>
+                                    </span>
+                                    <span class="submenu-text">
+                                        <strong>{{ Str::title($linha->titulo_servico) }}</strong>
+                                        <small>{{ $linha->subtitulo_servico }}</small>
+                                    </span>
+                                </a>
+                            </li>
                             @endforeach
                         </ul>
                     </div>
@@ -57,7 +57,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="https://wa.me/5511999612140" target="_blank">
                     <img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}" alt="Logo whatsapp" width="35">
                 </a>
             </li>
@@ -68,13 +68,13 @@
             </li>
             <li class="cart-btn">
                 @if(auth('aluno')->check() && auth('aluno')->user()->matriculas()->where('status_matricula', 'ATIVO')->exists())
-                    <a href="{{ route('aluno.dash') }}">
-                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
-                    </a>
+                <a href="{{ route('aluno.dash') }}">
+                    <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                </a>
                 @else
-                    <a href="{{ route('aluno.login') }}">
-                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
-                    </a>
+                <a href="{{ route('aluno.login') }}">
+                    <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
+                </a>
                 @endif
             </li>
             <li class="cart-btn">
