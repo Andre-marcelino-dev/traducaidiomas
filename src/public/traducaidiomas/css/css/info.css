@@ -1,0 +1,65 @@
+.informacao {
+  background: radial-gradient(#012169, #c8102e);
+    padding: 40px 20px;
+}
+
+.text_info {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* TÍTULO */
+.text_info h2 {
+ font-size: 1.875em;
+  color:#fff!important;
+letter-spacing: 0.5px;
+    line-height: 1.2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 20px;
+}
+
+/* TEXTO */
+.text_info h3 {
+   color:#fff!important;
+letter-spacing: 0.5px;
+    line-height: 1.2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    font-size: 1.2em;
+}
+
+.text_info .botoes {
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+  margin-top: 20px;
+}
+
+.btn-gradient {
+  margin-bottom: 50px;
+  margin-left: 350px;
+padding: 15px 40px;
+font-size: 2.25em;
+    background: linear-gradient(90deg, #012169 0%, #C8102E 50%, #012169 100%);
+    background-size: 200% 100%;
+    background-position: left;
+ 
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 15px rgba(1, 33, 105, 0.3);
+
+}
+
+.btn-gradient:hover {
+    background-position: right; /* anima o gradiente */
+    box-shadow: 0 6px 20px rgba(1, 33, 105, 0.5); /* sombra mais forte */
+    transform: translateY(-3px); /* leve subida */
+}

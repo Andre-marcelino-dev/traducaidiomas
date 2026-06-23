@@ -1,0 +1,202 @@
+/* ==================== ESTILOS DO PAINEL DO ALUNO ==================== */
+
+.area-aluno {
+    margin-bottom: 30px;
+}
+
+.area-aluno-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 40px;
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+    border-radius: 12px;
+    color: white;
+}
+
+.area-aluno-header img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+}
+
+.area-aluno-header > div {
+    flex: 1;
+}
+
+.area-aluno-header h4 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.area-aluno-header p {
+    margin: 5px 0 0 0;
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* Card de Estatísticas */
+.card-stat {
+    border: none;
+    border-radius: 12px;
+    padding: 45px 25px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-stat.success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.card-stat.warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+}
+
+.card-stat.info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+.card-stat .icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.card-stat h3 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.card-stat p {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Gráficos */
+.chart-container {
+    position: relative;
+    height: 450px;
+    margin-top: 15px;
+}
+
+/* WhatsApp Flutuante */
+.whatsapp-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.whatsapp-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #25d366;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    text-decoration: none;
+}
+
+.whatsapp-button:hover {
+    background: #20ba5a;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
+}
+
+.whatsapp-button:active {
+    transform: scale(0.95);
+}
+
+.whatsapp-tooltip {
+    position: absolute;
+    bottom: 75px;
+    right: 0;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.whatsapp-tooltip.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+    .area-aluno-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .area-aluno-header img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .card-stat {
+        padding: 20px 15px;
+    }
+
+    .whatsapp-container {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .whatsapp-button {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+}
+
+/* Estilos adicionais para aumentar conteúdo */
+.info-item {
+    font-size: 1.3rem;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+.info-item i {
+    font-size: 2rem;
+    color: var(--cor-primaria);
+}
+.card-aula h6 {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.card-aula p {
+    font-size: 1.1rem;
+}
+.area-aluno h3 {
+    font-size: 2.5rem;
+}
+.area-aluno p.text-muted {
+    font-size: 1.2rem;
+}

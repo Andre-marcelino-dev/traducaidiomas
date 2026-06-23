@@ -1,0 +1,57 @@
+.informacao {
+background: radial-gradient(#012169, #c8102e);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+    margin-top: 20px;
+  height: 320px;
+   
+}
+
+
+.text_info h2 {
+  text-align: center;
+  font-size: 1.875em;
+  padding: 30px;
+  color:#fff;
+}
+
+.text_info h3 {
+  text-align: center;
+  font-size: 1.1em;
+ 
+  color:#fff;
+}
+
+.text_info .botoes {
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+  margin-top: 20px;
+}
+
+.btn-gradient {
+  margin-bottom: 50px;
+  margin-left: 350px;
+padding: 15px 40px;
+font-size: 2.25em;
+    background: linear-gradient(90deg, #012169 0%, #C8102E 50%, #012169 100%);
+    background-size: 200% 100%;
+    background-position: left;
+ 
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 15px rgba(1, 33, 105, 0.3);
+
+}
+
+.btn-gradient:hover {
+    background-position: right; /* anima o gradiente */
+    box-shadow: 0 6px 20px rgba(1, 33, 105, 0.5); /* sombra mais forte */
+    transform: translateY(-3px); /* leve subida */
+}

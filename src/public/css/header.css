@@ -1,0 +1,162 @@
+@import url("https://use.typekit.net/bjg4qzy.css");
+/* VARIAVEIS DE LAYOUT */
+:root {
+  --cor_texto: #333333;
+  --cor_texto-suave: #ccc;
+  --cor_principal: #a6aef1;
+  --cor_destaque: #ff0000;
+
+  --primary-color-1: #4f46e5;
+  --primary-color-2: #6366f1;
+  --secundary-color: #facc15;
+
+  --altura-maxima: 1500px;
+  --texto-tamnaho: 16px;
+  --fonte-menu: paralucent-stencil, sans-serif;
+  --fonte-base: neue-has-grotesk-display, sans-serif;
+}
+
+/* FIM DAS VARIAVEIS DE LAYOUT */
+
+
+.container {
+  width: 100%;
+  max-width: var(--altura-maxima);
+  margin: 0 auto;
+  /*margin-inline: auto*/
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 31px;
+  gap: 1em;
+}
+
+.topo {
+  width: 100%;
+  z-index: 100000;
+  position: fixed;
+  background-color: #fff;
+  padding-block: 17px;
+}
+
+.topo h1 {
+  width: 231px;
+  height: 90px;
+  overflow: hidden;
+  background-image: url(../img/logo.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  text-indent: -9999px;
+  margin-bottom: 0;
+}
+
+
+.topo nav ul {
+  display: flex;
+  justify-content: center;
+  /* gap: 25px; */
+}
+
+.topo nav ul li a {
+  color: #012169;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  font-family: var(--fonte-menu);
+  padding-block: 0.5em;
+  padding-inline: 1.2em;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.ativo {
+  color: var(--cor_destaque) !important;
+}
+
+
+/* Cria a linha embaixo do texto */
+.topo nav ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.2em;
+  width: 0%;
+  height: 2px;
+  background: var(--cor_destaque);
+  box-shadow: 0 0 10px var(--cor_destaque);
+  transition: width 0.3s ease;
+}
+
+/* Quando o mouse passa, a linha cresce */
+.topo nav ul li a:hover::after {
+  width: 100%;
+}
+
+/* Cor do texto ao passar o mouse (opcional) */
+.topo nav ul li a:hover {
+  color: var(--cor_destaque);
+
+}
+
+/* Linha fixa no item ativo */
+nav ul li a.ativo::after {
+  width: 100%;
+}
+
+.rede {
+  display: flex;
+  gap: 35px;
+}
+
+.rede li a {
+  inline-size: 40px;
+  block-size: 40px;
+  display: grid;
+  border-radius: 50%;
+  transform: 2s;
+}
+                    
+
+.rede a:hover {
+  /* background-color: blue; */
+  color: #003A70;
+  transition: 2s ease;  
+  border-radius: 90px;
+}
+
+  .topo h1 {
+    width: 250px;
+  }
+
+
+nav ul li .submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 140px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 20;
+}
+
+nav ul li .submenu li a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+nav ul li .submenu li a:hover {
+  background: #f0f0f0;
+}
+
+/* EXIBIR SUBMENU AO PASSAR O MOUSE */
+nav ul li.dropdown:hover .submenu {
+  display: block;
+}

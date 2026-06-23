@@ -1,0 +1,86 @@
+/* ====== ESTILO DO DASHBOARD ====== */
+#dashboard {
+    min-height: 100vh;
+    background-color: #f8f9fa; /* fundo cinza claro */
+    display: flex;
+    flex-direction: row-reverse; /* sidebar direita */
+}
+
+/* ====== SIDEBAR DIREITA ====== */
+#dashboard .bg-light {
+    background-color: #ffffff !important;
+    border-left: 1px solid #dee2e6;
+    padding: 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+#dashboard .nav-link {
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+#dashboard .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 5px;
+    color: #0d6efd;
+}
+
+#dashboard .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+#dashboard .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+/* ====== CONTEÚDO PRINCIPAL ====== */
+#dashboard .flex-grow-1 {
+    padding: 40px;
+}
+
+/* ====== MODAL DE CADASTRO ====== */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-header .btn-close {
+    filter: invert(1); /* botão close branco */
+}
+
+.modal-body label {
+    font-weight: 500;
+    color: #495057;
+}
+
+.modal-footer {
+    border-top: none;
+    padding-top: 20px;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #5c636a;
+}
