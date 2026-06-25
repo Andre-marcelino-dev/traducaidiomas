@@ -3,7 +3,7 @@
         <h3>Entre em contato</h3>
         <p>
             Preencha o formulário ao lado e entraremos em contato com você o mais
-            rápido possivel.
+            rápido poss&iacute;vel.
         </p>
 
         <div id="cards_container">
@@ -27,7 +27,7 @@
                 <div class="card-infos">
                     <p>Localização</p>
                     <span>
-                        Rua Jesus Te Ama, 777, Bairro: Felicidade, Cidade: Ceú - Estado:
+                        Rua Jesus Te Ama, 777, Bairro: Felicidade, Cidade: C&eacute;u - Estado:
                         Feliz
                     </span>
                 </div>
@@ -52,7 +52,7 @@
                     <i class="fa-brands fa-whatsapp"></i>
                 </div>
                 <div class="card-infos">
-                    <p>whatsapp</p>
+                    <p>WhatsApp</p>
                     <span> (11)99612140</span>
                 </div>
             </a>
@@ -78,7 +78,7 @@
     </section>
 
     <section id="contacts_form_container">
-        <h3>Contatar</h3>
+        <h3>Enviar mensagem</h3>
 
         @if (session('sucesso'))
             <div id="alerta-sucesso">

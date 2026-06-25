@@ -1,68 +1,118 @@
 <aside class="app-sidebar shadow" data-bs-theme="dark" style="background:linear-gradient(180deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%) !important;">
+
     <div class="sidebar-brand">
         <a href="{{ route('aluno.dash') }}" class="brand-link">
             @php
-                $logoFile = \App\Models\ConfiguracaoPainel::get('logo_painel') ?: 'logo.png';
-                $logoPath = public_path('traducaidiomas/img/' . $logoFile);
-                $logoVer = file_exists($logoPath) ? filemtime($logoPath) : time();
+            $logoFile = \App\Models\ConfiguracaoPainel::get('logo_painel') ?: 'logo.png';
+            $logoPath = public_path('traducaidiomas/img/' . $logoFile);
+            $logoVer = file_exists($logoPath) ? filemtime($logoPath) : time();
             @endphp
+
             <img src="{{ asset('traducaidiomas/img/' . $logoFile) }}?v={{ $logoVer }}"
-                alt="Traduca Idiomas" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">Portal do Aluno</span>
+                alt="Traduca Idiomas"
+                class="brand-image opacity-75 shadow" />
+
         </a>
     </div>
 
     <div class="sidebar-wrapper">
         <nav class="mt-2">
-            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview"
-                role="navigation" data-accordion="false">
+            <ul class="nav sidebar-menu flex-column" role="navigation" aria-label="Main navigation" id="navigation">
+
+                {{-- TITULO FIXO --}}
+                <li class="nav-header">PORTAL DO ALUNO</li>
 
                 <li class="nav-item">
-                    <a href="{{ route('aluno.dash') }}" class="nav-link">
-                        <i class="nav-icon bi bi-speedometer"></i>
+                    <a href="{{ route('aluno.dash') }}"
+                        class="nav-link {{ request()->routeIs('aluno.dash') ? 'active' : '' }}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 17.25C8.58579 17.25 8.25 17.5858 8.25 18C8.25 18.4142 8.58579 18.75 9 18.75H15C15.4142 18.75 15.75 18.4142 15.75 18C15.75 17.5858 15.4142 17.25 15 17.25H9Z" fill="#ffffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C11.2919 1.25 10.6485 1.45282 9.95055 1.79224C9.27585 2.12035 8.49642 2.60409 7.52286 3.20832L5.45628 4.4909C4.53509 5.06261 3.79744 5.5204 3.2289 5.95581C2.64015 6.40669 2.18795 6.86589 1.86131 7.46263C1.53535 8.05812 1.38857 8.69174 1.31819 9.4407C1.24999 10.1665 1.24999 11.0541 1.25 12.1672V13.7799C1.24999 15.6837 1.24998 17.1866 1.4027 18.3616C1.55937 19.567 1.88856 20.5401 2.63236 21.3094C3.37958 22.0824 4.33046 22.4277 5.50761 22.5914C6.64849 22.75 8.10556 22.75 9.94185 22.75H14.0581C15.8944 22.75 17.3515 22.75 18.4924 22.5914C19.6695 22.4277 20.6204 22.0824 21.3676 21.3094C22.1114 20.5401 22.4406 19.567 22.5973 18.3616C22.75 17.1866 22.75 15.6838 22.75 13.7799V12.1672C22.75 11.0541 22.75 10.1665 22.6818 9.4407C22.6114 8.69174 22.4646 8.05812 22.1387 7.46263C21.8121 6.86589 21.3599 6.40669 20.7711 5.95581C20.2026 5.5204 19.4649 5.06262 18.5437 4.49091L16.4771 3.20831C15.5036 2.60409 14.7241 2.12034 14.0494 1.79224C13.3515 1.45282 12.7081 1.25 12 1.25ZM8.27953 4.50412C9.29529 3.87371 10.0095 3.43153 10.6065 3.1412C11.1882 2.85833 11.6002 2.75 12 2.75C12.3998 2.75 12.8118 2.85833 13.3935 3.14119C13.9905 3.43153 14.7047 3.87371 15.7205 4.50412L17.7205 5.74537C18.6813 6.34169 19.3559 6.76135 19.8591 7.1467C20.3487 7.52164 20.6303 7.83106 20.8229 8.18285C21.0162 8.53589 21.129 8.94865 21.1884 9.58104C21.2492 10.2286 21.25 11.0458 21.25 12.2039V13.725C21.25 15.6959 21.2485 17.1012 21.1098 18.1683C20.9736 19.2163 20.717 19.8244 20.2892 20.2669C19.8649 20.7058 19.2871 20.9664 18.2858 21.1057C17.2602 21.2483 15.9075 21.25 14 21.25H10C8.09247 21.25 6.73983 21.2483 5.71422 21.1057C4.71286 20.9664 4.13514 20.7058 3.71079 20.2669C3.28301 19.8244 3.02642 19.2163 2.89019 18.1683C2.75149 17.1012 2.75 15.6959 2.75 13.725V12.2039C2.75 11.0458 2.75076 10.2286 2.81161 9.58104C2.87103 8.94865 2.98385 8.53589 3.17709 8.18285C3.36965 7.83106 3.65133 7.52164 4.14092 7.1467C4.6441 6.76135 5.31869 6.34169 6.27953 5.74537L8.27953 4.50412Z" fill="#ffffff" />
+                        </svg>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon bi bi-book-fill"></i>
-                        <p>
-                            MEUS ESTUDOS
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
+                    <a href="{{ route('aluno.aulas.index') }}"
+                        class="nav-link {{ request()->routeIs('aluno.aulas.*') ? 'active' : '' }}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.2501 2.00052C18.7689 2.00052 20.0001 3.23173 20.0001 4.75052V19.2488C20.0001 20.7675 18.7689 21.9988 17.2501 21.9988H6.75C5.23122 21.9988 4 20.7675 4 19.2488V4.75052C4 3.49158 4.84596 2.43023 6.00044 2.10391L5.99963 3.75071C5.69623 3.97877 5.5 4.34173 5.5 4.75052V19.2488C5.5 19.9391 6.05964 20.4988 6.75 20.4988H17.2501C17.9405 20.4988 18.5001 19.9391 18.5001 19.2488V4.75052C18.5001 4.06016 17.9405 3.50052 17.2501 3.50052L15 3.5V2L17.2501 2.00052ZM14.0001 2V10.1389C14.0001 10.886 13.2007 11.1665 12.7109 10.9033L12.6279 10.8512L10.5019 9.56575L8.42379 10.8172C7.92411 11.1779 7.09342 10.9564 7.00736 10.2594L7.0001 10.1389V2H14.0001ZM12.5001 3.5H8.5001V9.02327L10.0734 8.07421C10.3377 7.93602 10.6574 7.93341 10.8906 8.05036L12.5001 9.02396V3.5Z" fill="#ffffff" />
+                        </svg>
+                        <p>Minhas Aulas</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('aluno.aulas.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Minhas Aulas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('aluno.progresso.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Meu Progresso</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('aluno.atividades.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Minhas Atividades</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('aluno.perfil') }}" class="nav-link">
-                        <i class="nav-icon bi bi-person-fill"></i>
+                    <a href="{{ route('aluno.materiais.index') }}"
+                        class="nav-link {{ request()->routeIs('aluno.materiais.*') ? 'active' : '' }}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 12.25C9.58579 12.25 9.25 12.5858 9.25 13C9.25 13.4142 9.58579 13.75 10 13.75H14C14.4142 13.75 14.75 13.4142 14.75 13C14.75 12.5858 14.4142 12.25 14 12.25H10Z" fill="#ffffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.32014 4.27529C7.65816 2.55091 9.17647 1.25 11 1.25H13C14.8236 1.25 16.3419 2.55092 16.6799 4.2753C19.625 5.03147 21.7073 7.66894 21.7494 10.7198C21.75 10.7665 21.75 10.8178 21.75 10.9044V13.9829C21.7503 13.994 21.7503 14.0052 21.75 14.0163V16.375C21.75 18.8445 20.0348 20.9827 17.6242 21.5184C13.9199 22.3415 10.0801 22.3415 6.37583 21.5184C3.96516 20.9827 2.25 18.8445 2.25 16.375V14.0163C2.24976 14.0052 2.24975 13.994 2.25 13.9829V10.9043C2.25 10.8177 2.25 10.7664 2.25065 10.7198C2.29272 7.66892 4.37505 5.03144 7.32014 4.27529ZM9.01446 3.94034C9.39341 3.23199 10.1409 2.75 11 2.75H13C13.8592 2.75 14.6067 3.232 14.9856 3.94035C13.0068 3.63773 10.9933 3.63772 9.01446 3.94034ZM20.25 10.9111V13.5066C14.9714 15.711 9.02859 15.711 3.75 13.5066V10.9111C3.75 10.8157 3.75002 10.7755 3.7505 10.7405C3.78369 8.33419 5.44872 6.25854 7.79056 5.70414C7.82455 5.69609 7.86386 5.68733 7.95695 5.66665C8.0412 5.64793 8.08113 5.63905 8.12052 5.63048C10.6769 5.07434 13.3231 5.07434 15.8795 5.63048C15.9189 5.63905 15.9588 5.64793 16.0431 5.66665C16.1361 5.68733 16.1755 5.69609 16.2094 5.70414C18.5513 6.25854 20.2163 8.33419 20.2495 10.7405C20.25 10.7755 20.25 10.8157 20.25 10.9111ZM3.75 16.375V15.123C7.91438 16.7307 12.433 17.0771 16.75 16.1622V17C16.75 17.4142 17.0858 17.75 17.5 17.75C17.9142 17.75 18.25 17.4142 18.25 17V15.7911C18.9241 15.5999 19.5915 15.3772 20.25 15.123V16.375C20.25 18.1415 19.0231 19.6709 17.2988 20.0541C13.8088 20.8296 10.1912 20.8296 6.70123 20.0541C4.97687 19.6709 3.75 18.1415 3.75 16.375Z" fill="#ffffff" />
+                        </svg>
+                        <p>Materiais</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('aluno.progresso.index') }}"
+                        class="nav-link {{ request()->routeIs('aluno.progresso.*') ? 'active' : '' }}">
+                        <svg stroke="#ffffff" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 17L8 12L11 15L18 8" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M14 8H18V12" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M3 21H21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p>Meu Progresso</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('aluno.atividades.index') }}"
+                        class="nav-link {{ request()->routeIs('aluno.atividades.*') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-clipboard-check"></i>
+                        <p>Atividades</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('aluno.reagendamentos.index') }}"
+                        class="nav-link {{ request()->routeIs('aluno.reagendamentos.*') || request()->routeIs('aluno.reagendamento.*') ? 'active' : '' }}">
+                        <svg stroke="#ffffff" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6602 10.44L20.6802 14.62C19.8402 18.23 18.1802 19.69 15.0602 19.39C14.5602 19.35 14.0202 19.26 13.4402 19.12L11.7602 18.72C7.59018 17.73 6.30018 15.67 7.28018 11.49L8.26018 7.30001C8.46018 6.45001 8.70018 5.71001 9.00018 5.10001C10.1702 2.68001 12.1602 2.03001 15.5002 2.82001L17.1702 3.21001C21.3602 4.19001 22.6402 6.26001 21.6602 10.44Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M15.0603 19.3901C14.4403 19.8101 13.6603 20.1601 12.7103 20.4701L11.1303 20.9901C7.16034 22.2701 5.07034 21.2001 3.78034 17.2301L2.50034 13.2801C1.22034 9.3101 2.28034 7.2101 6.25034 5.9301L7.83034 5.4101C8.24034 5.2801 8.63034 5.1701 9.00034 5.1001C8.70034 5.7101 8.46034 6.4501 8.26034 7.3001L7.28034 11.4901C6.30034 15.6701 7.59034 17.7301 11.7603 18.7201L13.4403 19.1201C14.0203 19.2601 14.5603 19.3501 15.0603 19.3901Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M12.6406 8.52979L17.4906 9.75979" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path opacity="0.4" d="M11.6602 12.3999L14.5602 13.1399" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p>Reagendamentos</p>
+                    </a>
+                </li>
+
+                {{-- CONTA --}}
+                <li class="nav-header mt-3">CONTA</li>
+
+                <li class="nav-item">
+                    <a href="{{ route('aluno.perfil') }}"
+                        class="nav-link {{ request()->routeIs('aluno.perfil*') ? 'active' : '' }}">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#ffffff"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M8 19h-3a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v11a1 1 0 0 1 -1 1" />
+                            <path d="M12 14a2 2 0 1 0 4.001 -.001a2 2 0 0 0 -4.001 .001" />
+                            <path d="M17 19a2 2 0 0 0 -2 -2h-2a2 2 0 0 0 -2 2" />
+                        </svg>
                         <p>Meu Perfil</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <form action="{{ route('aluno.logout') }}" method="POST">
+                    <form action="{{ route('aluno.logout') }}" method="POST" class="m-0">
                         @csrf
                         <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start">
                             <i class="nav-icon bi bi-box-arrow-right"></i>

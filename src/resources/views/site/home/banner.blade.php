@@ -13,7 +13,7 @@
                 <h1>{{ $siteConfig['banner1_titulo'] }}</h1>
                 <p>{{ $siteConfig['banner1_subtitulo'] }}</p>
                 <div class="banner-actions">
-                    <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
+                    <a class="btn btn-primary" href="contato.php">Agendar Diagn&oacute;stico</a>
                     <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
                 </div>
                 <div class="banner-trust">
@@ -30,7 +30,7 @@
             <div class="banner-metrics">
                 <div class="metric-card">
                     <span class="metric-label">Foco</span>
-                    <strong>Negocios, entrevistas e fluência</strong>
+                    <strong>Neg&oacute;cios, entrevistas e fluência</strong>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Formato</span>
@@ -63,22 +63,22 @@
                     </div>
                     <div class="trust-item">
                         <span class="trust-title">Performance</span>
-                        <small>Resultados mensuraveis na pratica</small>
+                        <small>Resultados mensur&aacute;veis na pr&aacute;tica</small>
                     </div>
                 </div>
             </div>
             <div class="banner-metrics">
                 <div class="metric-card">
                     <span class="metric-label">Aulas</span>
-                    <strong>Planos flexiveis e personalizados</strong>
+                    <strong>Planos flex&iacute;veis e personalizados</strong>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Suporte</span>
-                    <strong>Feedback proximo e ajustes contínuos</strong>
+                    <strong>Feedback pr&oacute;ximo e ajustes contínuos</strong>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Confiança</span>
-                    <strong>Fale com clareza em qualquer cenario</strong>
+                    <strong>Fale com clareza em qualquer cen&aacute;rio</strong>
                 </div>
             </div>
         </div>

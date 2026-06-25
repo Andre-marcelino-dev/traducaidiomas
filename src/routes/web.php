@@ -201,7 +201,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
             ->name('reagendamento.solicitar');
-        Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicatados'])
+        Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicitados'])
             ->name('reagendamentos.index');
         Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');

@@ -3,7 +3,7 @@
     <div class="rodape-info">
       <p class="rodape-nome">RENATO CAETANO</p>
       <p class="texto-pt">
-        Todos os direitos reservados © 2025.
+        Todos os direitos reservados © {{ date('Y') }}.
         <a href="#politica-privacidade">Política de Privacidade</a>
       </p>
     </div>

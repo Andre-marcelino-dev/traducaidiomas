@@ -15,7 +15,7 @@
 
                 <div class="student-info">
                     <h2>{{ $aluno->nome_aluno }}</h2>
-                    <div class="student-id">Matricula: ALUNO-{{ ($aluno->id_matricula && $aluno->data_matricula) ? \Carbon\Carbon::parse($aluno->data_matricula)->format('Y') . str_pad($aluno->id_matricula, 4, '0', STR_PAD_LEFT) : 'Sem Matrícula' }}</div>
+                    <div class="student-id">Matr&iacute;cula: ALUNO-{{ ($aluno->id_matricula && $aluno->data_matricula) ? \Carbon\Carbon::parse($aluno->data_matricula)->format('Y') . str_pad($aluno->id_matricula, 4, '0', STR_PAD_LEFT) : 'Sem Matrícula' }}</div>
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
          
 
                 <div class="validity">
-                    Email: {{ $aluno->email_aluno }}
+                    E-mail: {{ $aluno->email_aluno }}
                 </div>
 
                 @if($aluno->nota)
