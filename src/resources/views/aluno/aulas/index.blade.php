@@ -41,7 +41,7 @@
 <div class="app-content">
     <div class="container-fluid">
 
-        <div class="card recent-card mb-4">
+        <div class="card recent-card mb-4 fade-up">
             <div class="card-header">
                 <h5><i class="fas fa-video me-2 text-danger"></i>Sua Próxima Aula Ao Vivo</h5>
             </div>
@@ -106,7 +106,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-7 mb-4">
+            <div class="col-lg-7 mb-4 fade-up">
                 <div class="card recent-card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5><i class="fas fa-book me-2 text-primary"></i>Todas as Minhas Aulas</h5>
@@ -141,7 +141,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-5 mb-4">
+            <div class="col-lg-5 mb-4 fade-up">
                 <div class="card recent-card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5><i class="fas fa-file-arrow-down me-2 text-success"></i>Material de Apoio</h5>

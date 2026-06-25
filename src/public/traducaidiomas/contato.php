@@ -41,7 +41,7 @@ try {
 
     //Recipients
     $mail->setFrom('traducaidiomas@adminfo.dev.br', $assunto); // quem dispara o email
-    $mail->addAddress('anddrem89@gmail.com');     //Add a recipient
+    $mail->addAddress('felixsouzalps@gmail.com');     //Add a recipient
     // $mail->addAddress('ellen@example.com');               //Name is optional
     // $mail->addReplyTo('info@example.com', 'Information');
     // $mail->addCC('cc@example.com');

@@ -87,7 +87,7 @@
     .form-select {
         border-radius: 13px;
         border: 1px solid #dbe3ef;
-        min-height: 44px;
+        
         font-size: .92rem;
     }
 
