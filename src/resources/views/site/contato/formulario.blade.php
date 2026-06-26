@@ -47,7 +47,7 @@
             <!-- ################ FIM CARD EMAIL##############  -->
 
             <!-- ################ INICIO  CARD WHATSAP##############  -->
-            <a href="https://api.whatsapp.com/send?phone=" target="_blank" class="contact-card whatsapp">
+            <a href="https://api.whatsapp.com/send?phone=5511999612140" target="_blank" class="contact-card whatsapp">
                 <div class="card-icon">
                     <i class="fa-brands fa-whatsapp"></i>
                 </div>
@@ -131,6 +131,10 @@
             setTimeout(() => alerta.remove(), 500);
         }, 3000);
     }
+
+    @if(session('whatsapp_url'))
+        window.open("{{ session('whatsapp_url') }}", '_blank');
+    @endif
 </script>
 
 </main>

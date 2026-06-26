@@ -34,7 +34,17 @@ class ContatoController extends Controller
         }
     );
 
-    return redirect()->route('contato')->with('sucesso', 'Mensagem enviada com sucesso!');
+    $textoWhatsapp = urlencode(
+        "📩 *Nova mensagem do site*\n\n"
+        . "*Nome:* {$request->nome}\n"
+        . "*E-mail:* {$request->email}\n"
+        . "*Assunto:* {$request->assunto}\n\n"
+        . "*Mensagem:*\n{$request->mensagem}"
+    );
+
+    $whatsappUrl = "https://api.whatsapp.com/send?phone=5511999612140&text={$textoWhatsapp}";
+
+    return redirect()->route('contato')->with('sucesso', 'Mensagem enviada com sucesso!')->with('whatsapp_url', $whatsappUrl);
 }
 
 }
