@@ -24,23 +24,21 @@
 }
 
 .imagem-container {
-    flex: 0 0 300px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+   height: 400px;
+   width: 330px;
+   padding: 25px;
+   background: linear-gradient(135deg, #E5142D 0%, #003A70 100%);
+   border-radius: 25px;;
 }
 
 .img-perfil {
-    width: 320px;
-    height: 420px;
-    border-radius: 12px;
-    opacity: 1;
+    width: 100%;
+    height: 350px;
+    border-radius: 20px;
     object-fit: cover;
-    object-position: top;
-    display: block;
-    margin: 0 auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    filter: blur(20px);
+    transform: scale(1.2);           /* Começa maior, como fumaça */
+    animation: fumaça 2.5s ease forwards;
 }
 
 /* Efeito ao passar o mouse */
