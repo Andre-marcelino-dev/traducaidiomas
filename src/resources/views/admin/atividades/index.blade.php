@@ -69,7 +69,6 @@ unicode: "eb0b"
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="tbl-icon-wrap"><i class="fas fa-clipboard-list"></i></div>
                                     <span style="font-weight:600;font-size:.875rem;">{{ $atividade->titulo_atividade }}</span>
                                 </div>
                             </td>
