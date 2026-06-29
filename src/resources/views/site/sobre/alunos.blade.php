@@ -40,11 +40,6 @@
                 <div class="validity">
                     Email: {{ $aluno->email_aluno }}
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 
                 @if($aluno->nota)
                 <div class="card-feedback">
@@ -63,10 +58,6 @@
                     @endif
                 </div>
                 @endif
-<<<<<<< HEAD
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             </div>
         </div>
         @endforeach

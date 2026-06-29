@@ -10,12 +10,6 @@ class SobreController extends Controller
     public function sobre()
     {
         $alunos = DB::table('tbl_alunos')
-<<<<<<< HEAD
-<<<<<<< HEAD
-            ->leftJoin('tbl_matricula', 'tbl_alunos.id_aluno', '=', 'tbl_matricula.id_aluno')
-=======
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             ->join('tbl_matricula', 'tbl_alunos.id_aluno', '=', 'tbl_matricula.id_aluno')
             ->leftJoin('tbl_feedbacks', function ($join) {
                 $join->on('tbl_alunos.id_aluno', '=', 'tbl_feedbacks.id_aluno')
@@ -23,26 +17,13 @@ class SobreController extends Controller
             })
             ->leftJoin('tbl_professor', 'tbl_feedbacks.id_professor', '=', 'tbl_professor.id_professor')
             ->where('tbl_matricula.status_matricula', 'ATIVO')
-<<<<<<< HEAD
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             ->select(
                 'tbl_alunos.*',
                 'tbl_matricula.id_matricula',
                 'tbl_matricula.data_matricula',
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
                 'tbl_feedbacks.nota',
                 'tbl_feedbacks.comentario',
                 'tbl_professor.nome_professor',
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
-                'tbl_feedbacks.nota',
-                'tbl_feedbacks.comentario',
-                'tbl_professor.nome_professor',
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             )
             ->get();
 

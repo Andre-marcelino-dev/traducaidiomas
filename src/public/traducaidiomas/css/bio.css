@@ -1,133 +1,238 @@
-.bg-light {
-   width: 100%;
-   height: 650;
-   background-color: #333;
-    /* border-radius: 10px; */
-    margin: 0.4rem;
-    box-shadow: 0 4px 15px black;
-    height: 160px;
+/* ══════════════════════════════════════
+   SEÇÃO BIOGRAFIA — HOME
+   ══════════════════════════════════════ */
 
+.bio-section {
+    padding: 80px 0;
+    margin: 0;
+    background: linear-gradient(135deg, #c0192b 0%, #8b1a4a 40%, #4a1942 100%);
 }
 
-.sobre-container {
-    
+.bio-section + * {
+    margin-top: 0;
+}
+
+.bio-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
     display: flex;
-    gap: 2.5rem;
-    align-items: stretch;
-    margin-top: 1rem;
-   
+    align-items: center;
+    gap: 60px;
+    padding: 0 30px;
 }
 
-.foto-container {
-    flex: 0 0 300px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+/* ── FOTO ── */
+.bio-foto-col {
+    flex: 0 0 380px;
 }
 
-.foto-perfil {
-    width: 170%;
-    height: 350px;
+.bio-foto-frame {
+    position: relative;
     border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.bio-foto-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(1, 33, 105, 0.6) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bio-foto {
+    width: 100%;
+    height: 460px;
     object-fit: cover;
-
-    opacity: 0;
+    display: block;
     filter: blur(20px);
-    transform: scale(1.2);           /* Começa maior, como fumaça */
-    animation: fumaça 2.5s ease forwards;
+    transform: scale(1.1);
+    animation: bioReveal 2s ease forwards;
 }
 
-/* 🔥 Animação fumaça */
-@keyframes fumaça {
-    0% {
-        opacity: 0;
-        filter: blur(20px);
-        transform: scale(1.2);
-    }
-    50% {
-        opacity: 0.6;
-        filter: blur(10px);
-        transform: scale(1.1);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0px);
-        transform: scale(1);
-    }
+@keyframes bioReveal {
+    0%   { opacity: 0; filter: blur(20px); transform: scale(1.1); }
+    50%  { opacity: 0.7; filter: blur(8px); transform: scale(1.05); }
+    100% { opacity: 1; filter: blur(0); transform: scale(1); }
 }
 
-
-
-.texto-sobre {
-    flex: 1;
-    font-size: 0.85rem;
-    font-weight: 400;
+.bio-foto-badge {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #012169;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.biografia-texto {
-    line-height: 1.7;
-    flex: 1;
+.bio-foto-badge i {
+    color: #f59e0b;
     font-size: 15px;
 }
-.biografia-texto a {
-    width: 50px;
+
+/* ── TEXTO ── */
+.bio-texto-col {
+    flex: 1;
 }
 
-/* TEXTO JUSTIFICADO CONFORME ABNT - SOBRE MIM */
-.texto-sobre p {
-    margin-top: 50px;
-    display: inline-flex;
-    font-size:1.875em;
-    /* padding: 50px; */
-    margin-bottom: 1rem;
-    text-align: justify;
-    text-justify: inter-word;
-    line-height: 1.6;
+.bio-eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #a78bfa;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
 }
 
-.biografia-texto em {
-    font-style: italic;
-    color: rgb(112, 82, 0);
+.bio-titulo {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.bio-titulo::after {
+    content: "";
     display: block;
-    text-align: center;
-    margin: 0.5rem 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #c8102e);
+    border-radius: 4px;
+    margin-top: 12px;
 }
 
+.bio-conteudo {
+    margin-bottom: 28px;
+}
 
-.btn-gradient {
-    margin-top: 80px;
+.bio-conteudo p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #cbd5e1;
+    text-align: justify;
+}
+
+/* ── STATS ── */
+.bio-stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 32px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.bio-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bio-stat-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+
+.bio-stat-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* ── BOTÃO ── */
+.bio-btn {
     display: inline-flex;
-    margin-left: 0;     /* garante que fique à esquerda */
-    right:55px;
-     align-items: center;
-    justify-content: center;
-
-    padding: 15px 30px;
-    background: linear-gradient(90deg, #012169 0%, #C8102E 50%, #012169 100%);
-    background-size: 200% 100%;
-    background-position: left;
-
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.785em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.5s ease;
-    box-shadow: 0 4px 15px rgba(1, 33, 105, 0.3);
-
-    /* Removendo sublinhado do <a> */
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 12px;
     text-decoration: none;
-
-    /* Espaço abaixo (caso precise) */
-    margin-bottom: 30px;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    backdrop-filter: blur(4px);
 }
 
-/* Hover opcional (caso queira efeito) */
-.btn-gradient:hover {
-    background-position: right;
+.bio-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(1, 33, 105, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+
+.bio-btn i {
+    transition: transform 0.3s;
+}
+
+.bio-btn:hover i {
+    transform: translateX(4px);
+}
+
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+    .bio-wrapper {
+        flex-direction: column;
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    .bio-foto-col {
+        flex: none;
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+
+    .bio-foto {
+        height: 360px;
+    }
+
+    .bio-titulo {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .bio-titulo::after {
+        margin: 12px auto 0;
+    }
+
+    .bio-eyebrow {
+        display: block;
+        text-align: center;
+    }
+
+    .bio-conteudo p {
+        font-size: 0.92rem;
+    }
+
+    .bio-stats {
+        justify-content: center;
+    }
+
+    .bio-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

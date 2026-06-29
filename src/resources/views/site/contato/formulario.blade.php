@@ -41,35 +41,19 @@
                 </div>
                 <div class="card-infos">
                     <p>E-mail</p>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <span> email@gmail.com </span>
-=======
                     <span> contato.traducaidiomas@adminfo.dev.br</span>
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
-                    <span> contato.traducaidiomas@adminfo.dev.br</span>
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 </div>
             </a>
             <!-- ################ FIM CARD EMAIL##############  -->
 
             <!-- ################ INICIO  CARD WHATSAP##############  -->
-            <a href="https://api.whatsapp.com/send?phone=" target="_blank" class="contact-card whatsapp">
+            <a href="https://api.whatsapp.com/send?phone=5511999612140" target="_blank" class="contact-card whatsapp">
                 <div class="card-icon">
                     <i class="fa-brands fa-whatsapp"></i>
                 </div>
                 <div class="card-infos">
                     <p>whatsapp</p>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <span> (11)99999-9999-999 </span>
-=======
                     <span> (11)99612140</span>
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
-                    <span> (11)99612140</span>
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                 </div>
             </a>
             <!-- ################ FIM CARD WHATSAP##############  -->
@@ -97,17 +81,17 @@
         <h3>Contatar</h3>
 
         @if (session('sucesso'))
-            <div id="alerta-sucesso">
-                {{ session('sucesso') }}
-            </div>
+        <div id="alerta-sucesso">
+            {{ session('sucesso') }}
+        </div>
         @endif
 
         @if ($errors->any())
-            <ul class="alert-erros">
-                @foreach ($errors->all() as $erro)
-                    <li>{{ $erro }}</li>
-                @endforeach
-            </ul>
+        <ul class="alert-erros">
+            @foreach ($errors->all() as $erro)
+            <li>{{ $erro }}</li>
+            @endforeach
+        </ul>
         @endif
 
         <form action="{{ route('contato.enviar') }}" method="POST" id="contact_form">
@@ -140,13 +124,17 @@
 
 
     <script>
-    const alerta = document.getElementById('alerta-sucesso');
-    if (alerta) {
-        setTimeout(() => {
-            alerta.style.opacity = '0';
-            setTimeout(() => alerta.remove(), 500);
-        }, 3000);
-    }
-</script>
+        const alerta = document.getElementById('alerta-sucesso');
+        if (alerta) {
+            setTimeout(() => {
+                alerta.style.opacity = '0';
+                setTimeout(() => alerta.remove(), 500);
+            }, 3000);
+        }
+
+        @if(session('whatsapp_url'))
+        window.open("{{ session('whatsapp_url') }}", '_blank');
+        @endif
+    </script>
 
 </main>

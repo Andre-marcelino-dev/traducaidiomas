@@ -461,12 +461,6 @@
             }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        document.getElementById('formLogin').addEventListener('submit', function() {
-=======
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
         // Validação de email em tempo real
         const emailInput = document.getElementById('email_aluno');
         const formLogin = document.getElementById('formLogin');
@@ -499,10 +493,6 @@
                 emailInput.focus();
                 return;
             }
-<<<<<<< HEAD
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
             document.getElementById('btnEntrar').classList.add('carregando');
         });
     </script>

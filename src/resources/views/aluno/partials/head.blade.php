@@ -30,16 +30,8 @@
 
 <link rel="stylesheet" href="{{ asset('dash/css/adminlte.css')}}" />
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
 
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 <!--begin::Dashboard & Admin Tables-->
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}" />

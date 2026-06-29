@@ -80,6 +80,76 @@
   transform: translateY(-2px);
 }
 
+/* CARDS DOS SERVIÇOS */
+.footer-servico {
+  position: relative;
+}
+
+.footer-servico a {
+  display: block;
+  text-decoration: none !important;
+}
+
+.fs-label {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #60a5fa;
+  font-size: 12px;
+  transition: color 0.3s;
+}
+
+.fs-card {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 200px;
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 50;
+}
+
+.fs-card::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1e293b;
+}
+
+.footer-servico:hover .fs-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.footer-servico:hover .fs-label {
+  color: #fff;
+}
+
+.fs-card strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 4px;
+}
+
+.fs-card p {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #cbd5e1;
+  margin: 0;
+}
+
 /* Responsivo */
 
 

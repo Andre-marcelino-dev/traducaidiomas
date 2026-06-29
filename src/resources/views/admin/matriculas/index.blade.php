@@ -110,13 +110,6 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Data</label>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                            <input type="date" name="data_matricula" class="form-control" value="{{ $matriculaEdit?->data_matricula ?? '' }}">
-                        </div>
-=======
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                             <input type="date" name="data_matricula" class="form-control" value="{{ $matriculaEdit ? \Carbon\Carbon::parse($matriculaEdit->data_matricula)->format('Y-m-d') : '' }}">
                         </div>
                         @if ($matriculaEdit)
@@ -129,10 +122,6 @@
                                 </select>
                             </div>
                         @endif
-<<<<<<< HEAD
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
                     </div>
 
                     @if ($errors->any())

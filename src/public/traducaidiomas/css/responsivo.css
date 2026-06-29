@@ -127,11 +127,6 @@ Celulares - 0 - 768
 /* Celulares - 0 - 400 - 768 */
 @media (max-width: 768px) {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
   nav ul li .submenu {
     position: static;
     transform: none;
@@ -188,10 +183,6 @@ Celulares - 0 - 768
     font-size: 0.7em;
   }
 
-<<<<<<< HEAD
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
-=======
->>>>>>> c2e8e61f063cde17ab9a61599a5a7b1578d390d6
 .rodape-centro ul{
    display: flex;
    flex-direction: row;
