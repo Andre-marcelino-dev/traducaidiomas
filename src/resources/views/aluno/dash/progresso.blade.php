@@ -65,7 +65,7 @@
         <div class="col-6 col-xl fade-up">
             <div class="mc mc-rose shadow-sm h-100">
                 <div class="mc-icon"><i class="fas fa-circle-xmark"></i></div>
-                <div class="mc-val" data-progress-counter="{{ $totalFalta }}">0</div>
+                <div class="mc-val" data-progress-counter="{{ $totalFalta }}"></div>
                 <p class="mc-lbl">Faltas</p>
                 <div class="mc-trend"><i class="fas fa-ban me-1"></i> registradas</div>
             </div>
@@ -369,6 +369,25 @@
         align-items: center;
         display: inline-flex;
         gap: .35rem;
+    }
+    @media (max-width: 575.98px) {
+        .progress-goal-top {
+            flex-direction: column;
+            gap: .35rem;
+        }
+        .progress-goal-value {
+            font-size: 1.1rem;
+        }
+        .progress-chart-wrap {
+            width: 160px;
+            height: 160px;
+        }
+        .progress-chart-body {
+            min-height: 240px;
+        }
+        .progress-legend {
+            font-size: .72rem;
+        }
     }
 </style>
 

@@ -43,7 +43,7 @@
                         <p class="dash-hora" id="dash-hora"></p>
                         <h2 class="dash-nome">
                             @php $h = now()->format('H'); $saudacao = $h < 12 ? 'Bom dia' : ($h < 18 ? 'Boa tarde' : 'Boa noite'); @endphp
-                            {{ $saudacao }}, {{ explode(' ', $aluno->nome_aluno)[0] }}! 👋
+                            {{ $saudacao }}, {{ explode(' ', $aluno->nome_aluno)[0] }}! <span>👋</span>
                         </h2>
                         <p class="dash-sub">{{ now()->translatedFormat('l, d \d\e F \d\e Y') }}</p>
                         <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
@@ -856,6 +856,17 @@
         .student-status-top { flex-wrap: wrap; }
         .student-status-top .tbl-status { margin-left: 50px; }
         .student-platform-row { grid-template-columns: 1fr; }
+        .student-feedback-table-form {
+            min-width: 0;
+            width: 100%;
+        }
+        .student-feedback-table-controls {
+            grid-template-columns: 1fr;
+        }
+        .student-feedback-table-controls .tbl-btn-novo {
+            min-width: 0;
+            width: 100%;
+        }
     }
     .aluno-dashboard .mc-val-text {
         font-size: 1.35rem;
