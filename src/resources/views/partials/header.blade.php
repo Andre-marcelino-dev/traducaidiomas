@@ -1,38 +1,60 @@
 <header class="topo">
     <div class="container">
-        @if(!empty($siteConfig['logo_site']))
-            <a href="{{ route('home') }}"><img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas" style="max-height:60px;"></a>
-        @else
-            <h1>TraducaIdiomas</h1>
-        @endif
-        <?php
-        $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
-        ?>
 
-        <button class=abrir-menu></button>
-        <nav>
-            <button class=fechar-menu></button>
-            <ul>
+        {{-- LOGO --}}
+        <a href="{{ route('home') }}" class="logo">
+            @if(!empty($siteConfig['logo_site']))
+                <img src="{{ asset('traducaidiomas/img/' . $siteConfig['logo_site']) }}" alt="TraducaIdiomas">
+            @else
+                <h1>TraducaIdiomas</h1>
+            @endif
+        </a>
 
-                <li><a href="{{ route('home') }}" class="<?= $pgAtual == 'index.php' ? 'ativo' : '' ?>">Home</a></li>
+        {{-- BOTÃO MOBILE --}}
+        <button class="abrir-menu" aria-label="Abrir menu"></button>
 
-                <li><a href="{{ route('sobre') }}" class="<?= $pgAtual == 'sobre.php' ? 'ativo' : '' ?>"> Sobre</a></li>
+        {{-- OVERLAY --}}
+        <div class="overlay"></div>
 
+        {{-- NAV --}}
+        <nav class="sidebar">
+
+            <button class="fechar-menu" aria-label="Fechar menu"></button>
+
+            <ul class="menu">
+
+                <li>
+                    <a href="{{ route('home') }}"
+                       class="{{ $route === 'home' ? 'ativo' : '' }}">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('sobre') }}"
+                       class="{{ $route === 'sobre' ? 'ativo' : '' }}">
+                        Sobre
+                    </a>
+                </li>
+
+                {{-- DROPDOWN MELHORADO --}}
                 <li class="dropdown">
-                    <a href="{{ route('servicos') }}">Serviços <span class="dropdown-arrow">›</span></a>
+                    <button class="dropdown-toggle">
+                        Serviços <span>›</span>
+                    </button>
+
                     <div class="submenu">
-                        <span class="submenu-header">Nossos Serviços</span>
-                        <ul class="submenu-list">
+                        <span class="submenu-title">Nossos Serviços</span>
+
+                        <ul>
                             @foreach ($categorias as $linha)
                                 <li>
                                     <a href="{{ route('servicos.categoria', $linha->id_servico) }}">
-                                        <span class="submenu-icon">
-                                            <i class="fa-solid fa-language"></i>
-                                        </span>
-                                        <span class="submenu-text">
+                                        <i class="fa-solid fa-language"></i>
+                                        <div>
                                             <strong>{{ Str::title($linha->titulo_servico) }}</strong>
                                             <small>{{ $linha->subtitulo_servico }}</small>
-                                        </span>
+                                        </div>
                                     </a>
                                 </li>
                             @endforeach
@@ -40,52 +62,49 @@
                     </div>
                 </li>
 
-                <li><a href="{{ route('quiz') }}" class="<?= $pgAtual == 'quiz.php' ? 'ativo' : '' ?>">Quiz</a></li>
+                <li>
+                    <a href="{{ route('quiz') }}"
+                       class="{{ $route === 'quiz' ? 'ativo' : '' }}">
+                        Quiz
+                    </a>
+                </li>
 
-
-                <li><a href="{{ route('contato') }}" class="<?= $pgAtual == 'contato.php' ? 'ativo' : '' ?>">Contato</a>
+                <li>
+                    <a href="{{ route('contato') }}"
+                       class="{{ $route === 'contato' ? 'ativo' : '' }}">
+                        Contato
+                    </a>
                 </li>
 
             </ul>
+
+            {{-- REDES (MOBILE DENTRO DO MENU) --}}
+            <div class="rede mobile-rede">
+                <a href="#"><img src="{{ asset('traducaidiomas/img/instagramLogo.svg') }}"></a>
+                <a href="#"><img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}"></a>
+                <a href="#"><img src="{{ asset('traducaidiomas/img/linkedinLogo.svg') }}"></a>
+            </div>
+
         </nav>
 
+        {{-- REDES (DESKTOP) --}}
+        <ul class="rede desktop-rede">
+            <li><a href="#"><img src="{{ asset('traducaidiomas/img/instagramLogo.svg') }}"></a></li>
+            <li><a href="#"><img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}"></a></li>
+            <li><a href="#"><img src="{{ asset('traducaidiomas/img/linkedinLogo.svg') }}"></a></li>
 
-        <ul class="rede">
             <li>
-                <a href="#">
-                    <img src="{{ asset('traducaidiomas/img/instagramLogo.svg') }}" alt="Logo instagram" width="35">
+                <a href="{{ auth('aluno')->check() ? route('aluno.dash') : route('aluno.login') }}">
+                    <i class="fa fa-user-graduate"></i>
                 </a>
             </li>
+
             <li>
-                <a href="#">
-                    <img src="{{ asset('traducaidiomas/img/whatsappLogo.svg') }}" alt="Logo whatsapp" width="35">
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="{{ asset('traducaidiomas/img/linkedinLogo.svg') }}" alt="Logo linkedin" width="35">
-                </a>
-            </li>
-            <li class="cart-btn">
-                @if(auth('aluno')->check() && auth('aluno')->user()->matriculas()->where('status_matricula', 'ATIVO')->exists())
-                    <a href="{{ route('aluno.dash') }}">
-                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
-                    </a>
-                @else
-                    <a href="{{ route('aluno.login') }}">
-                        <i class="fa fa-user-graduate" style="font-size: 30px;"></i>
-                    </a>
-                @endif
-            </li>
-            <li class="cart-btn">
                 <a href="{{ route('admin.login') }}">
-                    <i class="fa fa-user-shield" style="font-size: 30px;"></i>
-                    <span class="count"></span>
+                    <i class="fa fa-user-shield"></i>
                 </a>
             </li>
         </ul>
 
-
-
-        <script src="{{ asset('traducaidiomas/js/idiomas.js') }}"></script>
+    </div>
 </header>

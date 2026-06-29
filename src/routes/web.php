@@ -37,6 +37,7 @@ Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
 Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
+Route::get('/home')
 
 // ── Rotas do Administrador (Admin) ──
 Route::prefix('admin')->name('admin.')->group(function () {
