@@ -17,6 +17,8 @@
 
     @include('partials.footer')
 
+    @include('partials.chatbot')
+
     @include('partials.script')
 </body>
 

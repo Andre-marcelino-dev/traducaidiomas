@@ -35,6 +35,7 @@
 <!--begin::Dashboard & Admin Tables-->
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/chatbot.css') }}" />
 <!--end::Dashboard & Admin Tables-->
 
 <link

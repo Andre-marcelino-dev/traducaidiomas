@@ -1,0 +1,10 @@
+{
+  "description": "Enhance language learning with an AI-powered chatbot that provides instant support, class scheduling, and resource access for students on any device.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

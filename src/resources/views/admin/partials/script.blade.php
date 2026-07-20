@@ -145,6 +145,8 @@
       crossorigin="anonymous"
     ></script>
 
+    <script src="{{ asset('js/chatbot.js') }}"></script>
+
 
      {{-- restante do script.blade.php acima --}}
 
@@ -162,4 +164,3 @@
     </script>
 
     
-

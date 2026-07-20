@@ -19,6 +19,8 @@
 
     </div>
 
+    @include('partials.chatbot')
+
     @include('aluno.partials.script')
 
     @stack('scripts')

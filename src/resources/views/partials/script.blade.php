@@ -11,6 +11,7 @@
 <!-- <script src="javascript.js"></script> -->
 
 <script src="{{ asset('traducaidiomas/js/animacao.js') }}"></script>
+<script src="{{ asset('js/chatbot.js') }}"></script>
 
 <script
     type="text/javascript"

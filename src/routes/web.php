@@ -23,6 +23,7 @@ use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
+use App\Http\Controllers\aluno\ChatbotController as AlunoChatbotController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
@@ -194,6 +195,10 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
         Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
         Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
+
+        // Chatbot Dados
+        Route::get('/chatbot/dados', [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
+        Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
 
         // ── Feedback (Aluno) ──
         Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
