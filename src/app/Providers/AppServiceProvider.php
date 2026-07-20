@@ -53,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('categorias', $categorias);
             $view->with('siteConfig', $siteConfig);
+            $view->with('route', request()->route()?->getName());
         });
     }
 }

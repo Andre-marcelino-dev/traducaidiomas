@@ -59,7 +59,8 @@
   /* gap: 25px; */
 }
 
-.topo nav ul li a {
+.topo nav ul li a,
+.topo nav ul li button.dropdown-toggle {
   color: #012169;
   font-size: 1.2em;
   text-transform: uppercase;
@@ -71,13 +72,31 @@
   text-decoration: none;
 }
 
+.topo nav ul li button.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0.5em 1.2em;
+  color: #012169;
+}
+
+.topo nav ul li button.dropdown-toggle:focus {
+  outline: none;
+}
+
 .ativo {
   color: var(--cor_destaque) !important;
 }
 
 
 /* Cria a linha embaixo do texto */
-.topo nav ul li a::after {
+.topo nav ul li a::after,
+.topo nav ul li button.dropdown-toggle::after {
   content: "";
   position: absolute;
   left: 0;
@@ -90,18 +109,21 @@
 }
 
 /* Quando o mouse passa, a linha cresce */
-.topo nav ul li a:hover::after {
+.topo nav ul li a:hover::after,
+.topo nav ul li button.dropdown-toggle:hover::after {
   width: 100%;
 }
 
 /* Cor do texto ao passar o mouse (opcional) */
-.topo nav ul li a:hover {
+.topo nav ul li a:hover,
+.topo nav ul li button.dropdown-toggle:hover {
   color: var(--cor_destaque);
 
 }
 
 /* Linha fixa no item ativo */
-nav ul li a.ativo::after {
+nav ul li a.ativo::after,
+nav ul li button.dropdown-toggle.ativo::after {
   width: 100%;
 }
 
