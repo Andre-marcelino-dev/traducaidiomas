@@ -120,6 +120,12 @@
                                 <p>Gerenciar Site</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.mensagens.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-envelope"></i>
+                                <p>Mensagens</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Categoria;
 use App\Models\ConfiguracaoPainel;
+use App\Models\MensagemContato;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -30,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
                 'logo_painel'        => ConfiguracaoPainel::get('logo_painel', ''),
                 'logo_site'          => ConfiguracaoPainel::get('logo_site', ''),
             ]);
+        });
+
+        View::composer('admin.partials.app-header', function ($view) {
+            $view->with('mensagensRecentes', MensagemContato::orderBy('created_at', 'desc')->take(5)->get());
+            $view->with('mensagensNaoLidasCount', MensagemContato::where('lida', false)->count());
         });
     }
 }

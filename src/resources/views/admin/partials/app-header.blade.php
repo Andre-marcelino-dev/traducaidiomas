@@ -29,77 +29,42 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" data-bs-toggle="dropdown" href="#">
                     <i class="bi bi-chat-text"></i>
-                    <span class="navbar-badge badge text-bg-danger">3</span>
+                    @if ($mensagensNaoLidasCount > 0)
+                        <span class="navbar-badge badge text-bg-danger">{{ $mensagensNaoLidasCount }}</span>
+                    @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <a href="#" class="dropdown-item">
-                        <!--begin::Message-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img src="{{ asset('dash/assets/img/user1-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 rounded-circle me-3" />
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-end fs-7 text-danger"><i class="bi bi-star-fill"></i></span>
-                                </h3>
-                                <p class="fs-7">Call me whenever you can...</p>
-                                <p class="fs-7 text-secondary">
-                                    <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                </p>
-                            </div>
-                        </div>
-                        <!--end::Message-->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!--begin::Message-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img src="{{ asset('dash/assets/img/user1-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 rounded-circle me-3" />
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-end fs-7 text-secondary">
-                                        <i class="bi bi-star-fill"></i>
+                    @forelse ($mensagensRecentes as $msg)
+                        <a href="{{ route('admin.mensagens.show', $msg) }}" class="dropdown-item">
+                            <!--begin::Message-->
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white me-3"
+                                        style="width:50px;height:50px;">
+                                        <i class="bi bi-envelope-fill"></i>
                                     </span>
-                                </h3>
-                                <p class="fs-7">I got your message bro</p>
-                                <p class="fs-7 text-secondary">
-                                    <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                </p>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h3 class="dropdown-item-title {{ !$msg->lida ? 'fw-bold' : '' }}">
+                                        {{ $msg->nome }}
+                                        @if (!$msg->lida)
+                                            <span class="float-end fs-7 text-danger"><i class="bi bi-circle-fill" style="font-size:8px;"></i></span>
+                                        @endif
+                                    </h3>
+                                    <p class="fs-7">{{ $msg->assunto }}</p>
+                                    <p class="fs-7 text-secondary">
+                                        <i class="bi bi-clock-fill me-1"></i> {{ $msg->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <!--end::Message-->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!--begin::Message-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img src="{{ asset('dash/assets/img/user1-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 rounded-circle me-3" />
-                            </div>
-                            <div class="flex-grow-1">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-end fs-7 text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                    </span>
-                                </h3>
-                                <p class="fs-7">The subject goes here</p>
-                                <p class="fs-7 text-secondary">
-                                    <i class="bi bi-clock-fill me-1"></i> 4 Hours Ago
-                                </p>
-                            </div>
-                        </div>
-                        <!--end::Message-->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                            <!--end::Message-->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    @empty
+                        <span class="dropdown-item text-secondary">Nenhuma mensagem recebida</span>
+                        <div class="dropdown-divider"></div>
+                    @endforelse
+                    <a href="{{ route('admin.mensagens.index') }}" class="dropdown-item dropdown-footer">See All Messages</a>
                 </div>
             </li>
             <!--end::Messages Dropdown Menu-->

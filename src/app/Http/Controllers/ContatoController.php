@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MensagemContato;
+use App\Models\Professor;
 use Illuminate\Http\Request;
 
 class ContatoController extends Controller
@@ -33,6 +35,14 @@ class ContatoController extends Controller
         ->subject("Contato: {$request->assunto}");
         }
     );
+
+    MensagemContato::create([
+        'professor_id' => Professor::first()?->id_professor,
+        'nome'         => $request->nome,
+        'email'        => $request->email,
+        'assunto'      => $request->assunto,
+        'mensagem'     => $request->mensagem,
+    ]);
 
     $textoWhatsapp = urlencode(
         "📩 *Nova mensagem do site*\n\n"

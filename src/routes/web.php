@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
 use App\Http\Controllers\admin\PresencaController;
 use App\Http\Controllers\admin\SiteController;
 use App\Http\Controllers\admin\AtividadeController as AdminAtividadeController;
+use App\Http\Controllers\admin\MensagemContatoController;
 use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
@@ -146,6 +147,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
+
+        // ── Mensagens de Contato ──
+        Route::prefix('mensagens')->name('mensagens.')->group(function () {
+            Route::get('/',          [MensagemContatoController::class, 'index'])->name('index');
+            Route::get('/{mensagem}', [MensagemContatoController::class, 'show'])->name('show');
+            Route::delete('/{mensagem}', [MensagemContatoController::class, 'destroy'])->name('destroy');
+        });
 
         // ── Atividades ──
         Route::prefix('atividades')->name('atividades.')->group(function () {
