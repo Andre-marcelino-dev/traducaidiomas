@@ -2,8 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
 use App\Models\Aluno;
+use App\Models\AtividadeResposta;
+use App\Models\AtividadeRespostaQuestao;
+use App\Models\Feedback;
+use App\Models\Matricula;
+use App\Models\Notificacao;
+use App\Models\Reagendamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AlunoController extends Controller
 {
@@ -120,7 +128,25 @@ class AlunoController extends Controller
 
     public function destroy($id)
     {
-        Aluno::findOrFail($id)->delete();
+        $aluno = Aluno::findOrFail($id);
+
+        DB::transaction(function () use ($aluno, $id) {
+            $respostaIds = AtividadeResposta::where('id_aluno', $id)->pluck('id_resposta');
+            AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)->delete();
+            AtividadeResposta::where('id_aluno', $id)->delete();
+
+            Notificacao::where('id_aluno', $id)->delete();
+            Reagendamento::where('aluno_id', $id)->delete();
+            Agenda::where('id_aluno', $id)->delete();
+            Matricula::where('id_aluno', $id)->delete();
+            Feedback::where('id_aluno', $id)->delete();
+
+            DB::table('tbl_presenca')->where('id_aluno', $id)->delete();
+            DB::table('tbl_progresso_materiais')->where('id_aluno', $id)->delete();
+
+            $aluno->delete();
+        });
+
         return redirect()->route('admin.alunos.index')->with('success', 'Aluno excluído com sucesso!');
     }
 }

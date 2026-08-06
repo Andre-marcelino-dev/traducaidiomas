@@ -36,5 +36,6 @@ _ide_helper.php
 Homestead.json 
 Homestead.yaml
 Thumbs.db
-*:Zone.Identifiersrc/.env
-main
+*:Zone.Identifier
+
+/backup/

@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasColumn('tbl_aulas', 'link_teams')) {
+            return;
+        }
+
         Schema::table('tbl_aulas', function (Blueprint $table) {
             $table->string('link_teams', 500)->nullable()->after('hora_aulas');
         });
