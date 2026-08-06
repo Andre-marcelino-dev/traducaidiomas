@@ -64,3 +64,33 @@
 
     </div>
 </section>
+
+<script>
+    (function () {
+        var container = document.querySelector('.card-container');
+        if (!container) return;
+
+        var cards = Array.prototype.slice.call(container.querySelectorAll('.card'));
+        var perPage = 6;
+        var total = cards.length;
+
+        if (total <= perPage) return;
+
+        var start = 0;
+
+        function showPage() {
+            cards.forEach(function (card) {
+                card.style.display = 'none';
+            });
+
+            for (var i = 0; i < perPage; i++) {
+                cards[(start + i) % total].style.display = '';
+            }
+
+            start = (start + perPage) % total;
+        }
+
+        showPage();
+        setInterval(showPage, 8000);
+    })();
+</script>
