@@ -51,6 +51,12 @@
                                 <p>Minhas Atividades</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('aluno.forum.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Fórum</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

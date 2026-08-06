@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-         
+
 
                 <div class="validity">
                     Email: {{ $aluno->email_aluno }}

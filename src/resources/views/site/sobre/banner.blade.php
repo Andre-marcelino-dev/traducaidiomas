@@ -13,7 +13,7 @@
                 <h1>Inglês profissional com método claro, foco em resultado e consistencia.</h1>
                 <p>Treinamento para reuniões, entrevistas e apresentações, com metas reais e acompanhamento proximo.</p>
                 <div class="banner-actions">
-                    <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
+                    <a class="btn btn-primary" href="{{ route('contato') }}">Agendar Diagnostico</a>
                     <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
                 </div>
                 <div class="banner-trust">
@@ -53,8 +53,8 @@
                 <h1>Da aula aplicação real: comunicação eficiente no seu contexto.</h1>
                 <p>Metodologia pratica, material objetivo e feedback continuo para acelerar sua evolução.</p>
                 <div class="banner-actions">
-                    <a class="btn btn-primary" href="contato.php">Falar com Especialista</a>
-                    <a class="btn btn-outline-light" href="sobre.php">Conheça a Escola</a>
+                    <a class="btn btn-primary" href="https://wa.me/5511999612140" target="_blank" rel="noopener">Falar com Especialista</a>
+                    <a class="btn btn-outline-light" href="{{ route('sobre') }}">Conheça a Escola</a>
                 </div>
                 <div class="banner-trust">
                     <div class="trust-item">

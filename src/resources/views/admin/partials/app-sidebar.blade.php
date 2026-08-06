@@ -98,6 +98,12 @@
                                 <p>Atividades</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.forum.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-chat-left-text"></i>
+                                <p>Fórum</p>
+                            </a>
+                        </li>
 
 
 

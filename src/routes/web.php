@@ -26,6 +26,8 @@ use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
+use App\Http\Controllers\aluno\ForumController as AlunoForumController;
+use App\Http\Controllers\admin\ForumController as AdminForumController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -157,6 +159,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/corrigir/{id}', [AdminAtividadeController::class, 'corrigir'])->name('corrigir');
         });
 
+        // ── Fórum (Admin) ──
+        Route::prefix('forum')->name('forum.')->group(function () {
+            Route::get('/',                 [AdminForumController::class, 'index'])->name('index');
+            Route::get('/{id}',             [AdminForumController::class, 'show'])->name('show');
+            Route::delete('/{id}',          [AdminForumController::class, 'destroyTopico'])->name('destroy');
+            Route::delete('/resposta/{id}', [AdminForumController::class, 'destroyResposta'])->name('resposta.destroy');
+        });
+
         // ── Gerenciamento do Site ──
         Route::prefix('site')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index'])->name('index');
@@ -197,6 +207,16 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
 
         // ── Feedback (Aluno) ──
         Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
+
+        // ── Fórum (Aluno) ──
+        Route::prefix('forum')->name('forum.')->group(function () {
+            Route::get('/',                [AlunoForumController::class, 'index'])->name('index');
+            Route::get('/create',          [AlunoForumController::class, 'create'])->name('create');
+            Route::post('/',               [AlunoForumController::class, 'store'])->name('store');
+            Route::get('/{id}',            [AlunoForumController::class, 'show'])->name('show');
+            Route::post('/{id}/responder', [AlunoForumController::class, 'storeResposta'])->name('responder');
+            Route::get('/{id}/download',   [AlunoForumController::class, 'download'])->name('download');
+        });
 
         // ── Reagendamentos (Aluno) ──
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])

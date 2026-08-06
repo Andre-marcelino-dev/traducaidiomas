@@ -13,7 +13,7 @@
                 <h1>{{ $siteConfig['banner1_titulo'] }}</h1>
                 <p>{{ $siteConfig['banner1_subtitulo'] }}</p>
                 <div class="banner-actions">
-                    <a class="btn btn-primary" href="contato.php">Agendar Diagnostico</a>
+                    <a class="btn btn-primary" href="{{ route('contato') }}">Agendar Diagnostico</a>
                     <a class="btn btn-outline-light" href="{{ route('servicos') }}">Ver Serviços</a>
                 </div>
                 <div class="banner-trust">
@@ -53,8 +53,8 @@
                 <h1>{{ $siteConfig['banner2_titulo'] }}</h1>
                 <p>{{ $siteConfig['banner2_subtitulo'] }}</p>
                 <div class="banner-actions">
-                    <a class="btn btn-primary" href="contato.php">Falar com Especialista</a>
-                    <a class="btn btn-outline-light" href="sobre.php">Conheça a Escola</a>
+                    <a class="btn btn-primary" href="https://wa.me/5511999612140" target="_blank" rel="noopener">Falar com Especialista</a>
+                    <a class="btn btn-outline-light" href="{{ route('sobre') }}">Conheça a Escola</a>
                 </div>
                 <div class="banner-trust">
                     <div class="trust-item">
