@@ -1,16 +1,40 @@
 @php
     $chatbotUserName = '';
+    $chatbotDataUrl = '';
+    $chatbotMessageUrl = '';
 
-    if (auth('aluno')->check()) {
-        $chatbotUserName = auth('aluno')->user()->nome_aluno ?? '';
-    } elseif (auth('admin')->check()) {
+    if (auth('admin')->check()) {
+
         $chatbotUserName = auth('admin')->user()->nome_professor ?? '';
-    }
+
+        $chatbotDataUrl = '';
+        $chatbotMessageUrl = route('admin.professor.chatbot.mensagem');
+
+
+    } elseif (auth('aluno')->check()) {
+
+        $chatbotUserName = auth('aluno')->user()->nome_aluno ?? '';
+
+        $chatbotDataUrl = route('aluno.chatbot.dados');
+        $chatbotMessageUrl = route('aluno.chatbot.mensagem');
+
+
+    } else {
+
+    $chatbotMessageUrl = route('chatbot.mensagem');
+
+}
 
     $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
-    $chatbotDataUrl = auth('aluno')->check() ? route('aluno.chatbot.dados') : '';
-    $chatbotMessageUrl = auth('aluno')->check() ? route('aluno.chatbot.mensagem') : '';
+
 @endphp
+<!--
+Aluno: {{ auth('aluno')->check() ? 'SIM' : 'NAO' }}
+Admin: {{ auth('admin')->check() ? 'SIM' : 'NAO' }}
+-->
+
+
+
 
 <div
     class="traduca-chatbot"

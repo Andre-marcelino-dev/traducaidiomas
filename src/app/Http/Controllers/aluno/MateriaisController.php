@@ -10,6 +10,7 @@ use App\Models\Curso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+
 class MateriaisController extends Controller
 {
     public function index(Request $request)

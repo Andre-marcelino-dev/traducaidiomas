@@ -124,10 +124,14 @@
                 credentials: 'same-origin',
                 headers: { Accept: 'application/json' },
             });
+if (!response.ok) {
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
+    const errorData = await response.json();
+
+    console.error('Erro API chatbot:', errorData);
+
+    throw new Error(`HTTP ${response.status}`);
+}
 
             chatbotData = await response.json();
         } catch (error) {
@@ -352,7 +356,9 @@
                         Accept: 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                     },
-                    body: JSON.stringify({ mensagemDoUsuario: text }),
+               body: JSON.stringify({ 
+    mensagem: text 
+}),
                 });
 
                 if (!response.ok) {

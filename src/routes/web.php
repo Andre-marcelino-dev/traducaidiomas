@@ -5,7 +5,20 @@ use App\Http\Controllers\SobreController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ContatoController;
+
+
+// Controllers do Aluno
 use App\Http\Controllers\aluno\ReagendamentoController as AlunoReagendamentoController;
+use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
+use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
+use App\Http\Controllers\aluno\DashController as AlunoDashController;
+use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
+use App\Http\Controllers\aluno\ChatbotController as AlunoChatbotController;
+use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
+use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
+use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
+
+// Controllers do Admin
 use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
@@ -19,14 +32,7 @@ use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
 use App\Http\Controllers\admin\PresencaController;
 use App\Http\Controllers\admin\SiteController;
 use App\Http\Controllers\admin\AtividadeController as AdminAtividadeController;
-use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
-use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
-use App\Http\Controllers\aluno\DashController as AlunoDashController;
-use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
-use App\Http\Controllers\aluno\ChatbotController as AlunoChatbotController;
-use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
-use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
-use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
+use App\Http\Controllers\admin\ProfessorChatbotController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -36,8 +42,8 @@ Route::get("/servicos", [ServicosController::class, 'servicos'])->name('servicos
 Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])->name('servicos.categoria');
 Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
-Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
-Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
+Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar');
+Route::post('/chatbot/mensagem', [ChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
 
 // ── Rotas do Administrador (Admin) ──
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -132,11 +138,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/salvar',           [PresencaController::class, 'salvar'])->name('salvar');
         });
 
-        // Recursos Adicionais do Admin (Aulas e Serviços)
+        // Recursos Adicionais (Aulas e Serviços)
         Route::resource('aulas', AulaController::class)->parameters(['aulas' => 'id']);
         Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id']);
 
-        // ── Reagendamentos (Admin) ──
+        // Reagendamentos (Admin)
         Route::prefix('reagendamentos')->name('reagendamentos.')->group(function () {
             Route::get('/',                        [AdminReagendamentoController::class, 'index'])->name('index');
             Route::post('/',                       [AdminReagendamentoController::class, 'store'])->name('store');
@@ -148,7 +154,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
-        // ── Atividades ──
+        // Atividades
         Route::prefix('atividades')->name('atividades.')->group(function () {
             Route::get('/',              [AdminAtividadeController::class, 'index'])->name('index');
             Route::get('/create',        [AdminAtividadeController::class, 'create'])->name('create');
@@ -158,11 +164,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/corrigir/{id}', [AdminAtividadeController::class, 'corrigir'])->name('corrigir');
         });
 
-        // ── Gerenciamento do Site ──
+        // Gerenciamento do Site (Protegido)
         Route::prefix('site')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index'])->name('index');
             Route::put('/', [SiteController::class, 'update'])->name('update');
+
+
         });
+
+        // Chatbot IA Professor
+Route::prefix('professor')->name('professor.')->group(function () {
+
+    Route::get('/chatbot', [Chatbotprofessor::class, 'index'])
+        ->name('chatbot');
+
+    Route::post('/chatbot/mensagem', [Chatbotprofessor::class, 'mensagem'])
+        ->name('chatbot.mensagem');
+
+});
+
     });
 });
 
@@ -183,27 +203,27 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::put('/perfil/email', [AlunoAuthController::class, 'atualizarEmail'])->name('perfil.email');
         Route::put('/perfil/senha', [AlunoAuthController::class, 'atualizarSenha'])->name('perfil.senha');
 
-        // Minhas Aulas
-        Route::get('/aulas',    [AlunoAulaController::class, 'index'])->name('aulas.index');
-        Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
-        Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
-        Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
+        // Minhas Aulas & Atividades
+        Route::get('/aulas',            [AlunoAulaController::class, 'index'])->name('aulas.index');
+        Route::get('/progresso',        [AlunoProgressoController::class, 'index'])->name('progresso.index');
+        Route::get('/atividades',       [AlunoAtividadeController::class, 'index'])->name('atividades.index');
+        Route::get('/atividades/{id}',  [AlunoAtividadeController::class, 'show'])->name('atividades.show');
         Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
 
         // Materiais (somente leitura)
-        Route::get('/materiais',                   [AlunoMateriaisController::class, 'index'])->name('materiais.index');
-        Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
-        Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
-        Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
+        Route::get('/materiais',               [AlunoMateriaisController::class, 'index'])->name('materiais.index');
+        Route::get('/materiais/{id}',          [AlunoMateriaisController::class, 'show'])->name('materiais.show');
+        Route::get('/materiais/{id}/download', [AlunoMateriaisController::class, 'download'])->name('materiais.download');
+        Route::get('/materiais/{id}/visualizar', [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
-        // Chatbot Dados
-        Route::get('/chatbot/dados', [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
+        // Chatbot Aluno
+        Route::get('/chatbot/dados',    [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
         Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
 
-        // ── Feedback (Aluno) ──
+        // Feedback
         Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
 
-        // ── Reagendamentos (Aluno) ──
+        // Reagendamentos (Aluno)
         Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
             ->name('reagendamento.solicitar');
         Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicitados'])
