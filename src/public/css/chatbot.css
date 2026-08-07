@@ -27,18 +27,15 @@
 .traduca-chatbot__launcher {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    min-height: 56px;
-    padding: 10px 18px 10px 10px;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
     border: 0;
     border-radius: 18px;
-    background: linear-gradient(135deg, var(--chatbot-blue), var(--chatbot-violet));
-    color: #fff;
-    box-shadow: 0 16px 38px rgba(37, 99, 235, 0.32);
-    font-weight: 800;
-    letter-spacing: 0;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
     cursor: pointer;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 16px 38px rgba(37,99,235,.32);
 }
 
 .traduca-chatbot__launcher:hover {
@@ -84,6 +81,7 @@
 }
 
 .traduca-chatbot.is-open .traduca-chatbot__panel {
+    display: flex !important;
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0) scale(1);
@@ -653,4 +651,10 @@
     .traduca-chatbot__bubble-wrap {
         max-width: 84%;
     }
+}
+
+/* Garante que elementos dentro dos botões não 'roubem' o clique */
+.traduca-chatbot__launcher *,
+.traduca-chatbot__icon-button * {
+    pointer-events: none;
 }

@@ -43,7 +43,6 @@ Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])-
 Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar');
-Route::post('/chatbot/mensagem', [ChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
 
 // ── Rotas do Administrador (Admin) ──
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -168,21 +167,35 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('site')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index'])->name('index');
             Route::put('/', [SiteController::class, 'update'])->name('update');
-
-
         });
 
         // Chatbot IA Professor
-Route::prefix('professor')->name('professor.')->group(function () {
+        // Chatbot IA Professor
+        Route::prefix('professor')->name('professor.')->group(function () {
 
-    Route::get('/chatbot', [Chatbotprofessor::class, 'index'])
-        ->name('chatbot');
 
-    Route::post('/chatbot/mensagem', [Chatbotprofessor::class, 'mensagem'])
-        ->name('chatbot.mensagem');
+            Route::get('/chatbot', [
+                ProfessorChatbotController::class,
+                'index'
+            ])
+                ->name('chatbot');
 
-});
 
+
+            Route::post('/chatbot/mensagem', [
+                ProfessorChatbotController::class,
+                'mensagem'
+            ])
+                ->name('chatbot.mensagem');
+
+
+
+            Route::get('/chatbot/historico', [
+                ProfessorChatbotController::class,
+                'historico'
+            ])
+                ->name('chatbot.historico');
+        });
     });
 });
 
