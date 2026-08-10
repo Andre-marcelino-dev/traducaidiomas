@@ -1,66 +1,117 @@
-```blade
 @php
 
-$chatbotUserName = '';
-$chatbotDataUrl = '';
-$chatbotMessageUrl = '';
-$chatbotHistoricoUrl = '';
+    $chatbotUserName = '';
+    $chatbotDataUrl = '';
+    $chatbotMessageUrl = '';
 
-if (auth('admin')->check()) {
+    /*
+    |--------------------------------------------------------------------------
+    | PROFESSOR
+    |--------------------------------------------------------------------------
+    */
 
-$chatbotUserName = auth('admin')->user()->nome_professor ?? '';
+    if (auth('admin')->check()) {
 
-$chatbotMessageUrl = route('admin.professor.chatbot.mensagem');
+        $chatbotUserName =
+            auth('admin')->user()->nome_professor ?? '';
 
-$chatbotHistoricoUrl = route('admin.professor.chatbot.historico');
+        $chatbotDataUrl =
+            route('admin.professor.chatbot.dados');
 
-} elseif (auth('aluno')->check()) {
+        $chatbotMessageUrl =
+            route('admin.professor.chatbot.mensagem');
 
-$chatbotUserName = auth('aluno')->user()->nome_aluno ?? '';
+        $chatbotPerfil = 'professor';
 
-$chatbotDataUrl = route('aluno.chatbot.dados');
+    /*
+    |--------------------------------------------------------------------------
+    | ALUNO
+    |--------------------------------------------------------------------------
+    */
 
-$chatbotMessageUrl = route('aluno.chatbot.mensagem');
+    } elseif (auth('aluno')->check()) {
 
-$chatbotHistoricoUrl = route('aluno.chatbot.historico');
+        $chatbotUserName =
+            auth('aluno')->user()->nome_aluno ?? '';
 
-}
+        $chatbotDataUrl =
+            route('aluno.chatbot.dados');
 
-$chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
+        $chatbotMessageUrl =
+            route('aluno.chatbot.mensagem');
+
+        $chatbotPerfil = 'aluno';
+
+    /*
+    |--------------------------------------------------------------------------
+    | VISITANTE
+    |--------------------------------------------------------------------------
+    */
+
+    } else {
+
+        $chatbotDataUrl =
+            route('chatbot.dados');
+
+        $chatbotMessageUrl =
+            route('chatbot.mensagem');
+
+        $chatbotPerfil = 'visitante';
+    }
+
+    $chatbotFirstName =
+        trim(explode(' ', $chatbotUserName)[0] ?? '');
 
 @endphp
 
 
 <script>
-    window.chatbotHistoricoUrl = @json($chatbotHistoricoUrl);
-    window.chatbotMessageUrl = @json($chatbotMessageUrl);
     window.chatbotDataUrl = @json($chatbotDataUrl);
+
+    window.chatbotMessageUrl = @json($chatbotMessageUrl);
+
     window.chatbotFirstName = @json($chatbotFirstName);
+
+    window.chatbotPerfil = @json($chatbotPerfil);
+
+    window.chatbotCsrfToken = @json(csrf_token());
 </script>
 
 
 <div
     class="traduca-chatbot"
+
     data-chatbot
+
     data-chatbot-data-url="{{ $chatbotDataUrl }}"
+
     data-chatbot-message-url="{{ $chatbotMessageUrl }}"
+
     data-user-name="{{ $chatbotFirstName }}"
+
+    data-chatbot-perfil="{{ $chatbotPerfil }}"
+
     data-csrf-token="{{ csrf_token() }}">
 
 
-    <!-- BOTÃO FLUTUANTE DO CHAT -->
+    <!-- =====================================================
+         BOTÃO FLUTUANTE
+    ====================================================== -->
 
     <button
         type="button"
         class="traduca-chatbot__launcher"
         data-chatbot-toggle
         aria-label="Abrir Traduca AI">
+
         <i class="bi bi-robot"></i>
+
     </button>
 
 
-
-    <!-- PAINEL DO CHAT -->
+    <!-- =====================================================
+         PAINEL
+    ====================================================== -->
 
     <section
         class="traduca-chatbot__panel"
@@ -68,14 +119,20 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
         aria-hidden="true">
 
 
+        <!-- HEADER -->
+
         <header class="traduca-chatbot__header">
 
+
             <div class="traduca-chatbot__avatar">
+
                 AI
+
             </div>
 
 
             <div class="traduca-chatbot__header-copy">
+
 
                 <div class="traduca-chatbot__title-row">
 
@@ -91,12 +148,15 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
 
 
                 <p>
+
                     <span></span>
+
                     Online - Assistente virtual da TraducaIdiomas
+
                 </p>
 
-            </div>
 
+            </div>
 
 
             <div class="traduca-chatbot__header-actions">
@@ -111,7 +171,6 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
                     <i class="bi bi-stars"></i>
 
                 </button>
-
 
 
                 <button
@@ -131,11 +190,14 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
         </header>
 
 
-
-
+        <!-- =====================================================
+             BODY
+        ====================================================== -->
 
         <div class="traduca-chatbot__body">
 
+
+            <!-- TELA INICIAL -->
 
             <div
                 class="traduca-chatbot__initial"
@@ -145,27 +207,28 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
                 <div class="traduca-chatbot__hero">
 
 
-                    <div class="traduca-chatbot__avatar traduca-chatbot__avatar--large">
+                    <div
+                        class="traduca-chatbot__avatar traduca-chatbot__avatar--large">
 
                         AI
 
                     </div>
 
 
-
                     <h3 data-chatbot-greeting>
 
-                        Ola!
+                        Olá!
 
                     </h3>
 
 
+                    <p data-chatbot-description>
 
-                    <p>
-
-                        Sou a <strong>Traduca AI</strong>,
+                        Sou a
+                        <strong>Traduca AI</strong>,
                         sua assistente virtual.
-                        Como posso ajudar com suas aulas hoje?
+
+                        Como posso ajudar você hoje?
 
                     </p>
 
@@ -173,16 +236,14 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
                 </div>
 
 
-
-
+                <!-- AÇÕES RÁPIDAS -->
 
                 <div class="traduca-chatbot__quick-area">
 
 
                     <p>
-                        O que voce precisa?
+                        O que você precisa?
                     </p>
-
 
 
                     <div
@@ -195,12 +256,10 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
                 </div>
 
 
-
             </div>
 
 
-
-
+            <!-- MENSAGENS -->
 
             <div
                 class="traduca-chatbot__messages"
@@ -210,12 +269,10 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
             </div>
 
 
-
         </div>
 
 
-
-
+        <!-- SUGESTÕES -->
 
         <div
             class="traduca-chatbot__suggestions"
@@ -225,10 +282,9 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
         </div>
 
 
-
-
-
-
+        <!-- =====================================================
+             INPUT
+        ====================================================== -->
 
         <form
             class="traduca-chatbot__input"
@@ -240,36 +296,24 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
 
                 <button
                     type="button"
-                    aria-label="Anexar arquivo">
+                    aria-label="Anexar arquivo"
+                    disabled>
 
                     <i class="bi bi-paperclip"></i>
 
                 </button>
 
 
-
-
-
                 <input
-
                     type="text"
-
                     data-chatbot-input
-
                     placeholder="Digite sua mensagem..."
-
                     autocomplete="off">
 
 
-
-
-
                 <button
-
                     type="submit"
-
                     data-chatbot-send
-
                     aria-label="Enviar mensagem">
 
                     <i class="bi bi-send-fill"></i>
@@ -277,11 +321,7 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
                 </button>
 
 
-
             </div>
-
-
-
 
 
             <p>
@@ -291,15 +331,9 @@ $chatbotFirstName = trim(explode(' ', $chatbotUserName)[0] ?? '');
             </p>
 
 
-
         </form>
-
-
-
 
 
     </section>
 
-
 </div>
-```

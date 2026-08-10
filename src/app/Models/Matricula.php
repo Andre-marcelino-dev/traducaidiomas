@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\Nivel;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
@@ -22,17 +22,28 @@ class Matricula extends Model
 
     public function aluno()
     {
-        return $this->belongsTo(Aluno::class, 'id_aluno', 'id_aluno');
+        return $this->belongsTo(
+            Aluno::class,
+            'id_aluno',
+            'id_aluno'
+        );
     }
 
     public function curso()
     {
-        return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');
+        return $this->belongsTo(
+            Curso::class,
+            'id_curso',
+            'id_curso'
+        );
     }
 
     public function nivel()
     {
-        return $this->belongsTo(Nivel::class, 'id_nivel', 'id_nivel');
-
+        return $this->belongsTo(
+            Nivel::class,
+            'id_nivel',
+            'id_nivel'
+        );
     }
 }

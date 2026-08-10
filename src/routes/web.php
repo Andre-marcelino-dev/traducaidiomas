@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\ServicosController;
@@ -7,7 +9,10 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ContatoController;
 
 
-// Controllers do Aluno
+// =====================================================
+// CONTROLLERS DO ALUNO
+// =====================================================
+
 use App\Http\Controllers\aluno\ReagendamentoController as AlunoReagendamentoController;
 use App\Http\Controllers\aluno\AtividadeController as AlunoAtividadeController;
 use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
@@ -18,7 +23,11 @@ use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 
-// Controllers do Admin
+
+// =====================================================
+// CONTROLLERS DO ADMIN
+// =====================================================
+
 use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
@@ -33,7 +42,6 @@ use App\Http\Controllers\admin\PresencaController;
 use App\Http\Controllers\admin\SiteController;
 use App\Http\Controllers\admin\AtividadeController as AdminAtividadeController;
 use App\Http\Controllers\admin\ProfessorChatbotController;
-use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
 Route::get("/", [HomeController::class, 'home'])->name('home');
@@ -171,33 +179,27 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Chatbot IA Professor
         // Chatbot IA Professor
-        Route::prefix('professor')->name('professor.')->group(function () {
+        // =====================================================
+        // CHATBOT PROFESSOR
+        // =====================================================
 
+        Route::prefix('professor')
+            ->name('professor.')
+            ->group(function () {
 
-            Route::get('/chatbot', [
-                ProfessorChatbotController::class,
-                'index'
-            ])
-                ->name('chatbot');
+                Route::get(
+                    '/chatbot/dados',
+                    [ProfessorChatbotController::class, 'dados']
+                )->name('chatbot.dados');
 
-
-
-            Route::post('/chatbot/mensagem', [
-                ProfessorChatbotController::class,
-                'mensagem'
-            ])
-                ->name('chatbot.mensagem');
-
-
-
-            Route::get('/chatbot/historico', [
-                ProfessorChatbotController::class,
-                'historico'
-            ])
-                ->name('chatbot.historico');
-        });
+                Route::post(
+                    '/chatbot/mensagem',
+                    [ProfessorChatbotController::class, 'mensagem']
+                )->name('chatbot.mensagem');
+            });
     });
 });
+
 
 // ── Rotas do Aluno ──
 Route::prefix('aluno')->name('aluno.')->group(function () {
@@ -230,9 +232,19 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
         Route::get('/materiais/{id}/visualizar', [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
         // Chatbot Aluno
-        Route::get('/chatbot/dados',    [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
-        Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
+        // =====================================================
+        // CHATBOT ALUNO
+        // =====================================================
 
+        Route::get(
+            '/chatbot/dados',
+            [AlunoChatbotController::class, 'dados']
+        )->name('chatbot.dados');
+
+        Route::post(
+            '/chatbot/mensagem',
+            [AlunoChatbotController::class, 'mensagem']
+        )->name('chatbot.mensagem');
         // Feedback
         Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
 
@@ -245,3 +257,196 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             ->name('reagendamento.notificacoes');
     });
 });
+
+// =====================================================
+// CHATBOT PÚBLICO / VISITANTE
+// =====================================================
+
+Route::get('/chatbot/dados', function () {
+
+    return response()->json([
+        'success' => true,
+        'perfil' => 'visitante',
+        'usuario' => null,
+        'nome' => 'Visitante',
+    ]);
+})->name('chatbot.dados');
+
+
+Route::post('/chatbot/mensagem', function (\Illuminate\Http\Request $request) {
+
+    $request->validate([
+        'mensagem' => 'required|string|max:4000',
+    ]);
+
+    $mensagem = trim($request->input('mensagem'));
+
+    $apiKey = config('services.groq.key');
+
+    if (!$apiKey) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'A chave da API da Groq não está configurada.',
+        ], 500);
+    }
+
+    $model = config(
+        'services.groq.model',
+        env('GROQ_MODEL', 'llama-3.1-8b-instant')
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Contexto real do banco de dados para o visitante
+    |--------------------------------------------------------------------------
+    */
+
+    $contexto = "";
+
+    // Professores
+    $professores = \App\Models\Professor::all();
+
+    $contexto .= "PROFESSORES DA TRADUCA IDIOMAS:\n";
+
+    foreach ($professores as $professor) {
+
+        $contexto .=
+            "- {$professor->nome_professor} | " .
+            "Especialidade: {$professor->especialidade_professor} | " .
+            "Curso: {$professor->curso_professor} | " .
+            "Nível: {$professor->nivel_professor} | " .
+            "Experiência: {$professor->experiencia_professor}\n";
+    }
+
+    $contexto .= "\n";
+
+    // Serviços com preços
+    $servicos = \App\Models\Servico::all();
+
+    $contexto .= "SERVIÇOS E PREÇOS:\n";
+
+    foreach ($servicos as $servico) {
+
+        $contexto .=
+            "- {$servico->titulo_servico} | " .
+            "Preço: R$ {$servico->preco_servico} | " .
+            "Idioma: {$servico->lingua_servico}\n";
+    }
+
+    $contexto .= "\n";
+
+    // Total de alunos matriculados
+    $totalMatriculas = \App\Models\Matricula::count();
+    $totalAlunos = \App\Models\Aluno::count();
+
+    $contexto .= "DADOS DA PLATAFORMA:\n";
+    $contexto .= "- Total de alunos cadastrados: {$totalAlunos}\n";
+    $contexto .= "- Total de matrículas ativas: {$totalMatriculas}\n";
+
+    $prompt = "Você é a Traduca AI, assistente virtual do site Traduca Idiomas.
+
+Você está conversando com um VISITANTE.
+
+Você possui acesso aos dados reais da plataforma abaixo:
+
+{$contexto}
+
+Ajude com informações gerais sobre:
+
+- professores da Traduca Idiomas;
+- preços dos cursos e serviços;
+- quantidade de alunos matriculados;
+- Traduca Idiomas;
+- cursos;
+- idiomas;
+- aulas;
+- matrícula;
+- funcionamento da plataforma;
+- estudos de idiomas;
+- informações gerais sobre o site.
+
+Quando o visitante perguntar sobre professores, preços ou matrículas, use os dados reais do contexto acima.
+
+O visitante não está autenticado.
+
+Você NÃO possui acesso a dados privados de alunos ou professores.
+
+Nunca invente dados pessoais, notas, matrículas ou informações privadas.
+
+Se o visitante perguntar por informações privadas, explique que ele precisa fazer login.
+
+Responda em português.
+
+Seja amigável, profissional, claro e objetivo.";
+
+    try {
+
+        $response = \Illuminate\Support\Facades\Http::withToken($apiKey)
+            ->timeout(30)
+            ->post(
+                'https://api.groq.com/openai/v1/chat/completions',
+                [
+                    'model' => $model,
+
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => $prompt,
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $mensagem,
+                        ],
+                    ],
+
+                    'temperature' => 0.7,
+                    'max_tokens' => 800,
+                ]
+            );
+
+        if (!$response->successful()) {
+
+            \Illuminate\Support\Facades\Log::error(
+                'Erro Groq visitante',
+                [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]
+            );
+
+            return response()->json([
+                'success' => false,
+                'message' => 'A IA não conseguiu processar a mensagem.',
+            ], 500);
+        }
+
+        $data = $response->json();
+
+        $resposta = $data['choices'][0]['message']['content']
+            ?? 'Não consegui gerar uma resposta no momento.';
+
+        return response()->json([
+            'success' => true,
+            'perfil' => 'visitante',
+            'nome' => 'Visitante',
+            'text' => trim($resposta),
+            'resposta' => trim($resposta),
+        ]);
+    } catch (\Throwable $e) {
+
+        \Illuminate\Support\Facades\Log::error(
+            'Erro chatbot visitante',
+            [
+                'erro' => $e->getMessage(),
+                'arquivo' => $e->getFile(),
+                'linha' => $e->getLine(),
+            ]
+        );
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Erro interno ao comunicar com a IA.',
+        ], 500);
+    }
+})->name('chatbot.mensagem');

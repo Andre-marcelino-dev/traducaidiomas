@@ -14,6 +14,9 @@ use App\Models\Aula;
 use App\Models\Materiais;
 use App\Models\Aluno;
 use App\Models\Matricula;
+use App\Models\Curso;
+use App\Models\Nivel;
+use App\Models\Presenca;
 
 
 class ProfessorChatbotController extends Controller
@@ -23,6 +26,22 @@ class ProfessorChatbotController extends Controller
     public function index()
     {
         return view('professor.chatbot');
+    }
+
+
+
+    public function dados(Request $request)
+    {
+        $professor = Auth::guard('admin')->user();
+
+        return response()->json([
+            'success' => true,
+            'perfil' => 'professor',
+            'usuario' => $professor ? [
+                'id' => $professor->getAuthIdentifier(),
+                'nome' => trim($professor->nome_professor ?? 'Professor'),
+            ] : null,
+        ]);
     }
 
 
@@ -130,6 +149,51 @@ class ProfessorChatbotController extends Controller
 
 
 
+        /*
+        BUSCA DADOS DOS ALUNOS DA PLATAFORMA
+        */
+
+
+        $alunos = Aluno::all();
+
+        $contexto .= "\nDADOS DOS ALUNOS DA PLATAFORMA:\n";
+
+        foreach ($alunos as $aluno) {
+
+            $matriculas = Matricula::where('id_aluno', $aluno->id_aluno)->get();
+
+            $cursosNomes = [];
+
+            foreach ($matriculas as $matricula) {
+
+                $curso = Curso::find($matricula->id_curso);
+                $nivel = Nivel::find($matricula->id_nivel);
+
+                $cursosNomes[] = trim(
+                    ($curso->nome_curso ?? 'Curso') .
+                    ' - ' .
+                    ($nivel->nome_nivel ?? 'Nível')
+                );
+            }
+
+            $presencas = Presenca::where('id_aluno', $aluno->id_aluno)->get();
+            $totalPresencas = $presencas->count();
+            $totalPresente = $presencas->where('status_presenca', 'PRESENTE')->count();
+            $percPresenca = $totalPresencas > 0
+                ? round(($totalPresente / $totalPresencas) * 100)
+                : 0;
+
+            $contexto .=
+                "- Aluno: {$aluno->nome_aluno} | " .
+                "Email: {$aluno->email_aluno} | " .
+                "Curso: " . implode(', ', $cursosNomes) . " | " .
+                "Nível: {$aluno->nivel_aluno} | " .
+                "Presença: {$percPresenca}% | " .
+                "Status: {$aluno->status_aluno}\n";
+        }
+
+        $contexto .= "\n";
+
 
 
         try {
@@ -178,7 +242,9 @@ Regras:
 - Seja objetiva.
 - Quando perguntarem sobre aulas use os dados disponíveis.
 - Quando perguntarem sobre materiais use os dados disponíveis.
+- Quando perguntarem sobre alunos, use os dados reais dos alunos disponíveis (nome, email, curso, nível, presença, status).
 - Ajude com idiomas, estudos, planejamento e educação.
+- Nunca invente dados de alunos que não estejam no contexto.
 "
 
                             ],
@@ -210,31 +276,20 @@ Regras:
             $dados = $response->json();
 
 
-if (!$response->successful()) {
+            if (!$response->successful()) {
 
-    Log::error('Erro Groq:', $dados);
+                Log::error('Erro Groq:', $dados);
 
-    return response()->json([
-        'text' => 'Não consegui acessar a inteligência artificial.'
-    ]);
-
-}
-
-
-$resposta =
-    $dados['choices'][0]['message']['content']
-    ??
-    'Não consegui responder.';
-
+                return response()->json([
+                    'text' => 'Não consegui acessar a inteligência artificial.'
+                ]);
+            }
 
 
             $resposta =
                 $dados['choices'][0]['message']['content']
                 ??
                 'Não consegui responder.';
-
-
-
 
 
 
@@ -266,15 +321,15 @@ $resposta =
             ]);
         } catch (\Exception $e) {
 
-    Log::error(
-        'Erro IA Professor: ' . $e->getMessage()
-    );
+            Log::error(
+                'Erro IA Professor: ' . $e->getMessage()
+            );
 
-    return response()->json([
+            return response()->json([
 
-        'text' => 'A Traduca AI está temporariamente indisponível. Tente novamente.'
+                'text' => 'A Traduca AI está temporariamente indisponível. Tente novamente.'
 
-    ]);
-}
+            ]);
+        }
     }
 }

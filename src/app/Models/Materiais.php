@@ -9,7 +9,8 @@ class Materiais extends Model
 {
     use HasFactory;
 
-  protected $table = 'tbl_materiais';
+    protected $table = 'tbl_materiais';
+
     protected $primaryKey = 'id_materiais';
 
     protected $fillable = [
@@ -23,23 +24,28 @@ class Materiais extends Model
     ];
 
     protected $casts = [
-        'criado_em_materiais'     => 'datetime',
+        'criado_em_materiais' => 'datetime',
         'atualizado_em_materiais' => 'datetime',
     ];
 
-    // Timestamps personalizados
-    const CREATED_AT  = 'criado_em_materiais';
-    const UPDATED_AT  = 'atualizado_em_materiais';
-
-    // ──────────────── Relacionamentos ────────────────
+    const CREATED_AT = 'criado_em_materiais';
+    const UPDATED_AT = 'atualizado_em_materiais';
 
     public function professor()
     {
-        return $this->belongsTo(Professor::class, 'id_professor', 'id_professor');
+        return $this->belongsTo(
+            Professor::class,
+            'id_professor',
+            'id_professor'
+        );
     }
 
     public function curso()
     {
-        return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');
+        return $this->belongsTo(
+            Curso::class,
+            'id_curso',
+            'id_curso'
+        );
     }
 }

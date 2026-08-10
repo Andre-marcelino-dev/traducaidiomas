@@ -6,7 +6,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Professor extends Authenticatable
 {
-    protected $table      = 'tbl_professor';
+    protected $table = 'tbl_professor';
+
     protected $primaryKey = 'id_professor';
 
     const CREATED_AT = 'criado_em_professor';
@@ -29,7 +30,6 @@ class Professor extends Authenticatable
         'senha_professor',
     ];
 
-    // Diz ao Laravel que o campo de senha se chama senha_professor
     public function getAuthPassword()
     {
         return $this->senha_professor;

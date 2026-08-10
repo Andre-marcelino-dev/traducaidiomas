@@ -10,7 +10,9 @@ class Aluno extends Authenticatable
     use Notifiable;
 
     protected $table = 'tbl_alunos';
+
     protected $primaryKey = 'id_aluno';
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -36,6 +38,10 @@ class Aluno extends Authenticatable
 
     public function matriculas()
     {
-        return $this->hasMany(Matricula::class, 'id_aluno', 'id_aluno');
+        return $this->hasMany(
+            Matricula::class,
+            'id_aluno',
+            'id_aluno'
+        );
     }
 }
