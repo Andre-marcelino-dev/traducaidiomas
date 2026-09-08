@@ -13,6 +13,7 @@ class DuvidaController extends Controller
         $aluno = auth('aluno')->user();
 
         $duvidas = Duvida::where('id_aluno', $aluno->id_aluno)
+            ->where('ativo', true)
             ->latest('criado_em')
             ->paginate(10);
 

@@ -45,7 +45,7 @@
                                 @if($duvida->status_duvida === 'respondida')
                                     <span class="tbl-badge">Respondida</span>
                                 @else
-                                    <span class="tbl-badge amber">Pendente</span>
+                                    <span class="tbl-badge amber">Não respondida</span>
                                 @endif
                             </div>
 

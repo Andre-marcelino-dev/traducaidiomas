@@ -32,13 +32,12 @@
             <div class="d-card fade-up mb-4">
                 <div class="d-card-header">
                     <h6><i class="fas fa-envelope text-primary"></i> Dúvida do Aluno</h6>
-                    <form action="{{ route('admin.duvidas.destroy', $duvida->id_duvida) }}" method="POST" class="d-inline form-delete">
+                    <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline"
+                          onsubmit="return confirm('Desativar a dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}? Ela deixará de aparecer nas listas.');">
                         @csrf
-                        @method('DELETE')
-                        <button type="button" class="tbl-btn-excluir"
-                            data-titulo="Dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}"
-                            onclick="abrirModalExcluir(this)">
-                            <i class="fas fa-trash-alt"></i> Excluir
+                        @method('PUT')
+                        <button type="submit" class="tbl-btn-excluir">
+                            <i class="fas fa-ban"></i> Desativar
                         </button>
                     </form>
                 </div>
@@ -51,7 +50,7 @@
                         @if($duvida->status_duvida === 'respondida')
                             <span class="tbl-badge">Respondida</span>
                         @else
-                            <span class="tbl-badge amber">Pendente</span>
+                            <span class="tbl-badge amber">Não respondida</span>
                         @endif
                     </div>
 
@@ -94,7 +93,5 @@
 
         </div>
     </div>
-
-    @include('admin.partials.modal-delete', ['delTitulo' => 'Excluir Dúvida', 'delDescricao' => 'Você está prestes a excluir a dúvida:'])
 
 @endsection

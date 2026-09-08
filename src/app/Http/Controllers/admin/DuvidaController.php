@@ -10,7 +10,7 @@ class DuvidaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Duvida::with('aluno');
+        $query = Duvida::with('aluno')->where('ativo', true);
 
         if ($request->filled('status_duvida')) {
             $query->where('status_duvida', $request->status_duvida);
@@ -18,9 +18,9 @@ class DuvidaController extends Controller
 
         $duvidas = $query->latest('criado_em')->paginate(15)->withQueryString();
 
-        $totalDuvidas = Duvida::count();
-        $totalPendentes = Duvida::where('status_duvida', 'pendente')->count();
-        $totalRespondidas = Duvida::where('status_duvida', 'respondida')->count();
+        $totalDuvidas = Duvida::where('ativo', true)->count();
+        $totalPendentes = Duvida::where('ativo', true)->where('status_duvida', 'pendente')->count();
+        $totalRespondidas = Duvida::where('ativo', true)->where('status_duvida', 'respondida')->count();
 
         return view('admin.duvidas.index', compact(
             'duvidas',
@@ -55,11 +55,12 @@ class DuvidaController extends Controller
             ->with('success', 'Resposta enviada ao aluno!');
     }
 
-    public function destroy($id)
+    public function desativar($id)
     {
-        Duvida::findOrFail($id)->delete();
+        $duvida = Duvida::findOrFail($id);
+        $duvida->update(['ativo' => false]);
 
         return redirect()->route('admin.duvidas.index')
-            ->with('success', 'Dúvida removida com sucesso!');
+            ->with('success', 'Dúvida desativada com sucesso!');
     }
 }

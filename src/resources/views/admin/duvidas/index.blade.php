@@ -41,7 +41,7 @@
                     <div class="mc mc-amber shadow">
                         <div class="mc-icon"><i class="fas fa-clock"></i></div>
                         <div class="mc-val">{{ $totalPendentes }}</div>
-                        <p class="mc-lbl">Pendentes</p>
+                        <p class="mc-lbl">Não Respondidas</p>
                         <div class="mc-trend"><i class="fas fa-hourglass-half me-1"></i>aguardando resposta</div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <div class="col-sm-4">
                             <select name="status_duvida" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="">Todos os status</option>
-                                <option value="pendente" {{ request('status_duvida') == 'pendente' ? 'selected' : '' }}>Pendentes</option>
+                                <option value="pendente" {{ request('status_duvida') == 'pendente' ? 'selected' : '' }}>Não respondidas</option>
                                 <option value="respondida" {{ request('status_duvida') == 'respondida' ? 'selected' : '' }}>Respondidas</option>
                             </select>
                         </div>
@@ -107,7 +107,7 @@
                                         @if($duvida->status_duvida === 'respondida')
                                             <span class="tbl-badge">Respondida</span>
                                         @else
-                                            <span class="tbl-badge amber">Pendente</span>
+                                            <span class="tbl-badge amber">Não respondida</span>
                                         @endif
                                     </td>
                                     <td>{{ $duvida->criado_em?->format('d/m/Y H:i') }}</td>
@@ -116,13 +116,12 @@
                                             <a href="{{ route('admin.duvidas.show', $duvida->id_duvida) }}" class="tbl-btn-ver">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
-                                            <form action="{{ route('admin.duvidas.destroy', $duvida->id_duvida) }}" method="POST" class="d-inline form-delete">
+                                            <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline"
+                                                  onsubmit="return confirm('Desativar a dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}? Ela deixará de aparecer nas listas.');">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="tbl-btn-excluir"
-                                                    data-titulo="Dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}"
-                                                    onclick="abrirModalExcluir(this)">
-                                                    <i class="fas fa-trash-alt"></i> Excluir
+                                                @method('PUT')
+                                                <button type="submit" class="tbl-btn-excluir">
+                                                    <i class="fas fa-ban"></i> Desativar
                                                 </button>
                                             </form>
                                         </div>
@@ -150,7 +149,5 @@
             </div>
         </div>
     </div>
-
-    @include('admin.partials.modal-delete', ['delTitulo' => 'Excluir Dúvida', 'delDescricao' => 'Você está prestes a excluir a dúvida:'])
 
 @endsection

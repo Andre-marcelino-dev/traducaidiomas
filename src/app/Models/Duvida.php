@@ -18,11 +18,13 @@ class Duvida extends Model
         'resposta_professor',
         'status_duvida',
         'respondido_em',
+        'ativo',
     ];
 
     protected $casts = [
         'criado_em' => 'datetime',
         'respondido_em' => 'datetime',
+        'ativo' => 'boolean',
     ];
 
     public function aluno()

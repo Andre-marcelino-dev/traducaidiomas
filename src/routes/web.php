@@ -171,10 +171,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // ── Dúvidas dos Alunos (Admin) ──
         Route::prefix('duvidas')->name('duvidas.')->group(function () {
-            Route::get('/',               [AdminDuvidaController::class, 'index'])->name('index');
-            Route::get('/{id}',           [AdminDuvidaController::class, 'show'])->name('show');
-            Route::put('/{id}/responder', [AdminDuvidaController::class, 'responder'])->name('responder');
-            Route::delete('/{id}',        [AdminDuvidaController::class, 'destroy'])->name('destroy');
+            Route::get('/',                [AdminDuvidaController::class, 'index'])->name('index');
+            Route::get('/{id}',            [AdminDuvidaController::class, 'show'])->name('show');
+            Route::put('/{id}/responder',  [AdminDuvidaController::class, 'responder'])->name('responder');
+            Route::put('/{id}/desativar',  [AdminDuvidaController::class, 'desativar'])->name('desativar');
         });
 
         // ── Gerenciamento do Site ──
