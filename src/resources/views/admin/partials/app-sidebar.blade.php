@@ -104,6 +104,12 @@
                                 <p>Fórum</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.duvidas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-question-circle"></i>
+                                <p>Dúvidas dos Alunos</p>
+                            </a>
+                        </li>
 
 
 

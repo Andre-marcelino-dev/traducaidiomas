@@ -57,6 +57,12 @@
                                 <p>Fórum</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('aluno.duvidas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Minhas Dúvidas</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
