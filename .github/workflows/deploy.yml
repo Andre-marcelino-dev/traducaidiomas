@@ -23,4 +23,4 @@ jobs:
           script: |
             cd /home/storage/d/d7/b9/adminfo1/public_html/traducaidiomas
             git pull origin main
-            
+            composer install --no-dev --optimize-autoloader
