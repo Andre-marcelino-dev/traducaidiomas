@@ -12,6 +12,7 @@ use App\Models\Notificacao;
 use App\Models\Reagendamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AlunoController extends Controller
 {
@@ -47,16 +48,7 @@ class AlunoController extends Controller
         $data['senha_aluno'] = bcrypt($request->senha_aluno);
 
         if ($request->hasFile('foto_aluno')) {
-            $foto = $request->file('foto_aluno');
-            $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
-            $destino = public_path('traducaidiomas/alunos');
-
-            if (!file_exists($destino)) {
-                mkdir($destino, 0777, true);
-            }
-
-            $foto->move($destino, $nome);
-            $data['foto_aluno'] = $nome;
+            $data['foto_aluno'] = $this->salvarFotoAluno($request);
         } else {
             $data['foto_aluno'] = '';
         }
@@ -64,6 +56,34 @@ class AlunoController extends Controller
         Aluno::create($data);
 
         return redirect()->route('admin.alunos.index')->with('success', 'Aluno cadastrado com sucesso!');
+    }
+
+    private function salvarFotoAluno(Request $request): string
+    {
+        $foto = $request->file('foto_aluno');
+        $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . strtolower($foto->getClientOriginalExtension());
+        $destino = public_path('traducaidiomas/alunos');
+
+        if (!is_dir($destino)) {
+            mkdir($destino, 0755, true);
+        }
+        chmod($destino, 0755);
+
+        $foto->move($destino, $nome);
+
+        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nome;
+
+        if (!file_exists($caminhoFinal)) {
+            Log::error('Falha ao salvar foto do aluno: arquivo não encontrado após move()', [
+                'destino' => $destino,
+                'nome'    => $nome,
+            ]);
+            throw new \RuntimeException('Não foi possível salvar a foto do aluno no servidor.');
+        }
+
+        chmod($caminhoFinal, 0644);
+
+        return $nome;
     }
 
     public function edit($id)
@@ -98,16 +118,7 @@ class AlunoController extends Controller
         }
 
         if ($request->hasFile('foto_aluno')) {
-            $foto = $request->file('foto_aluno');
-            $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . $foto->getClientOriginalExtension();
-            $destino = public_path('traducaidiomas/alunos');
-
-            if (!file_exists($destino)) {
-                mkdir($destino, 0777, true);
-            }
-
-            $foto->move($destino, $nome);
-            $data['foto_aluno'] = $nome;
+            $data['foto_aluno'] = $this->salvarFotoAluno($request);
         }
 
         $aluno->update($data);
