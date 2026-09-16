@@ -67,7 +67,7 @@ Segredos e credenciais de serviços devem permanecer em variáveis de ambiente (
 
 Projeto desenvolvido em equipe por:
 
-- **Felix Lopes** — Desenvolvimento e integração do projeto
+- **Felix Lopes** — Desenvolvimento do projeto
 - **André Marcelino** — Desenvolvimento do projeto
 - **Pedro Henrique** — Desenvolvimento do projeto
 
