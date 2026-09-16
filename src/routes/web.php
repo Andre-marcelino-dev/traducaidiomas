@@ -28,6 +28,8 @@ use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 use App\Http\Controllers\aluno\ForumController as AlunoForumController;
 use App\Http\Controllers\admin\ForumController as AdminForumController;
+use App\Http\Controllers\aluno\DuvidaController as AlunoDuvidaController;
+use App\Http\Controllers\admin\DuvidaController as AdminDuvidaController;
 use Illuminate\Support\Facades\Route;
 
 // ── Rotas Públicas do Site ──
@@ -167,6 +169,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/resposta/{id}', [AdminForumController::class, 'destroyResposta'])->name('resposta.destroy');
         });
 
+        // ── Dúvidas dos Alunos (Admin) ──
+        Route::prefix('duvidas')->name('duvidas.')->group(function () {
+            Route::get('/',                [AdminDuvidaController::class, 'index'])->name('index');
+            Route::get('/{id}',            [AdminDuvidaController::class, 'show'])->name('show');
+            Route::put('/{id}/responder',  [AdminDuvidaController::class, 'responder'])->name('responder');
+            Route::put('/{id}/desativar',  [AdminDuvidaController::class, 'desativar'])->name('desativar');
+        });
+
         // ── Gerenciamento do Site ──
         Route::prefix('site')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index'])->name('index');
@@ -216,6 +226,13 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             Route::get('/{id}',            [AlunoForumController::class, 'show'])->name('show');
             Route::post('/{id}/responder', [AlunoForumController::class, 'storeResposta'])->name('responder');
             Route::get('/{id}/download',   [AlunoForumController::class, 'download'])->name('download');
+        });
+
+        // ── Dúvidas dos Alunos (Aluno) ──
+        Route::prefix('duvidas')->name('duvidas.')->group(function () {
+            Route::get('/',       [AlunoDuvidaController::class, 'index'])->name('index');
+            Route::get('/create', [AlunoDuvidaController::class, 'create'])->name('create');
+            Route::post('/',      [AlunoDuvidaController::class, 'store'])->name('store');
         });
 
         // ── Reagendamentos (Aluno) ──
