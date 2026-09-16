@@ -1,3 +1,6 @@
+@if (!request()->is('admin*'))
+  @include('partials.chatbot')
+@endif
 <footer class="rodape idioma-pt">
   <div class="rodape-conteudo">
     <div class="rodape-info">

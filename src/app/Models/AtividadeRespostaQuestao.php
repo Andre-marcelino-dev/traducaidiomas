@@ -8,4 +8,5 @@ class AtividadeRespostaQuestao extends Model
     public $timestamps = false;
     protected $fillable = ['id_resposta', 'id_questao', 'resposta_aluno', 'correta'];
     public function questao() { return $this->belongsTo(AtividadeQuestao::class, 'id_questao', 'id_questao'); }
+    public function resposta() { return $this->belongsTo(AtividadeResposta::class, 'id_resposta', 'id_resposta'); }
 }

@@ -11,6 +11,7 @@ class Atividade extends Model
         'id_professor', 'id_curso', 'titulo_atividade',
         'descricao_atividade', 'tipo_atividade', 'data_entrega', 'status_atividade'
     ];
+    protected $casts = ['data_entrega' => 'date'];
     public function professor() { return $this->belongsTo(Professor::class, 'id_professor', 'id_professor'); }
     public function curso() { return $this->belongsTo(Curso::class, 'id_curso', 'id_curso'); }
     public function questoes() { return $this->hasMany(AtividadeQuestao::class, 'id_atividade', 'id_atividade'); }

@@ -20,6 +20,11 @@ class Matricula extends Model
         'status_matricula',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('status_matricula', 'ATIVO');
+    }
+
     public function aluno()
     {
         return $this->belongsTo(Aluno::class, 'id_aluno', 'id_aluno');

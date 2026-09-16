@@ -15,6 +15,7 @@
             @yield('content')
         </main>
 
+        @include('partials.chatbot')
         @include('aluno.partials.app-footer')
 
     </div>

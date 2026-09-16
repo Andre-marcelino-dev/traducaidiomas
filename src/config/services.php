@@ -1,6 +1,13 @@
 <?php
 
 return [
+    'groq' => [
+        'key' => env('GROQ_API_KEY'),
+        'url' => env('GROQ_API_URL', 'https://api.groq.com/openai/v1/chat/completions'),
+        'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        'max_tokens' => (int) env('GROQ_MAX_TOKENS', 500),
+        'timeout' => (int) env('GROQ_TIMEOUT', 30),
+    ],
 
     /*
     |--------------------------------------------------------------------------

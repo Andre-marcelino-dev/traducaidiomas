@@ -61,8 +61,9 @@
     <!--end::Required Plugin(AdminLTE)-->
 
     <!--begin::Dashboard & Admin Tables-->
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
-    <link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v=legacy-dashboard-1" />
+   <link rel="stylesheet" href="{{ asset('css/admin-tables.css') }}?v=legacy-dashboard-1" />
+   <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}?v=4" />
     <!--end::Dashboard & Admin Tables-->
  
     <!-- apexcharts -->

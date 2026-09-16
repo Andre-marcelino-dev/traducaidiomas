@@ -29,6 +29,18 @@ use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 use App\Http\Controllers\aluno\ForumController as AlunoForumController;
 use App\Http\Controllers\admin\ForumController as AdminForumController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatbotController;
+
+Route::get('/chatbot/dados', [ChatbotController::class, 'dados'])->name('chatbot.dados');
+Route::post('/chatbot/mensagem', [ChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
+Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
+    Route::get('/admin/chatbot/dados', [ChatbotController::class, 'dados'])->name('admin.professor.chatbot.dados');
+    Route::post('/admin/chatbot/mensagem', [ChatbotController::class, 'mensagem'])->name('admin.professor.chatbot.mensagem');
+});
+Route::middleware(['auth:aluno', 'session.timeout:aluno'])->group(function () {
+    Route::get('/aluno/chatbot/dados', [ChatbotController::class, 'dados'])->name('aluno.chatbot.dados');
+    Route::post('/aluno/chatbot/mensagem', [ChatbotController::class, 'mensagem'])->name('aluno.chatbot.mensagem');
+});
 
 // ── Rotas Públicas do Site ──
 Route::get("/", [HomeController::class, 'home'])->name('home');

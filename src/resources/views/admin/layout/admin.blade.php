@@ -17,6 +17,7 @@
             @yield('content')
         </main>
 
+        @include('partials.chatbot')
         @include('admin.partials.app-footer')
 
     </div>
