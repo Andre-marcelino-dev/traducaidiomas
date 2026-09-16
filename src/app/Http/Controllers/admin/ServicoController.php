@@ -43,7 +43,7 @@ class ServicoController extends Controller
         if ($request->hasFile('imagem_servico')) {
             $file     = $request->file('imagem_servico');
             $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $file->move(base_path('traducaidiomas/servicos'), $filename);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
         } else {
             $data['imagem_servico'] = '';
@@ -84,13 +84,13 @@ class ServicoController extends Controller
         $data = $request->except('imagem_servico');
 
         if ($request->hasFile('imagem_servico')) {
-            if ($servico->imagem_servico && file_exists(public_path($servico->imagem_servico))) {
-                unlink(public_path($servico->imagem_servico));
+            if ($servico->imagem_servico && file_exists(base_path($servico->imagem_servico))) {
+                unlink(base_path($servico->imagem_servico));
             }
 
             $file     = $request->file('imagem_servico');
             $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $file->move(base_path('traducaidiomas/servicos'), $filename);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
         }
 
@@ -103,8 +103,8 @@ class ServicoController extends Controller
     {
         $servico = Servico::findOrFail($id);
 
-        if ($servico->imagem_servico && file_exists(public_path($servico->imagem_servico))) {
-            unlink(public_path($servico->imagem_servico));
+        if ($servico->imagem_servico && file_exists(base_path($servico->imagem_servico))) {
+            unlink(base_path($servico->imagem_servico));
         }
 
         $servico->delete();

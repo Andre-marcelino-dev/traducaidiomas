@@ -35,8 +35,8 @@ class ForumController extends Controller
     {
         $topico = ForumTopico::findOrFail($id);
 
-        if ($topico->anexo_topico && file_exists(public_path($topico->anexo_topico))) {
-            unlink(public_path($topico->anexo_topico));
+        if ($topico->anexo_topico && file_exists(base_path($topico->anexo_topico))) {
+            unlink(base_path($topico->anexo_topico));
         }
 
         $topico->respostas()->delete();

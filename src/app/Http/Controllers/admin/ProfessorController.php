@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Professor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ProfessorController extends Controller
 {
@@ -51,16 +52,7 @@ public function store(Request $request)
     $dados['senha_professor'] = Hash::make($request->senha_professor);
 
     if ($request->hasFile('foto_professor')) {
-        $arquivo = $request->file('foto_professor');
-        $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
-        $diretorioDestino = public_path('traducaidiomas/professor/');
-
-        if (!file_exists($diretorioDestino)) {
-            mkdir($diretorioDestino, 0777, true);
-        }
-
-        $arquivo->move($diretorioDestino, $nomeFoto);
-        $dados['foto_professor'] = $nomeFoto;
+        $dados['foto_professor'] = $this->salvarFotoProfessor($request->file('foto_professor'));
     } else {
         $dados['foto_professor'] = '';
     }
@@ -69,8 +61,36 @@ public function store(Request $request)
 
 return redirect()
     ->route('admin.professores.index')
-    ->with('success', 'Professor cadastrado com sucesso!');  
+    ->with('success', 'Professor cadastrado com sucesso!');
 }
+
+    private function salvarFotoProfessor($arquivo): string
+    {
+        $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
+        $destino = base_path('traducaidiomas/professor');
+
+        if (!is_dir($destino)) {
+            mkdir($destino, 0755, true);
+        }
+        chmod($destino, 0755);
+
+        $arquivo->move($destino, $nomeFoto);
+
+        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nomeFoto;
+
+        if (!file_exists($caminhoFinal)) {
+            Log::error('Falha ao salvar foto do professor: arquivo não encontrado após move()', [
+                'destino' => $destino,
+                'nome'    => $nomeFoto,
+            ]);
+            throw new \RuntimeException('Não foi possível salvar a foto do professor no servidor.');
+        }
+
+        chmod($caminhoFinal, 0644);
+
+        return $nomeFoto;
+    }
+
     public function show($id)
     {
         $professor = Professor::find($id);
@@ -124,22 +144,12 @@ return redirect()
         }
 
         if ($request->hasFile('foto_professor')) {
-            $fotoAntiga = public_path('traducaidiomas/professor/' . $professor->foto_professor);
+            $fotoAntiga = base_path('traducaidiomas/professor/' . $professor->foto_professor);
             if ($professor->foto_professor && file_exists($fotoAntiga)) {
                 @unlink($fotoAntiga);
             }
 
-            $arquivo = $request->file('foto_professor');
-            $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
-            $diretorioDestino = public_path('traducaidiomas/professor/');
-
-            if (!file_exists($diretorioDestino)) {
-                @mkdir($diretorioDestino, 0777, true);
-            }
-                // dd($request->file('foto_professor'));
-
-           $arquivo->move($diretorioDestino, $nomeFoto);
-            $dados['foto_professor'] = $nomeFoto;
+            $dados['foto_professor'] = $this->salvarFotoProfessor($request->file('foto_professor'));
         }
 
         $professor->update($dados);
@@ -157,7 +167,7 @@ return redirect()
                 ->with('error', 'Professor não encontrado.');
         }
 
-        $fotoPath = public_path('traducaidiomas/professor/' . $professor->foto_professor);
+        $fotoPath = base_path('traducaidiomas/professor/' . $professor->foto_professor);
         if ($professor->foto_professor && file_exists($fotoPath)) {
             @unlink($fotoPath);
         }

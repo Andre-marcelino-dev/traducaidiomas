@@ -48,8 +48,8 @@ class SiteController extends Controller
             }
         }
 
-        $dirImg     = public_path('traducaidiomas/img/');
-        $dirBanners = public_path('traducaidiomas/banners/');
+        $dirImg     = base_path('traducaidiomas/img/');
+        $dirBanners = base_path('traducaidiomas/banners/');
 
         if (!is_dir($dirImg)) {
             mkdir($dirImg, 0775, true);

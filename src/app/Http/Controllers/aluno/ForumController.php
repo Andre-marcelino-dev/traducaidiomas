@@ -57,7 +57,7 @@ class ForumController extends Controller
         if ($request->hasFile('anexo_topico')) {
             $arquivo     = $request->file('anexo_topico');
             $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = public_path('traducaidiomas/forum');
+            $destino     = base_path('traducaidiomas/forum');
 
             if (!file_exists($destino)) {
                 mkdir($destino, 0755, true);
@@ -118,8 +118,8 @@ class ForumController extends Controller
         $topico = ForumTopico::findOrFail($id);
         abort_unless($idCursos->contains($topico->id_curso), 403);
 
-        if ($topico->anexo_topico && file_exists(public_path($topico->anexo_topico))) {
-            return response()->download(public_path($topico->anexo_topico));
+        if ($topico->anexo_topico && file_exists(base_path($topico->anexo_topico))) {
+            return response()->download(base_path($topico->anexo_topico));
         }
 
         return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');

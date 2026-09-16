@@ -130,7 +130,7 @@ class MateriaisController extends Controller
     {
         $material = Materiais::findOrFail($id);
 
-        $caminho = public_path($material->arquivo_materiais);
+        $caminho = base_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
             return response()->file($caminho);
@@ -143,7 +143,7 @@ class MateriaisController extends Controller
     {
         $material = Materiais::findOrFail($id);
 
-        $caminho = public_path($material->arquivo_materiais);
+        $caminho = base_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
             $ext = pathinfo($caminho, PATHINFO_EXTENSION);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\aluno;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -56,7 +57,27 @@ class AuthController extends Controller
         $aluno = auth('aluno')->user();
         $file = $request->file('foto_aluno');
         $nome = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('traducaidiomas/alunos/'), $nome);
+        $destino = base_path('traducaidiomas/alunos');
+
+        if (!is_dir($destino)) {
+            mkdir($destino, 0755, true);
+        }
+        chmod($destino, 0755);
+
+        $file->move($destino, $nome);
+
+        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nome;
+
+        if (!file_exists($caminhoFinal)) {
+            Log::error('Falha ao salvar foto do aluno: arquivo não encontrado após move()', [
+                'destino' => $destino,
+                'nome'    => $nome,
+            ]);
+            throw new \RuntimeException('Não foi possível salvar a foto no servidor.');
+        }
+
+        chmod($caminhoFinal, 0644);
+
         $aluno->update(['foto_aluno' => $nome]);
         return redirect()->route('aluno.perfil')->with('success', 'Foto atualizada com sucesso!');
     }
