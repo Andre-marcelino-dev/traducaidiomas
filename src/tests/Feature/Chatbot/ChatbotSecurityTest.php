@@ -30,6 +30,18 @@ class ChatbotSecurityTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_authorized_professor_receives_student_data_with_sobre_formulation(): void
+    {
+        [$professor] = $this->seedAuthorizedStudent();
+        $this->actingAs($professor, 'admin');
+
+        $response = app(ChatbotResponseService::class)
+            ->respond('Me dê informações sobre o aluno Caio Ferreira.', 'professor');
+
+        $this->assertSame('private_student_data', $response['intent']);
+        $this->assertSame('Caio Ferreira', $response['context']['student']['name']);
+    }
+
     public function test_professor_cannot_receive_data_from_student_outside_scope(): void
     {
         Http::fake();

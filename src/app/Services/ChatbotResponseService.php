@@ -20,7 +20,7 @@ class ChatbotResponseService
         private ChatbotIntentService $intents
     ) {}
 
-    public function respond(string $message, string $profile, ?string $forcedIntent = null): ?array
+    public function respond(string $message, string $profile, ?string $forcedIntent = null, array $entities = []): ?array
     {
         $intent = $forcedIntent ?? $this->intents->detect($message);
 
@@ -170,6 +170,10 @@ class ChatbotResponseService
 
         if ($intent === 'teacher_next_class_students') {
             return $this->teacherNextClassStudents($profile);
+        }
+
+        if ($intent === 'teacher_student_classes') {
+            return $this->teacherStudentClasses($profile, $message, $entities);
         }
 
         if ($intent === 'teacher_frequency') {
@@ -1012,6 +1016,113 @@ class ChatbotResponseService
             ->unique('id_aluno')
             ->sortBy('nome_aluno')
             ->values();
+    }
+
+    private function teacherStudentClasses(string $profile, string $message, array $entities = []): array
+    {
+        if ($profile !== 'professor' || !auth('admin')->check()) {
+            return [
+                'message' => 'Essa consulta está disponível apenas para professores autenticados.',
+                'intent' => 'teacher_student_classes',
+                'source' => 'database',
+            ];
+        }
+
+        $students = $this->authorizedTeacherStudents(auth('admin')->id());
+        $normalized = Str::of($message)->lower()->ascii()->value();
+        $student = $students->first(function ($candidate) use ($normalized) {
+            $name = Str::of($candidate->nome_aluno)->lower()->ascii()->value();
+            $firstName = strtok($name, ' ');
+
+            return str_contains($normalized, $name)
+                || ($firstName !== false && str_contains($normalized, ' ' . $firstName));
+        });
+
+        if (!$student) {
+            return [
+                'message' => 'Não encontrei esse aluno no escopo autorizado do professor.',
+                'intent' => 'teacher_student_classes',
+                'source' => 'database',
+            ];
+        }
+
+        $courseIds = Matricula::query()
+            ->active()
+            ->where('id_aluno', $student->id_aluno)
+            ->pluck('id_curso');
+
+        $scope = $entities['time_scope'] ?? 'upcoming';
+        $now = now();
+
+        $query = Aula::query()
+            ->where('id_professor', auth('admin')->id())
+            ->whereIn('id_curso', $courseIds);
+
+        if ($scope === 'today') {
+            $query->whereDate('data_aulas', $now->toDateString());
+        } elseif ($scope === 'this_week' || $scope === 'next_week') {
+            $start = $now->copy()->startOfWeek();
+            if ($scope === 'next_week') {
+                $start->addWeek();
+            }
+            $query->whereBetween('data_aulas', [
+                $start->toDateString(),
+                $start->copy()->endOfWeek()->toDateString(),
+            ]);
+        } elseif ($scope === 'history') {
+            $query->where(function ($history) use ($now) {
+                $history->where('data_aulas', '<', $now->toDateString())
+                    ->orWhere(function ($today) use ($now) {
+                        $today->whereDate('data_aulas', $now->toDateString())
+                            ->where('hora_aulas', '<', $now->format('H:i:s'));
+                    });
+            });
+        } else {
+            $scope = 'upcoming';
+            $query->where(function ($upcoming) use ($now) {
+                $upcoming->where('data_aulas', '>', $now->toDateString())
+                    ->orWhere(function ($today) use ($now) {
+                        $today->whereDate('data_aulas', $now->toDateString())
+                            ->where('hora_aulas', '>=', $now->format('H:i:s'));
+                    });
+            });
+        }
+
+        $items = $query
+            ->orderBy('data_aulas')
+            ->orderBy('hora_aulas')
+            ->limit(5)
+            ->get(['titulo_aulas', 'cursos_aulas', 'data_aulas', 'hora_aulas']);
+
+        $formattedItems = $items->map(fn ($item) => [
+            'date' => \Carbon\Carbon::parse($item->data_aulas)->format('d/m/Y'),
+            'time' => substr((string) $item->hora_aulas, 0, 5),
+            'course' => $item->cursos_aulas ?: $item->titulo_aulas,
+        ])->values();
+
+        $message = $items->isEmpty()
+            ? 'NÃ£o encontrei aulas para ' . $student->nome_aluno . ' no perÃ­odo solicitado.'
+            : '**Aulas de ' . $student->nome_aluno . "**\n\n" . $formattedItems->map(fn ($item) =>
+                '- ' . $item['date'] . ' Ã s ' . $item['time'] . ' â€” ' . $item['course']
+            )->implode("\n");
+
+        return [
+            'message' => $message,
+            /*
+                ? 'Não encontrei próximas aulas para ' . $student->nome_aluno . '.'
+                : '**Aulas de ' . $student->nome_aluno . "**\n\n" . $items->map(fn ($item) =>
+                    '- ' . \Carbon\Carbon::parse($item->data_aulas)->format('d/m/Y') . ' às ' . substr((string) $item->hora_aulas, 0, 5) . ' — ' . $item->titulo_aulas
+                )->implode("\n"),
+            */
+            'intent' => 'teacher_student_classes',
+            'source' => 'database',
+            'context' => [
+                'student' => $student->nome_aluno,
+                'classes' => $items->count(),
+                'time_scope' => $scope,
+                'items' => $formattedItems->all(),
+            ],
+        ];
     }
 
     private function teacherStudents(string $profile): array

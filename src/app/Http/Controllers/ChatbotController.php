@@ -7,6 +7,7 @@ use App\Models\Curso;
 use App\Models\Professor;
 use App\Services\ChatbotResponseService;
 use App\Services\ChatbotIntentClassifierService;
+use App\Services\ChatbotSemanticInterpreter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -16,7 +17,8 @@ class ChatbotController extends Controller
 {
     public function __construct(
         private ChatbotResponseService $chatbotResponses,
-        private ChatbotIntentClassifierService $intentClassifier
+        private ChatbotIntentClassifierService $intentClassifier,
+        private ChatbotSemanticInterpreter $semanticInterpreter
     ) {}
 
     public function dados(): JsonResponse
@@ -124,6 +126,30 @@ class ChatbotController extends Controller
             }
 
             if ($localResponse === null) {
+                $interpretation = $this->semanticInterpreter->interpret($userMessage, $profile);
+
+                if (($interpretation['needs_clarification'] ?? false) === true) {
+                    $question = $interpretation['clarification_question']
+                        ?? 'Você quer consultar as próximas aulas ou o histórico?';
+
+                    return response()->json([
+                        'message' => $question,
+                        'text' => $question,
+                        'source' => 'semantic-clarification',
+                    ]);
+                }
+
+                if (($interpretation['intent'] ?? null) !== null) {
+                    $localResponse = $this->chatbotResponses->respond(
+                        $userMessage,
+                        $profile,
+                        $interpretation['intent'],
+                        $interpretation['entities'] ?? []
+                    );
+                }
+            }
+
+            if ($localResponse === null) {
                 $fallbackIntent = $this->intentClassifier->classify(
                     $userMessage,
                     $profile
@@ -176,6 +202,16 @@ class ChatbotController extends Controller
                 'context_type' => $localResponse['intent'],
                 'context_available' => true,
             ]);
+
+            if (($localResponse['intent'] ?? null) === 'teacher_student_classes') {
+                return response()->json([
+                    'message' => $localResponse['message'],
+                    'text' => $localResponse['message'],
+                    'intent' => $localResponse['intent'],
+                    'source' => 'database',
+                    'context' => $localResponse['context'] ?? [],
+                ]);
+            }
         } elseif ($localResponse !== null) {
             return response()->json([
                 'message' => $localResponse['message'],

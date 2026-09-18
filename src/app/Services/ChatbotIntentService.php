@@ -41,9 +41,9 @@ class ChatbotIntentService
 
         // Ranking de faltas
         if ($this->matchesAny($message, [
-            '/\b(?:dados|informacoes|informacao) (?:do|da) aluno\b/',
-            '/\b(?:mostre|mostrar|ver|consulte|consultar) (?:os )?dados (?:do|da) aluno\b/',
-            '/\b(?:notas|curso|matricula|aulas?|horario|desempenho) (?:do|da) aluno\b/',
+            '/\b(?:dados|informacoes|informacao) (?:do|da|sobre o|sobre a) alun[oa]\b/',
+            '/\b(?:mostre|mostrar|ver|consulte|consultar) (?:os )?dados (?:do|da|sobre o|sobre a) alun[oa]\b/',
+            '/\b(?:notas|curso|matricula|aulas?|horario|desempenho) (?:do|da|sobre o|sobre a) alun[oa]\b/',
             '/\b(?:dados|informacoes|informacao) (?:do|da|de) [a-z]+(?: [a-z]+)?\b/',
             '/\bdados de [a-z]+(?: [a-z]+)+\b/',
             '/\baluno \d+\b/',
@@ -82,8 +82,8 @@ class ChatbotIntentService
             '/\bquem tem melhor desempenho\b/',
             '/\bqual aluno esta com a melhor nota\b/',
             '/\bquem teve o melhor desempenho\b/',
-            '/\b(?:qual|como|mostre|quero saber) (?:o |a )?(?:desempenho|nota|media) (?:do|da) [a-z]+\b/',
-            '/\bcomo esta (?:o )?(?:desempenho|nota|media) (?:do|da) [a-z]+\b/',
+            '/\b(?:qual|como|mostre|quero saber) (?:e )?(?:o |a )?(?:desempenho|nota|media) (?:do|da)(?: alun[oa])? [a-z]+\b/',
+            '/\bcomo esta (?:o )?(?:desempenho|nota|media) (?:do|da)(?: alun[oa])? [a-z]+\b/',
             '/\bcomo (?:o )?[a-z]+ esta indo\b/',
         ])) {
             return 'teacher_performance';
@@ -142,6 +142,16 @@ class ChatbotIntentService
             return 'teacher_question_performance';
         }
 
+        // Consultas de aulas de um aluno nomeado precedem aulas genéricas.
+        if ($this->matchesAny($message, [
+            '/\b(?:quais|que|mostre|mostrar|ver|quando|tem|quero saber quando)\b.*\baulas?\b.*\b(?:do|da|para o|para a) (?:alun[oa]\b|[a-z]+(?: [a-z]+)+)/',
+            '/\baulas?\b.*\b(?:do|da|para o|para a) (?:alun[oa]\b|[a-z]+(?: [a-z]+)+)/',
+            '/\baulas?\b\s+[a-z]+(?: [a-z]+)+\s+(?:tem|possui)\b/',
+            '/\b(?:alun[oa])\b.*\baulas?\b/',
+        ])) {
+            return 'teacher_student_classes';
+        }
+
         // Alunos do professor
         if ($this->matchesAny($message, [
             '/\balunos? (?:que )?tenho hoje\b/',
@@ -162,6 +172,7 @@ class ChatbotIntentService
             '/\balunos? da aula\b/',
             '/\balunos? que tenho hoje\b/',
             '/\balunos? matriculados\b/',
+            '/\balunos? ativos?\b/',
         ])) {
             return 'teacher_students';
         }

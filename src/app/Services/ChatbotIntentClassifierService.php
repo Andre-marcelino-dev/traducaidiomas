@@ -17,6 +17,7 @@ class ChatbotIntentClassifierService
         'teacher_content_performance',
         'teacher_question_performance',
         'teacher_next_class_students',
+        'teacher_student_classes',
         'price',
     ];
 
@@ -37,6 +38,7 @@ class ChatbotIntentClassifierService
             . '. Exemplos: "hj" significa hoje; "proxima" significa próxima; '
             . 'erros como desenpenho/desepenho indicam desempenho; "ta" significa está. '
             . 'Perguntas sobre desempenho nominal ou melhor aluno usam teacher_performance; '
+            . 'Perguntas sobre aulas de um aluno nomeado usam teacher_student_classes; '
             . 'Perguntas sobre questoes ou perguntas erradas, certas ou acertadas usam teacher_question_performance; '
             . 'Perguntas sobre conteudos, assuntos ou materias em que os alunos erram usam teacher_content_performance; '
             . 'aulas hoje, semana, próxima ou última usam my_classes. '

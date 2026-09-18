@@ -4,6 +4,7 @@ namespace Tests\Feature\Chatbot;
 
 use App\Models\Professor;
 use App\Services\ChatbotResponseService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -54,6 +55,73 @@ class ChatbotRealMetricsTest extends TestCase
         $this->assertSame('teacher_performance', $response['intent']);
         $this->assertStringContainsString('8,5', $response['message']);
         $this->assertSame(8.5, $response['context']['average']);
+    }
+
+    public function test_teacher_performance_accepts_average_of_named_student_formulation(): void
+    {
+        [$professor, $studentId, $courseId] = $this->seedClass();
+        $activityId = DB::table('tbl_atividades')->insertGetId([
+            'id_professor' => $professor->id_professor,
+            'id_curso' => $courseId,
+            'titulo_atividade' => 'Atividade de teste',
+            'descricao_atividade' => 'Teste',
+            'tipo_atividade' => 'texto',
+            'status_atividade' => 'ATIVA',
+        ]);
+        DB::table('tbl_atividade_respostas')->insert([
+            'id_atividade' => $activityId,
+            'id_aluno' => $studentId,
+            'status_resposta' => 'CORRIGIDA',
+            'nota' => 8.5,
+        ]);
+        $this->actingAs($professor, 'admin');
+
+        $response = app(ChatbotResponseService::class)
+            ->respond('Qual é a média do aluno Caio Ferreira?', 'professor');
+
+        $this->assertSame('teacher_performance', $response['intent']);
+        $this->assertSame('Caio Ferreira', $response['context']['student']);
+        $this->assertSame(8.5, $response['context']['average']);
+    }
+
+    public function test_teacher_student_classes_applies_time_scope_and_formats_dates(): void
+    {
+        Carbon::setTestNow('2026-09-16 09:00:00');
+        [$professor, , $courseId] = $this->seedClass();
+        DB::table('tbl_aulas')->insert([
+            'id_professor' => $professor->id_professor,
+            'id_curso' => $courseId,
+            'titulo_aulas' => 'Aula próxima semana',
+            'descricao_aulas' => 'Teste',
+            'data_aulas' => '2026-09-21',
+            'hora_aulas' => '10:00:00',
+            'cursos_aulas' => 'Inglês',
+            'status_aulas' => 'ATIVO',
+            'criado_em_aulas' => now(),
+            'atualizado_em_aulas' => now(),
+        ]);
+        $this->actingAs($professor, 'admin');
+
+        $today = app(ChatbotResponseService::class)->respond(
+            'Quais aulas o Caio tem hoje?',
+            'professor',
+            'teacher_student_classes',
+            ['student_name' => 'Caio Ferreira', 'time_scope' => 'today']
+        );
+        $nextWeek = app(ChatbotResponseService::class)->respond(
+            'Quais aulas o Caio terá na próxima semana?',
+            'professor',
+            'teacher_student_classes',
+            ['student_name' => 'Caio Ferreira', 'time_scope' => 'next_week']
+        );
+
+        $this->assertSame(1, $today['context']['classes']);
+        $this->assertSame('today', $today['context']['time_scope']);
+        $this->assertStringContainsString('16/09/2026', $today['message']);
+        $this->assertSame(1, $nextWeek['context']['classes']);
+        $this->assertSame('next_week', $nextWeek['context']['time_scope']);
+        $this->assertStringContainsString('21/09/2026', $nextWeek['message']);
+        Carbon::setTestNow();
     }
 
     public function test_inactive_enrollment_is_excluded_from_teacher_frequency(): void
