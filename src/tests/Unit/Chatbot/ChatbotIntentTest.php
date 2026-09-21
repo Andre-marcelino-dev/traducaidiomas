@@ -92,4 +92,41 @@ class ChatbotIntentTest extends TestCase
             ['Quais alunos estão matriculados?'],
         ];
     }
+
+    #[DataProvider('teacherActivityReportMessages')]
+    public function test_teacher_activity_report_variants_are_classified(string $message): void
+    {
+        $this->assertSame('teacher_activity_report', app(ChatbotIntentService::class)->detect($message));
+    }
+
+    public static function teacherActivityReportMessages(): array
+    {
+        return [
+            ['Analise o desempenho dos alunos nas ultimas atividades'],
+            ['Faca um relatorio das atividades recentes'],
+            ['Como foi o desempenho da turma nas atividades?'],
+            ['Quais foram os erros dos alunos nas ultimas atividades?'],
+        ];
+    }
+
+    #[DataProvider('studentActivityMessages')]
+    public function test_student_activity_variants_are_classified(string $message, string $intent): void
+    {
+        $this->assertSame($intent, app(ChatbotIntentService::class)->detect($message));
+    }
+
+    public static function studentActivityMessages(): array
+    {
+        return [
+            ['Quantas atividades eu respondi?', 'activities_completed'],
+            ['Quais questoes eu errei?', 'student_question_performance'],
+            ['Analiza meu desempenho nas atividades', 'student_activity_performance'],
+            ['Quantas aulas ja fiz?', 'student_classes_count'],
+            ['Quantas aulas participei?', 'student_classes_count'],
+            ['Quais aulas eu ja tive?', 'past_classes'],
+            ['Quais foram meus erros na Atividade de Ingles?', 'student_activity_correction'],
+            ['Mostre a correção da Atividade de Ingles', 'student_activity_correction'],
+            ['Qual foi minha nota na Atividade de Ingles?', 'student_activity_grade'],
+        ];
+    }
 }

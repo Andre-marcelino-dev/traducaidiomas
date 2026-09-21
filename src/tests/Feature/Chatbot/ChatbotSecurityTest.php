@@ -42,6 +42,30 @@ class ChatbotSecurityTest extends TestCase
         $this->assertSame('Caio Ferreira', $response['context']['student']['name']);
     }
 
+    public function test_authenticated_professor_endpoint_accepts_accessible_student_information_phrase(): void
+    {
+        Http::fake([
+            '*' => Http::response([
+                'choices' => [[
+                    'message' => ['content' => 'Caio Ferreira está matriculado em Inglês.'],
+                ]],
+            ]),
+        ]);
+        [$professor] = $this->seedAuthorizedStudent();
+        $this->actingAs($professor, 'admin');
+
+        $response = $this->postJson(route('admin.professor.chatbot.mensagem'), [
+            'message' => 'me de informações acessiveis do aluno caio',
+        ]);
+
+        $response->assertOk()->assertJsonPath('text', 'Caio Ferreira está matriculado em Inglês.');
+
+        Http::assertSent(function ($request) {
+            return str_contains((string) $request->body(), 'Caio Ferreira')
+                && str_contains((string) $request->body(), 'private_student_data');
+        });
+    }
+
     public function test_professor_cannot_receive_data_from_student_outside_scope(): void
     {
         Http::fake();

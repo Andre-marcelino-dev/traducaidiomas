@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Log;
 class ChatbotIntentClassifierService
 {
     private const INTENTS = [
-        'greeting', 'password', 'teacher', 'student_profile', 'course',
+        'greeting', 'password', 'teacher', 'student_profile', 'student_info', 'course',
         'enrollment', 'my_classes', 'schedule', 'past_classes', 'frequency',
         'notes', 'performance', 'activities', 'activities_pending',
-        'activities_completed', 'materials', 'teacher_students',
+        'activities_completed', 'student_activity_grade', 'student_activity_correction', 'student_classes_count', 'absences', 'student_question_performance', 'student_activity_performance', 'materials', 'teacher_students',
         'teacher_students_count', 'teacher_frequency', 'teacher_performance',
         'teacher_ranking', 'teacher_classes_count', 'teacher_students_today',
         'teacher_content_performance',
+        'teacher_activity_report',
         'teacher_question_performance',
         'teacher_next_class_students',
         'teacher_student_classes',
@@ -41,6 +42,8 @@ class ChatbotIntentClassifierService
             . 'Perguntas sobre aulas de um aluno nomeado usam teacher_student_classes; '
             . 'Perguntas sobre questoes ou perguntas erradas, certas ou acertadas usam teacher_question_performance; '
             . 'Perguntas sobre conteudos, assuntos ou materias em que os alunos erram usam teacher_content_performance; '
+            . 'Relatorios ou analises do desempenho da turma nas atividades usam teacher_activity_report; '
+            . 'No perfil aluno, informacoes proprias usam student_info, atividades respondidas/concluidas usam activities_completed, nota de atividade especifica usa student_activity_grade, correcao de atividade especifica usa student_activity_correction, aulas passadas usam student_classes_count ou past_classes, faltas usam absences, questoes certas/erradas usam student_question_performance e desempenho nas atividades usa student_activity_performance; '
             . 'aulas hoje, semana, próxima ou última usam my_classes. '
             . 'Exemplos obrigatórios: "Qual o desempenho do Caio?", '
             . '"Como o Caio está indo?", "Como o Caio ta indo?", '

@@ -39,9 +39,60 @@ class ChatbotIntentService
         |--------------------------------------------------------------------------
         */
 
+        // Consultas do próprio aluno devem preceder relatórios da turma.
+        if ($this->matchesAny($message, [
+            '/\b(?:qual|quanto)(?: foi)? (?:a )?minha (?:nota|avaliacao)\b.*\b(?:na|no|da|do|de)\b/',
+            '/\bquanto tirei\b.*\b(?:na|no|da|do|de)\b/',
+        ])) {
+            return 'student_activity_grade';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\b(?:o que|quais questoes?) eu errei\b.*\b(?:na|no|da|do)\b/',
+            '/\b(?:qual|quais) foram meus erros\b.*\b(?:na|no|da|do)\b/',
+            '/\bqual e a resposta correta\b.*\b(?:na|no|da|do)\b/',
+            '/\b(?:mostre|mostrar|ver|consultar|consulte) (?:a )?correcao\b.*\b(?:na|no|da|do)\b/',
+        ])) {
+            return 'student_activity_correction';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\bcomo fui nas atividades?\b/',
+            '/\bmeu desempenho nas atividades\b/',
+            '/\bcomo me sai nas atividades\b/',
+            '/\banal(?:ise|isa|iza) meu desempenho(?: nas atividades)?\b/',
+        ])) {
+            return 'student_activity_performance';
+        }
+
+        // Consultas individuais devem preceder a consulta genérica de dados.
+        if ($this->matchesAny($message, [
+            '/\b(?:analise|analise|resumo|relatorio)\b.*\b(?:desempenho|atividades?|turma)\b/',
+            '/\bdesempenho\b.*\b(?:ultimas?|recentes?|atividades?)\b/',
+            '/\b(?:quais|mostre|listar|liste)\b.*\b(?:ultimas?|recentes?)\b.*\batividades?\b/',
+            '/\b(?:erros?|questoes?)\b.*\b(?:alunos?|atividades?)\b.*\b(?:ultimas?|recentes?)\b/',
+        ])) {
+            return 'teacher_activity_report';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\b(?:desempenho|nota|notas|media|atividades?)\b.*\b(?:do|da|de|para o|para a)\s+(?:alun[oa]\s+)?[a-z]+(?:\s+[a-z]+)+\b/',
+            '/\b(?:qual|consulte|consultar|mostre|mostrar|analise|quantas?)\b.*\b(?:desempenho|nota|notas|media|atividades?)\b.*\b(?:do|da|de|para o|para a)\b/',
+        ])) {
+            return 'teacher_performance';
+        }
+
+        // Frequência individual do aluno, antes da frequência da turma.
+        if ($this->matchesAny($message, [
+            '/\b(?:qual|consulte|consultar|mostre|mostrar|ver)\b.*\b(?:frequencia|presenca|faltas?)\b.*\b(?:do|da|de|para o|para a)\s+(?:alun[oa]\s+)?[a-z]+(?:\s+[a-z]+)?\b/',
+            '/\b(?:frequencia|presenca|faltas?)\b.*\b(?:do|da|de|para o|para a)\s+(?:alun[oa]\s+)?[a-z]+(?:\s+[a-z]+)?\b/',
+        ])) {
+            return 'teacher_frequency';
+        }
+
         // Ranking de faltas
         if ($this->matchesAny($message, [
-            '/\b(?:dados|informacoes|informacao) (?:do|da|sobre o|sobre a) alun[oa]\b/',
+            '/\b(?:dados|informacoes|informacao)(?: acessiveis?)? (?:do|da|sobre o|sobre a) alun[oa]\b/',
             '/\b(?:mostre|mostrar|ver|consulte|consultar) (?:os )?dados (?:do|da|sobre o|sobre a) alun[oa]\b/',
             '/\b(?:notas|curso|matricula|aulas?|horario|desempenho) (?:do|da|sobre o|sobre a) alun[oa]\b/',
             '/\b(?:dados|informacoes|informacao) (?:do|da|de) [a-z]+(?: [a-z]+)?\b/',
@@ -57,6 +108,15 @@ class ChatbotIntentService
             '/\b(?:quem sou eu|qual e o meu nome|qual meu nome|meu nome)\b/',
         ])) {
             return 'student_profile';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\b(?:quais|qual) (?:sao|são) minhas? (?:informacoes?|dados)\b/',
+            '/\b(?:me mostre|quero ver) meus? (?:dados|informacoes?)\b/',
+            '/\binformacoes? voce tem sobre mim\b/',
+            '/\bme fale sobre meus dados\b/',
+        ])) {
+            return 'student_info';
         }
 
         if ($this->matchesAny($message, [
@@ -262,6 +322,14 @@ class ChatbotIntentService
             return 'frequency';
         }
 
+        if ($this->matchesAny($message, [
+            '/\bquantas? (?:aulas? )?(?:eu )?(?:perdi|faltei)\b/',
+            '/\bquantas? faltas? (?:eu )?(?:tenho|tive)\b/',
+            '/\bquantas? vezes (?:eu )?faltei\b/',
+        ])) {
+            return 'absences';
+        }
+
         // Notas
         if ($this->matchesAny($message, [
             '/\bnotas dos meus alunos?\b/',
@@ -300,6 +368,13 @@ class ChatbotIntentService
             '/\btenho quantas aulas?\b/',
         ])) {
             return 'teacher_classes_count';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\bquantas? aulas? (?:eu )?(?:tive|ja tive|ja fiz|participei|foram realizadas|ja aconteceram)\b/',
+            '/\bquantas? aulas? (?:eu )?(?:fiz|participei)\b/',
+        ])) {
+            return 'student_classes_count';
         }
 
         if ($this->matchesAny($message, [
@@ -365,6 +440,10 @@ class ChatbotIntentService
             '/\bhistorico de aulas?\b/',
             '/\baulas anteriores\b/',
             '/\baulas passadas\b/',
+            '/\bquais aulas? (?:eu )?(?:tive|ja tive|ja fiz)\b/',
+            '/\bquais foram minhas aulas?\b/',
+            '/\bme mostre minhas aulas passadas\b/',
+            '/\bmeu historico de aulas?\b/',
         ])) {
             return 'past_classes';
         }
@@ -388,13 +467,42 @@ class ChatbotIntentService
 
         // Concluídas
         if ($this->matchesAny($message, [
+            '/\b(?:qual|quanto|qual foi|quanto foi) (?:a minha )?(?:nota|avaliacao)\b.*\b(?:na|da|de|do)\b/',
+        ])) {
+            return 'student_activity_grade';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\b(?:o que|quais questoes?) eu errei\b.*\b(?:na|no|da|do)\b/',
+            '/\b(?:qual|quais) foram meus erros\b.*\b(?:na|no|da|do)\b/',
+            '/\bqual e a resposta correta\b.*\b(?:na|no|da|do)\b/',
+        ])) {
+            return 'student_activity_correction';
+        }
+
+        if ($this->matchesAny($message, [
             '/\batividades que ja respondi\b/',
             '/\batividades respondidas\b/',
             '/\batividades concluidas\b/',
             '/\batividades que fiz\b/',
             '/\batividades realizadas\b/',
+            '/\bquantas? atividades? (?:eu )?(?:fiz|respondi|realizei|completei|conclui)\b/',
+            '/\bquais atividades? (?:eu )?(?:fiz|respondi|realizei|conclui)\b/',
+            '/\bme (?:mostre|mostra) minhas atividades\b/',
+            '/\batividades? ja realizei\b/',
+            '/\bquais sao minhas atividades\b/',
         ])) {
             return 'activities_completed';
+        }
+
+        if ($this->matchesAny($message, [
+            '/\bquais questoes? (?:eu )?(?:errei|acertei)\b/',
+            '/\bquais perguntas? (?:eu )?(?:errei|acertei)\b/',
+            '/\bem quais questoes? (?:eu )?errei\b/',
+            '/\bquais foram meus erros\b/',
+            '/\bmostre meus erros\b/',
+        ])) {
+            return 'student_question_performance';
         }
 
         // Atividades genéricas
@@ -533,6 +641,13 @@ class ChatbotIntentService
             ->lower()
             ->ascii()
             ->replace('desenpenho', 'desempenho')
+            ->replace('desenpennho', 'desempenho')
+            ->replace('frequencia', 'frequencia')
+            ->replace('atividdade', 'atividade')
+            ->replace('atividaade', 'atividade')
+            ->replace('questoes', 'questoes')
+            ->replace('qestoes', 'questoes')
+            ->replace('mediaa', 'media')
             ->replaceMatches('/[^a-z0-9\s]/', ' ')
             ->squish()
             ->value();

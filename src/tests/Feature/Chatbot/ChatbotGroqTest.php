@@ -52,6 +52,25 @@ class ChatbotGroqTest extends TestCase
         $this->assertSame('Caio Ferreira', $result['entities']['student_name']);
     }
 
+    public function test_semantic_interpreter_accepts_activity_report_and_last_activities_scope(): void
+    {
+        config(['services.groq.key' => 'test-key']);
+        $payload = json_encode([
+            'intent' => 'teacher_activity_report',
+            'confidence' => 0.91,
+            'entities' => ['student_name' => null, 'teacher_name' => null, 'course_name' => null, 'time_scope' => 'last_activities'],
+            'needs_clarification' => false,
+            'clarification_question' => null,
+        ]);
+        Http::fake(['*' => Http::response(['choices' => [['message' => ['content' => $payload]]]], 200)]);
+
+        $result = app(ChatbotSemanticInterpreter::class)->interpret('Analize o desempenho dos alunos nas ultimas atividades', 'professor');
+
+        $this->assertSame('teacher_activity_report', $result['intent']);
+        $this->assertSame(0.91, $result['confidence']);
+        $this->assertSame('last_activities', $result['entities']['time_scope']);
+    }
+
     public function test_semantic_interpreter_rejects_invalid_intent_and_low_confidence(): void
     {
         config(['services.groq.key' => 'test-key']);

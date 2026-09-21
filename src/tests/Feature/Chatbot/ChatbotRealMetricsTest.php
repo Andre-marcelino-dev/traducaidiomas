@@ -181,6 +181,125 @@ class ChatbotRealMetricsTest extends TestCase
         $this->assertFalse($response['context']['has_performance_data']);
     }
 
+    public function test_activity_report_exposes_official_totals_and_latest_activity_details(): void
+    {
+        [$professor, $studentId, $courseId] = $this->seedClass();
+        foreach ([
+            ['Antiga', '2026-09-01 12:00:00'],
+            ['Atividade 2', '2026-09-21 12:06:00'],
+            ['Atividade 3', '2026-09-21 12:17:00'],
+            ['Atividade 4', '2026-09-21 12:27:00'],
+        ] as [$title, $createdAt]) {
+            $activityId = DB::table('tbl_atividades')->insertGetId([
+                'id_professor' => $professor->id_professor,
+                'id_curso' => $courseId,
+                'titulo_atividade' => $title,
+                'descricao_atividade' => 'Descrição ' . $title,
+                'tipo_atividade' => 'texto',
+                'status_atividade' => 'ATIVA',
+                'criado_em' => $createdAt,
+            ]);
+            if ($title !== 'Antiga') {
+                DB::table('tbl_atividade_respostas')->insert([
+                    'id_atividade' => $activityId,
+                    'id_aluno' => $studentId,
+                    'status_resposta' => 'ENVIADA',
+                    'nota' => null,
+                ]);
+            }
+        }
+
+        $this->actingAs($professor, 'admin');
+        $response = app(ChatbotResponseService::class)->respond(
+            'Analise as ultimas atividades',
+            'professor',
+            'teacher_activity_report',
+            ['time_scope' => 'last_activities']
+        );
+
+        $this->assertSame(1, $response['context']['total_students']);
+        $this->assertSame(3, $response['context']['total_activities']);
+        $this->assertSame(3, $response['context']['total_responses']);
+        $this->assertSame(0, $response['context']['total_corrected']);
+        $this->assertSame(0, $response['context']['total_evaluated']);
+        $this->assertSame(['Atividade 4', 'Atividade 3', 'Atividade 2'], array_column($response['context']['activities'], 'title'));
+        $this->assertStringNotContainsString('Antiga', json_encode($response['context'], JSON_UNESCAPED_UNICODE));
+    }
+
+    public function test_student_own_information_and_absences_use_authenticated_student(): void
+    {
+        [, $studentId] = $this->seedClass();
+        DB::table('presenca')->insert([
+            'id_aulas' => $this->classId,
+            'id_aluno' => $studentId,
+            'status_presenca' => 'PRESENTE',
+            'data_registro_presenca' => '2026-09-16',
+        ]);
+        $this->actingAs(\App\Models\Aluno::find($studentId), 'aluno');
+
+        $info = app(ChatbotResponseService::class)->respond('Quais são minhas informações?', 'aluno');
+        $absences = app(ChatbotResponseService::class)->respond('Quantas aulas eu perdi?', 'aluno');
+
+        $this->assertSame('Caio Ferreira', $info['context']['student']['name']);
+        $this->assertSame(0, $absences['context']['absences']);
+    }
+
+    public function test_student_activity_questions_and_performance_are_calculated_by_backend(): void
+    {
+        [$professor, $studentId, $courseId] = $this->seedClass();
+        $activityId = DB::table('tbl_atividades')->insertGetId([
+            'id_professor' => $professor->id_professor,
+            'id_curso' => $courseId,
+            'titulo_atividade' => 'Atividade aluno',
+            'descricao_atividade' => 'Teste',
+            'tipo_atividade' => 'texto',
+            'status_atividade' => 'ATIVA',
+        ]);
+        $questionId = DB::table('tbl_atividade_questoes')->insertGetId([
+            'id_atividade' => $activityId,
+            'enunciado' => 'Questão teste',
+            'tipo_questao' => 'texto',
+            'resposta_correta' => 'A',
+            'ordem' => 1,
+        ], 'id_questao');
+        $responseId = DB::table('tbl_atividade_respostas')->insertGetId([
+            'id_atividade' => $activityId,
+            'id_aluno' => $studentId,
+            'status_resposta' => 'CORRIGIDA',
+            'nota' => 9,
+        ]);
+        DB::table('tbl_atividade_resposta_questoes')->insert([
+            'id_resposta' => $responseId,
+            'id_questao' => $questionId,
+            'resposta_aluno' => 'B',
+            'correta' => 0,
+        ]);
+        $pendingResponseId = DB::table('tbl_atividade_respostas')->insertGetId([
+            'id_atividade' => $activityId,
+            'id_aluno' => $studentId,
+            'status_resposta' => 'ENVIADA',
+            'nota' => null,
+        ]);
+        DB::table('tbl_atividade_resposta_questoes')->insert([
+            'id_resposta' => $pendingResponseId,
+            'id_questao' => $questionId,
+            'resposta_aluno' => 'C',
+            'correta' => 0,
+        ]);
+        $this->actingAs(\App\Models\Aluno::find($studentId), 'aluno');
+
+        $questions = app(ChatbotResponseService::class)->respond('Quais questões eu errei?', 'aluno');
+        $performance = app(ChatbotResponseService::class)->respond('Como fui nas atividades?', 'aluno');
+        $completed = app(ChatbotResponseService::class)->respond('Quais atividades eu respondi?', 'aluno');
+
+        $this->assertSame(1, $questions['context']['questions_answered']);
+        $this->assertSame('Atividade aluno', $questions['context']['questions'][0]['activity']);
+        $this->assertSame(1, $performance['context']['activities_answered']);
+        $this->assertSame(1, $performance['context']['incorrect_answers']);
+        $this->assertCount(2, $completed['context']['activities']);
+        $this->assertNull($completed['context']['activities'][1]['grade']);
+    }
+
     private int $classId;
 
     private function seedClass(): array

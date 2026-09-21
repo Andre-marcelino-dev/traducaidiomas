@@ -174,7 +174,7 @@ class ChatbotController extends Controller
             }
         } catch (\Throwable $e) {
             Log::error('Erro ao consultar dados locais do chatbot', [
-                'intent_message' => $userMessage,
+                'message_length' => mb_strlen($userMessage),
                 'profile' => $profile,
                 'exception' => $e->getMessage(),
             ]);
@@ -212,6 +212,16 @@ class ChatbotController extends Controller
                     'context' => $localResponse['context'] ?? [],
                 ]);
             }
+
+            if (in_array(($localResponse['intent'] ?? null), ['student_activity_grade', 'student_activity_correction'], true)) {
+                return response()->json([
+                    'message' => $localResponse['message'],
+                    'text' => $localResponse['message'],
+                    'intent' => $localResponse['intent'],
+                    'source' => 'database',
+                    'context' => $localResponse['context'] ?? [],
+                ]);
+            }
         } elseif ($localResponse !== null) {
             return response()->json([
                 'message' => $localResponse['message'],
@@ -236,6 +246,14 @@ class ChatbotController extends Controller
 
             if (($authorizedContext['intent'] ?? null) === 'teacher_question_performance') {
                 $contentPerformanceInstructions = ' Para teacher_question_performance, use somente as questoes, enunciados, IDs, respostas e resultados calculados pelo Laravel. Se houver ranked_questions, a primeira representa a maior quantidade de erros; em caso de empate, apresente as empatadas sem inventar desempate. Nao confunda question com content: content nulo significa que nao ha topico pedagogico disponivel. Nao invente questoes, respostas ou numeros, nao diga que nao possui acesso ao enunciado quando question estiver no contexto e nao solicite relatorios ou dados adicionais ao professor.';
+            }
+
+            if (($authorizedContext['intent'] ?? null) === 'teacher_activity_report') {
+                $contentPerformanceInstructions = ' Para teacher_activity_report, gere uma sintese usando exclusivamente os numeros e dados do contexto autorizado pelo backend. total_activities e o numero oficial de atividades: preserve exatamente esse valor, nunca some novamente, nunca estime, nunca substitua e nunca transforme 3 em 4. Preserve tambem total_students, total_responses, total_corrected, total_evaluated, students_analyzed, activities_analyzed, responses, corrected_responses, graded_responses, average, activity_period e os detalhes de activities e questions. Nao invente alunos, nomes, notas, respostas, erros, periodos ou estatisticas. Se houver duvida, repita exatamente os valores recebidos. Se os dados forem insuficientes, informe essa limitacao claramente.';
+            }
+
+            if (in_array(($authorizedContext['intent'] ?? null), ['student_info', 'activities_completed', 'student_classes_count', 'absences', 'student_question_performance', 'student_activity_performance', 'student_activity_grade', 'student_activity_correction'], true)) {
+                $contentPerformanceInstructions = ' Use somente o contexto autorizado do proprio aluno. Preserve exatamente os nomes, quantidades, notas, respostas, acertos, erros e datas fornecidos pelo backend. Nao consulte banco, nao invente dados, nao altere numeros e nao exponha dados de outro aluno.';
             }
 
             array_splice($messages, 1, 0, [[

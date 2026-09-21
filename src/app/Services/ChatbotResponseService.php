@@ -34,7 +34,7 @@ class ChatbotResponseService
         }
 
         Log::info('CHATBOT INTENT', [
-            'message' => $message,
+            'message_length' => mb_strlen($message),
             'intent' => $intent,
             'profile' => $profile,
         ]);
@@ -49,6 +49,10 @@ class ChatbotResponseService
 
         if ($intent === 'student_profile') {
             return $this->studentProfile($profile);
+        }
+
+        if ($intent === 'student_info') {
+            return $this->studentInfo($profile);
         }
 
         /*
@@ -88,6 +92,10 @@ class ChatbotResponseService
             return $this->teacherClassesCount($profile, $message);
         }
 
+        if ($intent === 'student_classes_count') {
+            return $this->studentClassesCount($profile);
+        }
+
         if ($intent === 'schedule') {
             return $this->schedule($profile, 'schedule', $message);
         }
@@ -106,12 +114,22 @@ class ChatbotResponseService
             return $this->frequency($profile);
         }
 
+        if ($intent === 'absences') {
+            return $this->absences($profile);
+        }
+
         if ($intent === 'notes') {
             return $this->notes($profile);
         }
 
         if ($intent === 'performance') {
-            return $this->performance($profile);
+            return $profile === 'aluno'
+                ? $this->studentActivityPerformance($profile)
+                : $this->performance($profile);
+        }
+
+        if ($intent === 'student_activity_performance') {
+            return $this->studentActivityPerformance($profile);
         }
 
         if ($intent === 'course') {
@@ -137,7 +155,19 @@ class ChatbotResponseService
         }
 
         if ($intent === 'activities_completed') {
-            return $this->activities($profile, 'completed');
+            return $this->studentCompletedActivities($profile);
+        }
+
+        if ($intent === 'student_activity_grade') {
+            return $this->studentActivityGrade($profile, $message);
+        }
+
+        if ($intent === 'student_activity_correction') {
+            return $this->studentActivityCorrection($profile, $message);
+        }
+
+        if ($intent === 'student_question_performance') {
+            return $this->studentQuestionPerformance($profile, $message);
         }
 
         /*
@@ -177,11 +207,15 @@ class ChatbotResponseService
         }
 
         if ($intent === 'teacher_frequency') {
-            return $this->teacherFrequency($profile);
+            return $this->teacherFrequency($profile, $message);
         }
 
         if ($intent === 'teacher_performance') {
             return $this->teacherPerformance($profile, $message);
+        }
+
+        if ($intent === 'teacher_activity_report') {
+            return $this->teacherActivityReport($profile, $entities);
         }
 
         if ($intent === 'teacher_content_performance') {
@@ -358,6 +392,9 @@ class ChatbotResponseService
         }
 
         $students = $this->authorizedTeacherStudents(auth('admin')->id());
+        $courseIds = Aula::query()->where('id_professor', auth('admin')->id())->pluck('id_curso')
+            ->merge(Atividade::query()->where('id_professor', auth('admin')->id())->pluck('id_curso'))
+            ->filter()->unique()->values();
         $normalizedMessage = Str::of($message)->lower()->ascii()->value;
         $student = $students->first(function ($candidate) use ($normalizedMessage) {
             $name = Str::of($candidate->nome_aluno)->lower()->ascii()->value;
@@ -405,6 +442,43 @@ class ChatbotResponseService
                     'active_courses' => $courses->values()->all(),
                 ],
             ],
+        ];
+    }
+
+    private function studentInfo(string $profile): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return [
+                'message' => 'Essa consulta está disponível para alunos autenticados.',
+                'intent' => 'student_info',
+                'source' => 'database',
+            ];
+        }
+
+        $student = auth('aluno')->user();
+        $enrollments = Matricula::query()->with('curso')
+            ->where('id_aluno', $student->id_aluno)
+            ->where('status_matricula', 'ATIVO')
+            ->get();
+
+        $context = [
+            'student' => [
+                'name' => $student->nome_aluno,
+                'status' => $student->status_aluno,
+                'level' => $student->nivel_aluno,
+                'enrollments' => $enrollments->map(fn ($item) => [
+                    'id' => $item->id_matricula,
+                    'course' => $item->curso?->nome_curso,
+                    'status' => $item->status_matricula,
+                ])->values()->all(),
+            ],
+        ];
+
+        return [
+            'message' => 'Encontrei suas informações cadastrais e de matrícula.',
+            'intent' => 'student_info',
+            'source' => 'database',
+            'context' => $context,
         ];
     }
 
@@ -664,6 +738,28 @@ class ChatbotResponseService
             'message' => 'VocÃª possui ' . $total . ' aula(s) cadastrada(s) na agenda.',
             'intent' => 'teacher_classes_count',
             'source' => 'database',
+        ];
+    }
+
+    private function studentClassesCount(string $profile): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Essa consulta está disponível para alunos autenticados.', 'intent' => 'student_classes_count', 'source' => 'database'];
+        }
+
+        $courseIds = Matricula::query()->where('id_aluno', auth('aluno')->id())->active()->pluck('id_curso');
+        $now = now();
+        $count = Aula::query()->whereIn('id_curso', $courseIds)
+            ->where(function ($query) use ($now) {
+                $query->where('data_aulas', '<', $now->toDateString())
+                    ->orWhere(fn ($today) => $today->whereDate('data_aulas', $now->toDateString())->where('hora_aulas', '<', $now->format('H:i:s')));
+            })->count();
+
+        return [
+            'message' => 'Você teve ' . $count . ' aula(s) realizada(s) até o momento.',
+            'intent' => 'student_classes_count',
+            'source' => 'database',
+            'context' => ['classes_completed' => $count],
         ];
     }
 
@@ -931,6 +1027,122 @@ class ChatbotResponseService
     |--------------------------------------------------------------------------
     */
 
+    private function studentCompletedActivities(string $profile): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Entre na sua conta para consultar atividades.', 'intent' => 'activities_completed', 'source' => 'database'];
+        }
+
+        $items = AtividadeResposta::query()
+            ->with('atividade')
+            ->where('id_aluno', auth('aluno')->id())
+            ->whereIn('status_resposta', ['ENVIADA', 'CORRIGIDA'])
+            ->get(['id_atividade', 'status_resposta', 'nota', 'data_envio']);
+
+        $activities = $items->map(fn ($item) => [
+            'title' => $item->atividade?->titulo_atividade,
+            'status' => $item->status_resposta,
+            // ENVIADA nunca expõe nota/correção; esses dados só existem após CORRIGIDA.
+            'grade' => $item->status_resposta === 'CORRIGIDA' ? $item->nota : null,
+            'submitted_at' => $item->data_envio,
+        ])->filter(fn ($item) => $item['title'])->values();
+
+        return [
+            'message' => $activities->isEmpty()
+                ? 'Você ainda não possui atividades respondidas.'
+                : 'Você respondeu/concluiu ' . $activities->count() . ' atividade(s): ' . $activities->pluck('title')->implode(', ') . '.',
+            'intent' => 'activities_completed',
+            'source' => 'database',
+            'context' => ['activities_answered' => $activities->count(), 'activities' => $activities->all()],
+        ];
+    }
+
+    private function studentQuestionPerformance(string $profile, string $message): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Essa consulta está disponível para alunos autenticados.', 'intent' => 'student_question_performance', 'source' => 'database'];
+        }
+
+        $wantCorrect = preg_match('/\b(?:acertei|acertadas?|certas?|corretas?)\b/u', $message) === 1;
+        $items = AtividadeRespostaQuestao::query()
+            ->with(['questao.atividade', 'resposta'])
+            ->whereHas('resposta', fn ($query) => $query
+                ->where('id_aluno', auth('aluno')->id())
+                ->where('status_resposta', 'CORRIGIDA'))
+            ->where('correta', $wantCorrect ? 1 : 0)
+            ->get();
+
+        $questions = $items->map(fn ($item) => [
+            'question' => $item->questao?->enunciado,
+            'student_answer' => $item->resposta_aluno,
+            'correct_answer' => $item->questao?->resposta_correta,
+            'activity' => $item->questao?->atividade?->titulo_atividade,
+            'result' => $wantCorrect ? 'correct' : 'incorrect',
+        ])->values()->all();
+
+        return [
+            'message' => $items->isEmpty()
+                ? ($wantCorrect ? 'Não encontrei questões acertadas nos seus dados.' : 'Não encontrei questões erradas nos seus dados.')
+                : ($wantCorrect ? 'Encontrei ' . count($questions) . ' questão(ões) acertada(s).' : 'Encontrei ' . count($questions) . ' questão(ões) errada(s).'),
+            'intent' => 'student_question_performance',
+            'source' => 'database',
+            'context' => ['result_filter' => $wantCorrect ? 'correct' : 'incorrect', 'questions_answered' => count($questions), 'questions' => $questions],
+        ];
+    }
+
+    private function studentActivityGrade(string $profile, string $message): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Entre na sua conta para consultar a nota.', 'intent' => 'student_activity_grade', 'source' => 'database'];
+        }
+
+        $response = $this->findStudentActivityResponse($message);
+        if (!$response) {
+            return ['message' => 'Não encontrei essa atividade entre as suas respostas.', 'intent' => 'student_activity_grade', 'source' => 'database'];
+        }
+
+        if ($response->status_resposta !== 'CORRIGIDA' || $response->nota === null) {
+            return ['message' => 'Essa atividade ainda não foi corrigida pelo professor.', 'intent' => 'student_activity_grade', 'source' => 'database', 'context' => ['activity' => $response->atividade->titulo_atividade, 'status' => $response->status_resposta]];
+        }
+
+        return ['message' => 'Sua nota em ' . $response->atividade->titulo_atividade . ' foi ' . number_format((float) $response->nota, 1, ',', '.') . '.', 'intent' => 'student_activity_grade', 'source' => 'database', 'context' => ['activity' => $response->atividade->titulo_atividade, 'status' => $response->status_resposta, 'grade' => (float) $response->nota]];
+    }
+
+    private function studentActivityCorrection(string $profile, string $message): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Entre na sua conta para consultar a correção.', 'intent' => 'student_activity_correction', 'source' => 'database'];
+        }
+
+        $response = $this->findStudentActivityResponse($message);
+        if (!$response) {
+            return ['message' => 'Não encontrei essa atividade entre as suas respostas.', 'intent' => 'student_activity_correction', 'source' => 'database'];
+        }
+
+        if ($response->status_resposta !== 'CORRIGIDA') {
+            return ['message' => 'Essa atividade ainda não foi corrigida pelo professor.', 'intent' => 'student_activity_correction', 'source' => 'database', 'context' => ['activity' => $response->atividade->titulo_atividade, 'status' => $response->status_resposta]];
+        }
+
+        $questions = AtividadeRespostaQuestao::query()->with('questao')->where('id_resposta', $response->id_resposta)->get()->map(fn ($item) => [
+            'question' => $item->questao?->enunciado,
+            'student_answer' => $item->resposta_aluno,
+            'correct_answer' => $item->questao?->resposta_correta,
+            'result' => (int) $item->correta === 1 ? 'correct' : 'incorrect',
+        ])->values();
+        $errors = $questions->where('result', 'incorrect')->values();
+
+        return ['message' => $errors->isEmpty() ? 'Você não teve questões erradas nessa atividade.' : 'Você teve ' . $errors->count() . ' questão(ões) errada(s) nessa atividade.', 'intent' => 'student_activity_correction', 'source' => 'database', 'context' => ['activity' => $response->atividade->titulo_atividade, 'status' => $response->status_resposta, 'questions' => $errors->all()]];
+    }
+
+    private function findStudentActivityResponse(string $message): ?AtividadeResposta
+    {
+        $normalized = Str::of($message)->lower()->ascii()->value();
+        return AtividadeResposta::query()->with('atividade')->where('id_aluno', auth('aluno')->id())->get(['id_resposta', 'id_atividade', 'status_resposta', 'nota'])->first(function ($response) use ($normalized) {
+            $title = Str::of($response->atividade?->titulo_atividade ?? '')->lower()->ascii()->value();
+            return $title !== '' && str_contains($normalized, $title);
+        });
+    }
+
     private function materials(string $profile): array
     {
         if (
@@ -1029,6 +1241,9 @@ class ChatbotResponseService
         }
 
         $students = $this->authorizedTeacherStudents(auth('admin')->id());
+        $courseIds = Aula::query()->where('id_professor', auth('admin')->id())->pluck('id_curso')
+            ->merge(Atividade::query()->where('id_professor', auth('admin')->id())->pluck('id_curso'))
+            ->filter()->unique()->values();
         $normalized = Str::of($message)->lower()->ascii()->value();
         $student = $students->first(function ($candidate) use ($normalized) {
             $name = Str::of($candidate->nome_aluno)->lower()->ascii()->value();
@@ -1272,6 +1487,23 @@ class ChatbotResponseService
     |--------------------------------------------------------------------------
     */
 
+    private function absences(string $profile): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Essa consulta está disponível para alunos autenticados.', 'intent' => 'absences', 'source' => 'database'];
+        }
+
+        $records = Presenca::query()->where('id_aluno', auth('aluno')->id())->get(['status_presenca']);
+        $absent = $records->filter(fn ($item) => in_array(strtoupper((string) $item->status_presenca), ['FALTA', 'AUSENTE'], true))->count();
+
+        return [
+            'message' => 'Você possui ' . $absent . ' falta(s) registrada(s).',
+            'intent' => 'absences',
+            'source' => 'database',
+            'context' => ['total_records' => $records->count(), 'absences' => $absent],
+        ];
+    }
+
     private function frequency(string $profile): array
     {
         if (
@@ -1345,7 +1577,7 @@ class ChatbotResponseService
     |--------------------------------------------------------------------------
     */
 
-    private function teacherFrequency(string $profile): array
+    private function teacherFrequency(string $profile, string $message): array
     {
         if (
             $profile !== 'professor' ||
@@ -1355,6 +1587,45 @@ class ChatbotResponseService
                 'message' => 'Essa consulta está disponível apenas para professores autenticados.',
                 'intent' => 'teacher_frequency',
                 'source' => 'database',
+            ];
+        }
+
+        $students = $this->authorizedTeacherStudents(auth('admin')->id());
+        $courseIds = Aula::query()->where('id_professor', auth('admin')->id())->pluck('id_curso')
+            ->merge(Atividade::query()->where('id_professor', auth('admin')->id())->pluck('id_curso'))
+            ->filter()->unique()->values();
+        $normalized = Str::of($message)->lower()->ascii()->value();
+        $student = $students->first(function ($candidate) use ($normalized) {
+            $name = Str::of($candidate->nome_aluno)->lower()->ascii()->value();
+            $firstName = strtok($name, ' ');
+            return str_contains($normalized, $name)
+                || ($firstName !== false && preg_match('/\b' . preg_quote($firstName, '/') . '\b/', $normalized) === 1);
+        });
+
+        if ($student) {
+            $records = Presenca::query()
+                ->where('id_aluno', $student->id_aluno)
+                ->whereHas('aula', fn ($query) => $query->where('id_professor', auth('admin')->id()))
+                ->whereHas('aula', fn ($query) => $query->whereIn('id_curso', $courseIds))
+                ->get(['status_presenca']);
+
+            if ($records->isEmpty()) {
+                return [
+                    'message' => 'Não encontrei registros de frequência para ' . $student->nome_aluno . '.',
+                    'intent' => 'teacher_frequency',
+                    'source' => 'database',
+                    'context' => ['student' => $student->nome_aluno, 'records' => 0],
+                ];
+            }
+
+            $present = $records->filter(fn ($item) => in_array(strtoupper((string) $item->status_presenca), ['PRESENTE', 'PRESENCA'], true))->count();
+            $absent = $records->filter(fn ($item) => in_array(strtoupper((string) $item->status_presenca), ['FALTA', 'AUSENTE'], true))->count();
+
+            return [
+                'message' => $student->nome_aluno . ' possui ' . $records->count() . ' registros: ' . $present . ' presença(s) e ' . $absent . ' falta(s). Frequência registrada: ' . round(($present / $records->count()) * 100) . '%.',
+                'intent' => 'teacher_frequency',
+                'source' => 'database',
+                'context' => ['student' => $student->nome_aluno, 'records' => $records->count(), 'present' => $present, 'absent' => $absent, 'percentage' => round(($present / $records->count()) * 100)],
             ];
         }
 
@@ -1527,7 +1798,7 @@ class ChatbotResponseService
         $studentIds = $this->authorizedTeacherStudents(auth('admin')->id())->pluck('id_aluno');
         $wantCorrect = preg_match('/\b(?:acertaram|certas?|corretas?)\b/u', $message) === 1;
 
-        $items = AtividadeRespostaQuestao::query()
+        $allItems = AtividadeRespostaQuestao::query()
             ->with(['questao.atividade', 'resposta'])
             ->whereHas('questao.atividade', fn ($query) =>
                 $query->where('id_professor', auth('admin')->id())
@@ -1535,8 +1806,9 @@ class ChatbotResponseService
             ->whereHas('resposta', fn ($query) =>
                 $query->whereIn('id_aluno', $studentIds)
             )
-            ->where('correta', $wantCorrect ? 1 : 0)
             ->get();
+
+        $items = $allItems->where('correta', $wantCorrect ? 1 : 0)->values();
 
         $questions = $items->map(fn ($item) => [
             'question_id' => $item->id_questao,
@@ -1563,10 +1835,21 @@ class ChatbotResponseService
         $context = [
             'analysis_type' => 'teacher_question_performance',
             'result_filter' => $wantCorrect ? 'correct' : 'incorrect',
-            'questions_answered' => $items->count(),
+            'questions_answered' => $allItems->count(),
+            'correct_questions' => $allItems->where('correta', 1)->count(),
+            'incorrect_questions' => $allItems->where('correta', 0)->count(),
             'questions' => $questions,
             'ranked_questions' => $rankedQuestions,
         ];
+
+        if (!$wantCorrect && $allItems->isNotEmpty() && $items->isEmpty()) {
+            return [
+                'message' => 'Nao foram registrados erros nas questoes disponiveis no periodo analisado.',
+                'intent' => 'teacher_question_performance',
+                'source' => 'database',
+                'context' => $context,
+            ];
+        }
 
         $title = $wantCorrect ? '**Questões acertadas**' : '**Questões com erros**';
 
@@ -1575,6 +1858,97 @@ class ChatbotResponseService
                 ? ($wantCorrect ? 'Não encontrei questões acertadas nos dados autorizados.' : 'Não encontrei questões erradas nos dados autorizados.')
                 : $title . "\n\n" . collect($rankedQuestions)->map(fn ($item) => '**Questão ' . $item['question_id'] . "**\n" . ($item['question'] ?: 'Enunciado não disponível.') . ($wantCorrect ? '' : "\n**Erros:** " . $item['incorrect_count']))->implode("\n\n"),
             'intent' => 'teacher_question_performance',
+            'source' => 'database',
+            'context' => $context,
+        ];
+    }
+
+    private function teacherActivityReport(string $profile, array $entities = []): array
+    {
+        if ($profile !== 'professor' || !auth('admin')->check()) {
+            return [
+                'message' => 'Essa consulta está disponível apenas para professores autenticados.',
+                'intent' => 'teacher_activity_report',
+                'source' => 'database',
+            ];
+        }
+
+        $professorId = auth('admin')->id();
+        $students = $this->authorizedTeacherStudents($professorId);
+        $scope = $entities['time_scope'] ?? 'last_activities';
+        $activitiesQuery = Atividade::query()
+            ->where('id_professor', $professorId)
+            ->where('status_atividade', 'ATIVA');
+
+        if ($scope === 'last_activities') {
+            $activitiesQuery->latest('criado_em')->limit(3);
+        }
+
+        $activities = $activitiesQuery->get(['id_atividade', 'titulo_atividade', 'descricao_atividade', 'criado_em', 'data_entrega']);
+        $activityIds = $activities->pluck('id_atividade');
+        $responses = AtividadeResposta::query()
+            ->whereIn('id_atividade', $activityIds)
+            ->whereIn('id_aluno', $students->pluck('id_aluno'))
+            ->get(['id_resposta', 'id_atividade', 'id_aluno', 'status_resposta', 'nota']);
+        $questionItems = AtividadeRespostaQuestao::query()
+            ->whereIn('id_resposta', $responses->pluck('id_resposta'))
+            ->get(['id_questao', 'id_resposta', 'correta']);
+
+        $activityDetails = $activities->map(fn ($activity) => [
+            'id' => $activity->id_atividade,
+            'title' => $activity->titulo_atividade,
+            'description' => $activity->descricao_atividade,
+            'created_at' => $activity->criado_em,
+            'due_date' => $activity->data_entrega,
+            'questions_count' => $activity->questoes()->count(),
+        ])->values()->all();
+
+        $totalResponses = $responses->count();
+        $totalCorrected = $responses->where('status_resposta', 'CORRIGIDA')->count();
+        $totalEvaluated = $responses->whereNotNull('nota')->count();
+
+        $context = [
+            'report_type' => 'teacher_activity_report',
+            'time_scope' => $scope,
+            'total_students' => $students->count(),
+            'total_activities' => $activities->count(),
+            'total_responses' => $totalResponses,
+            'total_corrected' => $totalCorrected,
+            'total_evaluated' => $totalEvaluated,
+            'students_analyzed' => $students->count(),
+            'activities_analyzed' => $activities->count(),
+            'activities' => $activityDetails,
+            'activity_period' => [
+                'from' => $activities->min('criado_em'),
+                'to' => $activities->max('criado_em'),
+            ],
+            'responses' => $totalResponses,
+            'corrected_responses' => $totalCorrected,
+            'graded_responses' => $totalEvaluated,
+            'average' => $responses->whereNotNull('nota')->avg(fn ($item) => (float) $item->nota),
+            'questions' => $questionItems->groupBy('id_questao')->map(fn ($rows) => [
+                'question_id' => $rows->first()->id_questao,
+                'answers' => $rows->count(),
+                'correct' => $rows->where('correta', 1)->count(),
+                'incorrect' => $rows->where('correta', 0)->count(),
+            ])->values()->all(),
+        ];
+
+        Log::info('CHATBOT ACTIVITY REPORT CONTEXT', [
+            'intent' => 'teacher_activity_report',
+            'time_scope' => $scope,
+            'total_activities' => $context['total_activities'],
+            'total_responses' => $context['total_responses'],
+            'total_corrected' => $context['total_corrected'],
+            'total_evaluated' => $context['total_evaluated'],
+            'context_generated' => true,
+        ]);
+
+        return [
+            'message' => $activities->isEmpty()
+                ? 'Não há atividades disponíveis para elaborar o relatório no período solicitado.'
+                : 'Relatório de desempenho das atividades preparado com dados autorizados.',
+            'intent' => 'teacher_activity_report',
             'source' => 'database',
             'context' => $context,
         ];
@@ -1794,6 +2168,37 @@ class ChatbotResponseService
     | Desempenho
     |--------------------------------------------------------------------------
     */
+
+    private function studentActivityPerformance(string $profile): array
+    {
+        if ($profile !== 'aluno' || !auth('aluno')->check()) {
+            return ['message' => 'Essa consulta está disponível para alunos autenticados.', 'intent' => 'student_activity_performance', 'source' => 'database'];
+        }
+
+        $studentId = auth('aluno')->id();
+        $responses = AtividadeResposta::query()->where('id_aluno', $studentId)->get(['id_resposta', 'id_atividade', 'status_resposta', 'nota']);
+        $questionItems = AtividadeRespostaQuestao::query()->whereIn(
+            'id_resposta',
+            $responses->where('status_resposta', 'CORRIGIDA')->pluck('id_resposta')
+        )->get(['correta']);
+        $context = [
+            'student' => auth('aluno')->user()->nome_aluno,
+            'activities_answered' => $responses->whereIn('status_resposta', ['ENVIADA', 'CORRIGIDA'])->pluck('id_atividade')->unique()->count(),
+            'activities_corrected' => $responses->where('status_resposta', 'CORRIGIDA')->count(),
+            'activities_evaluated' => $responses->whereNotNull('nota')->count(),
+            'average' => $responses->whereNotNull('nota')->avg(fn ($item) => (float) $item->nota),
+            'questions_answered' => $questionItems->count(),
+            'correct_answers' => $questionItems->where('correta', 1)->count(),
+            'incorrect_answers' => $questionItems->where('correta', 0)->count(),
+        ];
+
+        return [
+            'message' => 'Seu desempenho nas atividades foi calculado com os dados registrados.',
+            'intent' => 'student_activity_performance',
+            'source' => 'database',
+            'context' => $context,
+        ];
+    }
 
     private function performance(string $profile): array
     {

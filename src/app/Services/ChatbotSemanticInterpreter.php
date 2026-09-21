@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Http;
 class ChatbotSemanticInterpreter
 {
     private const INTENTS = [
-        'greeting', 'password', 'teacher', 'student_profile', 'course',
+        'greeting', 'password', 'teacher', 'student_profile', 'student_info', 'course',
         'enrollment', 'my_classes', 'schedule', 'past_classes', 'frequency',
         'notes', 'performance', 'activities', 'activities_pending',
-        'activities_completed', 'materials', 'teacher_students',
+        'activities_completed', 'student_activity_grade', 'student_activity_correction', 'student_classes_count', 'absences', 'student_question_performance', 'student_activity_performance', 'materials', 'teacher_students',
         'teacher_students_count', 'teacher_frequency', 'teacher_performance',
         'teacher_ranking', 'teacher_classes_count', 'teacher_students_today',
         'teacher_content_performance', 'teacher_question_performance',
+        'teacher_activity_report',
         'teacher_next_class_students', 'teacher_student_classes', 'price',
     ];
 
@@ -25,7 +26,7 @@ class ChatbotSemanticInterpreter
         }
 
         try {
-            $response = Http::withToken($key)
+        $response = Http::withToken($key)
             ->acceptJson()
             ->timeout((int) config('services.groq.timeout', 30))
             ->post(config('services.groq.url'), [
@@ -45,6 +46,7 @@ class ChatbotSemanticInterpreter
         }
 
         if (!$response->successful()) {
+            \Illuminate\Support\Facades\Log::warning('CHATBOT SEMANTIC INTERPRETATION FAILED', ['status' => $response->status()]);
             return null;
         }
 
@@ -52,6 +54,7 @@ class ChatbotSemanticInterpreter
         $start = strpos($content, '{');
         $end = strrpos($content, '}');
         if ($start === false || $end === false || $end <= $start) {
+            \Illuminate\Support\Facades\Log::warning('CHATBOT SEMANTIC INTERPRETATION INVALID JSON', ['status' => $response->status(), 'content_length' => strlen($content)]);
             return null;
         }
 
@@ -71,12 +74,25 @@ class ChatbotSemanticInterpreter
             (!is_numeric($confidence) || (float) $confidence < 0 || (float) $confidence > 1) ||
             !is_array($entities) ||
             !is_bool($needsClarification) ||
-            ($timeScope !== null && !in_array($timeScope, ['today', 'upcoming', 'this_week', 'next_week', 'history'], true)) ||
+            ($timeScope !== null && !in_array($timeScope, ['today', 'upcoming', 'this_week', 'next_week', 'history', 'last_activities'], true)) ||
             ($intent !== null && !in_array($intent, self::INTENTS, true)) ||
             (float) $confidence < 0.65
         ) {
+            \Illuminate\Support\Facades\Log::warning('CHATBOT SEMANTIC INTERPRETATION REJECTED', [
+                'intent' => is_string($intent) ? $intent : null,
+                'confidence' => is_numeric($confidence) ? (float) $confidence : null,
+                'time_scope' => $timeScope,
+                'valid_json' => true,
+            ]);
             return null;
         }
+
+        \Illuminate\Support\Facades\Log::info('CHATBOT SEMANTIC INTERPRETATION', [
+            'intent' => $intent,
+            'confidence' => (float) $confidence,
+            'time_scope' => $timeScope,
+            'needs_clarification' => $needsClarification,
+        ]);
 
         return [
             'intent' => $intent,
@@ -102,6 +118,10 @@ class ChatbotSemanticInterpreter
             . 'As expressões "quando o aluno tem aula", "me mostra a agenda", "me fala das aulas" e "quais aulas o aluno tem" pertencem a teacher_student_classes. '
             . 'Use time_scope upcoming para próximas aulas, today para hoje, this_week para esta semana, next_week para próxima semana e history para aulas já realizadas. '
             . 'Para uma pergunta geral sem período explícito, use teacher_student_classes com time_scope upcoming. '
+            . 'Use teacher_activity_report para relatorios ou analises do desempenho da turma nas atividades. '
+            . 'Use time_scope last_activities para ultimas atividades, atividades recentes ou ultimas atividades realizadas; nao confunda com history. '
+            . 'Erros de ortografia como analize/analise devem ser tratados como equivalentes. '
+            . 'Para o perfil aluno, use student_info para seus proprios dados, activities_completed para atividades respondidas/concluidas, student_activity_grade para nota de uma atividade especifica, student_activity_correction para correcao de uma atividade especifica, student_classes_count para aulas passadas, absences para faltas, student_question_performance para questoes certas ou erradas e student_activity_performance para desempenho nas atividades. '
             . 'Use teacher_students para listas de alunos. '
             . 'Se houver ambiguidade, use intent null, needs_clarification true e faça uma pergunta curta.';
     }

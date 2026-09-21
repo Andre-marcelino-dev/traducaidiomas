@@ -348,11 +348,13 @@
             const linhas = String(texto || "").split("\n");
             let html = "";
             let listaAberta = false;
+            let listaNumerada = false;
 
             const fecharLista = function () {
                 if (listaAberta) {
-                    html += "</ul>";
+                    html += listaNumerada ? "</ol>" : "</ul>";
                     listaAberta = false;
+                    listaNumerada = false;
                 }
             };
 
@@ -360,10 +362,26 @@
                 const valor = escapeHtml(linha.trim());
                 const item = valor.match(/^[-•]\s+(.+)$/);
 
+                const itemNumerado = valor.match(/^\d+[.)]\s+(.+)$/);
+
+                if (itemNumerado) {
+                    if (!listaAberta || !listaNumerada) {
+                        fecharLista();
+                        html += "<ol>";
+                        listaAberta = true;
+                        listaNumerada = true;
+                    }
+
+                    html += "<li>" + itemNumerado[1] + "</li>";
+                    return;
+                }
+
                 if (item) {
-                    if (!listaAberta) {
+                    if (!listaAberta || listaNumerada) {
+                        fecharLista();
                         html += "<ul>";
                         listaAberta = true;
+                        listaNumerada = false;
                     }
 
                     html += "<li>" + item[1] + "</li>";
@@ -374,6 +392,13 @@
 
                 if (!valor) {
                     html += "<div class=\"traduca-chatbot__markdown-spacer\"></div>";
+                    return;
+                }
+
+                const titulo = valor.match(/^#{1,3}\s+(.+)$/);
+
+                if (titulo) {
+                    html += "<strong class=\"traduca-chatbot__section-title\">" + titulo[1] + "</strong>";
                     return;
                 }
 
