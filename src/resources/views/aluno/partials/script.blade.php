@@ -16,6 +16,10 @@
     });
 </script>
 
+<script src="{{ asset('js/chatbot.js') }}">
+
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
@@ -26,5 +30,7 @@
                 setTimeout(() => alert.remove(), 800);
             });
         }, 3000);
+
+
     });
 </script>

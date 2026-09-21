@@ -10,7 +10,15 @@ class DuvidaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Duvida::with('aluno')->where('ativo', true);
+        $filtroAtivo = $request->get('ativo', 'ativas');
+
+        $query = Duvida::with('aluno');
+
+        if ($filtroAtivo === 'ativas') {
+            $query->where('ativo', true);
+        } elseif ($filtroAtivo === 'desativadas') {
+            $query->where('ativo', false);
+        }
 
         if ($request->filled('status_duvida')) {
             $query->where('status_duvida', $request->status_duvida);
@@ -26,7 +34,8 @@ class DuvidaController extends Controller
             'duvidas',
             'totalDuvidas',
             'totalPendentes',
-            'totalRespondidas'
+            'totalRespondidas',
+            'filtroAtivo'
         ));
     }
 
@@ -60,7 +69,16 @@ class DuvidaController extends Controller
         $duvida = Duvida::findOrFail($id);
         $duvida->update(['ativo' => false]);
 
-        return redirect()->route('admin.duvidas.index')
+        return redirect()->back()
             ->with('success', 'Dúvida desativada com sucesso!');
+    }
+
+    public function ativar($id)
+    {
+        $duvida = Duvida::findOrFail($id);
+        $duvida->update(['ativo' => true]);
+
+        return redirect()->back()
+            ->with('success', 'Dúvida ativada com sucesso!');
     }
 }

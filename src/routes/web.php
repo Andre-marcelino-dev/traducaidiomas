@@ -5,6 +5,8 @@ use App\Http\Controllers\SobreController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\admin\ProfessorChatbotController;
+use App\Http\Controllers\aluno\ChatbotController as AlunoChatbotController;
 use App\Http\Controllers\aluno\ReagendamentoController as AlunoReagendamentoController;
 use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoController;
 use App\Http\Controllers\admin\AuthController;
@@ -31,6 +33,18 @@ use App\Http\Controllers\admin\ForumController as AdminForumController;
 use App\Http\Controllers\aluno\DuvidaController as AlunoDuvidaController;
 use App\Http\Controllers\admin\DuvidaController as AdminDuvidaController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
+// ── Rota de Deploy (roda as migrations pendentes no servidor via FTP) ──
+Route::get('/sistema/migrate/{token}', function (string $token) {
+    if (!hash_equals((string) env('DEPLOY_SECRET'), $token)) {
+        abort(404);
+    }
+
+    Artisan::call('migrate', ['--force' => true]);
+
+    return '<pre>' . e(Artisan::output()) . '</pre>';
+});
 
 // ── Rotas Públicas do Site ──
 Route::get("/", [HomeController::class, 'home'])->name('home');
@@ -41,6 +55,13 @@ Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
 Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
+
+
+// Chatbot publico
+Route::get('/chatbot/dados', [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
+Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
+ 
+
 
 // ── Rotas do Administrador (Admin) ──
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -151,6 +172,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('reagendamento/notificacoes', [AdminReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
 
+
+
+    
+        // Chatbot do professor
+        Route::prefix('professor/chatbot')->name('professor.chatbot.')->group(function () {
+            Route::get('/dados', [ProfessorChatbotController::class, 'dados'])->name('dados');
+            Route::post('/mensagem', [ProfessorChatbotController::class, 'mensagem'])->name('mensagem');
+        });
+
         // ── Atividades ──
         Route::prefix('atividades')->name('atividades.')->group(function () {
             Route::get('/',              [AdminAtividadeController::class, 'index'])->name('index');
@@ -175,6 +205,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{id}',            [AdminDuvidaController::class, 'show'])->name('show');
             Route::put('/{id}/responder',  [AdminDuvidaController::class, 'responder'])->name('responder');
             Route::put('/{id}/desativar',  [AdminDuvidaController::class, 'desativar'])->name('desativar');
+            Route::put('/{id}/ativar',     [AdminDuvidaController::class, 'ativar'])->name('ativar');
         });
 
         // ── Gerenciamento do Site ──
@@ -242,5 +273,14 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             ->name('reagendamentos.index');
         Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
+
+
+            // Chatbot do aluno
+        Route::prefix('chatbot')->name('chatbot.')->group(function () {
+            Route::get('/dados', [AlunoChatbotController::class, 'dados'])->name('dados');
+            Route::post('/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('mensagem');
+        });
     });
+
+
 });

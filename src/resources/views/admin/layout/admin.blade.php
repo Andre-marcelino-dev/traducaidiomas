@@ -22,6 +22,7 @@
     </div>
 
     @include('admin.partials.script')
+    @include('partials.chatbot')
 
 @stack('scripts')
 </body>

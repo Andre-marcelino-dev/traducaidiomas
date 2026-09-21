@@ -71,6 +71,13 @@
                                 <option value="respondida" {{ request('status_duvida') == 'respondida' ? 'selected' : '' }}>Respondidas</option>
                             </select>
                         </div>
+                        <div class="col-sm-4">
+                            <select name="ativo" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="ativas" {{ $filtroAtivo === 'ativas' ? 'selected' : '' }}>Ativas</option>
+                                <option value="desativadas" {{ $filtroAtivo === 'desativadas' ? 'selected' : '' }}>Desativadas</option>
+                                <option value="todas" {{ $filtroAtivo === 'todas' ? 'selected' : '' }}>Todas</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -109,6 +116,9 @@
                                         @else
                                             <span class="tbl-badge amber">Não respondida</span>
                                         @endif
+                                        @unless($duvida->ativo)
+                                            <span class="tbl-badge rose">Desativada</span>
+                                        @endunless
                                     </td>
                                     <td>{{ $duvida->criado_em?->format('d/m/Y H:i') }}</td>
                                     <td class="text-center">
@@ -116,14 +126,25 @@
                                             <a href="{{ route('admin.duvidas.show', $duvida->id_duvida) }}" class="tbl-btn-ver">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
-                                            <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline"
-                                                  onsubmit="return confirm('Desativar a dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}? Ela deixará de aparecer nas listas.');">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="tbl-btn-excluir">
-                                                    <i class="fas fa-ban"></i> Desativar
-                                                </button>
-                                            </form>
+                                            @if($duvida->ativo)
+                                                <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline form-desativar">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="button" class="tbl-btn-excluir"
+                                                        data-nome="Dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}"
+                                                        onclick="abrirModalDesativar(this)">
+                                                        <i class="fas fa-ban"></i> Desativar
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('admin.duvidas.ativar', $duvida->id_duvida) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit" class="tbl-btn-success">
+                                                        <i class="fas fa-check"></i> Ativar
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -149,5 +170,7 @@
             </div>
         </div>
     </div>
+
+@include('admin.partials.modal-desativar', ['desTitulo' => 'Desativar Dúvida', 'desDescricao' => 'Você está prestes a desativar a dúvida de:'])
 
 @endsection

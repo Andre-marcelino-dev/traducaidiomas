@@ -27,6 +27,10 @@
 
   {{-- resources/views/partials/script.blade.php --}}
 
+  <script src="{{ asset('js/chatbot.js') }}">
+
+  </script>
+
 <script>
     setTimeout(function () {
         const alerts = document.querySelectorAll('#flash-success, #flash-error');

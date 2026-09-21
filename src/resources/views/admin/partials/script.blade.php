@@ -161,5 +161,8 @@
         });
     </script>
 
+<script src="{{ asset('js/chatbot.js') }}">
+  
+</script>
     
 

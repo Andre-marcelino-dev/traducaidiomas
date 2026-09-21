@@ -32,14 +32,25 @@
             <div class="d-card fade-up mb-4">
                 <div class="d-card-header">
                     <h6><i class="fas fa-envelope text-primary"></i> Dúvida do Aluno</h6>
-                    <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline"
-                          onsubmit="return confirm('Desativar a dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}? Ela deixará de aparecer nas listas.');">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit" class="tbl-btn-excluir">
-                            <i class="fas fa-ban"></i> Desativar
-                        </button>
-                    </form>
+                    @if($duvida->ativo)
+                        <form action="{{ route('admin.duvidas.desativar', $duvida->id_duvida) }}" method="POST" class="d-inline form-desativar">
+                            @csrf
+                            @method('PUT')
+                            <button type="button" class="tbl-btn-excluir"
+                                data-nome="Dúvida de {{ $duvida->aluno->nome_aluno ?? 'aluno' }}"
+                                onclick="abrirModalDesativar(this)">
+                                <i class="fas fa-ban"></i> Desativar
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('admin.duvidas.ativar', $duvida->id_duvida) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="tbl-btn-success">
+                                <i class="fas fa-check"></i> Ativar
+                            </button>
+                        </form>
+                    @endif
                 </div>
                 <div class="card-body p-3">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -47,11 +58,16 @@
                             <div style="font-weight:700;font-size:.9rem;color:#1e293b;">{{ $duvida->aluno->nome_aluno ?? '—' }}</div>
                             <div style="font-size:.72rem;color:#94a3b8;">{{ $duvida->criado_em?->format('d/m/Y H:i') }}</div>
                         </div>
-                        @if($duvida->status_duvida === 'respondida')
-                            <span class="tbl-badge">Respondida</span>
-                        @else
-                            <span class="tbl-badge amber">Não respondida</span>
-                        @endif
+                        <div>
+                            @if($duvida->status_duvida === 'respondida')
+                                <span class="tbl-badge">Respondida</span>
+                            @else
+                                <span class="tbl-badge amber">Não respondida</span>
+                            @endif
+                            @unless($duvida->ativo)
+                                <span class="tbl-badge rose">Desativada</span>
+                            @endunless
+                        </div>
                     </div>
 
                     <p style="font-size:.88rem;color:#334155;line-height:1.7;white-space:pre-line;">{{ $duvida->mensagem_duvida }}</p>
@@ -93,5 +109,7 @@
 
         </div>
     </div>
+
+    @include('admin.partials.modal-desativar', ['desTitulo' => 'Desativar Dúvida', 'desDescricao' => 'Você está prestes a desativar a dúvida de:'])
 
 @endsection

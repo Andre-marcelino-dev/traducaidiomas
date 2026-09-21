@@ -533,3 +533,32 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(244, 63, 94, .5);
 }
+
+/* ── Variante âmbar (ações reversíveis, ex: desativar) ───── */
+.tone-amber .del-icon-circle {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    color: #b45309;
+}
+
+.tone-amber .del-icon-ring {
+    border-color: rgba(180, 83, 9, .15);
+}
+
+.tone-amber .del-item-nome {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.tone-amber .del-warn {
+    color: #64748b;
+}
+
+.tone-amber .del-btn-confirmar {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, .4);
+}
+
+.tone-amber .del-btn-confirmar:hover {
+    box-shadow: 0 6px 20px rgba(217, 119, 6, .5);
+}

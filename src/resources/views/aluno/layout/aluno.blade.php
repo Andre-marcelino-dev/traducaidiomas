@@ -20,6 +20,7 @@
     </div>
 
     @include('aluno.partials.script')
+    @include('partials.chatbot')
 
     @stack('scripts')
 </body>
