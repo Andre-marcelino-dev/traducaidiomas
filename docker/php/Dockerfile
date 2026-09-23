@@ -44,12 +44,13 @@ RUN docker-php-ext-install \
 # Instala o Composer 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer 
  
-WORKDIR /var/www/html 
-# Cria pastas de upload e define permissões
-RUN mkdir -p /var/www/html/public/traducaidiomas/professor \
-    && mkdir -p /var/www/html/public/traducaidiomas/alunos \
-    && mkdir -p /var/www/html/public/traducaidiomas/materiais \
-    && mkdir -p /var/www/html/public/traducaidiomas/servicos \
-    && mkdir -p /var/www/html/public/traducaidiomas/img \
-    && mkdir -p /var/www/html/public/traducaidiomas/banners \
-    && chmod -R 777 /var/www/html/public/traducaidiomas
+WORKDIR /var/www/html
+
+# /var/www/html e' montado como volume em tempo de execucao (ver
+# docker-compose.yml), entao as pastas de upload nao podem ser criadas
+# aqui no build - o mount escondera qualquer coisa criada agora. Isso e'
+# feito pelo entrypoint.sh toda vez que o container inicia.
+COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["entrypoint.sh"]
