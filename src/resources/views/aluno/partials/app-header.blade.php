@@ -36,7 +36,7 @@
                         <p>
                             {{ auth('aluno')->user()->nome_aluno }}
                             <small>{{ auth('aluno')->user()->curso_aluno }}</small>
-                            <small>Nível: {{ auth('aluno')->user()->nivel_aluno }}</small>
+                            <small>Nível: {{ isset($cursoAtual) ? ucfirst(\Illuminate\Support\Facades\DB::table('tbl_niveis')->where('id_nivel', $cursoAtual->id_nivel)->value('nome_nivel') ?? '') : auth('aluno')->user()->nivel_aluno }}</small>
                         </p>
                     </li>
                     <li class="user-footer">

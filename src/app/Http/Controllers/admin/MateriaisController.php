@@ -43,7 +43,7 @@ class MateriaisController extends Controller
         if ($request->hasFile('arquivo_materiais')) {
             $arquivo     = $request->file('arquivo_materiais');
             $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = base_path('traducaidiomas/materiais');
+            $destino     = public_path('traducaidiomas/materiais');
 
             if (!file_exists($destino)) {
                 mkdir($destino, 0755, true);
@@ -94,13 +94,13 @@ class MateriaisController extends Controller
         $materiais = Materiais::findOrFail($id);
 
         if ($request->hasFile('arquivo_materiais')) {
-            if ($materiais->arquivo_materiais && file_exists(base_path($materiais->arquivo_materiais))) {
-                unlink(base_path($materiais->arquivo_materiais));
+            if ($materiais->arquivo_materiais && file_exists(public_path($materiais->arquivo_materiais))) {
+                unlink(public_path($materiais->arquivo_materiais));
             }
 
             $arquivo     = $request->file('arquivo_materiais');
             $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = base_path('traducaidiomas/materiais');
+            $destino     = public_path('traducaidiomas/materiais');
 
             if (!file_exists($destino)) {
                 mkdir($destino, 0755, true);
@@ -122,8 +122,8 @@ class MateriaisController extends Controller
     {
         $materiais = Materiais::findOrFail($id);
 
-        if ($materiais->arquivo_materiais && file_exists(base_path($materiais->arquivo_materiais))) {
-            unlink(base_path($materiais->arquivo_materiais));
+        if ($materiais->arquivo_materiais && file_exists(public_path($materiais->arquivo_materiais))) {
+            unlink(public_path($materiais->arquivo_materiais));
         }
 
         $materiais->delete();
@@ -136,8 +136,8 @@ class MateriaisController extends Controller
     {
         $material = Materiais::findOrFail($id);
 
-        if ($material->arquivo_materiais && file_exists(base_path($material->arquivo_materiais))) {
-            return response()->download(base_path($material->arquivo_materiais));
+        if ($material->arquivo_materiais && file_exists(public_path($material->arquivo_materiais))) {
+            return response()->download(public_path($material->arquivo_materiais));
         }
 
         return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');

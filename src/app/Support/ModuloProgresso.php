@@ -47,12 +47,12 @@ class ModuloProgresso
             $concluidos = min($progressoPorModulo[$modulo->id_modulo] ?? 0, $total);
 
             $modulo->materiais_concluidos = $concluidos;
-            $modulo->percentual = $total > 0 ? (int) round(($concluidos / $total) * 100) : 100;
-            $modulo->concluido = $total === 0 || $concluidos >= $total;
+            $modulo->percentual = $total > 0 ? (int) round(($concluidos / $total) * 100) : 0;
+            $modulo->concluido = $total > 0 && $concluidos >= $total;
             $modulo->liberado = $liberado;
             $modulo->em_andamento = $modulo->liberado && !$modulo->concluido;
 
-            $liberado = $modulo->concluido;
+            $liberado = $modulo->concluido || $total === 0;
         }
 
         return $modulos;

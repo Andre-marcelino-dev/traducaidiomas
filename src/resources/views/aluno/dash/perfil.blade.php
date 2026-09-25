@@ -51,8 +51,26 @@
                     <span class="badge bg-success">{{ $aluno->status_aluno }}</span>
 
                     <hr>
-                    <p class="text-muted small mb-1"><strong>Curso:</strong> {{ $aluno->curso_aluno }}</p>
-                    <p class="text-muted small mb-1"><strong>Nível:</strong> {{ $aluno->nivel_aluno }}</p>
+                    @php
+                        $matriculasAluno = \Illuminate\Support\Facades\DB::table('tbl_matricula as m')
+                            ->join('tbl_cursos as c', 'c.id_curso', '=', 'm.id_curso')
+                            ->join('tbl_niveis as n', 'n.id_nivel', '=', 'm.id_nivel')
+                            ->where('m.id_aluno', $aluno->id_aluno)
+                            ->where('m.status_matricula', 'ATIVO')
+                            ->orderBy('c.nome_curso')
+                            ->get(['m.id_curso', 'c.nome_curso', 'n.nome_nivel']);
+                    @endphp
+                    <p class="text-muted small mb-1"><strong>Cursos:</strong></p>
+                    @forelse($matriculasAluno as $mat)
+                        <p class="text-muted small mb-1">
+                            {{ $mat->nome_curso }} ({{ ucfirst($mat->nome_nivel) }})
+                            @if(isset($cursoAtual) && $cursoAtual->id_curso == $mat->id_curso)
+                                <span class="badge bg-primary">atual</span>
+                            @endif
+                        </p>
+                    @empty
+                        <p class="text-muted small mb-1">Nenhuma matrícula ativa</p>
+                    @endforelse
                     <p class="text-muted small"><strong>Telefone:</strong> {{ $aluno->telefone_aluno }}</p>
 
                     {{-- FORM FOTO --}}

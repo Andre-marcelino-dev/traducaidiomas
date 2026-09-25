@@ -62,7 +62,7 @@ class AlunoController extends Controller
     {
         $foto = $request->file('foto_aluno');
         $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . strtolower($foto->getClientOriginalExtension());
-        $destino = base_path('traducaidiomas/alunos');
+        $destino = public_path('traducaidiomas/alunos');
 
         if (!is_dir($destino)) {
             mkdir($destino, 0755, true);

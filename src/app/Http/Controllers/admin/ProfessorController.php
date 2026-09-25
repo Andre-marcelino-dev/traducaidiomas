@@ -67,7 +67,7 @@ return redirect()
     private function salvarFotoProfessor($arquivo): string
     {
         $nomeFoto = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
-        $destino = base_path('traducaidiomas/professor');
+        $destino = public_path('traducaidiomas/professor');
 
         if (!is_dir($destino)) {
             mkdir($destino, 0755, true);
@@ -144,7 +144,7 @@ return redirect()
         }
 
         if ($request->hasFile('foto_professor')) {
-            $fotoAntiga = base_path('traducaidiomas/professor/' . $professor->foto_professor);
+            $fotoAntiga = public_path('traducaidiomas/professor/' . $professor->foto_professor);
             if ($professor->foto_professor && file_exists($fotoAntiga)) {
                 @unlink($fotoAntiga);
             }
@@ -167,7 +167,7 @@ return redirect()
                 ->with('error', 'Professor não encontrado.');
         }
 
-        $fotoPath = base_path('traducaidiomas/professor/' . $professor->foto_professor);
+        $fotoPath = public_path('traducaidiomas/professor/' . $professor->foto_professor);
         if ($professor->foto_professor && file_exists($fotoPath)) {
             @unlink($fotoPath);
         }

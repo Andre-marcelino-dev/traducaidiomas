@@ -57,7 +57,7 @@ class AuthController extends Controller
         $aluno = auth('aluno')->user();
         $file = $request->file('foto_aluno');
         $nome = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $destino = base_path('traducaidiomas/alunos');
+        $destino = public_path('traducaidiomas/alunos');
 
         if (!is_dir($destino)) {
             mkdir($destino, 0755, true);
