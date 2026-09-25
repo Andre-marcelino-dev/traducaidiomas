@@ -11,4 +11,9 @@ class Curso extends Model
     protected $primaryKey = 'id_curso';
 
     public $timestamps = false;
+
+    public function modulos()
+    {
+        return $this->hasMany(Modulo::class, 'id_curso', 'id_curso');
+    }
 }

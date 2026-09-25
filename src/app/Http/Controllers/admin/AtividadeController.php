@@ -6,6 +6,7 @@ use App\Models\AtividadeQuestao;
 use App\Models\AtividadeResposta;
 use App\Models\Curso;
 use App\Models\Aluno;
+use App\Models\Modulo;
 use Illuminate\Http\Request;
 class AtividadeController extends Controller
 {
@@ -19,7 +20,8 @@ class AtividadeController extends Controller
     public function create()
     {
         $cursos = Curso::orderBy('nome_curso')->get();
-        return view('admin.atividades.create', compact('cursos'));
+        $modulos = Modulo::with(['curso', 'nivel'])->orderBy('id_curso')->orderBy('ordem_modulo')->get();
+        return view('admin.atividades.create', compact('cursos', 'modulos'));
     }
 
     public function store(Request $request)
@@ -27,6 +29,7 @@ class AtividadeController extends Controller
         $request->validate([
             'titulo_atividade'   => 'required',
             'id_curso'           => 'required',
+            'id_modulo'          => 'nullable|exists:tbl_modulos,id_modulo',
             'data_entrega'       => 'required|date',
             'enunciado'          => 'required|array',
         ]);
@@ -34,6 +37,7 @@ class AtividadeController extends Controller
         $atividade = Atividade::create([
             'id_professor'       => auth('admin')->id(),
             'id_curso'           => $request->id_curso,
+            'id_modulo'          => $request->id_modulo,
             'titulo_atividade'   => $request->titulo_atividade,
             'descricao_atividade'=> $request->descricao_atividade,
             'tipo_atividade'     => 'misto',

@@ -17,6 +17,7 @@ use App\Http\Controllers\admin\AgendaController;
 use App\Http\Controllers\admin\AulaController;
 use App\Http\Controllers\admin\ServicoController as adminServicoController;
 use App\Http\Controllers\admin\MatriculaController;
+use App\Http\Controllers\admin\ModuloController;
 use App\Http\Controllers\admin\MateriaisController as AdminMateriaisController;
 use App\Http\Controllers\admin\PresencaController;
 use App\Http\Controllers\admin\SiteController;
@@ -26,6 +27,8 @@ use App\Http\Controllers\aluno\AuthController as AlunoAuthController;
 use App\Http\Controllers\aluno\DashController as AlunoDashController;
 use App\Http\Controllers\aluno\MateriaisController as AlunoMateriaisController;
 use App\Http\Controllers\aluno\AulaController as AlunoAulaController;
+use App\Http\Controllers\aluno\CursoController as AlunoCursoController;
+use App\Http\Controllers\aluno\EscolherCursoController as AlunoEscolherCursoController;
 use App\Http\Controllers\aluno\ProgressoController as AlunoProgressoController;
 use App\Http\Controllers\aluno\FeedbackController as AlunoFeedbackController;
 use App\Http\Controllers\aluno\ForumController as AlunoForumController;
@@ -56,6 +59,8 @@ Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
 Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
 
+
+Route::view('/api/documentacao', 'api.documentacao')->name('api.documentacao');
 
 // Chatbot publico
 Route::get('/chatbot/dados', [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
@@ -135,6 +140,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{id}',        [MatriculaController::class, 'update'])->name('update');
             Route::delete('/{id}',     [MatriculaController::class, 'destroy'])->name('destroy');
             Route::put('/{id}/status', [MatriculaController::class, 'updateStatus'])->name('updateStatus');
+        });
+
+        // CRUD Módulos
+        Route::prefix('modulos')->name('modulos.')->group(function () {
+            Route::get('/',          [ModuloController::class, 'index'])->name('index');
+            Route::post('/',         [ModuloController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [ModuloController::class, 'edit'])->name('edit');
+            Route::put('/{id}',      [ModuloController::class, 'update'])->name('update');
+            Route::delete('/{id}',   [ModuloController::class, 'destroy'])->name('destroy');
         });
 
         // CRUD Materiais
@@ -227,58 +241,67 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
     // Painel Aluno (Protegidas por Middleware)
     Route::middleware(['auth:aluno', 'session.timeout:aluno'])->group(function () {
 
-        Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
-        Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
-        Route::put('/perfil/foto',  [AlunoAuthController::class, 'atualizarFoto'])->name('perfil.foto');
-        Route::put('/perfil/email', [AlunoAuthController::class, 'atualizarEmail'])->name('perfil.email');
-        Route::put('/perfil/senha', [AlunoAuthController::class, 'atualizarSenha'])->name('perfil.senha');
+        // Escolha do curso (logo após o login)
+        Route::get('/escolher-curso',  [AlunoEscolherCursoController::class, 'index'])->name('cursos.escolher');
+        Route::post('/escolher-curso', [AlunoEscolherCursoController::class, 'selecionar'])->name('cursos.selecionar');
 
-        // Minhas Aulas
-        Route::get('/aulas',    [AlunoAulaController::class, 'index'])->name('aulas.index');
-        Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
-        Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
-        Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
-        Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
+        // Demais telas exigem um curso escolhido
+        Route::middleware('curso.selecionado')->group(function () {
 
-        // Materiais (somente leitura)
-        Route::get('/materiais',                   [AlunoMateriaisController::class, 'index'])->name('materiais.index');
-        Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
-        Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
-        Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
+            Route::get('/',       [AlunoDashController::class, 'index'])->name('dash');
+            Route::get('/perfil', [AlunoAuthController::class, 'perfil'])->name('perfil');
+            Route::put('/perfil/foto',  [AlunoAuthController::class, 'atualizarFoto'])->name('perfil.foto');
+            Route::put('/perfil/email', [AlunoAuthController::class, 'atualizarEmail'])->name('perfil.email');
+            Route::put('/perfil/senha', [AlunoAuthController::class, 'atualizarSenha'])->name('perfil.senha');
 
-        // ── Feedback (Aluno) ──
-        Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
+            // Minhas Aulas
+            Route::get('/aulas',    [AlunoAulaController::class, 'index'])->name('aulas.index');
+            Route::get('/curso',    [AlunoCursoController::class, 'index'])->name('curso.index');
+            Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
+            Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
+            Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
+            Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
 
-        // ── Fórum (Aluno) ──
-        Route::prefix('forum')->name('forum.')->group(function () {
-            Route::get('/',                [AlunoForumController::class, 'index'])->name('index');
-            Route::get('/create',          [AlunoForumController::class, 'create'])->name('create');
-            Route::post('/',               [AlunoForumController::class, 'store'])->name('store');
-            Route::get('/{id}',            [AlunoForumController::class, 'show'])->name('show');
-            Route::post('/{id}/responder', [AlunoForumController::class, 'storeResposta'])->name('responder');
-            Route::get('/{id}/download',   [AlunoForumController::class, 'download'])->name('download');
-        });
+            // Materiais (somente leitura)
+            Route::get('/materiais',                   [AlunoMateriaisController::class, 'index'])->name('materiais.index');
+            Route::get('/materiais/{id}',              [AlunoMateriaisController::class, 'show'])->name('materiais.show');
+            Route::get('/materiais/{id}/download',     [AlunoMateriaisController::class, 'download'])->name('materiais.download');
+            Route::get('/materiais/{id}/visualizar',   [AlunoMateriaisController::class, 'verArquivo'])->name('materiais.visualizar');
 
-        // ── Dúvidas dos Alunos (Aluno) ──
-        Route::prefix('duvidas')->name('duvidas.')->group(function () {
-            Route::get('/',       [AlunoDuvidaController::class, 'index'])->name('index');
-            Route::get('/create', [AlunoDuvidaController::class, 'create'])->name('create');
-            Route::post('/',      [AlunoDuvidaController::class, 'store'])->name('store');
-        });
+            // ── Feedback (Aluno) ──
+            Route::post('feedback', [AlunoFeedbackController::class, 'store'])->name('feedback.store');
 
-        // ── Reagendamentos (Aluno) ──
-        Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
-            ->name('reagendamento.solicitar');
-        Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicatados'])
-            ->name('reagendamentos.index');
-        Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
-            ->name('reagendamento.notificacoes');
+            // ── Fórum (Aluno) ──
+            Route::prefix('forum')->name('forum.')->group(function () {
+                Route::get('/',                [AlunoForumController::class, 'index'])->name('index');
+                Route::get('/create',          [AlunoForumController::class, 'create'])->name('create');
+                Route::post('/',               [AlunoForumController::class, 'store'])->name('store');
+                Route::get('/{id}',            [AlunoForumController::class, 'show'])->name('show');
+                Route::post('/{id}/responder', [AlunoForumController::class, 'storeResposta'])->name('responder');
+                Route::get('/{id}/download',   [AlunoForumController::class, 'download'])->name('download');
+            });
+
+            // ── Dúvidas dos Alunos (Aluno) ──
+            Route::prefix('duvidas')->name('duvidas.')->group(function () {
+                Route::get('/',       [AlunoDuvidaController::class, 'index'])->name('index');
+                Route::get('/create', [AlunoDuvidaController::class, 'create'])->name('create');
+                Route::post('/',      [AlunoDuvidaController::class, 'store'])->name('store');
+            });
+
+            // ── Reagendamentos (Aluno) ──
+            Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
+                ->name('reagendamento.solicitar');
+            Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicatados'])
+                ->name('reagendamentos.index');
+            Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
+                ->name('reagendamento.notificacoes');
 
 
-            // Chatbot do aluno
-        Route::prefix('chatbot')->name('chatbot.')->group(function () {
-            Route::get('/dados', [AlunoChatbotController::class, 'dados'])->name('dados');
-            Route::post('/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('mensagem');
+                // Chatbot do aluno
+            Route::prefix('chatbot')->name('chatbot.')->group(function () {
+                Route::get('/dados', [AlunoChatbotController::class, 'dados'])->name('dados');
+                Route::post('/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('mensagem');
+            });
         });
     });
 

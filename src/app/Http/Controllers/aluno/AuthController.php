@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         if (Auth::guard('aluno')->attempt($credenciais)) {
             $request->session()->regenerate();
-            return redirect()->route('aluno.dash');
+            return redirect()->route('aluno.cursos.escolher');
         }
 
         return back()->withInput()->with('error', 'Email ou senha inválidos');

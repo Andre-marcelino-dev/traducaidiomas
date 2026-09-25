@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Materiais;
 use App\Models\Professor;
 use App\Models\Curso;
+use App\Models\Modulo;
 use Illuminate\Http\Request;
 
 class MateriaisController extends Controller
@@ -21,8 +22,9 @@ class MateriaisController extends Controller
     {
         $professores = Professor::all();
         $cursos      = Curso::all();
+        $modulos     = Modulo::with(['curso', 'nivel'])->orderBy('id_curso')->orderBy('ordem_modulo')->get();
 
-        return view('admin.materiais.modal.create', compact('professores', 'cursos'));
+        return view('admin.materiais.modal.create', compact('professores', 'cursos', 'modulos'));
     }
 
     public function store(Request $request)
@@ -35,6 +37,7 @@ class MateriaisController extends Controller
             'curso_materiais'     => 'nullable|string|max:255',
             'nivel_material'      => 'required|string|max:100',
             'id_curso'            => 'required|exists:tbl_cursos,id_curso',
+            'id_modulo'           => 'nullable|exists:tbl_modulos,id_modulo',
         ]);
 
         if ($request->hasFile('arquivo_materiais')) {
@@ -70,8 +73,9 @@ class MateriaisController extends Controller
         $materiais   = Materiais::findOrFail($id);
         $professores = Professor::all();
         $cursos      = Curso::all();
+        $modulos     = Modulo::with(['curso', 'nivel'])->orderBy('id_curso')->orderBy('ordem_modulo')->get();
 
-        return view('admin.materiais.modal.edit', compact('materiais', 'professores', 'cursos'));
+        return view('admin.materiais.modal.edit', compact('materiais', 'professores', 'cursos', 'modulos'));
     }
 
     public function update(Request $request, $id)
@@ -84,6 +88,7 @@ class MateriaisController extends Controller
             'curso_materiais'     => 'nullable|string|max:255',
             'nivel_material'      => 'required|string|max:100',
             'id_curso'            => 'required|exists:tbl_cursos,id_curso',
+            'id_modulo'           => 'nullable|exists:tbl_modulos,id_modulo',
         ]);
 
         $materiais = Materiais::findOrFail($id);

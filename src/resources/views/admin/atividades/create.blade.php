@@ -32,6 +32,17 @@
                             <label class="form-label">Data de Entrega</label>
                             <input type="date" name="data_entrega" class="form-control" required>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Módulo</label>
+                            <select name="id_modulo" id="selectModulo" class="form-select">
+                                <option value="">Nenhum / não definido</option>
+                                @foreach($modulos as $modulo)
+                                    <option value="{{ $modulo->id_modulo }}" data-curso="{{ $modulo->id_curso }}">
+                                        {{ $modulo->curso?->nome_curso }} · {{ $modulo->nivel?->nome_nivel }} · {{ $modulo->ordem_modulo }} - {{ $modulo->nome_modulo }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-12">
                             <label class="form-label">Descrição/Instruções</label>
                             <textarea name="descricao_atividade" class="form-control" rows="3"></textarea>
@@ -120,5 +131,25 @@ function bindEvents() {
     });
 }
 bindEvents();
+
+(function () {
+    const cursoSelect = document.querySelector('select[name="id_curso"]');
+    const moduloSelect = document.getElementById('selectModulo');
+    if (!cursoSelect || !moduloSelect) return;
+
+    function filtrarModulos() {
+        const idCurso = cursoSelect.value;
+        [...moduloSelect.options].forEach(opt => {
+            if (!opt.value) return;
+            opt.hidden = idCurso !== '' && opt.dataset.curso !== idCurso;
+        });
+        if (moduloSelect.selectedOptions[0]?.hidden) {
+            moduloSelect.value = '';
+        }
+    }
+
+    cursoSelect.addEventListener('change', filtrarModulos);
+    filtrarModulos();
+})();
 </script>
 @endsection

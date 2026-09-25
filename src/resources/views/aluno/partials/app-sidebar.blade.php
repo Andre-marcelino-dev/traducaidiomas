@@ -14,6 +14,17 @@
 
     <div class="sidebar-wrapper">
         <nav class="mt-2">
+            @isset($cursoAtual)
+                <div class="mx-3 mb-3 p-3 rounded" style="background:rgba(255,255,255,.06);">
+                    <div class="text-uppercase" style="font-size:.65rem;letter-spacing:.1em;color:rgba(255,255,255,.5);">Curso atual</div>
+                    <div class="fw-bold text-white text-truncate">{{ $cursoAtual->curso->nome_curso ?? 'Curso' }}</div>
+                    <div class="text-truncate" style="font-size:.8rem;color:rgba(255,255,255,.6);">{{ $cursoAtual->nivel->nome_nivel ?? '' }}</div>
+                    <a href="{{ route('aluno.cursos.escolher') }}" class="d-inline-block mt-2" style="font-size:.8rem;color:#90cdf4;">
+                        <i class="bi bi-arrow-left-right me-1"></i>Trocar curso
+                    </a>
+                </div>
+            @endisset
+
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview"
                 role="navigation" data-accordion="false">
 
@@ -37,6 +48,12 @@
                             <a href="{{ route('aluno.aulas.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Minhas Aulas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('aluno.curso.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Meu Curso</p>
                             </a>
                         </li>
                         <li class="nav-item">

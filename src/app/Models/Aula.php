@@ -15,6 +15,7 @@ class Aula extends Model
     protected $fillable = [
         'id_professor',
         'id_curso',
+        'id_modulo',
         'titulo_aulas',
         'descricao_aulas',
         'data_aulas',
@@ -27,5 +28,10 @@ class Aula extends Model
     public function professor()
     {
         return $this->belongsTo(Professor::class, 'id_professor', 'id_professor');
+    }
+
+    public function modulo()
+    {
+        return $this->belongsTo(Modulo::class, 'id_modulo', 'id_modulo');
     }
 }

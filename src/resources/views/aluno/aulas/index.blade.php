@@ -127,6 +127,11 @@
                                             às {{ \Carbon\Carbon::parse($aula->hora_aulas)->format('H:i') }}
                                         @endif
                                     </div>
+                                    @if ($aula->modulo)
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle mt-1" style="font-size:.65rem;">
+                                            <i class="fas fa-layer-group me-1"></i>{{ $aula->modulo->ordem_modulo }} - {{ $aula->modulo->nome_modulo }}
+                                        </span>
+                                    @endif
                                 </div>
                                 @if ($aula->link_teams)
                                     <a href="{{ $aula->link_teams }}" target="_blank" class="btn btn-sm btn-outline-primary">
@@ -158,6 +163,11 @@
                                     <div class="text-muted" style="font-size:.78rem;">
                                         {{ Str::limit($material->descricao_materiais, 60) }}
                                     </div>
+                                    @if ($material->modulo)
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle mt-1" style="font-size:.65rem;">
+                                            <i class="fas fa-layer-group me-1"></i>{{ $material->modulo->ordem_modulo }} - {{ $material->modulo->nome_modulo }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="d-flex gap-1">
                                     <a href="{{ route('aluno.materiais.visualizar', $material->id_materiais) }}"

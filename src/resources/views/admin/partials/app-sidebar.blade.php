@@ -87,6 +87,12 @@
 
 
                         <li class="nav-item">
+                            <a href="{{ route('admin.modulos.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Módulos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.materiais.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Materiais</p>

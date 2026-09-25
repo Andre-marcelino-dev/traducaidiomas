@@ -54,6 +54,17 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold mb-1" style="font-size:.8rem;">Módulo</label>
+                            <select name="id_modulo" class="form-select form-select-sm">
+                                <option value="">Todos os módulos</option>
+                                @foreach($modulos as $modulo)
+                                    <option value="{{ $modulo->id_modulo }}" {{ request('id_modulo') == $modulo->id_modulo ? 'selected' : '' }}>
+                                        {{ $modulo->ordem_modulo }} - {{ $modulo->nome_modulo }} ({{ $modulo->curso?->nome_curso }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-2 d-flex gap-2">
                             <button type="submit" class="btn btn-primary btn-sm w-100">
                                 <i class="fas fa-search me-1"></i> Filtrar
@@ -109,6 +120,12 @@
                                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle"
                                               style="font-size:.7rem;">
                                             {{ $material->curso->nome_curso }}
+                                        </span>
+                                    @endif
+                                    @if($material->modulo)
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"
+                                              style="font-size:.7rem;">
+                                            <i class="fas fa-layer-group me-1"></i>{{ $material->modulo->ordem_modulo }} - {{ $material->modulo->nome_modulo }}
                                         </span>
                                     @endif
                                 </div>

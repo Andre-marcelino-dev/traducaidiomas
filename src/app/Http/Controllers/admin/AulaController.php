@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Aula;
 use App\Models\Professor;
 use App\Models\Curso;
+use App\Models\Modulo;
 use Illuminate\Http\Request;
 
 class AulaController extends Controller
@@ -38,8 +39,9 @@ public function index()
 {
     $professores = Professor::orderBy('nome_professor')->get();
     $cursos = Curso::orderBy('nome_curso')->get();
+    $modulos = Modulo::with(['curso', 'nivel'])->orderBy('id_curso')->orderBy('ordem_modulo')->get();
 
-   return view('admin.aulas.modal.create', compact('professores', 'cursos'));
+   return view('admin.aulas.modal.create', compact('professores', 'cursos', 'modulos'));
 }
 
 public function store(Request $request)
@@ -51,6 +53,7 @@ public function store(Request $request)
         'hora_aulas'      => 'required',
         'id_professor'    => 'required|exists:tbl_professor,id_professor',
         'id_curso'        => 'required|exists:tbl_cursos,id_curso',
+        'id_modulo'       => 'nullable|exists:tbl_modulos,id_modulo',
         'link_teams'      => 'nullable|url|max:500',
         'cursos_aulas'    => 'required|string|max:100',
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
@@ -58,7 +61,7 @@ public function store(Request $request)
 
     Aula::create($request->only([
         'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
-        'id_professor', 'id_curso', 'link_teams', 'cursos_aulas', 'status_aulas',
+        'id_professor', 'id_curso', 'id_modulo', 'link_teams', 'cursos_aulas', 'status_aulas',
     ]));
 
     return redirect()
@@ -71,11 +74,13 @@ public function store(Request $request)
     $aula = Aula::findOrFail($id);
     $professores = Professor::orderBy('nome_professor')->get();
     $cursos = Curso::orderBy('nome_curso')->get();
+    $modulos = Modulo::with(['curso', 'nivel'])->orderBy('id_curso')->orderBy('ordem_modulo')->get();
 
     return view('admin.aulas.modal.edit', compact(
         'aula',
         'professores',
-        'cursos'
+        'cursos',
+        'modulos'
     ));
 }
 
@@ -90,6 +95,7 @@ public function store(Request $request)
         'hora_aulas'      => 'required',
         'id_professor'    => 'required|exists:tbl_professor,id_professor',
         'id_curso' => 'required|exists:tbl_cursos,id_curso',
+        'id_modulo'       => 'nullable|exists:tbl_modulos,id_modulo',
         'link_teams'      => 'nullable|url|max:500',
         'cursos_aulas'    => 'required|string|max:100',
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
@@ -97,7 +103,7 @@ public function store(Request $request)
 
     $aula->update($request->only([
         'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
-        'id_professor', 'id_curso', 'link_teams', 'cursos_aulas', 'status_aulas',
+        'id_professor', 'id_curso', 'id_modulo', 'link_teams', 'cursos_aulas', 'status_aulas',
     ]));
 
     return redirect()

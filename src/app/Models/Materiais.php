@@ -20,6 +20,7 @@ class Materiais extends Model
         'curso_materiais',
         'nivel_material',
         'id_curso',
+        'id_modulo',
     ];
 
     protected $casts = [
@@ -41,5 +42,10 @@ class Materiais extends Model
     public function curso()
     {
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');
+    }
+
+    public function modulo()
+    {
+        return $this->belongsTo(Modulo::class, 'id_modulo', 'id_modulo');
     }
 }

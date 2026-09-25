@@ -8,11 +8,12 @@ class Atividade extends Model
     const CREATED_AT = 'criado_em';
     const UPDATED_AT = null;
     protected $fillable = [
-        'id_professor', 'id_curso', 'titulo_atividade',
+        'id_professor', 'id_curso', 'id_modulo', 'titulo_atividade',
         'descricao_atividade', 'tipo_atividade', 'data_entrega', 'status_atividade'
     ];
     public function professor() { return $this->belongsTo(Professor::class, 'id_professor', 'id_professor'); }
     public function curso() { return $this->belongsTo(Curso::class, 'id_curso', 'id_curso'); }
+    public function modulo() { return $this->belongsTo(Modulo::class, 'id_modulo', 'id_modulo'); }
     public function questoes() { return $this->hasMany(AtividadeQuestao::class, 'id_atividade', 'id_atividade'); }
     public function respostas() { return $this->hasMany(AtividadeResposta::class, 'id_atividade', 'id_atividade'); }
 }

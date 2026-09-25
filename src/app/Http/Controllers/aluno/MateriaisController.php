@@ -5,8 +5,10 @@ namespace App\Http\Controllers\aluno;
 use App\Http\Controllers\Controller;
 use App\Models\Materiais;
 use App\Models\Matricula;
+use App\Models\Modulo;
 use App\Models\Professor;
 use App\Models\Curso;
+use App\Support\CursoAtual;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,10 +16,9 @@ class MateriaisController extends Controller
 {
     public function index(Request $request)
     {
-        $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $matriculaAtual = CursoAtual::matricula();
 
-        $query = Materiais::with(['professor', 'curso'])->whereIn('id_curso', $idCursos);
+        $query = CursoAtual::filtrar(Materiais::with(['professor', 'curso', 'modulo']), $matriculaAtual);
 
         if ($request->filled('nivel')) {
             $query->where('nivel_material', $request->nivel);
@@ -25,13 +26,22 @@ class MateriaisController extends Controller
         if ($request->filled('id_curso')) {
             $query->where('id_curso', $request->id_curso);
         }
+        if ($request->filled('id_modulo')) {
+            $query->where('id_modulo', $request->id_modulo);
+        }
         if ($request->filled('busca')) {
             $query->where('titulo_materiais', 'like', '%' . $request->busca . '%');
         }
 
         $materiais = $query->latest('criado_em_materiais')->paginate(12);
 
-        return view('admin.materiais.alunoindex', compact('materiais'));
+        $modulos = Modulo::with('curso')
+            ->where('id_curso', $matriculaAtual->id_curso)
+            ->where('id_nivel', $matriculaAtual->id_nivel)
+            ->orderBy('ordem_modulo')
+            ->get();
+
+        return view('admin.materiais.alunoindex', compact('materiais', 'modulos'));
     }
 
     public function create()

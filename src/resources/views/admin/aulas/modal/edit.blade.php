@@ -78,6 +78,20 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Módulo</label>
+                    <select name="id_modulo" class="form-control" id="selectModulo">
+                        <option value="">Nenhum / não definido</option>
+                        @foreach($modulos as $modulo)
+                            <option value="{{ $modulo->id_modulo }}" data-curso="{{ $modulo->id_curso }}"
+                                {{ old('id_modulo', $aula->id_modulo) == $modulo->id_modulo ? 'selected' : '' }}>
+                                {{ $modulo->curso?->nome_curso }} · {{ $modulo->nivel?->nome_nivel }} · {{ $modulo->ordem_modulo }} - {{ $modulo->nome_modulo }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="form-text">Opcional. A lista se filtra pelo curso selecionado acima.</div>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Nome do Curso</label>
                     <input type="text"
                            name="cursos_aulas"
@@ -130,4 +144,26 @@
     </div>
 
 </div>
+
+<script>
+(function () {
+    const cursoSelect = document.querySelector('select[name="id_curso"]');
+    const moduloSelect = document.getElementById('selectModulo');
+    if (!cursoSelect || !moduloSelect) return;
+
+    function filtrarModulos() {
+        const idCurso = cursoSelect.value;
+        [...moduloSelect.options].forEach(opt => {
+            if (!opt.value) return;
+            opt.hidden = idCurso !== '' && opt.dataset.curso !== idCurso;
+        });
+        if (moduloSelect.selectedOptions[0]?.hidden) {
+            moduloSelect.value = '';
+        }
+    }
+
+    cursoSelect.addEventListener('change', filtrarModulos);
+    filtrarModulos();
+})();
+</script>
 @endsection

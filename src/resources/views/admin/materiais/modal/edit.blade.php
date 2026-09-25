@@ -105,6 +105,23 @@
                                         @enderror
                                     </div>
 
+                                    {{-- Módulo --}}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Módulo</label>
+                                        <select name="id_modulo" id="selectModulo" class="form-select @error('id_modulo') is-invalid @enderror">
+                                            <option value="">Nenhum / não definido</option>
+                                            @foreach($modulos as $modulo)
+                                                <option value="{{ $modulo->id_modulo }}" data-curso="{{ $modulo->id_curso }}"
+                                                    {{ old('id_modulo', $materiais->id_modulo) == $modulo->id_modulo ? 'selected' : '' }}>
+                                                    {{ $modulo->curso?->nome_curso }} · {{ $modulo->nivel?->nome_nivel }} · {{ $modulo->ordem_modulo }} - {{ $modulo->nome_modulo }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('id_modulo')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                     {{-- Nível --}}
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold">Nível</label>
@@ -173,4 +190,26 @@
 
         </div>
     </div>
+
+    <script>
+    (function () {
+        const cursoSelect = document.querySelector('select[name="id_curso"]');
+        const moduloSelect = document.getElementById('selectModulo');
+        if (!cursoSelect || !moduloSelect) return;
+
+        function filtrarModulos() {
+            const idCurso = cursoSelect.value;
+            [...moduloSelect.options].forEach(opt => {
+                if (!opt.value) return;
+                opt.hidden = idCurso !== '' && opt.dataset.curso !== idCurso;
+            });
+            if (moduloSelect.selectedOptions[0]?.hidden) {
+                moduloSelect.value = '';
+            }
+        }
+
+        cursoSelect.addEventListener('change', filtrarModulos);
+        filtrarModulos();
+    })();
+    </script>
 @endsection

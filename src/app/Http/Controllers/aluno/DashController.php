@@ -5,25 +5,19 @@ namespace App\Http\Controllers\aluno;
 use App\Http\Controllers\Controller;
 use App\Models\Aula;
 use App\Models\Feedback;
-use App\Models\Matricula;
 use App\Models\Notificacao;
 use App\Models\Reagendamento;
+use App\Support\CursoAtual;
 
 class DashController extends Controller
 {
     public function index()
     {
         $aluno = auth('aluno')->user();
+        $matriculaAtual = CursoAtual::matricula();
 
-        // Busca os cursos do aluno
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)
-            ->pluck('id_curso');
-
-        // Busca aulas dos cursos do aluno, ou todas se não houver correspondência
-        $aulas = Aula::whereIn('id_curso', $idCursos)->get();
-        if ($aulas->isEmpty()) {
-            $aulas = Aula::all();
-        }
+        // Aulas do curso/nível escolhido
+        $aulas = CursoAtual::filtrar(Aula::query(), $matriculaAtual)->get();
 
         $totalAulas = $aulas->count();
 
@@ -40,10 +34,7 @@ class DashController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $matriculas = Matricula::with('curso')
-            ->where('id_aluno', $aluno->id_aluno)
-            ->where('status_matricula', 'ATIVO')
-            ->get();
+        $matriculas = collect([$matriculaAtual]);
 
         foreach ($matriculas as $mat) {
             $aulaProf = Aula::where('id_curso', $mat->id_curso)->whereNotNull('id_professor')->first();

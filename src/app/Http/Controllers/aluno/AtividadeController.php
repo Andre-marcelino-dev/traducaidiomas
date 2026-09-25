@@ -5,6 +5,7 @@ use App\Models\Atividade;
 use App\Models\AtividadeResposta;
 use App\Models\AtividadeRespostaQuestao;
 use App\Models\AtividadeQuestao;
+use App\Support\CursoAtual;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class AtividadeController extends Controller
@@ -12,12 +13,11 @@ class AtividadeController extends Controller
     public function index()
     {
         $aluno = auth('aluno')->user();
-        $matricula = DB::table('tbl_matricula')->where('id_aluno', $aluno->id_aluno)->first();
-        $idCurso = $matricula ? $matricula->id_curso : null;
+        $matriculaAtual = CursoAtual::matricula();
 
-        $atividades = Atividade::with(['respostas' => function($q) use ($aluno) {
+        $atividades = CursoAtual::filtrar(Atividade::with(['respostas' => function($q) use ($aluno) {
             $q->where('id_aluno', $aluno->id_aluno);
-        }])->where('id_curso', $idCurso)->where('status_atividade', 'ATIVA')->orderBy('data_entrega')->get();
+        }]), $matriculaAtual)->where('status_atividade', 'ATIVA')->orderBy('data_entrega')->get();
 
         $pendentes  = $atividades->filter(fn($a) => $a->respostas->isEmpty() || $a->respostas->first()->status_resposta == 'PENDENTE')->count();
         $concluidas = $atividades->filter(fn($a) => $a->respostas->isNotEmpty() && in_array($a->respostas->first()->status_resposta, ['ENVIADA','CORRIGIDA']))->count();
