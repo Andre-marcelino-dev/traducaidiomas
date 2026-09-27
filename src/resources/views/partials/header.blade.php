@@ -86,6 +86,4 @@
         </ul>
 
 
-
-        <script src="{{ asset('traducaidiomas/js/idiomas.js') }}"></script>
 </header>
