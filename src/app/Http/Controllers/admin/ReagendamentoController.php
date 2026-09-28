@@ -27,23 +27,7 @@ class ReagendamentoController extends Controller
         return view('admin.reagendamentos.index', compact('reagendamentos', 'alunos', 'aulas'));
     }
 
-    public function show(Reagendamento $reagendamento)
-    {
-        $reagendamento->load(['aluno', 'aula', 'professor']);
 
-        return view('admin.reagendamentos.show', compact('reagendamento'));
-    }
-
-    public function alunos($id_aulas)
-    {
-        $aula = Aula::findOrFail($id_aulas);
-
-        $alunos = Aluno::where('curso_aluno', $aula->cursos_aulas)
-            ->where('status_aluno', 'EM CURSO')
-            ->get();
-
-        return view('admin.reagendamentos.alunos', compact('aula', 'alunos'));
-    }
 
     public function store(Request $request)
     {

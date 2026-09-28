@@ -191,7 +191,7 @@
 
         <p>
             Retorna todos os alunos, ordenados pelo nome.
-            Aceita o filtro opcional <code>?status=ATIVO</code>.
+            Aceita o filtro opcional <code>?status=EM CURSO</code>.
         </p>
 
     </div>
@@ -357,7 +357,7 @@
         "curso_aluno": "Inglês",
         "data_nasc_aluno": "2005-03-14",
         "nivel_aluno": "Intermediário",
-        "status_aluno": "ATIVO",
+        "status_aluno": "EM CURSO",
         "foto_aluno": "maria-souza.jpg"
     }
 }

@@ -50,7 +50,7 @@ public function solicitar(Request $request)
         'data_sugerida'        => $request->data_sugerida,
         'motivo'               => $request->motivo,
         'status'               => 'pendente',
-        'notificado_professor' => true,
+        'notificado_professor' => false,
         'notificado_aluno'     => false,
     ]);
 

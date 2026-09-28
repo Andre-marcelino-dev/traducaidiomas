@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agenda;
+use App\Models\Atividade;
+use App\Models\Aula;
+use App\Models\Materiais;
+use App\Models\Notificacao;
 use App\Models\Professor;
+use App\Models\Servico;
 use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -72,17 +78,6 @@ return redirect()
         return Upload::salvar($arquivo, 'professor', Upload::IMAGENS, 'professor');
     }
 
-    public function show($id)
-    {
-        $professor = Professor::find($id);
-
-        if (!$professor) {
-            return redirect()->route('admin.professores.index')
-                ->with('error', 'Professor não encontrado.');
-        }
-
-        return view('admin.professores.show', compact('professor'));
-    }
 
     public function edit($id)
     {
@@ -156,6 +151,24 @@ return redirect()
         if ((int) $professor->id_professor === (int) auth('admin')->id()) {
             return redirect()->route('admin.professores.index')
                 ->with('error', 'Você não pode remover o seu próprio usuário.');
+        }
+
+        // As tabelas abaixo apontam para o professor sem cascade: excluir daria erro 500.
+        // Em vez de apagar o conteúdo junto, avisa o que precisa ser transferido antes.
+        $vinculos = array_filter([
+            'aulas'        => Aula::where('id_professor', $id)->count(),
+            'materiais'    => Materiais::where('id_professor', $id)->count(),
+            'atividades'   => Atividade::where('id_professor', $id)->count(),
+            'agendamentos' => Agenda::where('id_professor', $id)->count(),
+            'serviços'     => Servico::where('id_professor', $id)->count(),
+            'notificações' => Notificacao::where('id_professor', $id)->count(),
+        ]);
+
+        if ($vinculos) {
+            $lista = collect($vinculos)->map(fn ($total, $nome) => "$total $nome")->implode(', ');
+
+            return redirect()->route('admin.professores.index')
+                ->with('error', "Não é possível remover: este professor ainda tem $lista. Transfira para outro professor ou remova antes.");
         }
 
         $fotoPath = public_path('traducaidiomas/professor/' . $professor->foto_professor);

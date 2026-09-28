@@ -3,18 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agenda;
 use App\Models\Aluno;
-use App\Models\AtividadeResposta;
-use App\Models\AtividadeRespostaQuestao;
-use App\Models\Feedback;
-use App\Models\Matricula;
-use App\Models\Notificacao;
-use App\Models\Reagendamento;
 use App\Support\Upload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AlunoController extends Controller
 {
@@ -54,7 +47,7 @@ class AlunoController extends Controller
             'curso_aluno'     => 'required|string|max:100',
             'data_nasc_aluno' => 'required|date',
             'nivel_aluno'     => 'required|string|max:50',
-            'status_aluno'    => 'required|string|max:50',
+            'status_aluno'    => ['required', Rule::in(Aluno::STATUS)],
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -88,7 +81,7 @@ class AlunoController extends Controller
             'curso_aluno'     => 'required|string|max:100',
             'data_nasc_aluno' => 'required|date',
             'nivel_aluno'     => 'required|string|max:50',
-            'status_aluno'    => 'required|string|max:50',
+            'status_aluno'    => ['required', Rule::in(Aluno::STATUS)],
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -117,7 +110,7 @@ class AlunoController extends Controller
     public function updateStatus(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'status_aluno' => 'required|string|max:50',
+            'status_aluno' => ['required', Rule::in(Aluno::STATUS)],
         ]);
 
         $aluno = Aluno::findOrFail($id);
@@ -133,24 +126,7 @@ class AlunoController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $aluno = Aluno::findOrFail($id);
-
-        DB::transaction(function () use ($aluno, $id) {
-            $respostaIds = AtividadeResposta::where('id_aluno', $id)->pluck('id_resposta');
-            AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)->delete();
-            AtividadeResposta::where('id_aluno', $id)->delete();
-
-            Notificacao::where('id_aluno', $id)->delete();
-            Reagendamento::where('aluno_id', $id)->delete();
-            Agenda::where('id_aluno', $id)->delete();
-            Matricula::where('id_aluno', $id)->delete();
-            Feedback::where('id_aluno', $id)->delete();
-
-            DB::table('tbl_presenca')->where('id_aluno', $id)->delete();
-            DB::table('tbl_progresso_materiais')->where('id_aluno', $id)->delete();
-
-            $aluno->delete();
-        });
+        Aluno::findOrFail($id)->excluirComDependencias();
 
         return response()->json([
             'success' => true,

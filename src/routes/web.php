@@ -91,7 +91,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/',         [ProfessorController::class, 'store'])->name('store');
             Route::get('/create',    [ProfessorController::class, 'create'])->name('create');
             Route::get('/{id}/edit', [ProfessorController::class, 'edit'])->name('edit');
-            Route::get('/{id}',      [ProfessorController::class, 'show'])->name('show');
             Route::put('/{id}',      [ProfessorController::class, 'update'])->name('update');
             Route::delete('/{id}',   [ProfessorController::class, 'destroy'])->name('destroy');
         });
@@ -115,12 +114,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/create',           [AgendaController::class, 'create'])->name('create');
             Route::get('/eventos',          [AgendaController::class, 'eventos'])->name('eventos');
             Route::get('/{id}/edit',        [AgendaController::class, 'edit'])->name('edit');
-            Route::get('/{id}',             [AgendaController::class, 'show'])->name('show');
             Route::put('/{id}',             [AgendaController::class, 'update'])->name('update');
             Route::delete('/{id}',          [AgendaController::class, 'destroy'])->name('destroy');
-            Route::patch('/{id}/reagendar', [AgendaController::class, 'solicitarReagendamento'])->name('reagendar');
-            Route::get('/aluno/{id}',       [AgendaController::class, 'porAluno'])->name('porAluno');
-            Route::get('/professor/{id}',   [AgendaController::class, 'porProfessor'])->name('porProfessor');
         });
 
         // CRUD Matrículas (somente admin)
@@ -170,7 +165,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('reagendamentos')->name('reagendamentos.')->group(function () {
             Route::get('/',                        [AdminReagendamentoController::class, 'index'])->name('index');
             Route::post('/',                       [AdminReagendamentoController::class, 'store'])->name('store');
-            Route::get('/{reagendamento}',         [AdminReagendamentoController::class, 'show'])->name('show');
             Route::put('/{reagendamento}/aceitar', [AdminReagendamentoController::class, 'aceitar'])->name('aceitar');
             Route::put('/{reagendamento}/recusar', [AdminReagendamentoController::class, 'recusar'])->name('recusar');
             Route::delete('/{reagendamento}',      [AdminReagendamentoController::class, 'destroy'])->name('destroy');
@@ -284,10 +278,6 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             // ── Reagendamentos (Aluno) ──
             Route::post('reagendamento/solicitar', [AlunoReagendamentoController::class, 'solicitar'])
                 ->name('reagendamento.solicitar');
-            Route::get('reagendamentos', [AlunoReagendamentoController::class, 'meusSolicatados'])
-                ->name('reagendamentos.index');
-            Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
-                ->name('reagendamento.notificacoes');
 
 
                 // Chatbot do aluno

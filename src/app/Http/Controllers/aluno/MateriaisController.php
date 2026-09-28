@@ -7,6 +7,7 @@ use App\Models\Materiais;
 use App\Models\Modulo;
 use App\Support\CursoAtual;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MateriaisController extends Controller
 {
@@ -44,6 +45,9 @@ class MateriaisController extends Controller
     {
         $materiais = $this->materialDoAluno($id, ['professor', 'curso']);
 
+        // Material sem arquivo não tem o que baixar: abrir os detalhes já conclui.
+        $this->registrarProgresso($materiais, concluido: !$materiais->arquivo_materiais);
+
         return view('admin.materiais.modal.showaluno', compact('materiais'));
     }
 
@@ -53,6 +57,7 @@ class MateriaisController extends Controller
         $caminho = public_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
+            $this->registrarProgresso($material, concluido: true);
             return response()->file($caminho);
         }
 
@@ -66,10 +71,41 @@ class MateriaisController extends Controller
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
             $ext = pathinfo($caminho, PATHINFO_EXTENSION);
+            $this->registrarProgresso($material, concluido: true);
             return response()->download($caminho, $material->titulo_materiais . '.' . $ext);
         }
 
         return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
+    }
+
+    /**
+     * Grava em tbl_progresso_materiais (é o que libera o próximo módulo, ver ModuloProgresso).
+     * Material já CONCLUIDO nunca volta para EM ANDAMENTO.
+     */
+    private function registrarProgresso(Materiais $material, bool $concluido): void
+    {
+        $chave = [
+            'id_aluno'     => auth('aluno')->id(),
+            'id_materiais' => $material->id_materiais,
+        ];
+
+        $atual = DB::table('tbl_progresso_materiais')->where($chave)->first();
+
+        if ($atual && $atual->status_progresso === 'CONCLUIDO') {
+            $concluido = true;
+        }
+
+        $dados = [
+            'status_progresso'                => $concluido ? 'CONCLUIDO' : 'EM ANDAMENTO',
+            'progresso_materiais'             => $concluido ? 100 : 0,
+            'data_acesso_progresso_materiais' => now(),
+        ];
+
+        if ($atual) {
+            DB::table('tbl_progresso_materiais')->where('id_progresso', $atual->id_progresso)->update($dados);
+        } else {
+            DB::table('tbl_progresso_materiais')->insert($chave + $dados);
+        }
     }
 
     /**
