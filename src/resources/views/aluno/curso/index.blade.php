@@ -89,9 +89,13 @@
                                         {{ intdiv($modulo->carga_horaria_minutos, 60) }}h{{ str_pad($modulo->carga_horaria_minutos % 60, 2, '0', STR_PAD_LEFT) }}
                                     </div>
 
-                                    @if($modulo->liberado && !$modulo->concluido && $modulo->materiais_count > 0)
+                                    @if($modulo->liberado && !$modulo->concluido && $modulo->total_itens > 0)
                                         <div style="background:#e2e8f0;border-radius:99px;height:5px;max-width:220px;" class="mt-2">
                                             <div style="width:{{ $modulo->percentual }}%;background:#6366f1;height:5px;border-radius:99px;"></div>
+                                        </div>
+                                        <div style="font-size:.7rem;color:#94a3b8;" class="mt-1">
+                                            {{ $modulo->aulas_concluidas }}/{{ $modulo->aulas_count }} aulas ·
+                                            {{ $modulo->materiais_concluidos }}/{{ $modulo->materiais_count }} materiais
                                         </div>
                                     @endif
                                 </div>
