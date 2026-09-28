@@ -16,10 +16,12 @@ class Aula extends Model
         'id_professor',
         'id_curso',
         'id_modulo',
+        'ordem_aula',
         'titulo_aulas',
         'descricao_aulas',
         'data_aulas',
         'hora_aulas',
+        'duracao_minutos',
         'link_teams',
         'cursos_aulas',
         'status_aulas',
@@ -33,5 +35,10 @@ class Aula extends Model
     public function modulo()
     {
         return $this->belongsTo(Modulo::class, 'id_modulo', 'id_modulo');
+    }
+
+    public function presencas()
+    {
+        return $this->hasMany(Presenca::class, 'id_aulas', 'id_aulas');
     }
 }

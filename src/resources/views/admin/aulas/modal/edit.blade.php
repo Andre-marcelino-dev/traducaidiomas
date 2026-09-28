@@ -47,6 +47,19 @@
                            required>
                 </div>
 
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nº da aula no módulo <small class="text-muted">(opcional)</small></label>
+                        <input type="number" name="ordem_aula" class="form-control" min="1" max="999"
+                               value="{{ old('ordem_aula', $aula->ordem_aula) }}" placeholder="Ex.: 1 = AULA 01">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Duração em minutos <small class="text-muted">(opcional)</small></label>
+                        <input type="number" name="duracao_minutos" class="form-control" min="1" max="600"
+                               value="{{ old('duracao_minutos', $aula->duracao_minutos) }}" placeholder="Ex.: 22">
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Professor</label>
 

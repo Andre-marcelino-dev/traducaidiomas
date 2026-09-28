@@ -54,6 +54,8 @@ public function store(Request $request)
         'id_professor'    => 'required|exists:tbl_professor,id_professor',
         'id_curso'        => 'required|exists:tbl_cursos,id_curso',
         'id_modulo'       => 'nullable|exists:tbl_modulos,id_modulo',
+        'ordem_aula'      => 'nullable|integer|min:1|max:999',
+        'duracao_minutos' => 'nullable|integer|min:1|max:600',
         'link_teams'      => 'nullable|url|max:500',
         'cursos_aulas'    => 'required|string|max:100',
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
@@ -61,7 +63,7 @@ public function store(Request $request)
 
     Aula::create($request->only([
         'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
-        'id_professor', 'id_curso', 'id_modulo', 'link_teams', 'cursos_aulas', 'status_aulas',
+        'id_professor', 'id_curso', 'id_modulo', 'ordem_aula', 'duracao_minutos', 'link_teams', 'cursos_aulas', 'status_aulas',
     ]));
 
     return redirect()
@@ -96,6 +98,8 @@ public function store(Request $request)
         'id_professor'    => 'required|exists:tbl_professor,id_professor',
         'id_curso' => 'required|exists:tbl_cursos,id_curso',
         'id_modulo'       => 'nullable|exists:tbl_modulos,id_modulo',
+        'ordem_aula'      => 'nullable|integer|min:1|max:999',
+        'duracao_minutos' => 'nullable|integer|min:1|max:600',
         'link_teams'      => 'nullable|url|max:500',
         'cursos_aulas'    => 'required|string|max:100',
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
@@ -103,7 +107,7 @@ public function store(Request $request)
 
     $aula->update($request->only([
         'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
-        'id_professor', 'id_curso', 'id_modulo', 'link_teams', 'cursos_aulas', 'status_aulas',
+        'id_professor', 'id_curso', 'id_modulo', 'ordem_aula', 'duracao_minutos', 'link_teams', 'cursos_aulas', 'status_aulas',
     ]));
 
     return redirect()

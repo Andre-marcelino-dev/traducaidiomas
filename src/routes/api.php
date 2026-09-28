@@ -21,6 +21,9 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
 
             Route::get('/cursos', [AlunoApiCursoController::class, 'index'])->name('cursos.index');
             Route::get('/cursos/{idCurso}/modulos', [AlunoApiCursoController::class, 'modulos'])->name('cursos.modulos');
+            Route::get('/cursos/{idCurso}/materiais', [AlunoApiCursoController::class, 'materiais'])->name('cursos.materiais');
+            Route::get('/modulos/{idModulo}', [AlunoApiCursoController::class, 'modulo'])->name('modulos.show');
+            Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
         });
     });
 

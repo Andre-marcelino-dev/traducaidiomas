@@ -180,6 +180,61 @@
     </p>
 
 
+    <h2>App do aluno (traduca-APP)</h2>
+
+    <p>Todas exigem o token do aluno (<code>POST /api/v1/aluno/login</code>).</p>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/cursos</code>
+        <p>Cursos em que o aluno tem matrícula ativa.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/cursos/{idCurso}/modulos</code>
+        <p>
+            Tela <strong>Curso</strong>: carga horária, <code>total_aulas</code>, <code>total_modulos</code>,
+            <code>percentual_geral</code> e a lista de módulos com <code>concluido</code>,
+            <code>liberado</code>, <code>em_andamento</code> e <code>percentual</code>.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/modulos/{idModulo}</code>
+        <p>
+            Tela <strong>Módulo</strong>: dados do módulo, <code>progresso</code>
+            (<code>aulas_concluidas</code> / <code>total_aulas</code>), <code>proximo_modulo</code>
+            e a lista de <code>aulas</code> com <code>numero</code>, <code>titulo</code>, <code>data</code>,
+            <code>hora</code>, <code>duracao_minutos</code>, <code>ao_vivo</code>, <code>link_aula</code>
+            e <code>concluida</code>. Módulo ainda bloqueado responde <code>403</code>.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/cursos/{idCurso}/materiais</code>
+        <p>
+            Aba <strong>Materiais</strong>. Filtro opcional <code>?modulo=ID</code>.
+            Cada item traz <code>concluido</code> e <code>url_download</code>.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/materiais/{idMaterial}/download</code>
+        <p>Baixa o arquivo (enviar o token) e marca o material como concluído.</p>
+    </div>
+
+    <p>
+        <strong>Regra de conclusão:</strong> uma aula fica <em>concluída</em> quando o professor
+        marca presença <code>presente</code> ou <code>justificado</code>; um material, quando o
+        aluno abre ou baixa o arquivo. O módulo é concluído quando todas as aulas e materiais
+        estão concluídos, e isso libera o próximo módulo.
+    </p>
+
+
     <h2>Endpoints</h2>
 
 
