@@ -1,9 +1,11 @@
 name: Deploy para VPS
 
+# Só roda manualmente (aba Actions > Run workflow).
+# O site no ar fica em /public_html/traduca e é publicado pelo FileZilla;
+# este deploy aponta para a pasta antiga public_html/traducaidiomas e
+# falha na conexão SSH desde 07/08/2026.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
