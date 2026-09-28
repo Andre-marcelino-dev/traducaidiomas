@@ -74,6 +74,19 @@
                         </div>
                     </div>
 
+                    @php $proprioUsuario = (int) $professor->id_professor === (int) auth('admin')->id(); @endphp
+                    <div class="form-check my-3">
+                        <input type="checkbox" name="is_admin" value="1" id="is_admin" class="form-check-input"
+                            {{ old('is_admin', $professor->is_admin) ? 'checked' : '' }}
+                            {{ $proprioUsuario ? 'disabled' : '' }}>
+                        <label for="is_admin" class="form-check-label">
+                            Administrador (gerencia professores, alunos, matrículas, módulos, serviços e o site)
+                            @if ($proprioUsuario)
+                                <small class="text-muted d-block">Você não pode alterar o seu próprio acesso de administrador.</small>
+                            @endif
+                        </label>
+                    </div>
+
 
                     <div class="mb-3">
                         <label class="form-label">Foto Atual</label>

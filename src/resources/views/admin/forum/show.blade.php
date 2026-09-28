@@ -53,7 +53,7 @@
                     <p style="font-size:.88rem;color:#334155;line-height:1.7;white-space:pre-line;">{{ $topico->descricao_topico }}</p>
 
                     @if($topico->anexo_topico)
-                        <a href="{{ asset($topico->anexo_topico) }}" target="_blank" class="tbl-link-btn">
+                        <a href="{{ route('admin.forum.anexo', $topico->id_topico) }}" target="_blank" class="tbl-link-btn">
                             <i class="fas fa-paperclip"></i> Ver anexo
                         </a>
                     @endif

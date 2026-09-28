@@ -29,6 +29,13 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="alert alert-danger alert-styled alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             {{-- METRIC CARDS --}}
             <div class="row g-3 mb-4">
                 <div class="col-sm-6 col-xl-3 fade-up">

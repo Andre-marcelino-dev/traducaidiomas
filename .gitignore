@@ -41,3 +41,11 @@ Thumbs.db
 /backup/
 src/.env
 *Zone.Identifier
+
+# Arquivos enviados pelos usuários (fotos de alunos/professores, materiais,
+# anexos do fórum) ficam só no servidor, nunca no Git (repositório público).
+src/public/traducaidiomas/alunos/*
+src/public/traducaidiomas/professor/*
+src/public/traducaidiomas/materiais/*
+src/public/traducaidiomas/forum/*
+!src/public/traducaidiomas/*/.htaccess

@@ -4,13 +4,10 @@ namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
 use App\Models\Materiais;
-use App\Models\Matricula;
 use App\Models\Modulo;
-use App\Models\Professor;
-use App\Models\Curso;
 use App\Support\CursoAtual;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class MateriaisController extends Controller
 {
@@ -44,105 +41,23 @@ class MateriaisController extends Controller
         return view('admin.materiais.alunoindex', compact('materiais', 'modulos'));
     }
 
-    public function create()
-    {
-        $professores = Professor::all();
-        $cursos      = Curso::all();
-
-        return view('admin.materiais.modal.create', compact('professores', 'cursos'));
-    }
-
-    public function store(Request $request)
-    {
-        $dados = $request->validate([
-            'id_professor'        => 'required|exists:tbl_professor,id_professor',
-            'titulo_materiais'    => 'required|string|max:255',
-            'descricao_materiais' => 'nullable|string',
-            'arquivo_materiais'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip|max:20480',
-            'curso_materiais'     => 'nullable|string|max:255',
-            'nivel_material'      => 'nullable|string|max:100',
-            'id_curso'            => 'nullable|exists:tbl_cursos,id_curso',
-        ]);
-
-        if ($request->file('arquivo_materiais')) {
-            $dados['arquivo_materiais'] = $request->file('arquivo_materiais')->store('materiais', 'public');
-        } else {
-            $dados['arquivo_materiais'] = null;
-        }
-
-        Materiais::create($dados);
-
-        return redirect()->route('admin.materiais.index')
-            ->with('success', 'Material criado com sucesso!');
-    }
-
     public function show($id)
     {
-        $materiais = Materiais::with(['professor', 'curso'])->findOrFail($id);
+        $materiais = $this->materialDoAluno($id, ['professor', 'curso']);
+
+        // Material sem arquivo não tem o que baixar: abrir os detalhes já conclui.
+        $this->registrarProgresso($materiais, concluido: !$materiais->arquivo_materiais);
 
         return view('admin.materiais.modal.showaluno', compact('materiais'));
     }
 
-    public function edit($id)
-    {
-        $materiais = Materiais::findOrFail($id);
-        $professores = Professor::all();
-        $cursos      = Curso::all();
-
-        return view('admin.materiais.modal.edit', compact('materiais', 'professores', 'cursos'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $dados = $request->validate([
-            'id_professor'        => 'required|exists:tbl_professor,id_professor',
-            'titulo_materiais'    => 'required|string|max:255',
-            'descricao_materiais' => 'nullable|string',
-            'arquivo_materiais'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip|max:20480',
-            'curso_materiais'     => 'nullable|string|max:255',
-            'nivel_material'      => 'nullable|string|max:100',
-            'id_curso'            => 'nullable|exists:tbl_cursos,id_curso',
-        ]);
-
-        $materiais = Materiais::findOrFail($id);
-
-        if ($request->file('arquivo_materiais')) {
-            if ($materiais->arquivo_materiais) {
-                Storage::disk('public')->delete($materiais->arquivo_materiais);
-            }
-            $dados['arquivo_materiais'] = $request->file('arquivo_materiais')->store('materiais', 'public');
-        } else {
-            $dados['arquivo_materiais'] = $materiais->arquivo_materiais;
-        }
-
-        $materiais->update($dados);
-
-        return redirect()->route('admin.materiais.index')
-            ->with('success', 'Material actualizado com sucesso!');
-    }
-
-    public function destroy($id)
-    {
-        $materiais = Materiais::findOrFail($id);
-
-        if ($materiais->arquivo_materiais) {
-            Storage::disk('public')->delete($materiais->arquivo_materiais);
-        }
-
-        $materiais->delete();
-
-        return redirect()->route('admin.materiais.index')
-            ->with('success', 'Material removido com sucesso!');
-    }
-
-
     public function verArquivo($id)
     {
-        $material = Materiais::findOrFail($id);
-
+        $material = $this->materialDoAluno($id);
         $caminho = public_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
+            $this->registrarProgresso($material, concluido: true);
             return response()->file($caminho);
         }
 
@@ -151,15 +66,55 @@ class MateriaisController extends Controller
 
     public function download($id)
     {
-        $material = Materiais::findOrFail($id);
-
+        $material = $this->materialDoAluno($id);
         $caminho = public_path($material->arquivo_materiais);
 
         if ($material->arquivo_materiais && file_exists($caminho)) {
             $ext = pathinfo($caminho, PATHINFO_EXTENSION);
+            $this->registrarProgresso($material, concluido: true);
             return response()->download($caminho, $material->titulo_materiais . '.' . $ext);
         }
 
         return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
+    }
+
+    /**
+     * Grava em tbl_progresso_materiais (é o que libera o próximo módulo, ver ModuloProgresso).
+     * Material já CONCLUIDO nunca volta para EM ANDAMENTO.
+     */
+    private function registrarProgresso(Materiais $material, bool $concluido): void
+    {
+        $chave = [
+            'id_aluno'     => auth('aluno')->id(),
+            'id_materiais' => $material->id_materiais,
+        ];
+
+        $atual = DB::table('tbl_progresso_materiais')->where($chave)->first();
+
+        if ($atual && $atual->status_progresso === 'CONCLUIDO') {
+            $concluido = true;
+        }
+
+        $dados = [
+            'status_progresso'                => $concluido ? 'CONCLUIDO' : 'EM ANDAMENTO',
+            'progresso_materiais'             => $concluido ? 100 : 0,
+            'data_acesso_progresso_materiais' => now(),
+        ];
+
+        if ($atual) {
+            DB::table('tbl_progresso_materiais')->where('id_progresso', $atual->id_progresso)->update($dados);
+        } else {
+            DB::table('tbl_progresso_materiais')->insert($chave + $dados);
+        }
+    }
+
+    /**
+     * Só devolve o material se ele for do curso/nível que o aluno escolheu;
+     * senão 404 (o aluno não pode abrir material de outro curso trocando o id na URL).
+     */
+    private function materialDoAluno($id, array $with = []): Materiais
+    {
+        return CursoAtual::filtrar(Materiais::with($with), CursoAtual::matricula())
+            ->findOrFail($id);
     }
 }

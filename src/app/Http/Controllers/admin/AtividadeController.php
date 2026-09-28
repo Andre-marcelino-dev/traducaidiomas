@@ -4,10 +4,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Atividade;
 use App\Models\AtividadeQuestao;
 use App\Models\AtividadeResposta;
+use App\Models\AtividadeRespostaQuestao;
 use App\Models\Curso;
 use App\Models\Aluno;
 use App\Models\Modulo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 class AtividadeController extends Controller
 {
     public function index()
@@ -71,6 +73,10 @@ class AtividadeController extends Controller
     public function corrigir(Request $request, $id)
     {
         $resposta = AtividadeResposta::findOrFail($id);
+        $request->validate([
+            'nota'               => 'required|numeric|min:0|max:10',
+            'feedback_professor' => 'nullable|string|max:2000',
+        ]);
         $resposta->update([
             'nota'                => $request->nota,
             'feedback_professor'  => $request->feedback_professor,
@@ -82,7 +88,16 @@ class AtividadeController extends Controller
 
     public function destroy($id)
     {
-        Atividade::findOrFail($id)->delete();
+        $atividade = Atividade::findOrFail($id);
+
+        // As respostas dos alunos não têm cascade no banco: apaga antes (senão erro 500).
+        DB::transaction(function () use ($atividade) {
+            $respostaIds = $atividade->respostas()->pluck('id_resposta');
+            AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)->delete();
+            AtividadeResposta::whereIn('id_resposta', $respostaIds)->delete();
+            $atividade->questoes()->delete();
+            $atividade->delete();
+        });
         return redirect()->route('admin.atividades.index')->with('success', 'Atividade removida!');
     }
 }

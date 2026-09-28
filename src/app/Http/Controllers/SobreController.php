@@ -17,8 +17,14 @@ class SobreController extends Controller
             })
             ->leftJoin('tbl_professor', 'tbl_feedbacks.id_professor', '=', 'tbl_professor.id_professor')
             ->where('tbl_matricula.status_matricula', 'ATIVO')
+            // Página pública: só os campos exibidos no card (nunca e-mail, telefone ou senha).
             ->select(
-                'tbl_alunos.*',
+                'tbl_alunos.id_aluno',
+                'tbl_alunos.nome_aluno',
+                'tbl_alunos.foto_aluno',
+                'tbl_alunos.curso_aluno',
+                'tbl_alunos.nivel_aluno',
+                'tbl_alunos.status_aluno',
                 'tbl_matricula.id_matricula',
                 'tbl_matricula.data_matricula',
                 'tbl_feedbacks.nota',

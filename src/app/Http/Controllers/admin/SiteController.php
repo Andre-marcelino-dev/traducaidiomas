@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\ConfiguracaoPainel;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 class SiteController extends Controller
 {
@@ -32,7 +33,15 @@ class SiteController extends Controller
 
     public function update(Request $request)
     {
-        \Log::info('SITE UPDATE - dados recebidos:', $request->all());
+        $imagem = 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:4096';
+        $request->validate([
+            'sobre_foto'     => $imagem,
+            'logo_painel'    => $imagem,
+            'logo_site'      => $imagem,
+            'banner1_imagem' => $imagem,
+            'banner2_imagem' => $imagem,
+        ]);
+
         $campos = [
             'banner1_titulo', 'banner1_subtitulo', 'banner1_eyebrow',
             'banner2_titulo', 'banner2_subtitulo', 'banner2_eyebrow',
@@ -42,29 +51,23 @@ class SiteController extends Controller
         ];
 
         foreach ($campos as $campo) {
-            \Log::info('Processando campo: ' . $campo . ' | has: ' . ($request->has($campo) ? 'sim' : 'nao'));
             if ($request->has($campo) && $request->input($campo) !== null) {
                 ConfiguracaoPainel::set($campo, (string) $request->input($campo));
             }
         }
 
-        $dirImg     = public_path('traducaidiomas/img/');
-        $dirBanners = public_path('traducaidiomas/banners/');
+        $dirImg = public_path('traducaidiomas/img/');
 
         if (!is_dir($dirImg)) {
             mkdir($dirImg, 0775, true);
         }
-        if (!is_dir($dirBanners)) {
-            mkdir($dirBanners, 0775, true);
-        }
 
         if ($request->hasFile('sobre_foto')) {
-            $file = $request->file('sobre_foto');
-            $nome = 'sobre_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($dirImg, $nome);
+            $nome = Upload::salvar($request->file('sobre_foto'), 'img', Upload::IMAGENS, 'sobre');
             ConfiguracaoPainel::set('sobre_foto', $nome);
         }
 
+        // Os logos mantêm nome fixo (.png); o conteúdo já foi validado como imagem acima.
         if ($request->hasFile('logo_painel')) {
             $file = $request->file('logo_painel');
             $file->move($dirImg, 'logo_painel.png');
@@ -78,20 +81,15 @@ class SiteController extends Controller
         }
 
         if ($request->hasFile('banner1_imagem')) {
-            $file = $request->file('banner1_imagem');
-            $nome = 'banner1_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($dirBanners, $nome);
+            $nome = Upload::salvar($request->file('banner1_imagem'), 'banners', Upload::IMAGENS, 'banner1');
             ConfiguracaoPainel::set('banner1_imagem', $nome);
         }
 
         if ($request->hasFile('banner2_imagem')) {
-            $file = $request->file('banner2_imagem');
-            $nome = 'banner2_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($dirBanners, $nome);
+            $nome = Upload::salvar($request->file('banner2_imagem'), 'banners', Upload::IMAGENS, 'banner2');
             ConfiguracaoPainel::set('banner2_imagem', $nome);
         }
 
-        \Log::info('Chegou ao final do update sem exceção');
         return redirect()->route('admin.site.index')->with('success', 'Site atualizado com sucesso!');
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -55,28 +55,7 @@ class AuthController extends Controller
     {
         $request->validate(['foto_aluno' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048']);
         $aluno = auth('aluno')->user();
-        $file = $request->file('foto_aluno');
-        $nome = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $destino = public_path('traducaidiomas/alunos');
-
-        if (!is_dir($destino)) {
-            mkdir($destino, 0755, true);
-        }
-        chmod($destino, 0755);
-
-        $file->move($destino, $nome);
-
-        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nome;
-
-        if (!file_exists($caminhoFinal)) {
-            Log::error('Falha ao salvar foto do aluno: arquivo não encontrado após move()', [
-                'destino' => $destino,
-                'nome'    => $nome,
-            ]);
-            throw new \RuntimeException('Não foi possível salvar a foto no servidor.');
-        }
-
-        chmod($caminhoFinal, 0644);
+        $nome = Upload::salvar($request->file('foto_aluno'), 'alunos', Upload::IMAGENS, 'aluno');
 
         $aluno->update(['foto_aluno' => $nome]);
         return redirect()->route('aluno.perfil')->with('success', 'Foto atualizada com sucesso!');
@@ -84,8 +63,10 @@ class AuthController extends Controller
 
     public function atualizarEmail(Request $request)
     {
-        $request->validate(['email_aluno' => 'required|email']);
         $aluno = auth('aluno')->user();
+        $request->validate([
+            'email_aluno' => 'required|email|max:80|unique:tbl_alunos,email_aluno,' . $aluno->id_aluno . ',id_aluno',
+        ]);
         $aluno->update(['email_aluno' => $request->email_aluno]);
         return redirect()->route('aluno.perfil')->with('success', 'Email atualizado com sucesso!');
     }

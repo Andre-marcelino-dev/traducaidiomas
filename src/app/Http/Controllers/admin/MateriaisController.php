@@ -7,6 +7,7 @@ use App\Models\Materiais;
 use App\Models\Professor;
 use App\Models\Curso;
 use App\Models\Modulo;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 
 class MateriaisController extends Controller
@@ -41,15 +42,7 @@ class MateriaisController extends Controller
         ]);
 
         if ($request->hasFile('arquivo_materiais')) {
-            $arquivo     = $request->file('arquivo_materiais');
-            $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = public_path('traducaidiomas/materiais');
-
-            if (!file_exists($destino)) {
-                mkdir($destino, 0755, true);
-            }
-
-            $arquivo->move($destino, $nomeArquivo);
+            $nomeArquivo = Upload::salvar($request->file('arquivo_materiais'), 'materiais', Upload::DOCUMENTOS, $dados['titulo_materiais']);
             $dados['arquivo_materiais'] = 'traducaidiomas/materiais/' . $nomeArquivo;
         } else {
             $dados['arquivo_materiais'] = '';
@@ -98,15 +91,7 @@ class MateriaisController extends Controller
                 unlink(public_path($materiais->arquivo_materiais));
             }
 
-            $arquivo     = $request->file('arquivo_materiais');
-            $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = public_path('traducaidiomas/materiais');
-
-            if (!file_exists($destino)) {
-                mkdir($destino, 0755, true);
-            }
-
-            $arquivo->move($destino, $nomeArquivo);
+            $nomeArquivo = Upload::salvar($request->file('arquivo_materiais'), 'materiais', Upload::DOCUMENTOS, $dados['titulo_materiais']);
             $dados['arquivo_materiais'] = 'traducaidiomas/materiais/' . $nomeArquivo;
         } else {
             $dados['arquivo_materiais'] = $materiais->arquivo_materiais;

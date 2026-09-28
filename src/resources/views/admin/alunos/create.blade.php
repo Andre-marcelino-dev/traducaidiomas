@@ -68,7 +68,7 @@
                             <label class="form-label">Status</label>
                             <select name="status_aluno" class="form-select">
                                 <option value="EM CURSO">EM CURSO</option>
-                                <option value="CONCLUÍDO">CONCLUÍDO</option>
+                                <option value="CONCLUIDO">CONCLUÍDO</option>
                                 <option value="INATIVO">INATIVO</option>
                             </select>
                         </div>

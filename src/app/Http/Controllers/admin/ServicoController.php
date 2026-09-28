@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Servico;
+use App\Support\Upload;
 
 class ServicoController extends Controller
 {
@@ -41,9 +42,7 @@ class ServicoController extends Controller
         $data['id_professor'] = auth('admin')->id();
 
         if ($request->hasFile('imagem_servico')) {
-            $file     = $request->file('imagem_servico');
-            $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $filename = Upload::salvar($request->file('imagem_servico'), 'servicos', Upload::IMAGENS, $request->titulo_servico);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
         } else {
             $data['imagem_servico'] = '';
@@ -88,9 +87,7 @@ class ServicoController extends Controller
                 unlink(public_path($servico->imagem_servico));
             }
 
-            $file     = $request->file('imagem_servico');
-            $filename = \Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('traducaidiomas/servicos'), $filename);
+            $filename = Upload::salvar($request->file('imagem_servico'), 'servicos', Upload::IMAGENS, $request->titulo_servico);
             $data['imagem_servico'] = 'traducaidiomas/servicos/' . $filename;
         }
 

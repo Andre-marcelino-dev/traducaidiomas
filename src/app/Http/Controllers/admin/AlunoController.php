@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\Agenda;
 use App\Models\Aluno;
-use App\Models\AtividadeResposta;
-use App\Models\AtividadeRespostaQuestao;
-use App\Models\Feedback;
-use App\Models\Matricula;
-use App\Models\Notificacao;
-use App\Models\Reagendamento;
+use App\Support\Upload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class AlunoController extends Controller
 {
@@ -37,7 +30,7 @@ class AlunoController extends Controller
             'curso_aluno'              => 'required|string|max:100',
             'data_nasc_aluno'          => 'required|date',
             'nivel_aluno'              => 'required|string|max:50',
-            'status_aluno'             => 'required|string|max:50',
+            'status_aluno'             => ['required', Rule::in(Aluno::STATUS)],
             'foto_aluno'               => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -60,30 +53,7 @@ class AlunoController extends Controller
 
     private function salvarFotoAluno(Request $request): string
     {
-        $foto = $request->file('foto_aluno');
-        $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . strtolower($foto->getClientOriginalExtension());
-        $destino = public_path('traducaidiomas/alunos');
-
-        if (!is_dir($destino)) {
-            mkdir($destino, 0755, true);
-        }
-        chmod($destino, 0755);
-
-        $foto->move($destino, $nome);
-
-        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nome;
-
-        if (!file_exists($caminhoFinal)) {
-            Log::error('Falha ao salvar foto do aluno: arquivo não encontrado após move()', [
-                'destino' => $destino,
-                'nome'    => $nome,
-            ]);
-            throw new \RuntimeException('Não foi possível salvar a foto do aluno no servidor.');
-        }
-
-        chmod($caminhoFinal, 0644);
-
-        return $nome;
+        return Upload::salvar($request->file('foto_aluno'), 'alunos', Upload::IMAGENS, $request->nome_aluno);
     }
 
     public function edit($id)
@@ -104,7 +74,7 @@ class AlunoController extends Controller
             'curso_aluno'     => 'required|string|max:100',
             'data_nasc_aluno' => 'required|date',
             'nivel_aluno'     => 'required|string|max:50',
-            'status_aluno'    => 'required|string|max:50',
+            'status_aluno'    => ['required', Rule::in(Aluno::STATUS)],
             'foto_aluno'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -129,34 +99,19 @@ class AlunoController extends Controller
 
 
     public function updateStatus(Request $request, $id)
-{
-    $aluno = Aluno::findOrFail($id);
-    $aluno->status_aluno = $request->status_aluno;
-    $aluno->save();
+    {
+        $aluno = Aluno::findOrFail($id);
+        $request->validate(['status_aluno' => ['required', Rule::in(Aluno::STATUS)]]);
 
-    return back()->with('success', 'Status atualizado!');
-}
+        $aluno->status_aluno = $request->status_aluno;
+        $aluno->save();
+
+        return back()->with('success', 'Status atualizado!');
+    }
 
     public function destroy($id)
     {
-        $aluno = Aluno::findOrFail($id);
-
-        DB::transaction(function () use ($aluno, $id) {
-            $respostaIds = AtividadeResposta::where('id_aluno', $id)->pluck('id_resposta');
-            AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)->delete();
-            AtividadeResposta::where('id_aluno', $id)->delete();
-
-            Notificacao::where('id_aluno', $id)->delete();
-            Reagendamento::where('aluno_id', $id)->delete();
-            Agenda::where('id_aluno', $id)->delete();
-            Matricula::where('id_aluno', $id)->delete();
-            Feedback::where('id_aluno', $id)->delete();
-
-            DB::table('tbl_presenca')->where('id_aluno', $id)->delete();
-            DB::table('tbl_progresso_materiais')->where('id_aluno', $id)->delete();
-
-            $aluno->delete();
-        });
+        Aluno::findOrFail($id)->excluirComDependencias();
 
         return redirect()->route('admin.alunos.index')->with('success', 'Aluno excluído com sucesso!');
     }
