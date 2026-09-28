@@ -7,6 +7,7 @@ use App\Models\Curso;
 use App\Models\ForumResposta;
 use App\Models\ForumTopico;
 use App\Models\Matricula;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 
 class ForumController extends Controller
@@ -55,15 +56,12 @@ class ForumController extends Controller
         abort_unless($idCursos->contains((int) $dados['id_curso']), 403);
 
         if ($request->hasFile('anexo_topico')) {
-            $arquivo     = $request->file('anexo_topico');
-            $nomeArquivo = time() . '_' . $arquivo->getClientOriginalName();
-            $destino     = public_path('traducaidiomas/forum');
-
-            if (!file_exists($destino)) {
-                mkdir($destino, 0755, true);
-            }
-
-            $arquivo->move($destino, $nomeArquivo);
+            $nomeArquivo = Upload::salvar(
+                $request->file('anexo_topico'),
+                'forum',
+                array_merge(Upload::DOCUMENTOS, Upload::IMAGENS),
+                $dados['titulo_topico']
+            );
             $dados['anexo_topico'] = 'traducaidiomas/forum/' . $nomeArquivo;
         }
 

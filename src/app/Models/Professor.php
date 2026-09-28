@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Professor extends Authenticatable
 {
+    use HasApiTokens;
+
     protected $table      = 'tbl_professor';
     protected $primaryKey = 'id_professor';
 
@@ -25,8 +28,13 @@ class Professor extends Authenticatable
         'senha_professor',
     ];
 
+    // is_admin fica de fora do $fillable de propósito: só muda via forceFill no ProfessorController.
     protected $hidden = [
         'senha_professor',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
     ];
 
     // Diz ao Laravel que o campo de senha se chama senha_professor

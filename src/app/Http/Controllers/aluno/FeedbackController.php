@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
+use App\Models\Aula;
 use App\Models\Feedback;
+use App\Support\CursoAtual;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
@@ -18,6 +20,14 @@ class FeedbackController extends Controller
             'nota'         => 'required|integer|min:1|max:5',
             'comentario'   => 'nullable|string|max:500',
         ]);
+
+        // Só pode avaliar o curso que está cursando e um professor que dá aula nele.
+        $cursoValido = (int) $request->id_curso === (int) CursoAtual::matricula()->id_curso;
+        $professorDoCurso = Aula::where('id_curso', $request->id_curso)
+            ->where('id_professor', $request->id_professor)
+            ->exists();
+
+        abort_unless($cursoValido && $professorDoCurso, 403);
 
         Feedback::updateOrCreate(
             [

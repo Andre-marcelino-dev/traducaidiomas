@@ -28,7 +28,7 @@ class AtividadeController extends Controller
     public function show($id)
     {
         $aluno = auth('aluno')->user();
-        $atividade = Atividade::with('questoes')->findOrFail($id);
+        $atividade = $this->atividadeDoAluno($id);
         $resposta = AtividadeResposta::with('respostasQuestoes')
             ->where('id_atividade', $id)
             ->where('id_aluno', $aluno->id_aluno)
@@ -39,12 +39,18 @@ class AtividadeController extends Controller
     public function responder(Request $request, $id)
     {
         $aluno = auth('aluno')->user();
-        $atividade = Atividade::with('questoes')->findOrFail($id);
+        $atividade = $this->atividadeDoAluno($id);
 
         $resposta = AtividadeResposta::firstOrCreate(
-            ['id_atividade' => $id, 'id_aluno' => $aluno->id_aluno],
+            ['id_atividade' => $atividade->id_atividade, 'id_aluno' => $aluno->id_aluno],
             ['status_resposta' => 'PENDENTE']
         );
+
+        // Depois de corrigida, reenviar apagaria as respostas que o professor avaliou.
+        if ($resposta->status_resposta === 'CORRIGIDA') {
+            return redirect()->route('aluno.atividades.show', $atividade->id_atividade)
+                ->with('error', 'Esta atividade já foi corrigida e não pode ser reenviada.');
+        }
 
         $resposta->update(['status_resposta' => 'ENVIADA', 'data_envio' => now()]);
         $resposta->respostasQuestoes()->delete();
@@ -64,5 +70,15 @@ class AtividadeController extends Controller
         }
 
         return redirect()->route('aluno.atividades.index')->with('success', 'Atividade enviada com sucesso!');
+    }
+
+    /**
+     * Só atividades ativas do curso/nível escolhido; senão 404.
+     */
+    private function atividadeDoAluno($id): Atividade
+    {
+        return CursoAtual::filtrar(Atividade::with('questoes'), CursoAtual::matricula())
+            ->where('status_atividade', 'ATIVA')
+            ->findOrFail($id);
     }
 }

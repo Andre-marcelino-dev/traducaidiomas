@@ -50,7 +50,8 @@ return [
     |
     */
 
-    'expiration' => null,
+    // Token do app vale 30 dias (depois o usuário faz login de novo).
+    'expiration' => env('SANCTUM_EXPIRATION', 60 * 24 * 30),
 
     /*
     |--------------------------------------------------------------------------

@@ -31,6 +31,17 @@ class ForumController extends Controller
         return view('admin.forum.show', compact('topico'));
     }
 
+    public function anexo($id)
+    {
+        $topico = ForumTopico::findOrFail($id);
+
+        if ($topico->anexo_topico && file_exists(public_path($topico->anexo_topico))) {
+            return response()->file(public_path($topico->anexo_topico));
+        }
+
+        return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
+    }
+
     public function destroyTopico($id)
     {
         $topico = ForumTopico::findOrFail($id);

@@ -10,9 +10,9 @@ use App\Models\Feedback;
 use App\Models\Matricula;
 use App\Models\Notificacao;
 use App\Models\Reagendamento;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AlunoController extends Controller
 {
@@ -60,30 +60,7 @@ class AlunoController extends Controller
 
     private function salvarFotoAluno(Request $request): string
     {
-        $foto = $request->file('foto_aluno');
-        $nome = strtolower(str_replace(' ', '-', $request->nome_aluno)) . '.' . strtolower($foto->getClientOriginalExtension());
-        $destino = public_path('traducaidiomas/alunos');
-
-        if (!is_dir($destino)) {
-            mkdir($destino, 0755, true);
-        }
-        chmod($destino, 0755);
-
-        $foto->move($destino, $nome);
-
-        $caminhoFinal = $destino . DIRECTORY_SEPARATOR . $nome;
-
-        if (!file_exists($caminhoFinal)) {
-            Log::error('Falha ao salvar foto do aluno: arquivo não encontrado após move()', [
-                'destino' => $destino,
-                'nome'    => $nome,
-            ]);
-            throw new \RuntimeException('Não foi possível salvar a foto do aluno no servidor.');
-        }
-
-        chmod($caminhoFinal, 0644);
-
-        return $nome;
+        return Upload::salvar($request->file('foto_aluno'), 'alunos', Upload::IMAGENS, $request->nome_aluno);
     }
 
     public function edit($id)

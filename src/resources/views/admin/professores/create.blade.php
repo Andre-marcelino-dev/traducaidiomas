@@ -52,6 +52,14 @@
                         </div>
                     </div>
 
+                    <div class="form-check my-3">
+                        <input type="checkbox" name="is_admin" value="1" id="is_admin" class="form-check-input"
+                            {{ old('is_admin') ? 'checked' : '' }}>
+                        <label for="is_admin" class="form-check-label">
+                            Administrador (gerencia professores, alunos, matrículas, módulos, serviços e o site)
+                        </label>
+                    </div>
+
 
                     <div class="mb-3">
                         <label>Biografia</label>

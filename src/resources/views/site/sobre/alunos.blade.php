@@ -35,12 +35,6 @@
                     </div>
                 </div>
 
-
-
-                <div class="validity">
-                    Email: {{ $aluno->email_aluno }}
-                </div>
-
                 @if($aluno->nota)
                 <div class="card-feedback">
                     <div class="feedback-stars">

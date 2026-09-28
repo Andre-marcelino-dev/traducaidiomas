@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Reagendamento;
 use App\Models\Aula;
 use App\Models\Professor;
+use App\Support\CursoAtual;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +29,8 @@ public function solicitar(Request $request)
     ]);
 
     $aluno = Auth::guard('aluno')->user();
-    $aula  = Aula::findOrFail($request->aula_id);
+    // Só aulas do curso/nível escolhido pelo aluno.
+    $aula  = CursoAtual::filtrar(Aula::query(), CursoAtual::matricula())->findOrFail($request->aula_id);
 
     // Verifica se já existe solicitação pendente
     $jaExiste = Reagendamento::where('aluno_id', $aluno->id_aluno)

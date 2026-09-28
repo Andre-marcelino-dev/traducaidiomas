@@ -136,7 +136,7 @@
 
                 <div class="linha-opcoes">
                     <span></span>
-                    <a href="{{ route('admin.recuperar-senha') }}" class="link-esqueceu">Esqueceu a senha?</a>
+                    <span class="link-esqueceu">Esqueceu a senha? Peça ao administrador.</span>
                 </div>
 
                 <button type="submit" class="btn-entrar" id="btnEntrar">
@@ -145,10 +145,8 @@
                 </button>
             </form>
 
-            <div class="divisor">ou</div>
-
             <p class="info-suporte">
-                Primeiro acesso? <a href="{{ route('admin.verificar') }}">Cadastre suas credenciais</a>
+                Primeiro acesso? O administrador cadastra seu e-mail e senha.
             </p>
 
         </div>

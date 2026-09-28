@@ -25,7 +25,9 @@
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
+                    @php $ehAdmin = auth('admin')->user()?->is_admin; @endphp
                     <ul class="nav nav-treeview">
+                        @if ($ehAdmin)
                         <li class="nav-item">
                             <a href="{{ route('admin.professores.index') }}" class="nav-link active">
                                 <i class="nav-icon bi bi-circle"></i>
@@ -46,6 +48,7 @@
                                 <p>Matriculas</p>
                             </a>
                         </li>
+                        @endif
 
 
 
@@ -68,12 +71,14 @@
 
 
 
+                        @if ($ehAdmin)
                         <li class="nav-item">
                             <a href="{{ route('admin.servicos.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Serviços</p>
                             </a>
                         </li>
+                        @endif
 
 
 
@@ -86,12 +91,14 @@
 
 
 
+                        @if ($ehAdmin)
                         <li class="nav-item">
                             <a href="{{ route('admin.modulos.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Módulos</p>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a href="{{ route('admin.materiais.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-circle"></i>
@@ -123,6 +130,7 @@
                 </li>
 
 
+                @if ($ehAdmin)
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon bi bi-tree-fill"></i>
@@ -140,6 +148,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
             </ul>
         </nav>
     </div>

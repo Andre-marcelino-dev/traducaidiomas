@@ -146,6 +146,40 @@
     </p>
 
 
+    <h2>Autenticação</h2>
+
+    <p>
+        Todas as rotas abaixo exigem um token. Faça login e envie o token no header
+        <code>Authorization: Bearer SEU_TOKEN</code>. O token vale 30 dias.
+    </p>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/professor/login</code>
+        <p>
+            Corpo: <code>email_professor</code> e <code>senha_professor</code>.
+            Devolve o token do professor. Rotas de <strong>alunos</strong> e de
+            criar/editar/excluir <strong>módulos</strong> exigem professor administrador.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/login</code>
+        <p>
+            Corpo: <code>email_aluno</code> e <code>senha_aluno</code>.
+            Devolve o token do aluno (usado pelo app), que só acessa as rotas
+            <code>/api/v1/aluno/*</code>.
+        </p>
+    </div>
+
+    <p>
+        Limites: 5 tentativas de login por minuto e 60 requisições por minuto por token.
+        Acima disso a API responde <code>429</code>. Sem token ou com token do tipo errado:
+        <code>401</code> / <code>403</code>.
+    </p>
+
+
     <h2>Endpoints</h2>
 
 
@@ -351,7 +385,7 @@
     <h2>Próximas etapas</h2>
 
     <p>
-        A API será expandida para autenticação,
+        A API será expandida para
         professores, cursos, matrículas,
         agendamentos, materiais e atividades.
     </p>

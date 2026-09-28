@@ -57,14 +57,13 @@ Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])-
 Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
-Route::get('/alunos', [AlunoController::class, 'index'])->name('alunos');
 
 
 Route::view('/api/documentacao', 'api.documentacao')->name('api.documentacao');
 
 // Chatbot publico
 Route::get('/chatbot/dados', [AlunoChatbotController::class, 'dados'])->name('chatbot.dados');
-Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('chatbot.mensagem');
+Route::post('/chatbot/mensagem', [AlunoChatbotController::class, 'mensagem'])->middleware('throttle:chatbot')->name('chatbot.mensagem');
  
 
 
@@ -73,20 +72,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Autenticação Admin (Públicas)
     Route::get('/login',  [AuthController::class, 'login'])->name('login');
-    Route::post('/login', [AuthController::class, 'autenticar'])->name('autenticar');
+    Route::post('/login', [AuthController::class, 'autenticar'])->middleware('throttle:login')->name('autenticar');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Primeiro Acesso
-    Route::get('/verificar',          [AuthController::class, 'verificar'])->name('verificar');
-    Route::post('/verificar',         [AuthController::class, 'verificarAcesso'])->name('verificar.acesso');
-    Route::get('/criar-credenciais',  [AuthController::class, 'criarCredenciais'])->name('criar-credenciais');
-    Route::post('/criar-credenciais', [AuthController::class, 'salvarCredenciais'])->name('salvar-credenciais');
-
-    // Recuperação de Senha
-    Route::get('/recuperar-senha',  [AuthController::class, 'recuperarSenha'])->name('recuperar-senha');
-    Route::post('/recuperar-senha', [AuthController::class, 'processarRecuperacao'])->name('processar-recuperacao');
-    Route::get('/redefinir-senha',  [AuthController::class, 'redefinirSenha'])->name('redefinir-senha');
-    Route::post('/redefinir-senha', [AuthController::class, 'salvarNovaSenha'])->name('salvar-nova-senha');
+    // Primeiro acesso e "esqueci a senha" pela tela de login foram removidos:
+    // só pediam nome/e-mail + telefone (dados públicos) para trocar a senha.
+    // Agora o admin cadastra/redefine a senha em Professores > Editar.
 
     // Painel Admin (Protegidas por Middleware)
     Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
@@ -94,8 +85,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/',           [DashController::class, 'index'])->name('dash');
         Route::get('/categorias', [DashController::class, 'index'])->name('categoria');
 
-        // CRUD Professores
-        Route::prefix('professores')->name('professores.')->group(function () {
+        // CRUD Professores (somente admin)
+        Route::prefix('professores')->middleware('somente.admin')->name('professores.')->group(function () {
             Route::get('/',          [ProfessorController::class, 'index'])->name('index');
             Route::post('/',         [ProfessorController::class, 'store'])->name('store');
             Route::get('/create',    [ProfessorController::class, 'create'])->name('create');
@@ -105,8 +96,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/{id}',   [ProfessorController::class, 'destroy'])->name('destroy');
         });
 
-        // CRUD Alunos
-        Route::prefix('alunos')->name('alunos.')->group(function () {
+        // CRUD Alunos (somente admin)
+        Route::prefix('alunos')->middleware('somente.admin')->name('alunos.')->group(function () {
             Route::get('/',            [AlunoController::class, 'index'])->name('index');
             Route::post('/',           [AlunoController::class, 'store'])->name('store');
             Route::get('/create',      [AlunoController::class, 'create'])->name('create');
@@ -132,8 +123,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/professor/{id}',   [AgendaController::class, 'porProfessor'])->name('porProfessor');
         });
 
-        // CRUD Matrículas
-        Route::prefix('matriculas')->name('matriculas.')->group(function () {
+        // CRUD Matrículas (somente admin)
+        Route::prefix('matriculas')->middleware('somente.admin')->name('matriculas.')->group(function () {
             Route::get('/',            [MatriculaController::class, 'index'])->name('index');
             Route::post('/',           [MatriculaController::class, 'store'])->name('store');
             Route::get('/{id}/edit',   [MatriculaController::class, 'edit'])->name('edit');
@@ -142,8 +133,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{id}/status', [MatriculaController::class, 'updateStatus'])->name('updateStatus');
         });
 
-        // CRUD Módulos
-        Route::prefix('modulos')->name('modulos.')->group(function () {
+        // CRUD Módulos (somente admin)
+        Route::prefix('modulos')->middleware('somente.admin')->name('modulos.')->group(function () {
             Route::get('/',          [ModuloController::class, 'index'])->name('index');
             Route::post('/',         [ModuloController::class, 'store'])->name('store');
             Route::get('/{id}/edit', [ModuloController::class, 'edit'])->name('edit');
@@ -172,7 +163,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Recursos Adicionais do Admin (Aulas e Serviços)
         Route::resource('aulas', AulaController::class)->parameters(['aulas' => 'id']);
-        Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id']);
+        Route::resource('servicos', adminServicoController::class)->parameters(['servicos' => 'id'])
+            ->middleware('somente.admin');
 
         // ── Reagendamentos (Admin) ──
         Route::prefix('reagendamentos')->name('reagendamentos.')->group(function () {
@@ -192,7 +184,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Chatbot do professor
         Route::prefix('professor/chatbot')->name('professor.chatbot.')->group(function () {
             Route::get('/dados', [ProfessorChatbotController::class, 'dados'])->name('dados');
-            Route::post('/mensagem', [ProfessorChatbotController::class, 'mensagem'])->name('mensagem');
+            Route::post('/mensagem', [ProfessorChatbotController::class, 'mensagem'])->middleware('throttle:chatbot')->name('mensagem');
         });
 
         // ── Atividades ──
@@ -209,6 +201,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('forum')->name('forum.')->group(function () {
             Route::get('/',                 [AdminForumController::class, 'index'])->name('index');
             Route::get('/{id}',             [AdminForumController::class, 'show'])->name('show');
+            Route::get('/{id}/anexo',       [AdminForumController::class, 'anexo'])->name('anexo');
             Route::delete('/{id}',          [AdminForumController::class, 'destroyTopico'])->name('destroy');
             Route::delete('/resposta/{id}', [AdminForumController::class, 'destroyResposta'])->name('resposta.destroy');
         });
@@ -222,8 +215,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{id}/ativar',     [AdminDuvidaController::class, 'ativar'])->name('ativar');
         });
 
-        // ── Gerenciamento do Site ──
-        Route::prefix('site')->name('site.')->group(function () {
+        // ── Gerenciamento do Site (somente admin) ──
+        Route::prefix('site')->middleware('somente.admin')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index'])->name('index');
             Route::put('/', [SiteController::class, 'update'])->name('update');
         });
@@ -235,7 +228,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
 
     // Autenticação Aluno (Públicas)
     Route::get('/login',  [AlunoAuthController::class, 'login'])->name('login');
-    Route::post('/login', [AlunoAuthController::class, 'autenticar'])->name('autenticar');
+    Route::post('/login', [AlunoAuthController::class, 'autenticar'])->middleware('throttle:login')->name('autenticar');
     Route::post('/logout', [AlunoAuthController::class, 'logout'])->name('logout');
 
     // Painel Aluno (Protegidas por Middleware)
@@ -300,7 +293,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
                 // Chatbot do aluno
             Route::prefix('chatbot')->name('chatbot.')->group(function () {
                 Route::get('/dados', [AlunoChatbotController::class, 'dados'])->name('dados');
-                Route::post('/mensagem', [AlunoChatbotController::class, 'mensagem'])->name('mensagem');
+                Route::post('/mensagem', [AlunoChatbotController::class, 'mensagem'])->middleware('throttle:chatbot')->name('mensagem');
             });
         });
     });
