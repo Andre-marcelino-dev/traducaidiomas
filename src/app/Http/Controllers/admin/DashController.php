@@ -24,9 +24,9 @@ class DashController extends Controller
         $totalAulas          = Aula::count();
         $matriculasAtivas    = Matricula::where('status_matricula', '!=', 'CONGELADO')->count();
 
-        // Presença
+        // Presença (a tela de presença grava "presente", "falta" ou "justificado")
         $presencaPresentes = Presenca::where('status_presenca', 'presente')->count();
-        $presencaAusentes  = Presenca::where('status_presenca', 'ausente')->count();
+        $presencaAusentes  = Presenca::where('status_presenca', 'falta')->count();
         $taxaPresenca      = ($presencaPresentes + $presencaAusentes) > 0
             ? round($presencaPresentes / ($presencaPresentes + $presencaAusentes) * 100)
             : 0;
@@ -45,12 +45,12 @@ class DashController extends Controller
             ->orderBy('mes')
             ->pluck('total', 'mes');
 
-        // Distribuição de notas
+        // Distribuição de notas (a nota aceita meio ponto, ex.: 4,5 entra em "0–4")
         $notasFaixas = [
-            '0–4'  => AtividadeResposta::whereBetween('nota', [0, 4])->count(),
-            '5–6'  => AtividadeResposta::whereBetween('nota', [5, 6])->count(),
-            '7–8'  => AtividadeResposta::whereBetween('nota', [7, 8])->count(),
-            '9–10' => AtividadeResposta::whereBetween('nota', [9, 10])->count(),
+            '0–4'  => AtividadeResposta::where('nota', '>=', 0)->where('nota', '<', 5)->count(),
+            '5–6'  => AtividadeResposta::where('nota', '>=', 5)->where('nota', '<', 7)->count(),
+            '7–8'  => AtividadeResposta::where('nota', '>=', 7)->where('nota', '<', 9)->count(),
+            '9–10' => AtividadeResposta::where('nota', '>=', 9)->where('nota', '<=', 10)->count(),
         ];
 
         // Alunos por nível

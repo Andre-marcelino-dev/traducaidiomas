@@ -3,7 +3,7 @@
   <div class="options">
 
     <!-- 1ª imagem -->
-    <div class="option active" style="--optionBackground:url('../img/idade1.jpg');">
+    <div class="option active" style="--optionBackground:url('../img/idade1-web.jpg');">
       <div class="shadow"></div>
       <div class="label">
         <div class="icon">
@@ -21,7 +21,7 @@
     </div>
 
     <!-- 2ª imagem -->
-    <div class="option" style="--optionBackground:url('../img/idade2.jpg');">
+    <div class="option" style="--optionBackground:url('../img/idade2-web.jpg');">
       <div class="shadow"></div>
       <div class="label">
         <div class="icon">
@@ -38,7 +38,7 @@
     </div>
 
     <!-- 3ª imagem -->
-    <div class="option" style="--optionBackground:url('../img/idade3.jpg');">
+    <div class="option" style="--optionBackground:url('../img/idade3-web.jpg');">
       <div class="shadow"></div>
       <div class="label">
         <div class="icon">

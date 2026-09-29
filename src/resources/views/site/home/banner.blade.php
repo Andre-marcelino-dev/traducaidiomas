@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <div class="banner-slide" style="--banner-image: url('img/banner2.png');">
-        <div class="banner-media" style="background-image: url('img/banner2.png');"></div>
+    <div class="banner-slide" style="--banner-image: url('img/banner2-web.jpg');">
+        <div class="banner-media" style="background-image: url('img/banner2-web.jpg');"></div>
         <div class="banner-overlay"></div>
         <div class="banner-grid container">
             <div class="banner-card">
