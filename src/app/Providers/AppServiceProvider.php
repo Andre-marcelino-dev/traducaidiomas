@@ -18,9 +18,23 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configurarLimitesDeAcesso();
 
+        // Dados usados pelo layout de todas as telas. O composer roda para CADA
+        // view/partial, então monta uma vez por requisição e reaproveita
+        // (antes eram ~14 consultas por partial, 120-170 por página).
         View::composer('*', function ($view) {
-            $view->with('categorias', Categoria::all());
-            $view->with('siteConfig', [
+            if (!app()->bound('view.dados_globais')) {
+                app()->instance('view.dados_globais', $this->dadosGlobaisDasViews());
+            }
+
+            $view->with(app('view.dados_globais'));
+        });
+    }
+
+    private function dadosGlobaisDasViews(): array
+    {
+        return [
+            'categorias' => Categoria::all(),
+            'siteConfig' => [
                 'banner1_titulo'     => ConfiguracaoPainel::get('banner1_titulo', 'Inglês profissional com método claro, foco em resultado e consistência.'),
                 'banner1_subtitulo'  => ConfiguracaoPainel::get('banner1_subtitulo', 'Treinamento para reuniões, entrevistas e apresentações, com metas reais e acompanhamento próximo.'),
                 'banner1_eyebrow'    => ConfiguracaoPainel::get('banner1_eyebrow', 'TraducaIdiomas · English & Professional Skills'),
@@ -34,8 +48,8 @@ class AppServiceProvider extends ServiceProvider
                 'sobre_foto'         => ConfiguracaoPainel::get('sobre_foto', ''),
                 'logo_painel'        => ConfiguracaoPainel::get('logo_painel', ''),
                 'logo_site'          => ConfiguracaoPainel::get('logo_site', ''),
-            ]);
-        });
+            ],
+        ];
     }
 
     /**
