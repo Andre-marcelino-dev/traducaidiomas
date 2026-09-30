@@ -89,6 +89,7 @@
                         <div class="col-md-3">
                             <label class="form-label">Carga horária (minutos)</label>
                             <input type="number" name="carga_horaria_minutos" min="0" class="form-control" value="{{ old('carga_horaria_minutos', $moduloEdit?->carga_horaria_minutos ?? 0) }}">
+                            <small class="text-muted">Usada só se alguma aula do módulo estiver sem duração; senão vale a soma das aulas.</small>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Status</label>
@@ -146,7 +147,12 @@
                                 <td style="font-weight:600;">{{ $modulo->nome_modulo }}</td>
                                 <td><span class="tbl-badge">{{ $modulo->curso?->nome_curso ?? '—' }}</span></td>
                                 <td>{{ $modulo->nivel?->nome_nivel ?? '—' }}</td>
-                                <td>{{ intdiv($modulo->carga_horaria_minutos, 60) }}h{{ str_pad($modulo->carga_horaria_minutos % 60, 2, '0', STR_PAD_LEFT) }}</td>
+                                <td>
+                                    {{ intdiv($modulo->carga_exibida, 60) }}h{{ str_pad($modulo->carga_exibida % 60, 2, '0', STR_PAD_LEFT) }}
+                                    @if($modulo->carga_pelas_aulas)
+                                        <br><small class="text-muted">soma das aulas</small>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="tbl-status {{ $modulo->status_modulo == 'ATIVO' ? 'tbl-status-ativo' : 'tbl-status-inativo' }}">
                                         <span class="tbl-status-dot"></span>{{ $modulo->status_modulo }}

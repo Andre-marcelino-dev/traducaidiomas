@@ -150,7 +150,7 @@ class CursoController extends Controller
                     'ordem_modulo'          => $modulo->ordem_modulo,
                     'nome_modulo'           => $modulo->nome_modulo,
                     'descricao_modulo'      => $modulo->descricao_modulo,
-                    'carga_horaria_minutos' => $modulo->carga_horaria_minutos,
+                    'carga_horaria_minutos' => $progresso->carga_horaria_minutos,
                 ],
                 'progresso' => [
                     'total_aulas'          => $listaAulas->count(),
