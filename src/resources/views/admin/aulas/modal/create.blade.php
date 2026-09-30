@@ -8,6 +8,16 @@
     <div class="card">
         <div class="card-body">
 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $erro)
+                            <li>{{ $erro }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('admin.aulas.store') }}" method="POST">
                 @csrf
 
@@ -66,7 +76,8 @@
                         <option value="">Selecione um professor</option>
 
                         @foreach($professores as $professor)
-                            <option value="{{ $professor->id_professor }}">
+                            <option value="{{ $professor->id_professor }}"
+                                {{ old('id_professor') == $professor->id_professor ? 'selected' : '' }}>
                                 {{ $professor->nome_professor }}
                             </option>
                         @endforeach
@@ -80,7 +91,8 @@
                         <option value="">Selecione um curso</option>
 
                         @foreach($cursos as $curso)
-                            <option value="{{ $curso->id_curso }}">
+                            <option value="{{ $curso->id_curso }}"
+                                {{ old('id_curso') == $curso->id_curso ? 'selected' : '' }}>
                                 {{ $curso->nome_curso }}
                             </option>
                         @endforeach
@@ -92,7 +104,8 @@
                     <select name="id_modulo" class="form-control" id="selectModulo">
                         <option value="">Nenhum / não definido</option>
                         @foreach($modulos as $modulo)
-                            <option value="{{ $modulo->id_modulo }}" data-curso="{{ $modulo->id_curso }}">
+                            <option value="{{ $modulo->id_modulo }}" data-curso="{{ $modulo->id_curso }}"
+                                {{ old('id_modulo') == $modulo->id_modulo ? 'selected' : '' }}>
                                 {{ $modulo->curso?->nome_curso }} · {{ $modulo->nivel?->nome_nivel }} · {{ $modulo->ordem_modulo }} - {{ $modulo->nome_modulo }}
                             </option>
                         @endforeach
@@ -121,9 +134,9 @@
                     <label class="form-label">Status</label>
 
                     <select name="status_aulas" class="form-control" required>
-                        <option value="ATIVO">ATIVO</option>
-                        <option value="INATIVO">INATIVO</option>
-                        <option value="CANCELADO">CANCELADO</option>
+                        <option value="ATIVO" {{ old('status_aulas') == 'ATIVO' ? 'selected' : '' }}>ATIVO</option>
+                        <option value="INATIVO" {{ old('status_aulas') == 'INATIVO' ? 'selected' : '' }}>INATIVO</option>
+                        <option value="CANCELADO" {{ old('status_aulas') == 'CANCELADO' ? 'selected' : '' }}>CANCELADO</option>
                     </select>
                 </div>
 

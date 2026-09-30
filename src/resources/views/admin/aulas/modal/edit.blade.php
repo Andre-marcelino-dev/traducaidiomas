@@ -8,6 +8,16 @@
     <div class="card">
         <div class="card-body">
 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $erro)
+                            <li>{{ $erro }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('admin.aulas.update', $aula->id_aulas) }}" method="POST">
                 @csrf
                 @method('PUT')
