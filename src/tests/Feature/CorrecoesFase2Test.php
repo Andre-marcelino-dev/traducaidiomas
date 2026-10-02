@@ -319,7 +319,9 @@ class CorrecoesFase2Test extends TestCase
             ->assertSee('📝 Justificado')
             ->assertDontSee('❌ Falta')
             ->assertViewHas('totalPresente', 1)
-            ->assertViewHas('totalFalta', 0);
+            ->assertViewHas('totalJustificado', 1)
+            ->assertViewHas('totalFalta', 0)
+            ->assertViewHas('percPresenca', 100); // justificada conta como presença
     }
 
     public function test_presenca_lista_so_matricula_ativa_e_recusa_status_invalido(): void
