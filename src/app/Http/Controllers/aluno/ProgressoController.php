@@ -16,7 +16,9 @@ class ProgressoController extends Controller
         $totalAulas     = Presenca::where('id_aluno', $aluno->id_aluno)->count();
         $totalPresente  = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'presente')->count();
         $totalFalta     = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'falta')->count();
-        $percPresenca   = $totalAulas > 0 ? round(($totalPresente / $totalAulas) * 100) : 0;
+        $totalJustificado = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'justificado')->count();
+        // Falta justificada (aceita pelo professor) conta como presença na frequência.
+        $percPresenca   = $totalAulas > 0 ? round((($totalPresente + $totalJustificado) / $totalAulas) * 100) : 0;
 
         // Materiais do curso/nível escolhido
         $idsMateriais = CursoAtual::filtrar(Materiais::query(), CursoAtual::matricula())->pluck('id_materiais');
@@ -37,7 +39,7 @@ class ProgressoController extends Controller
             ->get();
 
         return view('aluno.dash.progresso', compact(
-            'aluno', 'totalAulas', 'totalPresente', 'totalFalta',
+            'aluno', 'totalAulas', 'totalPresente', 'totalFalta', 'totalJustificado',
             'percPresenca', 'totalMateriais', 'materiaisVistos',
             'percMateriais', 'ultimasPresencas'
         ));

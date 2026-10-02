@@ -108,6 +108,7 @@
                         </div>
                         <div class="mt-3 d-flex gap-3">
                             <span><i class="fas fa-circle text-success"></i> Presente ({{ $totalPresente }})</span>
+                            <span><i class="fas fa-circle text-warning"></i> Justificado ({{ $totalJustificado }})</span>
                             <span><i class="fas fa-circle text-danger"></i> Falta ({{ $totalFalta }})</span>
                         </div>
                     </div>
@@ -245,8 +246,8 @@ new Chart(document.getElementById('chartPresenca'), {
     type: 'doughnut',
     data: {
         datasets: [{
-            data: [{{ $totalPresente }}, {{ $totalFalta }}],
-            backgroundColor: ['#28a745', '#dc3545'],
+            data: [{{ $totalPresente }}, {{ $totalJustificado }}, {{ $totalFalta }}],
+            backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
             borderWidth: 0
         }]
     },
