@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tbl_atividades', function (Blueprint $table) {
             $table->integer('id_atividade', true);
-            $table->integer('id_professor')->index('id_professor');
-            $table->integer('id_curso')->index('id_curso');
+            $table->integer('id_professor')->index('tbl_atividades_id_professor_index');
+            $table->integer('id_curso')->index('tbl_atividades_id_curso_index');
             $table->string('titulo_atividade', 200);
             $table->text('descricao_atividade')->nullable();
             $table->enum('tipo_atividade', ['multipla_escolha', 'texto', 'misto'])->nullable()->default('misto');

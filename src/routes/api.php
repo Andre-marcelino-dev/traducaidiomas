@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AlunoController;
 use App\Http\Controllers\Api\V1\AulaController;
 use App\Http\Controllers\Api\V1\ModuloController;
+use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
 use App\Http\Controllers\Api\V1\Professor\AuthController as ProfessorApiAuthController;
@@ -24,6 +25,7 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/cursos/{idCurso}/materiais', [AlunoApiCursoController::class, 'materiais'])->name('cursos.materiais');
             Route::get('/modulos/{idModulo}', [AlunoApiCursoController::class, 'modulo'])->name('modulos.show');
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
+            Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
         });
     });
 
