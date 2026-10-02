@@ -178,7 +178,7 @@ class ProfessorChatbotController extends Controller
 
             $presencas = Presenca::where('id_aluno', $aluno->id_aluno)->get();
             $totalPresencas = $presencas->count();
-            $totalPresente = $presencas->where('status_presenca', 'PRESENTE')->count();
+            $totalPresente = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'presente')->count();
             $percPresenca = $totalPresencas > 0
                 ? round(($totalPresente / $totalPresencas) * 100)
                 : 0;

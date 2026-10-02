@@ -314,8 +314,8 @@ class ChatbotController extends Controller
 
             $presencas = Presenca::where('id_aluno', $alunoId)->get();
             $totalAulas = $presencas->count();
-            $totalPresente = $presencas->where('status_presenca', 'PRESENTE')->count();
-            $totalFalta = $presencas->where('status_presenca', 'FALTA')->count();
+            $totalPresente = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'presente')->count();
+            $totalFalta = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'falta')->count();
             $percPresenca = $totalAulas > 0 ? round(($totalPresente / $totalAulas) * 100) : 0;
 
             return [
@@ -407,7 +407,7 @@ class ChatbotController extends Controller
             if (str_contains($msg, 'progresso') || str_contains($msg, 'presença') || str_contains($msg, 'presenca')) {
                 $presencas = Presenca::where('id_aluno', $alunoId)->get();
                 $total = $presencas->count();
-                $presente = $presencas->where('status_presenca', 'PRESENTE')->count();
+                $presente = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'presente')->count();
                 $perc = $total > 0 ? round(($presente / $total) * 100) : 0;
 
                 return [
@@ -589,7 +589,7 @@ class ChatbotController extends Controller
 
                 $presencas = Presenca::where('id_aluno', $aluno->id_aluno)->get();
                 $totalPresencas = $presencas->count();
-                $totalPresente = $presencas->where('status_presenca', 'PRESENTE')->count();
+                $totalPresente = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'presente')->count();
                 $percPresenca = $totalPresencas > 0
                     ? round(($totalPresente / $totalPresencas) * 100)
                     : 0;
@@ -698,8 +698,8 @@ class ChatbotController extends Controller
             // Progresso - Presenças
             $presencas = Presenca::where('id_aluno', $alunoId)->get();
             $totalAulas = $presencas->count();
-            $totalPresente = $presencas->where('status_presenca', 'PRESENTE')->count();
-            $totalFalta = $presencas->where('status_presenca', 'FALTA')->count();
+            $totalPresente = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'presente')->count();
+            $totalFalta = $presencas->filter(fn ($p) => strtolower($p->status_presenca) === 'falta')->count();
             $percPresenca = $totalAulas > 0 ? round(($totalPresente / $totalAulas) * 100) : 0;
 
             $contexto .= "PROGRESSO:\n";

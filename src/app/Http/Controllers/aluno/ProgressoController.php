@@ -12,10 +12,10 @@ class ProgressoController extends Controller
     {
         $aluno = auth('aluno')->user();
 
-        // Presença
+        // Presença (a tela de presença grava "presente", "falta" ou "justificado")
         $totalAulas     = Presenca::where('id_aluno', $aluno->id_aluno)->count();
-        $totalPresente  = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'PRESENTE')->count();
-        $totalFalta     = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'FALTA')->count();
+        $totalPresente  = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'presente')->count();
+        $totalFalta     = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'falta')->count();
         $percPresenca   = $totalAulas > 0 ? round(($totalPresente / $totalAulas) * 100) : 0;
 
         // Materiais do curso/nível escolhido

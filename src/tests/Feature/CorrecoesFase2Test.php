@@ -298,6 +298,30 @@ class CorrecoesFase2Test extends TestCase
         $this->assertStringStartsWith('2026-09-01', (string) $registro->data_registro_presenca);
     }
 
+    public function test_meu_progresso_mostra_presenca_lancada_pelo_professor(): void
+    {
+        $aluno = $this->aluno();
+        $matricula = $this->matricular($aluno);
+        $presente = $this->aula('2026-09-01');
+        $justificado = $this->aula('2026-09-02');
+
+        // A tela do professor grava em minúsculas.
+        $this->actingAs($this->professor, 'admin')
+            ->post('/admin/presenca/salvar', ['id_aulas' => $presente->id_aulas, 'presencas' => [$aluno->id_aluno => 'presente']]);
+        $this->actingAs($this->professor, 'admin')
+            ->post('/admin/presenca/salvar', ['id_aulas' => $justificado->id_aulas, 'presencas' => [$aluno->id_aluno => 'justificado']]);
+
+        $this->actingAs($aluno, 'aluno')
+            ->withSession([CursoAtual::SESSAO => $matricula->id_matricula])
+            ->get('/aluno/progresso')
+            ->assertOk()
+            ->assertSee('✅ Presente')
+            ->assertSee('📝 Justificado')
+            ->assertDontSee('❌ Falta')
+            ->assertViewHas('totalPresente', 1)
+            ->assertViewHas('totalFalta', 0);
+    }
+
     public function test_presenca_lista_so_matricula_ativa_e_recusa_status_invalido(): void
     {
         $ativo = $this->aluno();
