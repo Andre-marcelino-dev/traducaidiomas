@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tbl_atividade_questoes', function (Blueprint $table) {
             $table->integer('id_questao', true);
-            $table->integer('id_atividade')->index('id_atividade');
+            $table->integer('id_atividade')->index('tbl_atividade_questoes_id_atividade_index');
             $table->text('enunciado');
             $table->enum('tipo_questao', ['multipla_escolha', 'texto']);
             $table->string('opcao_a', 300)->nullable();
