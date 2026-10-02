@@ -40,6 +40,11 @@
                                     <i class="fas fa-bell"></i> {{ $totalReagendamentosPendentes }} reagendamento{{ $totalReagendamentosPendentes > 1 ? 's' : '' }} pendente{{ $totalReagendamentosPendentes > 1 ? 's' : '' }}
                                 </a>
                             @endif
+                            @if($totalJustificativasPendentes > 0)
+                                <a href="{{ route('admin.justificativas.index') }}" class="dash-badge-prof" style="background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.35);color:#fcd34d;text-decoration:none;">
+                                    <i class="fas fa-file-signature"></i> {{ $totalJustificativasPendentes }} justificativa{{ $totalJustificativasPendentes > 1 ? 's' : '' }} de falta para analisar
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-4 d-none d-md-flex justify-content-end">

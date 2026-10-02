@@ -9,6 +9,8 @@ use App\Http\Controllers\admin\ProfessorChatbotController;
 use App\Http\Controllers\aluno\ChatbotController as AlunoChatbotController;
 use App\Http\Controllers\aluno\ReagendamentoController as AlunoReagendamentoController;
 use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoController;
+use App\Http\Controllers\aluno\JustificativaController as AlunoJustificativaController;
+use App\Http\Controllers\admin\JustificativaController as AdminJustificativaController;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
@@ -200,6 +202,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('/resposta/{id}', [AdminForumController::class, 'destroyResposta'])->name('resposta.destroy');
         });
 
+        // ── Justificativas de falta (Admin) ──
+        Route::prefix('justificativas')->name('justificativas.')->group(function () {
+            Route::get('/',              [AdminJustificativaController::class, 'index'])->name('index');
+            Route::put('/{id}/aceitar',  [AdminJustificativaController::class, 'aceitar'])->name('aceitar');
+            Route::put('/{id}/recusar',  [AdminJustificativaController::class, 'recusar'])->name('recusar');
+        });
+
         // ── Dúvidas dos Alunos (Admin) ──
         Route::prefix('duvidas')->name('duvidas.')->group(function () {
             Route::get('/',                [AdminDuvidaController::class, 'index'])->name('index');
@@ -245,6 +254,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             Route::get('/aulas',    [AlunoAulaController::class, 'index'])->name('aulas.index');
             Route::get('/curso',    [AlunoCursoController::class, 'index'])->name('curso.index');
             Route::get('/progresso', [AlunoProgressoController::class, 'index'])->name('progresso.index');
+            Route::post('/presenca/{id_presenca}/justificar', [AlunoJustificativaController::class, 'store'])->name('justificativa.store');
             Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
             Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
             Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');

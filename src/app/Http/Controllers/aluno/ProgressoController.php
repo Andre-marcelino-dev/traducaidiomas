@@ -30,7 +30,7 @@ class ProgressoController extends Controller
         $percMateriais = $totalMateriais > 0 ? round(($materiaisVistos / $totalMateriais) * 100) : 0;
 
         // Últimas presenças
-        $ultimasPresencas = Presenca::with('aula')
+        $ultimasPresencas = Presenca::with('aula', 'ultimaJustificativa')
             ->where('id_aluno', $aluno->id_aluno)
             ->orderBy('data_registro_presenca', 'desc')
             ->limit(5)
