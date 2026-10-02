@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ModuloController;
 use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
+use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
 use App\Http\Controllers\Api\V1\Professor\AuthController as ProfessorApiAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,7 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/modulos/{idModulo}', [AlunoApiCursoController::class, 'modulo'])->name('modulos.show');
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
             Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
+            Route::post('/reagendamento/solicitar', [AlunoApiReagendamentoController::class, 'solicitar'])->name('reagendamento.solicitar');
         });
     });
 
