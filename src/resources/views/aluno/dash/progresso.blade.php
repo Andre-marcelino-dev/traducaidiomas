@@ -138,8 +138,12 @@
                                     <td>{{ $p->aula?->titulo_aulas ?? '—' }}</td>
                                     <td>{{ \Carbon\Carbon::parse($p->data_registro_presenca)->format('d/m/Y') }}</td>
                                     <td>
-                                        @if($p->status_presenca == 'PRESENTE')
+                                        {{-- A tela de presença grava em minúsculas: presente, falta ou justificado --}}
+                                        @php $statusPresenca = strtolower($p->status_presenca); @endphp
+                                        @if($statusPresenca === 'presente')
                                             <span class="badge bg-success">✅ Presente</span>
+                                        @elseif($statusPresenca === 'justificado')
+                                            <span class="badge bg-warning text-dark">📝 Justificado</span>
                                         @else
                                             <span class="badge bg-danger">❌ Falta</span>
                                         @endif
