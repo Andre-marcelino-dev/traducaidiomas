@@ -9,7 +9,7 @@ class Atividade extends Model
     const UPDATED_AT = null;
     protected $fillable = [
         'id_professor', 'id_curso', 'id_modulo', 'titulo_atividade',
-        'descricao_atividade', 'tipo_atividade', 'categoria_atividade', 'finalidade_atividade',
+        'descricao_atividade', 'arquivo_audio', 'tipo_atividade', 'categoria_atividade', 'finalidade_atividade',
         'data_entrega', 'status_atividade'
     ];
 

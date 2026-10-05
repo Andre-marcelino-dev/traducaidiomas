@@ -36,6 +36,15 @@ class AtividadeController extends Controller
         return view('aluno.atividades.show', compact('atividade', 'aluno', 'resposta'));
     }
 
+    public function audio($id)
+    {
+        $atividade = $this->atividadeDoAluno($id);
+        $caminho = public_path((string) $atividade->arquivo_audio);
+        abort_unless($atividade->arquivo_audio && is_file($caminho), 404);
+
+        return response()->file($caminho);
+    }
+
     public function responder(Request $request, $id)
     {
         $aluno = auth('aluno')->user();

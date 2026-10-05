@@ -9,7 +9,7 @@
 </div>
 <div class="app-content">
     <div class="container-fluid">
-        <form action="{{ route('admin.atividades.store') }}" method="POST" id="formAtividade">
+        <form action="{{ route('admin.atividades.store') }}" method="POST" id="formAtividade" enctype="multipart/form-data">
             @csrf
             <div class="card shadow-sm mb-4">
                 <div class="card-header fw-bold" style="background:#1a1a2e; color:#fff;">📋 Informações da Atividade</div>
@@ -59,6 +59,13 @@
                                     <option value="{{ $valor }}" @selected(old('finalidade_atividade', 'FIXACAO') === $valor)>{{ $label }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label"><i class="fas fa-headphones me-1"></i> Anexo de áudio <small class="text-muted">(opcional · MP3, WAV, OGG, M4A, AAC ou WEBM · até 20 MB)</small></label>
+                            <input type="file" name="arquivo_audio" id="arquivoAudio" class="form-control @error('arquivo_audio') is-invalid @enderror"
+                                   accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm">
+                            @error('arquivo_audio')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <audio id="previewAudio" controls class="w-100 mt-2" style="display:none;"></audio>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Descrição/Instruções</label>
@@ -130,6 +137,19 @@ document.getElementById('addQuestao').addEventListener('click', function() {
     document.getElementById('questoes').appendChild(template);
     questaoIndex++;
     bindEvents();
+
+// Prévia do áudio escolhido, antes de salvar.
+document.getElementById('arquivoAudio').addEventListener('change', function () {
+    const player = document.getElementById('previewAudio');
+    if (player.src) URL.revokeObjectURL(player.src);
+    if (this.files.length) {
+        player.src = URL.createObjectURL(this.files[0]);
+        player.style.display = 'block';
+    } else {
+        player.removeAttribute('src');
+        player.style.display = 'none';
+    }
+});
 });
 
 function bindEvents() {

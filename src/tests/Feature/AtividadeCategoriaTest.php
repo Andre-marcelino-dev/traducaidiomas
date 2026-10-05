@@ -10,6 +10,7 @@ use App\Models\Nivel;
 use App\Models\Professor;
 use App\Support\CursoAtual;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -117,6 +118,97 @@ class AtividadeCategoriaTest extends TestCase
             ->assertOk()
             ->assertSee('Leitura de crônica')
             ->assertDontSee('Conversa no aeroporto');
+    }
+
+    public function test_professor_anexa_audio_e_aluno_ouve_pela_rota_protegida(): void
+    {
+        $this->actingAs($this->professor, 'admin')
+            ->post(route('admin.atividades.store'), $this->payload([
+                'categoria_atividade' => 'AUDIO',
+                'arquivo_audio'       => UploadedFile::fake()->create('aeroporto.mp3', 200, 'audio/mpeg'),
+            ]))
+            ->assertRedirect(route('admin.atividades.index'));
+
+        $atividade = Atividade::firstOrFail();
+        $this->assertStringStartsWith('traducaidiomas/atividades/', $atividade->arquivo_audio);
+        $this->assertStringEndsWith('.mp3', $atividade->arquivo_audio);
+        $this->assertFileExists(public_path($atividade->arquivo_audio));
+
+        $this->actingAs($this->professor, 'admin')
+            ->get(route('admin.atividades.audio', $atividade->id_atividade))
+            ->assertOk();
+
+        [$aluno, $matricula] = $this->alunoMatriculado();
+        $this->actingAs($aluno, 'aluno')
+            ->withSession([CursoAtual::SESSAO => $matricula->id_matricula])
+            ->get(route('aluno.atividades.show', $atividade->id_atividade))
+            ->assertOk()
+            ->assertSee(route('aluno.atividades.audio', $atividade->id_atividade));
+
+        $this->actingAs($aluno, 'aluno')
+            ->withSession([CursoAtual::SESSAO => $matricula->id_matricula])
+            ->get(route('aluno.atividades.audio', $atividade->id_atividade))
+            ->assertOk();
+
+        // Excluir a atividade apaga o arquivo do servidor.
+        $caminho = public_path($atividade->arquivo_audio);
+        $this->actingAs($this->professor, 'admin')
+            ->delete(route('admin.atividades.destroy', $atividade->id_atividade));
+        $this->assertFileDoesNotExist($caminho);
+    }
+
+    public function test_anexo_que_nao_e_audio_e_rejeitado(): void
+    {
+        $this->actingAs($this->professor, 'admin')
+            ->post(route('admin.atividades.store'), $this->payload([
+                'arquivo_audio' => UploadedFile::fake()->create('virus.php', 10, 'application/x-php'),
+            ]))
+            ->assertSessionHasErrors('arquivo_audio');
+
+        $this->assertSame(0, Atividade::count());
+    }
+
+    public function test_aluno_de_outro_curso_nao_ouve_o_audio(): void
+    {
+        $atividade = Atividade::create([
+            'id_professor'     => $this->professor->id_professor,
+            'id_curso'         => $this->italiano->id_curso,
+            'titulo_atividade' => 'Ascolto',
+            'arquivo_audio'    => 'traducaidiomas/atividades/nao-existe.mp3',
+            'data_entrega'     => '2026-07-20',
+        ]);
+
+        [$aluno, $matricula] = $this->alunoMatriculado();
+        $this->actingAs($aluno, 'aluno')
+            ->withSession([CursoAtual::SESSAO => $matricula->id_matricula])
+            ->get(route('aluno.atividades.audio', $atividade->id_atividade))
+            ->assertNotFound();
+    }
+
+    /** Aluno matriculado no curso de Inglês. */
+    private function alunoMatriculado(): array
+    {
+        $nivel = Nivel::create(['nome_nivel' => 'Iniciante']);
+        $aluno = Aluno::create([
+            'nome_aluno'      => 'Aluno Audio',
+            'email_aluno'     => uniqid() . '@aluno.test',
+            'senha_aluno'     => Hash::make('segredo123'),
+            'telefone_aluno'  => '11999999999',
+            'curso_aluno'     => 'Inglês',
+            'data_nasc_aluno' => '2000-01-01',
+            'nivel_aluno'     => 'Iniciante',
+            'foto_aluno'      => '',
+            'status_aluno'    => 'EM CURSO',
+        ]);
+        $matricula = Matricula::create([
+            'id_aluno'         => $aluno->id_aluno,
+            'id_curso'         => $this->ingles->id_curso,
+            'id_nivel'         => $nivel->id_nivel,
+            'data_matricula'   => now(),
+            'status_matricula' => 'ATIVO',
+        ]);
+
+        return [$aluno, $matricula];
     }
 
     public function test_aluno_ve_selo_finalidade_e_professor_no_card(): void

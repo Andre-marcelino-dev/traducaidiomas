@@ -25,6 +25,10 @@
                 <p><strong>Finalidade:</strong> {{ $atividade->finalidadeLabel() ?? '—' }}</p>
                 <p><strong>Entrega:</strong> {{ \Carbon\Carbon::parse($atividade->data_entrega)->format('d/m/Y') }}</p>
                 <p><strong>Descrição:</strong> {{ $atividade->descricao_atividade }}</p>
+                @if($atividade->arquivo_audio)
+                    <p class="mb-1"><strong><i class="fas fa-headphones me-1"></i> Áudio:</strong></p>
+                    <audio controls preload="none" class="w-100" src="{{ route('admin.atividades.audio', $atividade->id_atividade) }}"></audio>
+                @endif
             </div>
         </div>
 

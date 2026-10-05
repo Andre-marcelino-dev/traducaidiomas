@@ -8,6 +8,7 @@ use App\Models\AtividadeRespostaQuestao;
 use App\Models\Curso;
 use App\Models\Aluno;
 use App\Models\Modulo;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class AtividadeController extends Controller
@@ -38,8 +39,18 @@ class AtividadeController extends Controller
             'data_entrega'       => 'required|date',
             'categoria_atividade'  => 'nullable|in:' . implode(',', array_keys(Atividade::CATEGORIAS)),
             'finalidade_atividade' => 'nullable|in:' . implode(',', array_keys(Atividade::FINALIDADES)),
+            'arquivo_audio'      => 'nullable|file|mimes:' . implode(',', Upload::AUDIOS) . '|max:20480',
             'enunciado'          => 'required|array',
+        ], [
+            'arquivo_audio.mimes' => 'O áudio deve ser MP3, WAV, OGG, M4A, AAC ou WEBM.',
+            'arquivo_audio.max'   => 'O áudio pode ter no máximo 20 MB.',
         ]);
+
+        $arquivoAudio = null;
+        if ($request->hasFile('arquivo_audio')) {
+            $arquivoAudio = 'traducaidiomas/atividades/'
+                . Upload::salvar($request->file('arquivo_audio'), 'atividades', Upload::AUDIOS, $request->titulo_atividade);
+        }
 
         $atividade = Atividade::create([
             'id_professor'       => auth('admin')->id(),
@@ -47,6 +58,7 @@ class AtividadeController extends Controller
             'id_modulo'          => $request->id_modulo,
             'titulo_atividade'   => $request->titulo_atividade,
             'descricao_atividade'=> $request->descricao_atividade,
+            'arquivo_audio'      => $arquivoAudio,
             'tipo_atividade'     => 'misto',
             'categoria_atividade'  => $request->categoria_atividade,
             'finalidade_atividade' => $request->finalidade_atividade ?: 'FIXACAO',
@@ -77,6 +89,15 @@ class AtividadeController extends Controller
         return view('admin.atividades.show', compact('atividade'));
     }
 
+    public function audio($id)
+    {
+        $atividade = Atividade::findOrFail($id);
+        $caminho = public_path((string) $atividade->arquivo_audio);
+        abort_unless($atividade->arquivo_audio && is_file($caminho), 404);
+
+        return response()->file($caminho);
+    }
+
     public function corrigir(Request $request, $id)
     {
         $resposta = AtividadeResposta::findOrFail($id);
@@ -105,6 +126,10 @@ class AtividadeController extends Controller
             $atividade->questoes()->delete();
             $atividade->delete();
         });
+
+        if ($atividade->arquivo_audio && is_file(public_path($atividade->arquivo_audio))) {
+            @unlink(public_path($atividade->arquivo_audio));
+        }
         return redirect()->route('admin.atividades.index')->with('success', 'Atividade removida!');
     }
 }
