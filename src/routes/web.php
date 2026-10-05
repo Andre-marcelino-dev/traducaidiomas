@@ -189,6 +189,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/create',        [AdminAtividadeController::class, 'create'])->name('create');
             Route::post('/',             [AdminAtividadeController::class, 'store'])->name('store');
             Route::get('/{id}',          [AdminAtividadeController::class, 'show'])->name('show');
+            Route::get('/{id}/audio',    [AdminAtividadeController::class, 'audio'])->name('audio');
             Route::delete('/{id}',       [AdminAtividadeController::class, 'destroy'])->name('destroy');
             Route::put('/corrigir/{id}', [AdminAtividadeController::class, 'corrigir'])->name('corrigir');
         });
@@ -257,6 +258,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             Route::post('/presenca/{id_presenca}/justificar', [AlunoJustificativaController::class, 'store'])->name('justificativa.store');
             Route::get('/atividades', [AlunoAtividadeController::class, 'index'])->name('atividades.index');
             Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
+            Route::get('/atividades/{id}/audio', [AlunoAtividadeController::class, 'audio'])->name('atividades.audio');
             Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
 
             // Materiais (somente leitura)

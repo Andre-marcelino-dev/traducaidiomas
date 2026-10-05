@@ -15,7 +15,7 @@ class AtividadeController extends Controller
         $aluno = auth('aluno')->user();
         $matriculaAtual = CursoAtual::matricula();
 
-        $atividades = CursoAtual::filtrar(Atividade::with(['respostas' => function($q) use ($aluno) {
+        $atividades = CursoAtual::filtrar(Atividade::with(['curso', 'professor', 'respostas' => function($q) use ($aluno) {
             $q->where('id_aluno', $aluno->id_aluno);
         }]), $matriculaAtual)->where('status_atividade', 'ATIVA')->orderBy('data_entrega')->get();
 
@@ -34,6 +34,15 @@ class AtividadeController extends Controller
             ->where('id_aluno', $aluno->id_aluno)
             ->first();
         return view('aluno.atividades.show', compact('atividade', 'aluno', 'resposta'));
+    }
+
+    public function audio($id)
+    {
+        $atividade = $this->atividadeDoAluno($id);
+        $caminho = public_path((string) $atividade->arquivo_audio);
+        abort_unless($atividade->arquivo_audio && is_file($caminho), 404);
+
+        return response()->file($caminho);
     }
 
     public function responder(Request $request, $id)

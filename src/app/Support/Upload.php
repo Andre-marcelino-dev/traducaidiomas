@@ -17,6 +17,8 @@ class Upload
 {
     const IMAGENS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
     const DOCUMENTOS = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip'];
+    // mpga/oga/weba/mp4: extensões que o PHP detecta pelo conteúdo de mp3/ogg/webm/m4a.
+    const AUDIOS = ['mp3', 'mpga', 'wav', 'ogg', 'oga', 'm4a', 'mp4', 'aac', 'webm', 'weba'];
 
     /**
      * @return string nome do arquivo salvo (sem a pasta)

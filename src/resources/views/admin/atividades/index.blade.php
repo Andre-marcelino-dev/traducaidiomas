@@ -33,11 +33,22 @@
                     <i class="fas fa-plus"></i> Nova Atividade
                 </a>
             </div>
+            <div class="d-flex flex-wrap gap-2 px-3 pt-3">
+                <a href="{{ route('admin.atividades.index') }}"
+                   class="btn btn-sm {{ $idCurso ? 'btn-outline-primary' : 'btn-primary' }}">Todos</a>
+                @foreach($cursos as $curso)
+                    <a href="{{ route('admin.atividades.index', ['curso' => $curso->id_curso]) }}"
+                       class="btn btn-sm {{ (string) $idCurso === (string) $curso->id_curso ? 'btn-primary' : 'btn-outline-primary' }}">
+                        {{ $curso->nome_curso }}
+                    </a>
+                @endforeach
+            </div>
             <div class="table-responsive">
                 <table class="table recent-table mb-0">
                     <thead>
                         <tr>
                             <th>Título</th>
+                            <th>Categoria</th>
                             <th>Curso</th>
                             <th>Entrega</th>
                             <th>Respostas</th>
@@ -47,12 +58,30 @@
                     </thead>
                     <tbody>
                         @forelse($atividades as $atividade)
+                        @php $cat = $atividade->categoriaInfo(); @endphp
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="tbl-icon-wrap"><i class="fas fa-clipboard-list"></i></div>
-                                    <span style="font-weight:600;font-size:.875rem;">{{ $atividade->titulo_atividade }}</span>
+                                    <div class="tbl-icon-wrap" @if($cat) style="background:{{ $cat['cor'] }}1a;color:{{ $cat['cor'] }};" @endif>
+                                        <i class="fas {{ $cat['icone'] ?? 'fa-clipboard-list' }}"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight:600;font-size:.875rem;">{{ $atividade->titulo_atividade }}</div>
+                                        <div style="font-size:.75rem;color:#6b7280;">
+                                            {{ $atividade->finalidadeLabel() ?? 'Exercício' }}
+                                            @if($atividade->professor) · Prof. {{ $atividade->professor->nome_professor }} @endif
+                                        </div>
+                                    </div>
                                 </div>
+                            </td>
+                            <td>
+                                @if($cat)
+                                    <span class="tbl-badge" style="background:{{ $cat['cor'] }};color:#fff;">
+                                        <i class="fas {{ $cat['icone'] }} me-1"></i>{{ $cat['label'] }}
+                                    </span>
+                                @else
+                                    <span class="tbl-badge">—</span>
+                                @endif
                             </td>
                             <td><span class="tbl-badge">{{ $atividade->curso?->nome_curso ?? '—' }}</span></td>
                             <td>
@@ -96,7 +125,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="tbl-empty">
                                     <i class="fas fa-clipboard-list tbl-empty-icon"></i>
                                     <span class="tbl-empty-text">Nenhuma atividade cadastrada.</span>

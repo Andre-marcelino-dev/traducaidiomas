@@ -65,6 +65,7 @@
                         'ENVIADA'   => ['border' => '#f59e0b', 'bg' => '#fffbeb', 'color' => '#d97706', 'icon' => 'fa-paper-plane', 'label' => 'Enviada'],
                         default     => ['border' => '#6366f1', 'bg' => '#eef3ff', 'color' => '#4f46e5', 'icon' => 'fa-pen-to-square', 'label' => 'Pendente'],
                     };
+                    $cat = $atividade->categoriaInfo();
                 @endphp
                 <div class="col-md-6 col-xl-4 fade-up">
                     <div class="d-card h-100" style="border-top:3px solid {{ $corConfig['border'] }};">
@@ -72,12 +73,26 @@
                             {{-- Header --}}
                             <div class="d-flex align-items-start justify-content-between mb-2">
                                 <div class="d-flex align-items-center gap-2">
-                                    <div style="width:38px;height:38px;border-radius:10px;background:{{ $corConfig['bg'] }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                        <i class="fas {{ $corConfig['icon'] }}" style="color:{{ $corConfig['color'] }};font-size:.9rem;"></i>
-                                    </div>
+                                    @if($cat)
+                                        <div class="d-flex flex-column align-items-center flex-shrink-0" style="width:56px;">
+                                            <div style="width:38px;height:38px;border-radius:10px;background:{{ $cat['cor'] }}1a;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fas {{ $cat['icone'] }}" style="color:{{ $cat['cor'] }};font-size:.9rem;"></i>
+                                            </div>
+                                            <span style="margin-top:.2rem;padding:.05rem .35rem;border-radius:4px;background:{{ $cat['cor'] }};color:#fff;font-size:.6rem;font-weight:700;white-space:nowrap;">{{ $cat['label'] }}</span>
+                                        </div>
+                                    @else
+                                        <div style="width:38px;height:38px;border-radius:10px;background:{{ $corConfig['bg'] }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                            <i class="fas {{ $corConfig['icon'] }}" style="color:{{ $corConfig['color'] }};font-size:.9rem;"></i>
+                                        </div>
+                                    @endif
                                     <div>
                                         <div style="font-weight:700;font-size:.9rem;color:#1e293b;">{{ $atividade->titulo_atividade }}</div>
-                                        <div style="font-size:.7rem;color:#94a3b8;">{{ $atividade->curso?->nome_curso ?? '' }}</div>
+                                        <div style="font-size:.7rem;color:#94a3b8;">
+                                            {{ $atividade->finalidadeLabel() ?? ($atividade->curso?->nome_curso ?? '') }}
+                                        </div>
+                                        @if($atividade->professor)
+                                            <div style="font-size:.7rem;color:#94a3b8;">Professor: {{ $atividade->professor->nome_professor }}</div>
+                                        @endif
                                     </div>
                                 </div>
                                 <span class="tbl-status tbl-status-{{ $status === 'CORRIGIDA' ? 'confirmado' : ($status === 'ENVIADA' ? 'pendente' : 'congelado') }}">
