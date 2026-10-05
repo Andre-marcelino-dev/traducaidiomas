@@ -227,6 +227,57 @@
         <p>Baixa o arquivo (enviar o token) e marca o material como concluído.</p>
     </div>
 
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/agenda</code>
+        <p>Tela <strong>Agenda</strong>: <code>proxima_aula</code> e as <code>aulas</code> de todos os cursos matriculados.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/reagendamento/solicitar</code>
+        <p>
+            Pede o reagendamento de uma aula. Corpo: <code>aula_id</code> e <code>motivo</code> (mín. 10 caracteres).
+            Já existe pedido pendente para a aula: <code>409</code>.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/atividades</code>
+        <p>
+            Tela <strong>Atividades</strong>: <code>total</code>, <code>concluidas</code>, <code>pendentes</code> e a lista
+            com <code>categoria</code> (<code>label</code>, <code>cor</code>), <code>finalidade</code>, <code>curso</code>,
+            <code>professor</code>, <code>data_entrega</code>, <code>status</code>
+            (<code>pendente</code> | <code>enviada</code> | <code>corrigida</code>) e <code>nota</code> (só depois de corrigida).
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/atividades/{id}</code>
+        <p>
+            Abre a atividade: <code>questoes</code> (<code>tipo</code> <code>multipla_escolha</code> com <code>opcoes</code>,
+            ou <code>texto</code>), a <code>resposta_aluno</code> e se ela está <code>correta</code> (a resposta certa
+            nunca é enviada), <code>feedback_professor</code> e <code>pode_responder</code>.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/atividades/{id}/audio</code>
+        <p>Áudio da atividade (enviar o token). Sem áudio: <code>404</code>.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/atividades/{id}/responder</code>
+        <p>
+            Envia as respostas. Corpo: <code>{"respostas": {"&lt;id_questao&gt;": "B" ou "texto"}}</code>.
+            Atividade já corrigida: <code>409</code>.
+        </p>
+    </div>
+
     <p>
         <strong>Regra de conclusão:</strong> uma aula fica <em>concluída</em> quando o professor
         marca presença <code>presente</code> ou <code>justificado</code>; um material, quando o
