@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\AlunoController;
 use App\Http\Controllers\Api\V1\AulaController;
 use App\Http\Controllers\Api\V1\ModuloController;
 use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaController;
+use App\Http\Controllers\Api\V1\Aluno\AtividadeController as AlunoApiAtividadeController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
 use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
@@ -28,6 +29,11 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
             Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
             Route::post('/reagendamento/solicitar', [AlunoApiReagendamentoController::class, 'solicitar'])->name('reagendamento.solicitar');
+
+            Route::get('/atividades', [AlunoApiAtividadeController::class, 'index'])->name('atividades.index');
+            Route::get('/atividades/{id}', [AlunoApiAtividadeController::class, 'show'])->whereNumber('id')->name('atividades.show');
+            Route::get('/atividades/{id}/audio', [AlunoApiAtividadeController::class, 'audio'])->whereNumber('id')->name('atividades.audio');
+            Route::post('/atividades/{id}/responder', [AlunoApiAtividadeController::class, 'responder'])->whereNumber('id')->name('atividades.responder');
         });
     });
 
