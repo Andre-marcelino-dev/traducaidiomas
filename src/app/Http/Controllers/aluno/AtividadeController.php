@@ -15,7 +15,7 @@ class AtividadeController extends Controller
         $aluno = auth('aluno')->user();
         $matriculaAtual = CursoAtual::matricula();
 
-        $atividades = CursoAtual::filtrar(Atividade::with(['respostas' => function($q) use ($aluno) {
+        $atividades = CursoAtual::filtrar(Atividade::with(['curso', 'professor', 'respostas' => function($q) use ($aluno) {
             $q->where('id_aluno', $aluno->id_aluno);
         }]), $matriculaAtual)->where('status_atividade', 'ATIVA')->orderBy('data_entrega')->get();
 

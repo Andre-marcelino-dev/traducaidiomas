@@ -21,6 +21,8 @@
             <div class="card-header fw-bold" style="background:#1a1a2e; color:#fff;">📋 Detalhes</div>
             <div class="card-body">
                 <p><strong>Curso:</strong> {{ $atividade->curso?->nome_curso }}</p>
+                <p><strong>Categoria:</strong> {{ $atividade->categoriaInfo()['label'] ?? '—' }}</p>
+                <p><strong>Finalidade:</strong> {{ $atividade->finalidadeLabel() ?? '—' }}</p>
                 <p><strong>Entrega:</strong> {{ \Carbon\Carbon::parse($atividade->data_entrega)->format('d/m/Y') }}</p>
                 <p><strong>Descrição:</strong> {{ $atividade->descricao_atividade }}</p>
             </div>

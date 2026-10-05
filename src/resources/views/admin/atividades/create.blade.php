@@ -43,6 +43,23 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Categoria</label>
+                            <select name="categoria_atividade" class="form-select">
+                                <option value="">Selecione</option>
+                                @foreach(\App\Models\Atividade::CATEGORIAS as $valor => $cat)
+                                    <option value="{{ $valor }}" @selected(old('categoria_atividade') === $valor)>{{ $cat['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Finalidade</label>
+                            <select name="finalidade_atividade" class="form-select">
+                                @foreach(\App\Models\Atividade::FINALIDADES as $valor => $label)
+                                    <option value="{{ $valor }}" @selected(old('finalidade_atividade', 'FIXACAO') === $valor)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-12">
                             <label class="form-label">Descrição/Instruções</label>
                             <textarea name="descricao_atividade" class="form-control" rows="3"></textarea>

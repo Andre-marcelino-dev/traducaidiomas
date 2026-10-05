@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class AtividadeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $atividades = Atividade::with(['curso', 'respostas'])->orderBy('criado_em', 'desc')->get();
+        $idCurso = $request->query('curso');
+        $atividades = Atividade::with(['curso', 'professor', 'respostas'])
+            ->when($idCurso, fn($q) => $q->where('id_curso', $idCurso))
+            ->orderBy('criado_em', 'desc')->get();
         $cursos = Curso::orderBy('nome_curso')->get();
-        return view('admin.atividades.index', compact('atividades', 'cursos'));
+        return view('admin.atividades.index', compact('atividades', 'cursos', 'idCurso'));
     }
 
     public function create()
@@ -33,6 +36,8 @@ class AtividadeController extends Controller
             'id_curso'           => 'required',
             'id_modulo'          => 'nullable|exists:tbl_modulos,id_modulo',
             'data_entrega'       => 'required|date',
+            'categoria_atividade'  => 'nullable|in:' . implode(',', array_keys(Atividade::CATEGORIAS)),
+            'finalidade_atividade' => 'nullable|in:' . implode(',', array_keys(Atividade::FINALIDADES)),
             'enunciado'          => 'required|array',
         ]);
 
@@ -43,6 +48,8 @@ class AtividadeController extends Controller
             'titulo_atividade'   => $request->titulo_atividade,
             'descricao_atividade'=> $request->descricao_atividade,
             'tipo_atividade'     => 'misto',
+            'categoria_atividade'  => $request->categoria_atividade,
+            'finalidade_atividade' => $request->finalidade_atividade ?: 'FIXACAO',
             'data_entrega'       => $request->data_entrega,
         ]);
 
