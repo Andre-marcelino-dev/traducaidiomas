@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Curso;
 use App\Models\Modulo;
 use App\Models\Nivel;
+use App\Support\ModuloProgresso;
 use Illuminate\Http\Request;
 
 class ModuloController extends Controller
@@ -19,16 +20,27 @@ class ModuloController extends Controller
         ];
     }
 
-    public function index()
+    /**
+     * Lista da tabela, com a carga horária que o aluno vê
+     * (soma das aulas quando todas têm duração — ver ModuloProgresso).
+     */
+    private function listaModulos()
     {
-        $modulos = Modulo::with(['curso', 'nivel'])
+        return ModuloProgresso::comDuracaoDasAulas(Modulo::with(['curso', 'nivel']))
             ->orderBy('id_curso')
             ->orderBy('id_nivel')
             ->orderBy('ordem_modulo')
-            ->get();
+            ->get()
+            ->each(function (Modulo $modulo) {
+                $modulo->carga_exibida = ModuloProgresso::cargaHoraria($modulo);
+                $modulo->carga_pelas_aulas = ModuloProgresso::cargaPelasAulas($modulo);
+            });
+    }
 
+    public function index()
+    {
         return view('admin.modulos.index', array_merge($this->dadosComuns(), [
-            'modulos'    => $modulos,
+            'modulos'    => $this->listaModulos(),
             'moduloEdit' => null,
         ]));
     }
@@ -57,14 +69,8 @@ class ModuloController extends Controller
 
     public function edit($id)
     {
-        $modulos = Modulo::with(['curso', 'nivel'])
-            ->orderBy('id_curso')
-            ->orderBy('id_nivel')
-            ->orderBy('ordem_modulo')
-            ->get();
-
         return view('admin.modulos.index', array_merge($this->dadosComuns(), [
-            'modulos'    => $modulos,
+            'modulos'    => $this->listaModulos(),
             'moduloEdit' => Modulo::findOrFail($id),
         ]));
     }

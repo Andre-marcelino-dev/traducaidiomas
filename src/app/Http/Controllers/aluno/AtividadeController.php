@@ -22,9 +22,14 @@ class AtividadeController extends Controller
 
         $atividades = CursoAtual::filtrar(
             Atividade::with([
+                'curso',
+                'professor',
                 'respostas' => function ($q) use ($aluno) {
-                    $q->where('id_aluno', $aluno->id_aluno);
-                }
+                    $q->where(
+                        'id_aluno',
+                        $aluno->id_aluno
+                    );
+                },
             ]),
             $matriculaAtual
         )
@@ -70,8 +75,14 @@ class AtividadeController extends Controller
         $atividade = $this->atividadeDoAluno($id);
 
         $resposta = AtividadeResposta::with('respostasQuestoes')
-            ->where('id_atividade', $id)
-            ->where('id_aluno', $aluno->id_aluno)
+            ->where(
+                'id_atividade',
+                $id
+            )
+            ->where(
+                'id_aluno',
+                $aluno->id_aluno
+            )
             ->first();
 
         return view(
@@ -219,7 +230,8 @@ class AtividadeController extends Controller
 
             if ($questao->tipo_questao === 'audio') {
 
-                $nomeCampo = 'audio_resposta_' . $questao->id_questao;
+                $nomeCampo =
+                    'audio_resposta_' . $questao->id_questao;
 
                 $arquivo = $request->file($nomeCampo);
 
@@ -252,9 +264,10 @@ class AtividadeController extends Controller
 
                 if ($questao->tipo_questao === 'multipla_escolha') {
 
-                    $correta = $respostaAluno === $questao->resposta_correta
-                        ? 1
-                        : 0;
+                    $correta =
+                        $respostaAluno === $questao->resposta_correta
+                            ? 1
+                            : 0;
                 }
             }
 
@@ -265,15 +278,20 @@ class AtividadeController extends Controller
             */
 
             AtividadeRespostaQuestao::create([
-                'id_resposta' => $resposta->id_resposta,
+                'id_resposta' =>
+                    $resposta->id_resposta,
 
-                'id_questao' => $questao->id_questao,
+                'id_questao' =>
+                    $questao->id_questao,
 
-                'resposta_aluno' => $respostaAluno,
+                'resposta_aluno' =>
+                    $respostaAluno,
 
-                'audio_resposta' => $audioResposta,
+                'audio_resposta' =>
+                    $audioResposta,
 
-                'correta' => $correta,
+                'correta' =>
+                    $correta,
             ]);
         }
 
@@ -304,7 +322,10 @@ class AtividadeController extends Controller
             Atividade::with('questoes'),
             CursoAtual::matricula()
         )
-            ->where('status_atividade', 'ATIVA')
+            ->where(
+                'status_atividade',
+                'ATIVA'
+            )
             ->findOrFail($id);
     }
 }

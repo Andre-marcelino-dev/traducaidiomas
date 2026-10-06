@@ -44,8 +44,21 @@ public function index()
    return view('admin.aulas.modal.create', compact('professores', 'cursos', 'modulos'));
 }
 
+// "02" vindo do input number reprova na regra integer; tira os zeros à esquerda.
+private function normalizarNumeros(Request $request): void
+{
+    foreach (['ordem_aula', 'duracao_minutos'] as $campo) {
+        $valor = trim((string) $request->input($campo, ''));
+        if (ctype_digit($valor)) {
+            $request->merge([$campo => (int) $valor]);
+        }
+    }
+}
+
 public function store(Request $request)
 {
+    $this->normalizarNumeros($request);
+
     $request->validate([
         'titulo_aulas'    => 'required|string|max:100',
         'descricao_aulas' => 'required|string',
@@ -89,6 +102,8 @@ public function store(Request $request)
     public function update(Request $request, $id)
     {
        $aula = Aula::findOrFail($id);
+
+    $this->normalizarNumeros($request);
 
     $request->validate([
         'titulo_aulas'    => 'required|string|max:100',

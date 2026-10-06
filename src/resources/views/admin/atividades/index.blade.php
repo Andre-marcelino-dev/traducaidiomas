@@ -64,6 +64,28 @@
 
 
         {{-- ============================================================
+             MENSAGEM DE ERRO
+        ============================================================ --}}
+        @if(session('error'))
+
+            <div class="alert alert-danger alert-styled alert-dismissible fade show mb-3">
+
+                <i class="fas fa-exclamation-circle me-2"></i>
+
+                {{ session('error') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                ></button>
+
+            </div>
+
+        @endif
+
+
+        {{-- ============================================================
              CARD PRINCIPAL
         ============================================================ --}}
         <div class="d-card fade-up">
@@ -95,6 +117,45 @@
 
 
             {{-- ========================================================
+                 FILTRO POR CURSO
+            ======================================================== --}}
+            <div class="d-flex flex-wrap gap-2 px-3 pt-3">
+
+                <a
+                    href="{{ route('admin.atividades.index') }}"
+                    class="btn btn-sm
+                        {{ $idCurso ? 'btn-outline-primary' : 'btn-primary' }}"
+                >
+                    Todos
+                </a>
+
+
+                @foreach($cursos as $curso)
+
+                    <a
+                        href="{{
+                            route(
+                                'admin.atividades.index',
+                                ['curso' => $curso->id_curso]
+                            )
+                        }}"
+                        class="btn btn-sm
+                            {{
+                                (string) $idCurso ===
+                                (string) $curso->id_curso
+                                    ? 'btn-primary'
+                                    : 'btn-outline-primary'
+                            }}"
+                    >
+                        {{ $curso->nome_curso }}
+                    </a>
+
+                @endforeach
+
+            </div>
+
+
+            {{-- ========================================================
                  TABELA
             ======================================================== --}}
             <div class="table-responsive">
@@ -111,6 +172,10 @@
 
                             <th>
                                 Tipo
+                            </th>
+
+                            <th>
+                                Categoria
                             </th>
 
                             <th>
@@ -188,6 +253,44 @@
 
                                 /*
                                 |--------------------------------------------------------------------------
+                                | CATEGORIA
+                                |--------------------------------------------------------------------------
+                                */
+
+                                $cat = null;
+
+                                if (
+                                    method_exists(
+                                        $atividade,
+                                        'categoriaInfo'
+                                    )
+                                ) {
+                                    $cat =
+                                        $atividade->categoriaInfo();
+                                }
+
+
+                                /*
+                                |--------------------------------------------------------------------------
+                                | FINALIDADE
+                                |--------------------------------------------------------------------------
+                                */
+
+                                $finalidade = null;
+
+                                if (
+                                    method_exists(
+                                        $atividade,
+                                        'finalidadeLabel'
+                                    )
+                                ) {
+                                    $finalidade =
+                                        $atividade->finalidadeLabel();
+                                }
+
+
+                                /*
+                                |--------------------------------------------------------------------------
                                 | STATUS DA ATIVIDADE
                                 |--------------------------------------------------------------------------
                                 */
@@ -237,14 +340,41 @@
                                         </div>
 
 
-                                        <span
-                                            style="
-                                                font-weight:600;
-                                                font-size:.875rem;
-                                            "
-                                        >
-                                            {{ $atividade->titulo_atividade }}
-                                        </span>
+                                        <div>
+
+                                            <span
+                                                style="
+                                                    font-weight:600;
+                                                    font-size:.875rem;
+                                                "
+                                            >
+                                                {{ $atividade->titulo_atividade }}
+                                            </span>
+
+
+                                            @if($finalidade)
+
+                                                <div
+                                                    style="
+                                                        font-size:.75rem;
+                                                        color:#6b7280;
+                                                    "
+                                                >
+
+                                                    {{ $finalidade }}
+
+                                                    @if($atividade->professor)
+
+                                                        · Prof.
+                                                        {{ $atividade->professor->nome_professor }}
+
+                                                    @endif
+
+                                                </div>
+
+                                            @endif
+
+                                        </div>
 
                                     </div>
 
@@ -257,7 +387,6 @@
                                 <td>
 
                                     <div class="d-flex align-items-center gap-2">
-
 
                                         <div
                                             class="
@@ -283,6 +412,44 @@
                                         </span>
 
                                     </div>
+
+                                </td>
+
+
+                                {{-- ==================================================
+                                     CATEGORIA
+                                ================================================== --}}
+                                <td>
+
+                                    @if($cat)
+
+                                        <span
+                                            class="tbl-badge"
+                                            style="
+                                                background:{{ $cat['cor'] }};
+                                                color:#fff;
+                                            "
+                                        >
+
+                                            <i
+                                                class="
+                                                    fas
+                                                    {{ $cat['icone'] }}
+                                                    me-1
+                                                "
+                                            ></i>
+
+                                            {{ $cat['label'] }}
+
+                                        </span>
+
+                                    @else
+
+                                        <span class="tbl-badge">
+                                            —
+                                        </span>
+
+                                    @endif
 
                                 </td>
 
@@ -455,7 +622,7 @@
                             ================================================== --}}
                             <tr>
 
-                                <td colspan="7">
+                                <td colspan="8">
 
                                     <div class="tbl-empty">
 
@@ -495,7 +662,6 @@
                                 </td>
 
                             </tr>
-
 
                         @endforelse
 

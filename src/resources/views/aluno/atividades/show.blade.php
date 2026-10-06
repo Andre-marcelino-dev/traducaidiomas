@@ -93,6 +93,24 @@
 
         @endif
 
+<<<<<<< HEAD
+=======
+        {{-- Áudio da atividade --}}
+        @if($atividade->arquivo_audio)
+            <div class="d-card fade-up mb-4">
+                <div class="card-body p-3 d-flex align-items-center gap-3">
+                    <div class="tbl-icon-wrap" style="min-width:38px;"><i class="fas fa-headphones"></i></div>
+                    <div class="flex-grow-1">
+                        <div style="font-weight:600;font-size:.88rem;color:#1e293b;margin-bottom:.4rem;">Ouça o áudio da atividade</div>
+                        <audio controls preload="none" class="w-100" src="{{ route('aluno.atividades.audio', $atividade->id_atividade) }}"></audio>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if($resposta && in_array($resposta->status_resposta, ['ENVIADA', 'CORRIGIDA']))
+            {{-- ══ JÁ RESPONDEU ══ --}}
+>>>>>>> 6f578f56ecd30dc7830ded11ab7a911becaaacd1
 
         @if(session('error'))
 

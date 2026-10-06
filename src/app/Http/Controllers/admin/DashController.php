@@ -10,6 +10,7 @@ use App\Models\Aula;
 use App\Models\Matricula;
 use App\Models\AtividadeResposta;
 use App\Models\Reagendamento;
+use App\Models\JustificativaFalta;
 use Illuminate\Support\Facades\DB;
 
 class DashController extends Controller
@@ -84,6 +85,7 @@ class DashController extends Controller
             ->take(4)
             ->get();
         $totalReagendamentosPendentes = Reagendamento::where('status', 'pendente')->count();
+        $totalJustificativasPendentes = JustificativaFalta::visivelPara($professor)->pendentes()->count();
 
         // Ranking de notas
         $topAlunos = AtividadeResposta::selectRaw('id_aluno, AVG(nota) as media, COUNT(*) as total_atividades')
@@ -114,6 +116,7 @@ class DashController extends Controller
             'proximasAulas',
             'reagendamentosPendentes',
             'totalReagendamentosPendentes',
+            'totalJustificativasPendentes',
             'topAlunos'
         ));
     }

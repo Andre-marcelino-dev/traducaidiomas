@@ -6,6 +6,7 @@ use App\Models\Materiais;
 use App\Models\Matricula;
 use App\Models\Modulo;
 use App\Models\Presenca;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\DB;
  * Módulo concluído = todos os itens feitos. Módulo sem nenhum item não trava
  * a sequência (senão travaria por falta de cadastro).
  *
+ * Carga horária do módulo: se todas as aulas ativas têm "duração em minutos",
+ * vale a soma delas; senão vale o número digitado no cadastro do módulo.
+ * (Calculado na hora de mostrar; nada é gravado no banco.)
+ *
  * Usado pela tela web do aluno e pela API do app, pra não duplicar a regra.
  */
 class ModuloProgresso
@@ -28,15 +33,49 @@ class ModuloProgresso
     /** Status de presença que contam a aula como concluída. */
     const PRESENCA_CONCLUI = ['presente', 'justificado'];
 
+    /**
+     * Acrescenta na consulta de módulos o necessário para calcular a carga horária
+     * pelas aulas: soma das durações e quantas aulas ativas estão sem duração.
+     */
+    public static function comDuracaoDasAulas(Builder $query): Builder
+    {
+        $ativas = fn ($q) => $q->where('status_aulas', 'ATIVO');
+
+        return $query
+            ->withSum(['aulas as duracao_aulas_soma' => $ativas], 'duracao_minutos')
+            ->withCount([
+                'aulas as aulas_ativas_total' => $ativas,
+                'aulas as aulas_sem_duracao' => fn ($q) => $ativas($q)->whereNull('duracao_minutos'),
+            ]);
+    }
+
+    /**
+     * Carga horária em minutos (o módulo precisa vir de comDuracaoDasAulas()).
+     */
+    public static function cargaHoraria(Modulo $modulo): int
+    {
+        return self::cargaPelasAulas($modulo)
+            ? (int) $modulo->duracao_aulas_soma
+            : (int) $modulo->carga_horaria_minutos;
+    }
+
+    /** true quando a carga horária vem da soma das aulas. */
+    public static function cargaPelasAulas(Modulo $modulo): bool
+    {
+        return (int) $modulo->aulas_ativas_total > 0 && (int) $modulo->aulas_sem_duracao === 0;
+    }
+
     public static function paraMatricula(Matricula $matricula): Collection
     {
-        $modulos = Modulo::where('id_curso', $matricula->id_curso)
-            ->where('id_nivel', $matricula->id_nivel)
-            ->where('status_modulo', 'ATIVO')
-            ->withCount([
-                'materiais',
-                'aulas' => fn ($q) => $q->where('status_aulas', 'ATIVO'),
-            ])
+        $modulos = self::comDuracaoDasAulas(
+            Modulo::where('id_curso', $matricula->id_curso)
+                ->where('id_nivel', $matricula->id_nivel)
+                ->where('status_modulo', 'ATIVO')
+                ->withCount([
+                    'materiais',
+                    'aulas' => fn ($q) => $q->where('status_aulas', 'ATIVO'),
+                ])
+        )
             ->orderBy('ordem_modulo')
             ->get();
 
@@ -67,6 +106,9 @@ class ModuloProgresso
 
             $total = $modulo->materiais_count + $modulo->aulas_count;
             $feitos = $materiaisFeitos + $aulasFeitas;
+
+            // Só para exibir: não chamar save() nestes módulos.
+            $modulo->carga_horaria_minutos = self::cargaHoraria($modulo);
 
             $modulo->materiais_concluidos = $materiaisFeitos;
             $modulo->aulas_concluidas = $aulasFeitas;

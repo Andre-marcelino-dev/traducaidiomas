@@ -4,6 +4,7 @@
 
 <div class="app-content-header">
     <div class="container-fluid">
+
         <div class="row align-items-center">
 
             <div class="col-sm-6">
@@ -13,6 +14,7 @@
             </div>
 
             <div class="col-sm-6">
+
                 <ol class="breadcrumb float-sm-end mb-0">
 
                     <li class="breadcrumb-item">
@@ -26,9 +28,11 @@
                     </li>
 
                 </ol>
+
             </div>
 
         </div>
+
     </div>
 </div>
 
@@ -38,7 +42,7 @@
     <div class="container-fluid">
 
         {{-- ========================================================= --}}
-        {{-- MENSAGEM DE SUCESSO --}}
+        {{-- MENSAGEM DE SUCESSO                                      --}}
         {{-- ========================================================= --}}
 
         @if(session('success'))
@@ -61,7 +65,30 @@
 
 
         {{-- ========================================================= --}}
-        {{-- METRIC CARDS --}}
+        {{-- MENSAGEM DE ERRO                                         --}}
+        {{-- ========================================================= --}}
+
+        @if(session('error'))
+
+            <div class="alert alert-danger alert-styled alert-dismissible fade show mb-3">
+
+                <i class="fas fa-exclamation-circle me-2"></i>
+
+                {{ session('error') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                ></button>
+
+            </div>
+
+        @endif
+
+
+        {{-- ========================================================= --}}
+        {{-- METRIC CARDS                                             --}}
         {{-- ========================================================= --}}
 
         <div class="row g-3 mb-4">
@@ -153,7 +180,7 @@
 
 
         {{-- ========================================================= --}}
-        {{-- ATIVIDADES --}}
+        {{-- ATIVIDADES                                               --}}
         {{-- ========================================================= --}}
 
         <div class="row g-3">
@@ -164,16 +191,24 @@
 
                     /*
                     |--------------------------------------------------------------------------
-                    | STATUS
+                    | STATUS DA RESPOSTA
                     |--------------------------------------------------------------------------
                     */
 
-                    $resposta = $atividade->respostas->first();
+                    $resposta =
+                        $atividade->respostas->first();
 
-                    $status = $resposta
-                        ? $resposta->status_resposta
-                        : 'PENDENTE';
+                    $status =
+                        $resposta
+                            ? $resposta->status_resposta
+                            : 'PENDENTE';
 
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | CONFIGURAÇÃO DO STATUS
+                    |--------------------------------------------------------------------------
+                    */
 
                     $corConfig = match($status) {
 
@@ -206,15 +241,21 @@
 
                     /*
                     |--------------------------------------------------------------------------
-                    | TIPO DA ATIVIDADE
+                    | CONFIGURAÇÃO DO TIPO DA ATIVIDADE
                     |--------------------------------------------------------------------------
                     |
-                    | O ícone principal agora depende do tipo da atividade,
-                    | e não do status.
+                    | O ícone principal representa o tipo:
+                    |
+                    | Conjugação → livro
+                    | Conversa   → fones
+                    | Pronúncia  → microfone
+                    | Leitura    → livro aberto
                     |
                     */
 
-                    $tipoConfig = match($atividade->tipo_atividade) {
+                    $tipoConfig = match(
+                        $atividade->tipo_atividade
+                    ) {
 
                         'conjugacao' => [
                             'icon' => 'fa-book',
@@ -253,15 +294,63 @@
 
                     };
 
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | CATEGORIA
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $cat = null;
+
+                    if (
+                        method_exists(
+                            $atividade,
+                            'categoriaInfo'
+                        )
+                    ) {
+
+                        $cat =
+                            $atividade->categoriaInfo();
+
+                    }
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | FINALIDADE
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $finalidade = null;
+
+                    if (
+                        method_exists(
+                            $atividade,
+                            'finalidadeLabel'
+                        )
+                    ) {
+
+                        $finalidade =
+                            $atividade->finalidadeLabel();
+
+                    }
+
                 @endphp
 
+
+                {{-- ================================================= --}}
+                {{-- CARD DA ATIVIDADE                                --}}
+                {{-- ================================================= --}}
 
                 <div class="col-md-6 col-xl-4 fade-up">
 
                     <div
                         class="d-card h-100"
                         style="
-                            border-top:3px solid {{ $corConfig['border'] }};
+                            border-top:
+                                3px solid
+                                {{ $corConfig['border'] }};
                         "
                     >
 
@@ -269,22 +358,37 @@
 
 
                             {{-- ================================================= --}}
-                            {{-- HEADER --}}
+                            {{-- HEADER                                           --}}
                             {{-- ================================================= --}}
 
-                            <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div
+                                class="
+                                    d-flex
+                                    align-items-start
+                                    justify-content-between
+                                    mb-2
+                                "
+                            >
 
-                                <div class="d-flex align-items-center gap-2">
+                                <div
+                                    class="
+                                        d-flex
+                                        align-items-start
+                                        gap-2
+                                    "
+                                >
 
-
-                                    {{-- ÍCONE DO TIPO DA ATIVIDADE --}}
+                                    {{-- ===================================== --}}
+                                    {{-- ÍCONE DO TIPO                          --}}
+                                    {{-- ===================================== --}}
 
                                     <div
                                         style="
                                             width:38px;
                                             height:38px;
                                             border-radius:10px;
-                                            background:{{ $tipoConfig['bg'] }};
+                                            background:
+                                                {{ $tipoConfig['bg'] }};
                                             display:flex;
                                             align-items:center;
                                             justify-content:center;
@@ -293,9 +397,13 @@
                                     >
 
                                         <i
-                                            class="fas {{ $tipoConfig['icon'] }}"
+                                            class="
+                                                fas
+                                                {{ $tipoConfig['icon'] }}
+                                            "
                                             style="
-                                                color:{{ $tipoConfig['color'] }};
+                                                color:
+                                                    {{ $tipoConfig['color'] }};
                                                 font-size:.9rem;
                                             "
                                         ></i>
@@ -303,7 +411,9 @@
                                     </div>
 
 
-                                    {{-- TÍTULO E TIPO --}}
+                                    {{-- ===================================== --}}
+                                    {{-- TÍTULO E INFORMAÇÕES                  --}}
+                                    {{-- ===================================== --}}
 
                                     <div>
 
@@ -314,9 +424,13 @@
                                                 color:#1e293b;
                                             "
                                         >
+
                                             {{ $atividade->titulo_atividade }}
+
                                         </div>
 
+
+                                        {{-- CURSO --}}
 
                                         <div
                                             style="
@@ -324,40 +438,89 @@
                                                 color:#94a3b8;
                                             "
                                         >
+
                                             {{ $atividade->curso?->nome_curso ?? '' }}
+
                                         </div>
 
 
-                                        {{-- NOME DO TIPO --}}
+                                        {{-- TIPO --}}
 
                                         <div
                                             style="
                                                 font-size:.68rem;
-                                                color:{{ $tipoConfig['color'] }};
+                                                color:
+                                                    {{ $tipoConfig['color'] }};
                                                 font-weight:600;
                                                 margin-top:2px;
                                             "
                                         >
+
                                             {{ $tipoConfig['label'] }}
+
                                         </div>
+
+
+                                        {{-- FINALIDADE --}}
+
+                                        @if($finalidade)
+
+                                            <div
+                                                style="
+                                                    font-size:.68rem;
+                                                    color:#94a3b8;
+                                                    margin-top:2px;
+                                                "
+                                            >
+
+                                                {{ $finalidade }}
+
+                                            </div>
+
+                                        @endif
+
+
+                                        {{-- PROFESSOR --}}
+
+                                        @if($atividade->professor)
+
+                                            <div
+                                                style="
+                                                    font-size:.68rem;
+                                                    color:#94a3b8;
+                                                    margin-top:2px;
+                                                "
+                                            >
+
+                                                Professor:
+                                                {{ $atividade->professor->nome_professor }}
+
+                                            </div>
+
+                                        @endif
 
                                     </div>
 
                                 </div>
 
 
-                                {{-- STATUS --}}
+                                {{-- ================================================= --}}
+                                {{-- STATUS                                           --}}
+                                {{-- ================================================= --}}
 
                                 <span
-                                    class="tbl-status tbl-status-{{
-                                        $status === 'CORRIGIDA'
-                                            ? 'confirmado'
-                                            : (
-                                                $status === 'ENVIADA'
-                                                    ? 'pendente'
-                                                    : 'congelado'
-                                            )
-                                    }}"
+                                    class="
+                                        tbl-status
+                                        tbl-status-{{
+                                            $status === 'CORRIGIDA'
+                                                ? 'confirmado'
+                                                : (
+                                                    $status === 'ENVIADA'
+                                                        ? 'pendente'
+                                                        : 'congelado'
+                                                )
+                                        }}
+                                    "
                                 >
 
                                     <span class="tbl-status-dot"></span>
@@ -370,7 +533,46 @@
 
 
                             {{-- ================================================= --}}
-                            {{-- DESCRIÇÃO --}}
+                            {{-- CATEGORIA                                         --}}
+                            {{-- ================================================= --}}
+
+                            @if($cat)
+
+                                <div class="mb-2">
+
+                                    <span
+                                        style="
+                                            display:inline-flex;
+                                            align-items:center;
+                                            gap:.3rem;
+                                            padding:.2rem .45rem;
+                                            border-radius:5px;
+                                            background:
+                                                {{ $cat['cor'] }};
+                                            color:#fff;
+                                            font-size:.62rem;
+                                            font-weight:700;
+                                        "
+                                    >
+
+                                        <i
+                                            class="
+                                                fas
+                                                {{ $cat['icone'] }}
+                                            "
+                                        ></i>
+
+                                        {{ $cat['label'] }}
+
+                                    </span>
+
+                                </div>
+
+                            @endif
+
+
+                            {{-- ================================================= --}}
+                            {{-- DESCRIÇÃO                                         --}}
                             {{-- ================================================= --}}
 
                             @if($atividade->descricao_atividade)
@@ -383,17 +585,19 @@
                                         margin-bottom:.75rem;
                                     "
                                 >
+
                                     {{ Str::limit(
                                         $atividade->descricao_atividade,
                                         100
                                     ) }}
+
                                 </p>
 
                             @endif
 
 
                             {{-- ================================================= --}}
-                            {{-- ÁUDIO DISPONÍVEL --}}
+                            {{-- ÁUDIO DISPONÍVEL                                 --}}
                             {{-- ================================================= --}}
 
                             @if(
@@ -440,7 +644,7 @@
 
 
                             {{-- ================================================= --}}
-                            {{-- DATA DE ENTREGA --}}
+                            {{-- DATA DE ENTREGA                                  --}}
                             {{-- ================================================= --}}
 
                             <div
@@ -472,18 +676,22 @@
 
 
                             {{-- ================================================= --}}
-                            {{-- NOTA --}}
+                            {{-- NOTA                                             --}}
                             {{-- ================================================= --}}
 
-                            @if($status === 'CORRIGIDA' && $resposta)
+                            @if(
+                                $status === 'CORRIGIDA' &&
+                                $resposta
+                            )
 
                                 <div
                                     style="
-                                        background:linear-gradient(
-                                            135deg,
-                                            #ecfdf5,
-                                            #d1fae5
-                                        );
+                                        background:
+                                            linear-gradient(
+                                                135deg,
+                                                #ecfdf5,
+                                                #d1fae5
+                                            );
                                         border-radius:10px;
                                         padding:.75rem;
                                         margin-bottom:.75rem;
@@ -491,7 +699,11 @@
                                 >
 
                                     <div
-                                        class="d-flex align-items-center justify-content-between"
+                                        class="
+                                            d-flex
+                                            align-items-center
+                                            justify-content-between
+                                        "
                                     >
 
                                         <div>
@@ -544,10 +756,11 @@
                                                             : '#ef4444'
                                                     );
 
-                                            $notaPct = min(
-                                                100,
-                                                $resposta->nota * 10
-                                            );
+                                            $notaPct =
+                                                min(
+                                                    100,
+                                                    $resposta->nota * 10
+                                                );
 
                                         @endphp
 
@@ -557,11 +770,12 @@
                                                 width:50px;
                                                 height:50px;
                                                 border-radius:50%;
-                                                background:conic-gradient(
-                                                    {{ $notaCor }}
-                                                    {{ $notaPct }}%,
-                                                    #e2e8f0 0
-                                                );
+                                                background:
+                                                    conic-gradient(
+                                                        {{ $notaCor }}
+                                                        {{ $notaPct }}%,
+                                                        #e2e8f0 0
+                                                    );
                                                 display:flex;
                                                 align-items:center;
                                                 justify-content:center;
@@ -595,7 +809,9 @@
                                     </div>
 
 
-                                    @if($resposta->feedback_professor)
+                                    @if(
+                                        $resposta->feedback_professor
+                                    )
 
                                         <div
                                             style="
@@ -603,16 +819,24 @@
                                                 color:#065f46;
                                                 margin-top:.5rem;
                                                 padding-top:.5rem;
-                                                border-top:1px solid rgba(
-                                                    16,
-                                                    185,
-                                                    129,
-                                                    .2
-                                                );
+                                                border-top:
+                                                    1px solid
+                                                    rgba(
+                                                        16,
+                                                        185,
+                                                        129,
+                                                        .2
+                                                    );
                                             "
                                         >
 
-                                            <i class="fas fa-comment-dots me-1"></i>
+                                            <i
+                                                class="
+                                                    fas
+                                                    fa-comment-dots
+                                                    me-1
+                                                "
+                                            ></i>
 
                                             {{ Str::limit(
                                                 $resposta->feedback_professor,
@@ -629,7 +853,7 @@
 
 
                             {{-- ================================================= --}}
-                            {{-- BOTÃO --}}
+                            {{-- BOTÃO                                             --}}
                             {{-- ================================================= --}}
 
                             @if(
@@ -644,7 +868,11 @@
                                             $atividade->id_atividade
                                         )
                                     }}"
-                                    class="tbl-btn-success w-100 justify-content-center"
+                                    class="
+                                        tbl-btn-success
+                                        w-100
+                                        justify-content-center
+                                    "
                                 >
 
                                     <i class="fas fa-pen-to-square"></i>
@@ -662,7 +890,11 @@
                                             $atividade->id_atividade
                                         )
                                     }}"
-                                    class="tbl-btn-ver w-100 justify-content-center"
+                                    class="
+                                        tbl-btn-ver
+                                        w-100
+                                        justify-content-center
+                                    "
                                 >
 
                                     <i class="fas fa-eye"></i>
@@ -687,11 +919,17 @@
                     <div class="tbl-empty">
 
                         <i
-                            class="fas fa-clipboard-list tbl-empty-icon"
+                            class="
+                                fas
+                                fa-clipboard-list
+                                tbl-empty-icon
+                            "
                         ></i>
 
                         <span class="tbl-empty-text">
+
                             Nenhuma atividade disponível ainda.
+
                         </span>
 
                     </div>

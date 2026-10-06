@@ -117,6 +117,20 @@
                                 <p>Fórum</p>
                             </a>
                         </li>
+                        @php
+                            $justificativasPendentes = \App\Models\JustificativaFalta::visivelPara(auth('admin')->user())->pendentes()->count();
+                        @endphp
+                        <li class="nav-item">
+                            <a href="{{ route('admin.justificativas.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-file-earmark-check"></i>
+                                <p>
+                                    Justificativas
+                                    @if ($justificativasPendentes > 0)
+                                        <span class="nav-badge badge text-bg-danger me-3" title="Justificativas aguardando resposta">{{ $justificativasPendentes }}</span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.duvidas.index') }}" class="nav-link">
                                 <i class="nav-icon bi bi-question-circle"></i>

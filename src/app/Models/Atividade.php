@@ -21,10 +21,66 @@ class Atividade extends Model
         'descricao_atividade',
         'tipo_atividade',
         'audio',
+        'arquivo_audio',
+        'categoria_atividade',
+        'finalidade_atividade',
         'data_entrega',
         'status_atividade',
     ];
 
+    /**
+     * Categorias utilizadas nos cards de atividades.
+     */
+    const CATEGORIAS = [
+        'GRAMATICA' => [
+            'label' => 'Gramática',
+            'icone' => 'fa-book',
+            'cor' => '#ef4444',
+        ],
+
+        'AUDIO' => [
+            'label' => 'Áudio',
+            'icone' => 'fa-headphones',
+            'cor' => '#8b5cf6',
+        ],
+
+        'FALA' => [
+            'label' => 'Fala',
+            'icone' => 'fa-microphone',
+            'cor' => '#06b6d4',
+        ],
+
+        'LEITURA' => [
+            'label' => 'Leitura',
+            'icone' => 'fa-book-open',
+            'cor' => '#f59e0b',
+        ],
+
+        'ESCRITA' => [
+            'label' => 'Escrita',
+            'icone' => 'fa-pen',
+            'cor' => '#10b981',
+        ],
+
+        'VOCABULARIO' => [
+            'label' => 'Vocabulário',
+            'icone' => 'fa-spell-check',
+            'cor' => '#ec4899',
+        ],
+    ];
+
+    /**
+     * Finalidades disponíveis para a atividade.
+     */
+    const FINALIDADES = [
+        'FIXACAO' => 'Exercício de fixação',
+        'REVISAO' => 'Exercício de revisão',
+        'AVALIACAO' => 'Avaliação',
+    ];
+
+    /**
+     * Professor responsável pela atividade.
+     */
     public function professor()
     {
         return $this->belongsTo(
@@ -34,6 +90,9 @@ class Atividade extends Model
         );
     }
 
+    /**
+     * Curso da atividade.
+     */
     public function curso()
     {
         return $this->belongsTo(
@@ -43,6 +102,9 @@ class Atividade extends Model
         );
     }
 
+    /**
+     * Módulo da atividade.
+     */
     public function modulo()
     {
         return $this->belongsTo(
@@ -52,6 +114,9 @@ class Atividade extends Model
         );
     }
 
+    /**
+     * Questões da atividade.
+     */
     public function questoes()
     {
         return $this->hasMany(
@@ -61,6 +126,9 @@ class Atividade extends Model
         );
     }
 
+    /**
+     * Respostas dos alunos.
+     */
     public function respostas()
     {
         return $this->hasMany(
@@ -68,5 +136,27 @@ class Atividade extends Model
             'id_atividade',
             'id_atividade'
         );
+    }
+
+    /**
+     * Retorna as informações da categoria.
+     *
+     * @return array|null
+     */
+    public function categoriaInfo(): ?array
+    {
+        return self::CATEGORIAS[
+            $this->categoria_atividade
+        ] ?? null;
+    }
+
+    /**
+     * Retorna o nome da finalidade.
+     */
+    public function finalidadeLabel(): ?string
+    {
+        return self::FINALIDADES[
+            $this->finalidade_atividade
+        ] ?? null;
     }
 }

@@ -12,11 +12,13 @@ class ProgressoController extends Controller
     {
         $aluno = auth('aluno')->user();
 
-        // Presença
+        // Presença (a tela de presença grava "presente", "falta" ou "justificado")
         $totalAulas     = Presenca::where('id_aluno', $aluno->id_aluno)->count();
-        $totalPresente  = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'PRESENTE')->count();
-        $totalFalta     = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'FALTA')->count();
-        $percPresenca   = $totalAulas > 0 ? round(($totalPresente / $totalAulas) * 100) : 0;
+        $totalPresente  = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'presente')->count();
+        $totalFalta     = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'falta')->count();
+        $totalJustificado = Presenca::where('id_aluno', $aluno->id_aluno)->where('status_presenca', 'justificado')->count();
+        // Falta justificada (aceita pelo professor) conta como presença na frequência.
+        $percPresenca   = $totalAulas > 0 ? round((($totalPresente + $totalJustificado) / $totalAulas) * 100) : 0;
 
         // Materiais do curso/nível escolhido
         $idsMateriais = CursoAtual::filtrar(Materiais::query(), CursoAtual::matricula())->pluck('id_materiais');
@@ -30,14 +32,14 @@ class ProgressoController extends Controller
         $percMateriais = $totalMateriais > 0 ? round(($materiaisVistos / $totalMateriais) * 100) : 0;
 
         // Últimas presenças
-        $ultimasPresencas = Presenca::with('aula')
+        $ultimasPresencas = Presenca::with('aula', 'ultimaJustificativa')
             ->where('id_aluno', $aluno->id_aluno)
             ->orderBy('data_registro_presenca', 'desc')
             ->limit(5)
             ->get();
 
         return view('aluno.dash.progresso', compact(
-            'aluno', 'totalAulas', 'totalPresente', 'totalFalta',
+            'aluno', 'totalAulas', 'totalPresente', 'totalFalta', 'totalJustificado',
             'percPresenca', 'totalMateriais', 'materiaisVistos',
             'percMateriais', 'ultimasPresencas'
         ));

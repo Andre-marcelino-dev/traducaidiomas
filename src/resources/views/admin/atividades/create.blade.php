@@ -21,7 +21,6 @@
             enctype="multipart/form-data"
             id="formAtividade"
         >
-
             @csrf
 
             {{-- ============================= --}}
@@ -41,7 +40,10 @@
 
                     <div class="row g-3">
 
-                        {{-- ESTILO DA ATIVIDADE --}}
+                        {{-- ============================= --}}
+                        {{-- ESTILO DA ATIVIDADE            --}}
+                        {{-- ============================= --}}
+
                         <div class="col-md-6">
 
                             <label class="form-label fw-bold">
@@ -54,27 +56,37 @@
                                 class="form-select"
                                 required
                             >
-
                                 <option value="">
                                     Selecione o estilo da atividade
                                 </option>
 
-                                <option value="conjugacao">
+                                <option
+                                    value="conjugacao"
+                                    @selected(old('tipo_atividade') === 'conjugacao')
+                                >
                                     📕 Conjugação de verbo
                                 </option>
 
-                                <option value="conversa">
+                                <option
+                                    value="conversa"
+                                    @selected(old('tipo_atividade') === 'conversa')
+                                >
                                     🎧 Conversa
                                 </option>
 
-                                <option value="pronuncia">
+                                <option
+                                    value="pronuncia"
+                                    @selected(old('tipo_atividade') === 'pronuncia')
+                                >
                                     🎙️ Pronúncia
                                 </option>
 
-                                <option value="leitura">
+                                <option
+                                    value="leitura"
+                                    @selected(old('tipo_atividade') === 'leitura')
+                                >
                                     📖 Leitura
                                 </option>
-
                             </select>
 
                             <div class="form-text">
@@ -82,10 +94,18 @@
                                 do aluno para definir o ícone da atividade.
                             </div>
 
+                            @error('tipo_atividade')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                         </div>
 
+                        {{-- ============================= --}}
+                        {{-- TÍTULO                         --}}
+                        {{-- ============================= --}}
 
-                        {{-- TÍTULO --}}
                         <div class="col-md-6">
 
                             <label class="form-label">
@@ -95,14 +115,23 @@
                             <input
                                 type="text"
                                 name="titulo_atividade"
+                                value="{{ old('titulo_atividade') }}"
                                 class="form-control"
                                 required
                             >
 
+                            @error('titulo_atividade')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                         </div>
 
+                        {{-- ============================= --}}
+                        {{-- CURSO                          --}}
+                        {{-- ============================= --}}
 
-                        {{-- CURSO --}}
                         <div class="col-md-4">
 
                             <label class="form-label">
@@ -114,14 +143,16 @@
                                 class="form-select"
                                 required
                             >
-
                                 <option value="">
                                     Selecione
                                 </option>
 
                                 @foreach($cursos as $curso)
 
-                                    <option value="{{ $curso->id_curso }}">
+                                    <option
+                                        value="{{ $curso->id_curso }}"
+                                        @selected(old('id_curso') == $curso->id_curso)
+                                    >
                                         {{ $curso->nome_curso }}
                                     </option>
 
@@ -129,10 +160,18 @@
 
                             </select>
 
+                            @error('id_curso')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                         </div>
 
+                        {{-- ============================= --}}
+                        {{-- DATA DE ENTREGA                --}}
+                        {{-- ============================= --}}
 
-                        {{-- DATA DE ENTREGA --}}
                         <div class="col-md-4">
 
                             <label class="form-label">
@@ -142,14 +181,23 @@
                             <input
                                 type="date"
                                 name="data_entrega"
+                                value="{{ old('data_entrega') }}"
                                 class="form-control"
                                 required
                             >
 
+                            @error('data_entrega')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                         </div>
 
+                        {{-- ============================= --}}
+                        {{-- MÓDULO                         --}}
+                        {{-- ============================= --}}
 
-                        {{-- MÓDULO --}}
                         <div class="col-md-4">
 
                             <label class="form-label">
@@ -161,7 +209,6 @@
                                 id="selectModulo"
                                 class="form-select"
                             >
-
                                 <option value="">
                                     Nenhum / não definido
                                 </option>
@@ -171,6 +218,7 @@
                                     <option
                                         value="{{ $modulo->id_modulo }}"
                                         data-curso="{{ $modulo->id_curso }}"
+                                        @selected(old('id_modulo') == $modulo->id_modulo)
                                     >
                                         {{ $modulo->curso?->nome_curso }}
                                         ·
@@ -185,10 +233,93 @@
 
                             </select>
 
+                            @error('id_modulo')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
                         </div>
 
+                        {{-- ============================= --}}
+                        {{-- CATEGORIA                      --}}
+                        {{-- ============================= --}}
 
-                        {{-- DESCRIÇÃO --}}
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Categoria
+                            </label>
+
+                            <select
+                                name="categoria_atividade"
+                                class="form-select"
+                            >
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                @foreach(\App\Models\Atividade::CATEGORIAS as $valor => $cat)
+
+                                    <option
+                                        value="{{ $valor }}"
+                                        @selected(old('categoria_atividade') === $valor)
+                                    >
+                                        {{ $cat['label'] }}
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                            @error('categoria_atividade')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+                        {{-- ============================= --}}
+                        {{-- FINALIDADE                     --}}
+                        {{-- ============================= --}}
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Finalidade
+                            </label>
+
+                            <select
+                                name="finalidade_atividade"
+                                class="form-select"
+                            >
+
+                                @foreach(\App\Models\Atividade::FINALIDADES as $valor => $label)
+
+                                    <option
+                                        value="{{ $valor }}"
+                                        @selected(old('finalidade_atividade', 'FIXACAO') === $valor)
+                                    >
+                                        {{ $label }}
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                            @error('finalidade_atividade')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+                        {{-- ============================= --}}
+                        {{-- DESCRIÇÃO                      --}}
+                        {{-- ============================= --}}
+
                         <div class="col-md-12">
 
                             <label class="form-label">
@@ -199,13 +330,18 @@
                                 name="descricao_atividade"
                                 class="form-control"
                                 rows="3"
-                            ></textarea>
+                            >{{ old('descricao_atividade') }}</textarea>
+
+                            @error('descricao_atividade')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                         </div>
 
-
                         {{-- ============================= --}}
-                        {{-- ÁUDIO DA ATIVIDADE             --}}
+                        {{-- ÁUDIO DA ATIVIDADE              --}}
                         {{-- ============================= --}}
 
                         <div
@@ -224,17 +360,33 @@
                                     type="file"
                                     name="audio"
                                     id="audioAtividade"
-                                    class="form-control"
+                                    class="form-control @error('audio') is-invalid @enderror"
                                     accept=".mp3,.wav,.ogg,.m4a,.webm,audio/*"
                                 >
+
+                                @error('audio')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                                 <div class="form-text">
                                     Use este campo para atividades de
                                     <strong>Conversa</strong> ou
                                     <strong>Leitura</strong>.
-                                    Formatos aceitos: MP3, WAV, OGG, M4A e WEBM.
+                                    <br>
+                                    Formatos aceitos:
+                                    MP3, WAV, OGG, M4A e WEBM.
+                                    <br>
                                     Tamanho máximo: 20 MB.
                                 </div>
+
+                                <audio
+                                    id="previewAudioAtividade"
+                                    controls
+                                    class="w-100 mt-3"
+                                    style="display:none;"
+                                ></audio>
 
                             </div>
 
@@ -276,10 +428,12 @@
 
                     </div>
 
-
                     <div class="card-body">
 
-                        {{-- ENUNCIADO --}}
+                        {{-- ============================= --}}
+                        {{-- ENUNCIADO                      --}}
+                        {{-- ============================= --}}
+
                         <div class="mb-3">
 
                             <label class="form-label">
@@ -291,12 +445,15 @@
                                 class="form-control"
                                 rows="2"
                                 required
-                            ></textarea>
+                            >{{ old('enunciado.0') }}</textarea>
 
                         </div>
 
 
-                        {{-- TIPO DA QUESTÃO --}}
+                        {{-- ============================= --}}
+                        {{-- TIPO DA QUESTÃO                --}}
+                        {{-- ============================= --}}
+
                         <div class="mb-3">
 
                             <label class="form-label">
@@ -319,6 +476,7 @@
                                 <option
                                     value="audio"
                                     class="opcao-audio"
+                                    hidden
                                 >
                                     🎙️ Resposta em Áudio
                                 </option>
@@ -334,7 +492,7 @@
 
 
                         {{-- ============================= --}}
-                        {{-- OPÇÕES DA MÚLTIPLA ESCOLHA    --}}
+                        {{-- OPÇÕES DA MÚLTIPLA ESCOLHA     --}}
                         {{-- ============================= --}}
 
                         <div class="opcoes-multipla">
@@ -356,7 +514,6 @@
 
                                 </div>
 
-
                                 {{-- OPÇÃO B --}}
                                 <div class="col-md-6">
 
@@ -371,7 +528,6 @@
                                     >
 
                                 </div>
-
 
                                 {{-- OPÇÃO C --}}
                                 <div class="col-md-6">
@@ -388,7 +544,6 @@
 
                                 </div>
 
-
                                 {{-- OPÇÃO D --}}
                                 <div class="col-md-6">
 
@@ -404,7 +559,6 @@
 
                                 </div>
 
-
                                 {{-- RESPOSTA CORRETA --}}
                                 <div class="col-md-3">
 
@@ -416,12 +570,21 @@
                                         name="resposta_correta[]"
                                         class="form-select"
                                     >
+                                        <option value="A">
+                                            A
+                                        </option>
 
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                        <option value="D">D</option>
+                                        <option value="B">
+                                            B
+                                        </option>
 
+                                        <option value="C">
+                                            C
+                                        </option>
+
+                                        <option value="D">
+                                            D
+                                        </option>
                                     </select>
 
                                 </div>
@@ -500,6 +663,57 @@ const campoAudioAtividade =
 const audioAtividade =
     document.getElementById('audioAtividade');
 
+const previewAudioAtividade =
+    document.getElementById('previewAudioAtividade');
+
+
+/*
+|--------------------------------------------------------------------------
+| PREVIEW DO ÁUDIO
+|--------------------------------------------------------------------------
+*/
+
+if (audioAtividade) {
+
+    audioAtividade.addEventListener(
+        'change',
+        function () {
+
+            if (!previewAudioAtividade) {
+                return;
+            }
+
+            if (previewAudioAtividade.src) {
+                URL.revokeObjectURL(
+                    previewAudioAtividade.src
+                );
+            }
+
+            if (this.files.length) {
+
+                previewAudioAtividade.src =
+                    URL.createObjectURL(
+                        this.files[0]
+                    );
+
+                previewAudioAtividade.style.display =
+                    'block';
+
+            } else {
+
+                previewAudioAtividade.removeAttribute(
+                    'src'
+                );
+
+                previewAudioAtividade.style.display =
+                    'none';
+            }
+
+        }
+    );
+
+}
+
 
 /*
 |--------------------------------------------------------------------------
@@ -507,7 +721,7 @@ const audioAtividade =
 |--------------------------------------------------------------------------
 |
 | Conversa:
-|   possui áudio obrigatório/recomendado para o conteúdo.
+|   possui áudio para o conteúdo.
 |
 | Leitura:
 |   pode possuir áudio adicional.
@@ -522,7 +736,10 @@ const audioAtividade =
 
 function atualizarAudioAtividade() {
 
-    if (!tipoAtividade || !campoAudioAtividade) {
+    if (
+        !tipoAtividade ||
+        !campoAudioAtividade
+    ) {
         return;
     }
 
@@ -543,8 +760,23 @@ function atualizarAudioAtividade() {
      * limpamos o campo para evitar
      * enviar um arquivo desnecessário.
      */
-    if (!mostrarAudio && audioAtividade) {
+
+    if (
+        !mostrarAudio &&
+        audioAtividade
+    ) {
+
         audioAtividade.value = '';
+
+        if (previewAudioAtividade) {
+
+            previewAudioAtividade.removeAttribute(
+                'src'
+            );
+
+            previewAudioAtividade.style.display =
+                'none';
+        }
     }
 
 }
@@ -599,30 +831,33 @@ function atualizarTiposDasQuestoes() {
     const permitirAudio =
         tipo === 'pronuncia';
 
-
     document
         .querySelectorAll('.questao-card')
         .forEach(function(card) {
 
             const select =
-                card.querySelector('.tipo-questao');
+                card.querySelector(
+                    '.tipo-questao'
+                );
 
             if (!select) {
                 return;
             }
 
             const opcaoAudio =
-                select.querySelector('.opcao-audio');
+                select.querySelector(
+                    '.opcao-audio'
+                );
 
             if (!opcaoAudio) {
                 return;
             }
 
-
             /*
              * Mostra ou esconde a opção
              * de resposta em áudio.
              */
+
             opcaoAudio.hidden =
                 !permitirAudio;
 
@@ -632,15 +867,16 @@ function atualizarTiposDasQuestoes() {
              * questão estava como áudio,
              * volta para texto.
              */
+
             if (
                 !permitirAudio &&
                 select.value === 'audio'
             ) {
 
-                select.value = 'texto';
+                select.value =
+                    'texto';
 
             }
-
 
             atualizarOpcoesQuestao(card);
 
@@ -658,12 +894,19 @@ function atualizarTiposDasQuestoes() {
 function atualizarOpcoesQuestao(card) {
 
     const select =
-        card.querySelector('.tipo-questao');
+        card.querySelector(
+            '.tipo-questao'
+        );
 
     const opcoes =
-        card.querySelector('.opcoes-multipla');
+        card.querySelector(
+            '.opcoes-multipla'
+        );
 
-    if (!select || !opcoes) {
+    if (
+        !select ||
+        !opcoes
+    ) {
         return;
     }
 
@@ -672,6 +915,7 @@ function atualizarOpcoesQuestao(card) {
      * Só mostra alternativas quando
      * a questão é múltipla escolha.
      */
+
     opcoes.style.display =
         select.value === 'multipla_escolha'
             ? 'block'
@@ -688,95 +932,121 @@ function atualizarOpcoesQuestao(card) {
 
 document
     .getElementById('addQuestao')
-    .addEventListener('click', function() {
+    .addEventListener(
+        'click',
+        function() {
 
-        const original =
-            document.querySelector('.questao-card');
+            const original =
+                document.querySelector(
+                    '.questao-card'
+                );
 
-        const template =
-            original.cloneNode(true);
+            if (!original) {
+                return;
+            }
 
-
-        /*
-         * Atualiza o índice.
-         */
-        template.setAttribute(
-            'data-index',
-            questaoIndex
-        );
-
-
-        /*
-         * Atualiza o título.
-         */
-        template
-            .querySelector('.card-header span')
-            .textContent =
-                '❓ Questão ' +
-                (questaoIndex + 1);
+            const template =
+                original.cloneNode(true);
 
 
-        /*
-         * Limpa inputs e textareas.
-         */
-        template
-            .querySelectorAll('input, textarea')
-            .forEach(function(el) {
+            /*
+             * Atualiza o índice.
+             */
 
-                el.value = '';
-
-            });
+            template.setAttribute(
+                'data-index',
+                questaoIndex
+            );
 
 
-        /*
-         * Reseta selects.
-         */
-        template
-            .querySelectorAll('select')
-            .forEach(function(el) {
+            /*
+             * Atualiza o título.
+             */
 
-                if (
-                    el.classList.contains(
-                        'tipo-questao'
-                    )
-                ) {
+            const titulo =
+                template.querySelector(
+                    '.card-header span'
+                );
 
-                    el.value =
-                        'multipla_escolha';
+            if (titulo) {
 
-                } else {
+                titulo.textContent =
+                    '❓ Questão ' +
+                    (questaoIndex + 1);
+
+            }
+
+
+            /*
+             * Limpa inputs e textareas.
+             */
+
+            template
+                .querySelectorAll(
+                    'input, textarea'
+                )
+                .forEach(function(el) {
 
                     el.value = '';
 
-                }
-
-            });
+                });
 
 
-        /*
-         * Adiciona a nova questão.
-         */
-        document
-            .getElementById('questoes')
-            .appendChild(template);
+            /*
+             * Reseta selects.
+             */
+
+            template
+                .querySelectorAll('select')
+                .forEach(function(el) {
+
+                    if (
+                        el.classList.contains(
+                            'tipo-questao'
+                        )
+                    ) {
+
+                        el.value =
+                            'multipla_escolha';
+
+                    } else {
+
+                        el.value = '';
+
+                    }
+
+                });
 
 
-        questaoIndex++;
+            /*
+             * Garante que o botão de remover
+             * funcione na nova questão.
+             */
+
+            document
+                .getElementById('questoes')
+                .appendChild(template);
 
 
-        /*
-         * Reativa os eventos.
-         */
-        bindEvents();
+            questaoIndex++;
 
 
-        /*
-         * Atualiza a disponibilidade
-         * da opção de áudio.
-         */
-        atualizarTiposDasQuestoes();
+            /*
+             * Reativa os eventos.
+             */
 
-    });
+            bindEvents();
+
+
+            /*
+             * Atualiza a disponibilidade
+             * da opção de áudio.
+             */
+
+            atualizarTiposDasQuestoes();
+
+        }
+    );
 
 
 /*
@@ -790,6 +1060,7 @@ function bindEvents() {
     /*
      * Remover questão
      */
+
     document
         .querySelectorAll('.remover-questao')
         .forEach(function(btn) {
@@ -802,7 +1073,6 @@ function bindEvents() {
                             '.questao-card'
                         )
                         .length;
-
 
                 if (quantidade > 1) {
 
@@ -820,6 +1090,7 @@ function bindEvents() {
     /*
      * Alterar tipo da questão
      */
+
     document
         .querySelectorAll('.tipo-questao')
         .forEach(function(select) {
@@ -831,8 +1102,9 @@ function bindEvents() {
                         '.questao-card'
                     );
 
-
-                atualizarOpcoesQuestao(card);
+                atualizarOpcoesQuestao(
+                    card
+                );
 
             };
 
@@ -876,19 +1148,19 @@ function bindEvents() {
             cursoSelect.value;
 
 
-        [...moduloSelect.options]
-            .forEach(function(opt) {
+        [
+            ...moduloSelect.options
+        ].forEach(function(opt) {
 
-                if (!opt.value) {
-                    return;
-                }
+            if (!opt.value) {
+                return;
+            }
 
+            opt.hidden =
+                idCurso !== '' &&
+                opt.dataset.curso !== idCurso;
 
-                opt.hidden =
-                    idCurso !== '' &&
-                    opt.dataset.curso !== idCurso;
-
-            });
+        });
 
 
         if (

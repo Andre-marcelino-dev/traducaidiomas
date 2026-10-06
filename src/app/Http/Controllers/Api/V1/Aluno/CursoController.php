@@ -317,23 +317,23 @@ class CursoController extends Controller
                 'curso',
                 'nivel',
             ])
-            ->where(
-                'id_aluno',
-                $request->user()->id_aluno
-            )
-            ->where(
-                'id_curso',
-                $modulo->id_curso
-            )
-            ->where(
-                'id_nivel',
-                $modulo->id_nivel
-            )
-            ->where(
-                'status_matricula',
-                'ATIVO'
-            )
-            ->first()
+                ->where(
+                    'id_aluno',
+                    $request->user()->id_aluno
+                )
+                ->where(
+                    'id_curso',
+                    $modulo->id_curso
+                )
+                ->where(
+                    'id_nivel',
+                    $modulo->id_nivel
+                )
+                ->where(
+                    'status_matricula',
+                    'ATIVO'
+                )
+                ->first()
             : null;
 
         if (!$matricula) {
@@ -489,7 +489,7 @@ class CursoController extends Controller
                     $modulo->descricao_modulo,
 
                     'carga_horaria_minutos' =>
-                    $modulo->carga_horaria_minutos,
+                    $progresso->carga_horaria_minutos,
                 ],
 
                 'progresso' => [
@@ -704,7 +704,7 @@ class CursoController extends Controller
         ModuloProgresso::registrarMaterial(
             $idAluno,
             $material,
-            concluido: true
+            'concluido' => true
         );
 
         $ext = pathinfo(
@@ -746,7 +746,7 @@ class CursoController extends Controller
             ->first();
     }
 
-    /**ola
+    /**
      * Resposta padrão para recurso não encontrado.
      */
     private function naoEncontrado(

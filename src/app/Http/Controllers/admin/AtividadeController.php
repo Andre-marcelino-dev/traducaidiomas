@@ -10,6 +10,7 @@ use App\Models\AtividadeRespostaQuestao;
 use App\Models\Curso;
 use App\Models\Aluno;
 use App\Models\Modulo;
+use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,12 +19,18 @@ class AtividadeController extends Controller
     /**
      * Lista as atividades.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $idCurso = $request->query('curso');
+
         $atividades = Atividade::with([
             'curso',
             'respostas'
         ])
+            ->when(
+                $idCurso,
+                fn($q) => $q->where('id_curso', $idCurso)
+            )
             ->orderBy('criado_em', 'desc')
             ->get();
 
@@ -31,7 +38,7 @@ class AtividadeController extends Controller
 
         return view(
             'admin.atividades.index',
-            compact('atividades', 'cursos')
+            compact('atividades', 'cursos', 'idCurso')
         );
     }
 
@@ -68,18 +75,17 @@ class AtividadeController extends Controller
         */
 
         $request->validate([
-
             'titulo_atividade' =>
-            'required|string|max:255',
+                'required|string|max:255',
 
             'id_curso' =>
-            'required',
+                'required',
 
             'id_modulo' =>
-            'nullable|exists:tbl_modulos,id_modulo',
+                'nullable|exists:tbl_modulos,id_modulo',
 
             'data_entrega' =>
-            'required|date',
+                'required|date',
 
             /*
              * Estilo da atividade.
@@ -89,7 +95,7 @@ class AtividadeController extends Controller
              * ícone e o visual da atividade.
              */
             'tipo_atividade' =>
-            'required|in:conjugacao,conversa,pronuncia,leitura',
+                'required|in:conjugacao,conversa,pronuncia,leitura',
 
             /*
              * Áudio da atividade.
@@ -98,26 +104,25 @@ class AtividadeController extends Controller
              * precisa possuir áudio.
              */
             'audio' =>
-            'nullable|file|mimes:mp3,wav,ogg,m4a,webm|max:20480',
+                'nullable|file|mimes:mp3,wav,ogg,m4a,webm|max:20480',
 
             /*
              * Pelo menos uma questão precisa existir.
              */
             'enunciado' =>
-            'required|array|min:1',
+                'required|array|min:1',
 
             'enunciado.*' =>
-            'required|string',
+                'required|string',
 
             /*
              * Tipo de cada questão.
              */
             'tipo_questao' =>
-            'nullable|array',
+                'nullable|array',
 
             'tipo_questao.*' =>
-            'nullable|in:multipla_escolha,texto,audio',
-
+                'nullable|in:multipla_escolha,texto,audio',
         ]);
 
         /*
@@ -147,28 +152,28 @@ class AtividadeController extends Controller
              * Professor atualmente logado.
              */
             'id_professor' =>
-            auth('admin')->id(),
+                auth('admin')->id(),
 
             /*
              * Curso selecionado.
              */
             'id_curso' =>
-            $request->id_curso,
+                $request->id_curso,
 
             /*
              * Módulo selecionado.
              */
             'id_modulo' =>
-            $request->id_modulo,
+                $request->id_modulo,
 
             /*
              * Informações da atividade.
              */
             'titulo_atividade' =>
-            $request->titulo_atividade,
+                $request->titulo_atividade,
 
             'descricao_atividade' =>
-            $request->descricao_atividade,
+                $request->descricao_atividade,
 
             /*
              * Estilo escolhido pelo professor.
@@ -181,19 +186,19 @@ class AtividadeController extends Controller
              * leitura
              */
             'tipo_atividade' =>
-            $request->tipo_atividade,
+                $request->tipo_atividade,
 
             /*
              * Caminho do áudio salvo.
              */
             'audio' =>
-            $audio,
+                $audio,
 
             /*
              * Data de entrega.
              */
             'data_entrega' =>
-            $request->data_entrega,
+                $request->data_entrega,
         ]);
 
         /*
@@ -218,13 +223,13 @@ class AtividadeController extends Controller
                  * Relacionamento com a atividade.
                  */
                 'id_atividade' =>
-                $atividade->id_atividade,
+                    $atividade->id_atividade,
 
                 /*
                  * Enunciado.
                  */
                 'enunciado' =>
-                $enunciado,
+                    $enunciado,
 
                 /*
                  * Tipo da questão:
@@ -234,7 +239,7 @@ class AtividadeController extends Controller
                  * audio
                  */
                 'tipo_questao' =>
-                $tipo,
+                    $tipo,
 
                 /*
                  * Alternativas.
@@ -244,34 +249,33 @@ class AtividadeController extends Controller
                  * ficarão null.
                  */
                 'opcao_a' =>
-                $request->opcao_a[$i]
+                    $request->opcao_a[$i]
                     ?? null,
 
                 'opcao_b' =>
-                $request->opcao_b[$i]
+                    $request->opcao_b[$i]
                     ?? null,
 
                 'opcao_c' =>
-                $request->opcao_c[$i]
+                    $request->opcao_c[$i]
                     ?? null,
 
                 'opcao_d' =>
-                $request->opcao_d[$i]
+                    $request->opcao_d[$i]
                     ?? null,
 
                 /*
                  * Resposta correta.
                  */
                 'resposta_correta' =>
-                $request->resposta_correta[$i]
+                    $request->resposta_correta[$i]
                     ?? null,
 
                 /*
                  * Ordem da questão.
                  */
                 'ordem' =>
-                $i + 1,
-
+                    $i + 1,
             ]);
         }
 
@@ -329,10 +333,10 @@ class AtividadeController extends Controller
         $request->validate([
 
             'nota' =>
-            'required|numeric|min:0|max:10',
+                'required|numeric|min:0|max:10',
 
             'feedback_professor' =>
-            'nullable|string|max:2000',
+                'nullable|string|max:2000',
 
         ]);
 
@@ -345,16 +349,16 @@ class AtividadeController extends Controller
         $resposta->update([
 
             'nota' =>
-            $request->nota,
+                $request->nota,
 
             'feedback_professor' =>
-            $request->feedback_professor,
+                $request->feedback_professor,
 
             'status_resposta' =>
-            'CORRIGIDA',
+                'CORRIGIDA',
 
             'data_correcao' =>
-            now(),
+                now(),
 
         ]);
 
@@ -400,8 +404,8 @@ class AtividadeController extends Controller
              */
             $respostaIds =
                 $atividade
-                ->respostas()
-                ->pluck('id_resposta');
+                    ->respostas()
+                    ->pluck('id_resposta');
 
             /*
              * Remove as respostas das questões.
