@@ -102,6 +102,7 @@
 
                         </div>
 
+
                         {{-- ============================= --}}
                         {{-- TÍTULO                         --}}
                         {{-- ============================= --}}
@@ -127,6 +128,7 @@
                             @enderror
 
                         </div>
+
 
                         {{-- ============================= --}}
                         {{-- CURSO                          --}}
@@ -168,6 +170,7 @@
 
                         </div>
 
+
                         {{-- ============================= --}}
                         {{-- DATA DE ENTREGA                --}}
                         {{-- ============================= --}}
@@ -181,10 +184,15 @@
                             <input
                                 type="date"
                                 name="data_entrega"
-                                value="{{ old('data_entrega') }}"
+                                value="{{ old('data_entrega', now()->format('Y-m-d')) }}"
+                                min="{{ now()->format('Y-m-d') }}"
                                 class="form-control"
                                 required
                             >
+
+                            <div class="form-text">
+                                A data deve ser hoje ou uma data futura.
+                            </div>
 
                             @error('data_entrega')
                                 <div class="text-danger small mt-1">
@@ -193,6 +201,7 @@
                             @enderror
 
                         </div>
+
 
                         {{-- ============================= --}}
                         {{-- MÓDULO                         --}}
@@ -241,6 +250,7 @@
 
                         </div>
 
+
                         {{-- ============================= --}}
                         {{-- CATEGORIA                      --}}
                         {{-- ============================= --}}
@@ -280,6 +290,7 @@
 
                         </div>
 
+
                         {{-- ============================= --}}
                         {{-- FINALIDADE                     --}}
                         {{-- ============================= --}}
@@ -299,7 +310,12 @@
 
                                     <option
                                         value="{{ $valor }}"
-                                        @selected(old('finalidade_atividade', 'FIXACAO') === $valor)
+                                        @selected(
+                                            old(
+                                                'finalidade_atividade',
+                                                'FIXACAO'
+                                            ) === $valor
+                                        )
                                     >
                                         {{ $label }}
                                     </option>
@@ -315,6 +331,7 @@
                             @enderror
 
                         </div>
+
 
                         {{-- ============================= --}}
                         {{-- DESCRIÇÃO                      --}}
@@ -340,8 +357,9 @@
 
                         </div>
 
+
                         {{-- ============================= --}}
-                        {{-- ÁUDIO DA ATIVIDADE              --}}
+                        {{-- ÁUDIO DA ATIVIDADE             --}}
                         {{-- ============================= --}}
 
                         <div
@@ -499,7 +517,6 @@
 
                             <div class="row g-2">
 
-                                {{-- OPÇÃO A --}}
                                 <div class="col-md-6">
 
                                     <label class="form-label">
@@ -514,7 +531,6 @@
 
                                 </div>
 
-                                {{-- OPÇÃO B --}}
                                 <div class="col-md-6">
 
                                     <label class="form-label">
@@ -529,7 +545,6 @@
 
                                 </div>
 
-                                {{-- OPÇÃO C --}}
                                 <div class="col-md-6">
 
                                     <label class="form-label">
@@ -544,7 +559,6 @@
 
                                 </div>
 
-                                {{-- OPÇÃO D --}}
                                 <div class="col-md-6">
 
                                     <label class="form-label">
@@ -559,7 +573,6 @@
 
                                 </div>
 
-                                {{-- RESPOSTA CORRETA --}}
                                 <div class="col-md-3">
 
                                     <label class="form-label">
@@ -570,21 +583,10 @@
                                         name="resposta_correta[]"
                                         class="form-select"
                                     >
-                                        <option value="A">
-                                            A
-                                        </option>
-
-                                        <option value="B">
-                                            B
-                                        </option>
-
-                                        <option value="C">
-                                            C
-                                        </option>
-
-                                        <option value="D">
-                                            D
-                                        </option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
                                     </select>
 
                                 </div>
@@ -684,9 +686,11 @@ if (audioAtividade) {
             }
 
             if (previewAudioAtividade.src) {
+
                 URL.revokeObjectURL(
                     previewAudioAtividade.src
                 );
+
             }
 
             if (this.files.length) {
@@ -707,6 +711,7 @@ if (audioAtividade) {
 
                 previewAudioAtividade.style.display =
                     'none';
+
             }
 
         }
@@ -755,10 +760,10 @@ function atualizarAudioAtividade() {
             ? 'block'
             : 'none';
 
+
     /*
      * Quando não for necessário áudio,
-     * limpamos o campo para evitar
-     * enviar um arquivo desnecessário.
+     * limpamos o campo.
      */
 
     if (
@@ -776,7 +781,9 @@ function atualizarAudioAtividade() {
 
             previewAudioAtividade.style.display =
                 'none';
+
         }
+
     }
 
 }
@@ -852,6 +859,7 @@ function atualizarTiposDasQuestoes() {
             if (!opcaoAudio) {
                 return;
             }
+
 
             /*
              * Mostra ou esconde a opção
@@ -1019,8 +1027,7 @@ document
 
 
             /*
-             * Garante que o botão de remover
-             * funcione na nova questão.
+             * Adiciona a nova questão.
              */
 
             document

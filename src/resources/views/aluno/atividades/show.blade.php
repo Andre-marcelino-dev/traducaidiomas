@@ -1,72 +1,46 @@
-
 @extends('aluno.layout.aluno')
 
 @section('content')
 
 <div class="app-content-header">
-
     <div class="container-fluid">
-
         <div class="row align-items-center">
 
             <div class="col-sm-6">
-
                 <h3 class="mb-0 fw-bold">
-
                     {{ $atividade->titulo_atividade }}
-
                 </h3>
-
             </div>
 
-
             <div class="col-sm-6">
-
                 <ol class="breadcrumb float-sm-end mb-0">
 
                     <li class="breadcrumb-item">
-
                         <a href="{{ route('aluno.dash') }}">
-
                             Home
-
                         </a>
-
                     </li>
-
 
                     <li class="breadcrumb-item">
-
                         <a href="{{ route('aluno.atividades.index') }}">
-
                             Atividades
-
                         </a>
-
                     </li>
 
-
                     <li class="breadcrumb-item active">
-
                         Responder
-
                     </li>
 
                 </ol>
-
             </div>
 
         </div>
-
     </div>
-
 </div>
 
 
 <div class="app-content">
-
     <div class="container-fluid">
-
 
         {{-- ========================================================= --}}
         {{-- MENSAGENS --}}
@@ -78,7 +52,6 @@
                 class="alert alert-success alert-dismissible fade show mb-4"
                 role="alert"
             >
-
                 <i class="fas fa-circle-check me-2"></i>
 
                 {{ session('success') }}
@@ -88,29 +61,10 @@
                     class="btn-close"
                     data-bs-dismiss="alert"
                 ></button>
-
             </div>
 
         @endif
 
-<<<<<<< HEAD
-=======
-        {{-- Áudio da atividade --}}
-        @if($atividade->arquivo_audio)
-            <div class="d-card fade-up mb-4">
-                <div class="card-body p-3 d-flex align-items-center gap-3">
-                    <div class="tbl-icon-wrap" style="min-width:38px;"><i class="fas fa-headphones"></i></div>
-                    <div class="flex-grow-1">
-                        <div style="font-weight:600;font-size:.88rem;color:#1e293b;margin-bottom:.4rem;">Ouça o áudio da atividade</div>
-                        <audio controls preload="none" class="w-100" src="{{ route('aluno.atividades.audio', $atividade->id_atividade) }}"></audio>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        @if($resposta && in_array($resposta->status_resposta, ['ENVIADA', 'CORRIGIDA']))
-            {{-- ══ JÁ RESPONDEU ══ --}}
->>>>>>> 6f578f56ecd30dc7830ded11ab7a911becaaacd1
 
         @if(session('error'))
 
@@ -118,7 +72,6 @@
                 class="alert alert-danger alert-dismissible fade show mb-4"
                 role="alert"
             >
-
                 <i class="fas fa-circle-exclamation me-2"></i>
 
                 {{ session('error') }}
@@ -128,7 +81,6 @@
                     class="btn-close"
                     data-bs-dismiss="alert"
                 ></button>
-
             </div>
 
         @endif
@@ -143,22 +95,16 @@
             <div class="alert alert-danger mb-4">
 
                 <div class="fw-bold mb-2">
-
                     <i class="fas fa-circle-exclamation me-1"></i>
-
                     Verifique os seguintes erros:
-
                 </div>
-
 
                 <ul class="mb-0">
 
                     @foreach($errors->all() as $erro)
 
                         <li>
-
                             {{ $erro }}
-
                         </li>
 
                     @endforeach
@@ -184,11 +130,8 @@
                         class="tbl-icon-wrap"
                         style="min-width:38px;"
                     >
-
                         <i class="fas fa-circle-info"></i>
-
                     </div>
-
 
                     <div>
 
@@ -213,7 +156,6 @@
 
                         </div>
 
-
                         <div
                             style="
                                 font-size:.82rem;
@@ -221,9 +163,7 @@
                                 line-height:1.6;
                             "
                         >
-
                             {{ $atividade->descricao_atividade }}
-
                         </div>
 
                     </div>
@@ -257,13 +197,11 @@
                         @if($atividade->tipo_atividade === 'conversa')
 
                             <i class="fas fa-headphones text-primary"></i>
-
                             Áudio da Conversa
 
                         @else
 
                             <i class="fas fa-volume-high text-primary"></i>
-
                             Áudio da Leitura
 
                         @endif
@@ -271,7 +209,6 @@
                     </h6>
 
                 </div>
-
 
                 <div class="card-body p-3">
 
@@ -291,7 +228,6 @@
 
                         </div>
 
-
                         <div class="audio-atividade-info">
 
                             <div class="audio-atividade-titulo">
@@ -308,31 +244,25 @@
 
                             </div>
 
-
                             <div class="audio-atividade-subtitulo">
-
                                 Você pode ouvir quantas vezes precisar.
-
                             </div>
 
                         </div>
 
                     </div>
 
-
                     <audio
                         controls
                         preload="metadata"
                         class="audio-player"
                     >
-
                         <source
                             src="{{ asset('storage/' . $atividade->audio) }}"
                             type="audio/mpeg"
                         >
 
                         Seu navegador não suporta reprodução de áudio.
-
                     </audio>
 
                 </div>
@@ -353,7 +283,6 @@
                 ['ENVIADA', 'CORRIGIDA']
             )
         )
-
 
             {{-- ===================================================== --}}
             {{-- CORRIGIDA --}}
@@ -391,7 +320,6 @@
                                     justify-content:center;
                                 "
                             >
-
                                 <i
                                     class="fas fa-check-circle"
                                     style="
@@ -399,9 +327,7 @@
                                         color:#16a34a;
                                     "
                                 ></i>
-
                             </div>
-
 
                             <div class="flex-grow-1">
 
@@ -412,11 +338,8 @@
                                         color:#065f46;
                                     "
                                 >
-
                                     Atividade Corrigida
-
                                 </div>
-
 
                                 <div
                                     style="
@@ -424,13 +347,10 @@
                                         color:#16a34a;
                                     "
                                 >
-
                                     Seu professor avaliou suas respostas
-
                                 </div>
 
                             </div>
-
 
                             <div style="text-align:center;">
 
@@ -442,11 +362,8 @@
                                         line-height:1;
                                     "
                                 >
-
                                     {{ $resposta->nota }}
-
                                 </div>
-
 
                                 <div
                                     style="
@@ -457,9 +374,7 @@
                                         letter-spacing:.08em;
                                     "
                                 >
-
                                     /10
-
                                 </div>
 
                             </div>
@@ -488,11 +403,8 @@
                                         margin-bottom:.3rem;
                                     "
                                 >
-
                                     Feedback do Professor
-
                                 </div>
-
 
                                 <div
                                     style="
@@ -501,9 +413,7 @@
                                         line-height:1.5;
                                     "
                                 >
-
                                     {{ $resposta->feedback_professor }}
-
                                 </div>
 
                             </div>
@@ -515,7 +425,6 @@
                 </div>
 
             @else
-
 
                 {{-- ================================================= --}}
                 {{-- ENVIADA --}}
@@ -542,11 +451,8 @@
                                 color:#b45309;
                             "
                         >
-
                             <i class="fas fa-paper-plane"></i>
-
                         </div>
-
 
                         <div>
 
@@ -554,19 +460,14 @@
                                 class="dash-ok-title"
                                 style="color:#92400e;"
                             >
-
                                 Atividade enviada!
-
                             </div>
-
 
                             <div
                                 class="dash-ok-sub"
                                 style="color:#b45309;"
                             >
-
                                 Aguardando correção do professor.
-
                             </div>
 
                         </div>
@@ -587,18 +488,13 @@
                 <div class="d-card-header">
 
                     <h6>
-
                         <i class="fas fa-clipboard-check text-success"></i>
-
                         Suas Respostas
-
                     </h6>
 
                 </div>
 
-
                 <div class="card-body p-3">
-
 
                     @foreach($atividade->questoes as $i => $questao)
 
@@ -612,7 +508,6 @@
                                 );
 
                         @endphp
-
 
                         <div
                             style="
@@ -647,11 +542,8 @@
                                         flex-shrink:0;
                                     "
                                 >
-
                                     {{ $i + 1 }}
-
                                 </span>
-
 
                                 <div
                                     style="
@@ -662,9 +554,7 @@
                                 >
 
                                     @if($atividade->tipo_atividade === 'pronuncia')
-
                                         Pronuncie:
-
                                     @endif
 
                                     {{ $questao->enunciado }}
@@ -687,20 +577,14 @@
                                         <div class="audio-resposta-enviada">
 
                                             <div class="audio-resposta-icon">
-
                                                 <i class="fas fa-microphone"></i>
-
                                             </div>
-
 
                                             <div>
 
                                                 <div class="audio-resposta-titulo">
-
                                                     Sua pronúncia
-
                                                 </div>
-
 
                                                 <audio
                                                     controls
@@ -709,14 +593,12 @@
                                                         audio-player-small
                                                     "
                                                 >
-
                                                     <source
                                                         src="{{ asset('storage/' . $rq->audio_resposta) }}"
                                                     >
 
                                                     Seu navegador não suporta
                                                     reprodução de áudio.
-
                                                 </audio>
 
                                             </div>
@@ -734,9 +616,7 @@
                                                 border:1px solid #e2e8f0;
                                             "
                                         >
-
                                             Nenhuma gravação enviada.
-
                                         </div>
 
                                     @endif
@@ -759,21 +639,14 @@
                                 >
 
                                     A) {{ $questao->opcao_a }}
-
                                     &nbsp;&nbsp;
-
                                     B) {{ $questao->opcao_b }}
-
                                     &nbsp;&nbsp;
-
                                     C) {{ $questao->opcao_c }}
-
                                     &nbsp;&nbsp;
-
                                     D) {{ $questao->opcao_d }}
 
                                 </div>
-
 
                                 <div
                                     style="
@@ -786,9 +659,7 @@
                                     Sua resposta:
 
                                     <strong style="color:#1e293b;">
-
                                         {{ $rq?->resposta_aluno ?? '—' }}
-
                                     </strong>
 
 
@@ -803,11 +674,8 @@
                                                     ms-2
                                                 "
                                             >
-
                                                 <span class="tbl-status-dot"></span>
-
                                                 Correta
-
                                             </span>
 
                                         @else
@@ -819,11 +687,8 @@
                                                     ms-2
                                                 "
                                             >
-
                                                 <span class="tbl-status-dot"></span>
-
                                                 Errada
-
                                             </span>
 
                                         @endif
@@ -846,20 +711,14 @@
                                         <div class="audio-resposta-enviada">
 
                                             <div class="audio-resposta-icon">
-
                                                 <i class="fas fa-microphone"></i>
-
                                             </div>
-
 
                                             <div>
 
                                                 <div class="audio-resposta-titulo">
-
                                                     Sua gravação
-
                                                 </div>
-
 
                                                 <audio
                                                     controls
@@ -868,14 +727,12 @@
                                                         audio-player-small
                                                     "
                                                 >
-
                                                     <source
                                                         src="{{ asset('storage/' . $rq->audio_resposta) }}"
                                                     >
 
                                                     Seu navegador não suporta
                                                     reprodução de áudio.
-
                                                 </audio>
 
                                             </div>
@@ -893,9 +750,7 @@
                                                 border:1px solid #e2e8f0;
                                             "
                                         >
-
                                             Nenhuma gravação enviada.
-
                                         </div>
 
                                     @endif
@@ -921,9 +776,7 @@
                                         border:1px solid #e2e8f0;
                                     "
                                 >
-
                                     {{ $rq?->resposta_aluno ?? '—' }}
-
                                 </div>
 
                             @endif
@@ -941,16 +794,12 @@
                 href="{{ route('aluno.atividades.index') }}"
                 class="del-btn-cancelar mb-5"
             >
-
                 <i class="fas fa-arrow-left me-1"></i>
-
                 Voltar para Atividades
-
             </a>
 
 
         @else
-
 
             {{-- ========================================================= --}}
             {{-- FORMULÁRIO --}}
@@ -997,11 +846,8 @@
                                         font-weight:700;
                                     "
                                 >
-
                                     {{ $i + 1 }}
-
                                 </span>
-
 
                                 Questão {{ $i + 1 }}
 
@@ -1015,41 +861,29 @@
                             @if($atividade->tipo_atividade === 'pronuncia')
 
                                 <span class="tbl-badge">
-
                                     <i class="fas fa-microphone me-1"></i>
-
                                     Pronúncia
-
                                 </span>
 
                             @elseif($questao->tipo_questao === 'multipla_escolha')
 
                                 <span class="tbl-badge blue">
-
                                     <i class="fas fa-list-ol me-1"></i>
-
                                     Múltipla Escolha
-
                                 </span>
 
                             @elseif($questao->tipo_questao === 'audio')
 
                                 <span class="tbl-badge">
-
                                     <i class="fas fa-microphone me-1"></i>
-
                                     Resposta em Áudio
-
                                 </span>
 
                             @else
 
                                 <span class="tbl-badge">
-
                                     <i class="fas fa-pen me-1"></i>
-
                                     Dissertativa
-
                                 </span>
 
                             @endif
@@ -1059,7 +893,6 @@
 
                         <div class="card-body p-3">
 
-
                             {{-- ================================================= --}}
                             {{-- TESTE DE PRONÚNCIA --}}
                             {{-- ================================================= --}}
@@ -1068,110 +901,74 @@
 
                                 <div class="teste-pronuncia">
 
-
-                                    {{-- CABEÇALHO --}}
-
                                     <div class="teste-pronuncia-topo">
 
                                         <div class="teste-pronuncia-icone">
-
                                             <i class="fas fa-microphone"></i>
-
                                         </div>
-
 
                                         <div>
 
                                             <div class="teste-pronuncia-titulo">
-
                                                 Teste de Pronúncia
-
                                             </div>
 
-
                                             <div class="teste-pronuncia-subtitulo">
-
                                                 Leia a frase abaixo e grave sua
                                                 pronúncia.
-
                                             </div>
 
                                         </div>
 
                                     </div>
 
-
-                                    {{-- FRASE --}}
 
                                     <div class="teste-pronuncia-frase">
 
                                         <div class="teste-pronuncia-label">
-
                                             <i class="fas fa-volume-high me-1"></i>
-
                                             Pronuncie:
-
                                         </div>
 
-
                                         <div class="teste-pronuncia-texto">
-
                                             {{ $questao->enunciado }}
-
                                         </div>
 
                                     </div>
 
 
-                                    {{-- CONTROLES --}}
-
                                     <div class="teste-pronuncia-controles">
-
 
                                         <button
                                             type="button"
                                             class="btn-gravar-pronuncia"
                                             data-questao="{{ $questao->id_questao }}"
                                         >
-
                                             <i class="fas fa-microphone"></i>
-
                                             Gravar minha pronúncia
-
                                         </button>
-
 
                                         <button
                                             type="button"
                                             class="btn-parar-pronuncia d-none"
                                             data-questao="{{ $questao->id_questao }}"
                                         >
-
                                             <i class="fas fa-stop"></i>
-
                                             Parar gravação
-
                                         </button>
 
                                     </div>
 
 
-                                    {{-- STATUS --}}
-
                                     <div
                                         class="status-pronuncia"
                                         id="status-pronuncia-{{ $questao->id_questao }}"
                                     >
-
                                         <i class="fas fa-circle-info"></i>
-
                                         Clique em "Gravar minha pronúncia"
                                         para começar.
-
                                     </div>
 
-
-                                    {{-- PREVIEW --}}
 
                                     <audio
                                         controls
@@ -1179,8 +976,6 @@
                                         id="preview-pronuncia-{{ $questao->id_questao }}"
                                     ></audio>
 
-
-                                    {{-- INPUT REAL --}}
 
                                     <input
                                         type="file"
@@ -1200,7 +995,6 @@
 
                             @elseif($questao->tipo_questao === 'multipla_escolha')
 
-
                                 <p
                                     style="
                                         font-weight:600;
@@ -1209,9 +1003,7 @@
                                         margin-bottom:1rem;
                                     "
                                 >
-
                                     {{ $questao->enunciado }}
-
                                 </p>
 
 
@@ -1236,18 +1028,12 @@
                                                     class="atv-radio"
                                                 >
 
-
                                                 <span class="atv-option-letra">
-
                                                     {{ $letra }}
-
                                                 </span>
 
-
                                                 <span class="atv-option-text">
-
                                                     {{ $opcao }}
-
                                                 </span>
 
                                             </label>
@@ -1265,7 +1051,6 @@
 
                             @elseif($questao->tipo_questao === 'audio')
 
-
                                 <p
                                     style="
                                         font-weight:600;
@@ -1274,38 +1059,27 @@
                                         margin-bottom:1rem;
                                     "
                                 >
-
                                     {{ $questao->enunciado }}
-
                                 </p>
 
 
                                 <div class="audio-gravacao-container">
 
-
                                     <div class="audio-gravacao-info">
 
                                         <div class="audio-gravacao-icon">
-
                                             <i class="fas fa-microphone"></i>
-
                                         </div>
-
 
                                         <div>
 
                                             <div class="audio-gravacao-titulo">
-
                                                 Grave sua resposta
-
                                             </div>
 
-
                                             <div class="audio-gravacao-subtitulo">
-
                                                 Clique em gravar e fale sua
                                                 resposta.
-
                                             </div>
 
                                         </div>
@@ -1320,24 +1094,17 @@
                                             class="btn-gravar-audio"
                                             data-questao="{{ $questao->id_questao }}"
                                         >
-
                                             <i class="fas fa-microphone"></i>
-
                                             Gravar
-
                                         </button>
-
 
                                         <button
                                             type="button"
                                             class="btn-parar-audio d-none"
                                             data-questao="{{ $questao->id_questao }}"
                                         >
-
                                             <i class="fas fa-stop"></i>
-
                                             Parar
-
                                         </button>
 
                                     </div>
@@ -1347,9 +1114,7 @@
                                         class="audio-status"
                                         id="audio-status-{{ $questao->id_questao }}"
                                     >
-
                                         Aguardando gravação...
-
                                     </div>
 
 
@@ -1378,7 +1143,6 @@
 
                             @else
 
-
                                 <p
                                     style="
                                         font-weight:600;
@@ -1387,9 +1151,7 @@
                                         margin-bottom:1rem;
                                     "
                                 >
-
                                     {{ $questao->enunciado }}
-
                                 </p>
 
 
@@ -1404,7 +1166,6 @@
                                         border-color:#e2e8f0;
                                     "
                                 ></textarea>
-
 
                             @endif
 
@@ -1428,7 +1189,6 @@
                     "
                 >
 
-
                     <button
                         type="submit"
                         class="tbl-btn-success"
@@ -1439,11 +1199,8 @@
                         id="btnEnviarAtividade"
                         onclick="return confirmarEnvio()"
                     >
-
                         <i class="fas fa-paper-plane"></i>
-
                         Enviar Atividade
-
                     </button>
 
 
@@ -1451,11 +1208,8 @@
                         href="{{ route('aluno.atividades.index') }}"
                         class="del-btn-cancelar"
                     >
-
                         <i class="fas fa-arrow-left"></i>
-
                         Cancelar
-
                     </a>
 
                 </div>
@@ -1465,7 +1219,6 @@
         @endif
 
     </div>
-
 </div>
 
 
@@ -1473,117 +1226,71 @@
 
 <style>
 
-
 /* ============================================================= */
 /* MÚLTIPLA ESCOLHA */
 /* ============================================================= */
 
 .atv-option {
-
     display:flex;
-
     align-items:center;
-
     gap:.75rem;
-
     padding:.75rem 1rem;
-
     border:1.5px solid #e2e8f0;
-
     border-radius:12px;
-
     cursor:pointer;
-
     transition:all .2s;
-
     background:#fff;
-
 }
-
 
 .atv-option:hover {
-
     border-color:#6366f1;
-
     background:#f5f3ff;
-
 }
 
-
 .atv-option:has(input:checked) {
-
     border-color:#6366f1;
-
     background:linear-gradient(
         135deg,
         #eef3ff,
         #e0e7ff
     );
-
     box-shadow:
         0 2px 8px rgba(99,102,241,.12);
-
 }
-
 
 .atv-radio {
-
     display:none;
-
 }
-
 
 .atv-option-letra {
-
     width:32px;
-
     height:32px;
-
     border-radius:8px;
-
     background:#f1f5f9;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     font-weight:700;
-
     font-size:.82rem;
-
     color:#64748b;
-
     flex-shrink:0;
-
     transition:all .2s;
-
 }
-
 
 .atv-option:has(input:checked)
 .atv-option-letra {
-
     background:linear-gradient(
         135deg,
         #6366f1,
         #818cf8
     );
-
     color:#fff;
-
 }
 
-
 .atv-option-text {
-
     font-size:.88rem;
-
     color:#1e293b;
-
     font-weight:500;
-
 }
 
 
@@ -1592,86 +1299,48 @@
 /* ============================================================= */
 
 .audio-atividade {
-
     display:flex;
-
     align-items:center;
-
     gap:1rem;
-
     padding:1rem;
-
     border-radius:12px;
-
     background:#f8fafc;
-
     border:1px solid #e2e8f0;
-
     margin-bottom:1rem;
-
 }
-
 
 .audio-atividade-icon {
-
     width:48px;
-
     height:48px;
-
     border-radius:12px;
-
     background:#eef2ff;
-
     color:#6366f1;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     flex-shrink:0;
-
     font-size:1.2rem;
-
 }
-
 
 .audio-atividade-info {
-
     flex:1;
-
 }
-
 
 .audio-atividade-titulo {
-
     font-weight:700;
-
     color:#1e293b;
-
     font-size:.9rem;
-
 }
-
 
 .audio-atividade-subtitulo {
-
     color:#64748b;
-
     font-size:.78rem;
-
     margin-top:.2rem;
-
 }
 
-
 .audio-player {
-
     width:100%;
-
     height:42px;
-
 }
 
 
@@ -1680,219 +1349,120 @@
 /* ============================================================= */
 
 .teste-pronuncia {
-
     border:1.5px solid #e2e8f0;
-
     border-radius:16px;
-
     padding:1.25rem;
-
     background:#fafbfc;
-
 }
-
 
 .teste-pronuncia-topo {
-
     display:flex;
-
     align-items:center;
-
     gap:.85rem;
-
     margin-bottom:1.25rem;
-
 }
-
 
 .teste-pronuncia-icone {
-
     width:50px;
-
     height:50px;
-
     border-radius:14px;
-
     background:#eef2ff;
-
     color:#6366f1;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     font-size:1.25rem;
-
     flex-shrink:0;
-
 }
-
 
 .teste-pronuncia-titulo {
-
     font-size:.95rem;
-
     font-weight:700;
-
     color:#1e293b;
-
 }
-
 
 .teste-pronuncia-subtitulo {
-
     margin-top:.2rem;
-
     font-size:.78rem;
-
     color:#64748b;
-
 }
-
 
 .teste-pronuncia-frase {
-
     background:#fff;
-
     border:1px solid #e2e8f0;
-
     border-radius:12px;
-
     padding:1rem;
-
     margin-bottom:1rem;
-
 }
-
 
 .teste-pronuncia-label {
-
     font-size:.68rem;
-
     font-weight:700;
-
     text-transform:uppercase;
-
     letter-spacing:.06em;
-
     color:#6366f1;
-
     margin-bottom:.45rem;
-
 }
-
 
 .teste-pronuncia-texto {
-
     font-size:1rem;
-
     font-weight:600;
-
     line-height:1.6;
-
     color:#1e293b;
-
 }
-
 
 .teste-pronuncia-controles {
-
     display:flex;
-
     gap:.6rem;
-
     flex-wrap:wrap;
-
 }
-
 
 .btn-gravar-pronuncia,
-
 .btn-parar-pronuncia {
-
     border:none;
-
     border-radius:10px;
-
     padding:.7rem 1.1rem;
-
     font-size:.82rem;
-
     font-weight:700;
-
     cursor:pointer;
-
     transition:all .2s;
-
 }
-
 
 .btn-gravar-pronuncia {
-
     background:#dc2626;
-
     color:#fff;
-
 }
-
 
 .btn-gravar-pronuncia:hover {
-
     background:#b91c1c;
-
     transform:translateY(-1px);
-
 }
-
 
 .btn-parar-pronuncia {
-
     background:#1e293b;
-
     color:#fff;
-
 }
-
 
 .btn-parar-pronuncia:hover {
-
     background:#0f172a;
-
     transform:translateY(-1px);
-
 }
-
 
 .status-pronuncia {
-
     margin-top:.8rem;
-
     color:#64748b;
-
     font-size:.76rem;
-
     line-height:1.5;
-
 }
-
 
 .preview-pronuncia {
-
     width:100%;
-
     height:42px;
-
     margin-top:.8rem;
-
 }
 
-
 .input-pronuncia {
-
     display:none;
-
 }
 
 
@@ -1901,168 +1471,93 @@
 /* ============================================================= */
 
 .audio-gravacao-container {
-
     border:1.5px solid #e2e8f0;
-
     border-radius:14px;
-
     padding:1rem;
-
     background:#fafbfc;
-
 }
-
 
 .audio-gravacao-info {
-
     display:flex;
-
     align-items:center;
-
     gap:.75rem;
-
     margin-bottom:1rem;
-
 }
-
 
 .audio-gravacao-icon {
-
     width:44px;
-
     height:44px;
-
     border-radius:12px;
-
     background:#fef2f2;
-
     color:#dc2626;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     flex-shrink:0;
-
 }
-
 
 .audio-gravacao-titulo {
-
     font-weight:700;
-
     font-size:.9rem;
-
     color:#1e293b;
-
 }
-
 
 .audio-gravacao-subtitulo {
-
     font-size:.78rem;
-
     color:#64748b;
-
     margin-top:.15rem;
-
 }
-
 
 .audio-gravacao-botoes {
-
     display:flex;
-
     gap:.5rem;
-
     flex-wrap:wrap;
-
 }
-
 
 .btn-gravar-audio,
-
 .btn-parar-audio {
-
     border:none;
-
     border-radius:10px;
-
     padding:.65rem 1rem;
-
     font-size:.82rem;
-
     font-weight:600;
-
     cursor:pointer;
-
     transition:all .2s;
-
 }
-
 
 .btn-gravar-audio {
-
     background:#dc2626;
-
     color:#fff;
-
 }
-
 
 .btn-gravar-audio:hover {
-
     background:#b91c1c;
-
 }
-
 
 .btn-parar-audio {
-
     background:#1e293b;
-
     color:#fff;
-
 }
-
 
 .btn-parar-audio:hover {
-
     background:#0f172a;
-
 }
-
 
 .audio-status {
-
     margin-top:.75rem;
-
     font-size:.75rem;
-
     color:#64748b;
-
     line-height:1.5;
-
 }
-
 
 .audio-preview {
-
     width:100%;
-
     margin-top:.75rem;
-
     height:40px;
-
 }
 
-
 .audio-input {
-
     display:none;
-
 }
 
 
@@ -2071,60 +1566,34 @@
 /* ============================================================= */
 
 .audio-resposta-enviada {
-
     display:flex;
-
     align-items:center;
-
     gap:.75rem;
-
 }
-
 
 .audio-resposta-icon {
-
     width:38px;
-
     height:38px;
-
     border-radius:10px;
-
     background:#eef2ff;
-
     color:#6366f1;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     flex-shrink:0;
-
 }
-
 
 .audio-resposta-titulo {
-
     font-size:.8rem;
-
     font-weight:700;
-
     color:#334155;
-
     margin-bottom:.3rem;
-
 }
 
-
 .audio-player-small {
-
     width:300px;
-
     max-width:100%;
-
     height:36px;
-
 }
 
 
@@ -2133,33 +1602,24 @@
 /* ============================================================= */
 
 .gravando {
-
     animation:pulsarMicrofone 1.2s infinite;
-
 }
-
 
 @keyframes pulsarMicrofone {
 
     0% {
-
         box-shadow:
             0 0 0 0 rgba(220,38,38,.35);
-
     }
 
     70% {
-
         box-shadow:
             0 0 0 10px rgba(220,38,38,0);
-
     }
 
     100% {
-
         box-shadow:
             0 0 0 0 rgba(220,38,38,0);
-
     }
 
 }
@@ -2169,36 +1629,24 @@
 /* RESPONSIVO */
 /* ============================================================= */
 
-@media (max-width: 576px) {
+@media (max-width:576px) {
 
     .teste-pronuncia {
-
         padding:.9rem;
-
     }
-
 
     .teste-pronuncia-texto {
-
         font-size:.9rem;
-
     }
-
 
     .btn-gravar-pronuncia,
     .btn-parar-pronuncia {
-
         width:100%;
-
         justify-content:center;
-
     }
 
-
     .audio-resposta-enviada {
-
         align-items:flex-start;
-
     }
 
 }
@@ -2210,10 +1658,9 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
     /*
     |--------------------------------------------------------------------------
-    | GRAVAÇÕES
+    | CONTROLE DAS GRAVAÇÕES
     |--------------------------------------------------------------------------
     */
 
@@ -2222,42 +1669,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | MIME TYPE
+    | VERIFICAR SUPORTE
+    |--------------------------------------------------------------------------
+    */
+
+    function navegadorSuportaGravacao() {
+
+        return (
+            navigator.mediaDevices &&
+            typeof navigator.mediaDevices.getUserMedia === 'function' &&
+            typeof MediaRecorder !== 'undefined'
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DESCOBRIR MIME TYPE
     |--------------------------------------------------------------------------
     */
 
     function obterMimeType() {
 
-        const tipos = [
-
-            'audio/webm;codecs=opus',
-
-            'audio/webm',
-
-            'audio/ogg;codecs=opus',
-
-            'audio/ogg'
-
-        ];
-
-
         if (typeof MediaRecorder === 'undefined') {
-
             return '';
-
         }
 
+        const tipos = [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/ogg;codecs=opus',
+            'audio/ogg'
+        ];
 
         for (const tipo of tipos) {
 
             if (MediaRecorder.isTypeSupported(tipo)) {
-
                 return tipo;
-
             }
 
         }
-
 
         return '';
 
@@ -2266,7 +1718,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | EXTENSÃO
+    | EXTENSÃO DO ARQUIVO
     |--------------------------------------------------------------------------
     */
 
@@ -2274,37 +1726,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         mimeType = mimeType || '';
 
-
         if (mimeType.includes('ogg')) {
-
             return 'ogg';
-
         }
-
 
         if (
             mimeType.includes('mp4') ||
             mimeType.includes('m4a')
         ) {
-
             return 'm4a';
-
         }
-
 
         if (mimeType.includes('mpeg')) {
-
             return 'mp3';
-
         }
-
 
         if (mimeType.includes('wav')) {
-
             return 'wav';
-
         }
-
 
         return 'webm';
 
@@ -2313,73 +1752,78 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | GRAVAÇÃO GENÉRICA
+    | PEDIR PERMISSÃO DO MICROFONE
     |--------------------------------------------------------------------------
     */
 
-    async function iniciarGravacao(config) {
-
-
-        const {
-
-            idQuestao,
-
-            botaoGravar,
-
-            botaoParar,
-
-            status,
-
-            preview,
-
-            input,
-
-            textoGravando,
-
-            textoConcluido
-
-        } = config;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | VERIFICAR MICROFONE
-        |--------------------------------------------------------------------------
-        */
+    async function solicitarPermissaoMicrofone() {
 
         if (
             !navigator.mediaDevices ||
             !navigator.mediaDevices.getUserMedia
         ) {
 
-            status.innerHTML = `
-
-                <span style="color:#dc2626;">
-
-                    <i class="fas fa-circle-exclamation"></i>
-
-                    Seu navegador não permite gravação de áudio.
-
-                </span>
-
-            `;
-
-            return;
+            throw new Error(
+                'O navegador não disponibilizou acesso ao microfone.'
+            );
 
         }
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+
+        /*
+        |--------------------------------------------------------------
+        | IMPORTANTE:
+        |--------------------------------------------------------------
+        | Apenas estamos verificando a permissão.
+        | Depois desligamos o microfone.
+        */
+
+        stream
+            .getTracks()
+            .forEach(function (track) {
+                track.stop();
+            });
+
+        return true;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | INICIAR GRAVAÇÃO
+    |--------------------------------------------------------------------------
+    */
+
+    async function iniciarGravacao(config) {
+
+        const {
+            idQuestao,
+            botaoGravar,
+            botaoParar,
+            status,
+            preview,
+            input,
+            textoGravando,
+            textoConcluido
+        } = config;
 
 
         /*
         |--------------------------------------------------------------------------
-        | VERIFICAR MEDIA RECORDER
+        | SUPORTE DO NAVEGADOR
         |--------------------------------------------------------------------------
         */
 
-        if (typeof MediaRecorder === 'undefined') {
+        if (!navegadorSuportaGravacao()) {
 
             status.innerHTML = `
 
-                <span style="color:#dc2626;">
+                <span style="color:#dc2626;font-weight:600;">
 
                     <i class="fas fa-circle-exclamation"></i>
 
@@ -2396,7 +1840,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /*
         |--------------------------------------------------------------------------
-        | EVITAR DUAS GRAVAÇÕES AO MESMO TEMPO
+        | VERIFICAR SE JÁ EXISTE OUTRA GRAVAÇÃO
         |--------------------------------------------------------------------------
         */
 
@@ -2424,13 +1868,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        try {
+        /*
+        |--------------------------------------------------------------------------
+        | STATUS
+        |--------------------------------------------------------------------------
+        */
 
+        status.innerHTML = `
+
+            <span style="color:#6366f1;font-weight:600;">
+
+                <i class="fas fa-spinner fa-spin"></i>
+
+                Solicitando acesso ao microfone...
+
+            </span>
+
+        `;
+
+
+        try {
 
             /*
             |--------------------------------------------------------------------------
-            | MICROFONE
+            | PEDIR MICROFONE
             |--------------------------------------------------------------------------
+            |
+            | É AQUI que o Chrome irá mostrar:
+            |
+            | "localhost:8081 deseja usar seu microfone"
+            |
             */
 
             const stream =
@@ -2451,7 +1918,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             /*
             |--------------------------------------------------------------------------
-            | FORMATO
+            | MIME TYPE
             |--------------------------------------------------------------------------
             */
 
@@ -2461,7 +1928,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             /*
             |--------------------------------------------------------------------------
-            | RECORDER
+            | CRIAR MEDIA RECORDER
             |--------------------------------------------------------------------------
             */
 
@@ -2483,7 +1950,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             /*
             |--------------------------------------------------------------------------
-            | DADOS
+            | RECEBER DADOS
             |--------------------------------------------------------------------------
             */
 
@@ -2514,7 +1981,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 'stop',
                 function () {
 
-
                     const tipoAudio =
                         recorder.mimeType ||
                         mimeType ||
@@ -2523,7 +1989,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     /*
                     |--------------------------------------------------------------------------
-                    | BLOB
+                    | CRIAR BLOB
                     |--------------------------------------------------------------------------
                     */
 
@@ -2548,7 +2014,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     /*
                     |--------------------------------------------------------------------------
-                    | ARQUIVO
+                    | CRIAR FILE
                     |--------------------------------------------------------------------------
                     */
 
@@ -2558,7 +2024,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             `resposta_${idQuestao}.${extensao}`,
                             {
                                 type: tipoAudio,
-
                                 lastModified: Date.now()
                             }
                         );
@@ -2566,16 +2031,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     /*
                     |--------------------------------------------------------------------------
-                    | DATA TRANSFER
+                    | COLOCAR NO INPUT FILE
                     |--------------------------------------------------------------------------
                     */
 
                     const dataTransfer =
                         new DataTransfer();
 
-
                     dataTransfer.items.add(arquivo);
-
 
                     input.files =
                         dataTransfer.files;
@@ -2589,7 +2052,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const url =
                         URL.createObjectURL(blob);
-
 
                     preview.src = url;
 
@@ -2606,7 +2068,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     status.innerHTML = `
 
-                        <span style="color:#16a34a;font-weight:600;">
+                        <span
+                            style="
+                                color:#16a34a;
+                                font-weight:600;
+                            "
+                        >
 
                             <i class="fas fa-circle-check"></i>
 
@@ -2616,14 +2083,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         <br>
 
-                        Você pode ouvir sua gravação ou gravar novamente.
+                        <span style="color:#64748b;">
+
+                            Você pode ouvir sua gravação
+                            ou gravar novamente.
+
+                        </span>
 
                     `;
 
 
                     /*
                     |--------------------------------------------------------------------------
-                    | SALVAR REFERÊNCIA
+                    | SALVAR GRAVAÇÃO
                     |--------------------------------------------------------------------------
                     */
 
@@ -2644,7 +2116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     /*
                     |--------------------------------------------------------------------------
-                    | LIBERAR MICROFONE
+                    | DESLIGAR MICROFONE
                     |--------------------------------------------------------------------------
                     */
 
@@ -2671,7 +2143,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             /*
             |--------------------------------------------------------------------------
-            | SALVAR
+            | SALVAR ESTADO
             |--------------------------------------------------------------------------
             */
 
@@ -2718,6 +2190,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 </span>
 
+                <br>
+
                 ${textoGravando}
 
             `;
@@ -2725,23 +2199,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             /*
             |--------------------------------------------------------------------------
-            | PARAR
+            | BOTÃO PARAR
             |--------------------------------------------------------------------------
             */
 
             botaoParar.onclick =
                 function () {
 
-
                     if (
-                        recorder.state !==
-                        'inactive'
+                        recorder.state !== 'inactive'
                     ) {
 
                         recorder.stop();
 
                     }
-
 
                     botaoParar.classList.add('d-none');
 
@@ -2754,9 +2225,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (erro) {
 
-
             console.error(
-                'Erro ao gravar áudio:',
+                'Erro ao acessar o microfone:',
                 erro
             );
 
@@ -2768,13 +2238,18 @@ document.addEventListener('DOMContentLoaded', function () {
             */
 
             if (
-                erro.name ===
-                'NotAllowedError'
+                erro.name === 'NotAllowedError' ||
+                erro.name === 'PermissionDeniedError'
             ) {
 
                 status.innerHTML = `
 
-                    <span style="color:#dc2626;">
+                    <span
+                        style="
+                            color:#dc2626;
+                            font-weight:600;
+                        "
+                    >
 
                         <i class="fas fa-circle-exclamation"></i>
 
@@ -2784,10 +2259,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <br>
 
-                    Permita o acesso ao microfone no navegador
-                    para realizar o teste de pronúncia.
+                    <span style="color:#64748b;">
+
+                        Clique no ícone de cadeado
+                        ao lado do endereço do site
+                        e permita o uso do microfone.
+
+                    </span>
 
                 `;
+
+                return;
 
             }
 
@@ -2798,51 +2280,151 @@ document.addEventListener('DOMContentLoaded', function () {
             |--------------------------------------------------------------------------
             */
 
-            else if (
-                erro.name ===
-                'NotFoundError'
-            ) {
+            if (erro.name === 'NotFoundError') {
 
                 status.innerHTML = `
 
-                    <span style="color:#dc2626;">
+                    <span
+                        style="
+                            color:#dc2626;
+                            font-weight:600;
+                        "
+                    >
 
-                        <i class="fas fa-circle-exclamation"></i>
+                        <i class="fas fa-microphone-slash"></i>
 
-                        Nenhum microfone foi encontrado.
+                        Nenhum microfone disponível.
+
+                    </span>
+
+                    <br>
+
+                    <span style="color:#64748b;">
+
+                        Verifique se o computador possui
+                        um microfone conectado.
 
                     </span>
 
                 `;
+
+                return;
 
             }
 
 
             /*
             |--------------------------------------------------------------------------
-            | OUTRO ERRO
+            | MICROFONE OCUPADO
             |--------------------------------------------------------------------------
             */
 
-            else {
+            if (erro.name === 'NotReadableError') {
 
                 status.innerHTML = `
 
-                    <span style="color:#dc2626;">
+                    <span
+                        style="
+                            color:#dc2626;
+                            font-weight:600;
+                        "
+                    >
 
                         <i class="fas fa-circle-exclamation"></i>
 
-                        Não foi possível iniciar a gravação.
+                        Não foi possível acessar o microfone.
 
                     </span>
 
                     <br>
 
-                    Verifique as permissões do navegador.
+                    <span style="color:#64748b;">
+
+                        Verifique se outro programa
+                        está usando o microfone.
+
+                    </span>
 
                 `;
 
+                return;
+
             }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CONTEXTO INSEGURO
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                erro.name === 'SecurityError' ||
+                erro.name === 'TypeError'
+            ) {
+
+                status.innerHTML = `
+
+                    <span
+                        style="
+                            color:#dc2626;
+                            font-weight:600;
+                        "
+                    >
+
+                        <i class="fas fa-lock"></i>
+
+                        O navegador bloqueou o acesso ao microfone.
+
+                    </span>
+
+                    <br>
+
+                    <span style="color:#64748b;">
+
+                        Acesse a aplicação usando
+                        localhost ou HTTPS.
+
+                    </span>
+
+                `;
+
+                return;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ERRO GENÉRICO
+            |--------------------------------------------------------------------------
+            */
+
+            status.innerHTML = `
+
+                <span
+                    style="
+                        color:#dc2626;
+                        font-weight:600;
+                    "
+                >
+
+                    <i class="fas fa-circle-exclamation"></i>
+
+                    Não foi possível acessar o microfone.
+
+                </span>
+
+                <br>
+
+                <span style="color:#64748b;">
+
+                    Permita o uso do microfone
+                    nas configurações do navegador.
+
+                </span>
+
+            `;
 
         }
 
@@ -2851,7 +2433,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | BOTÃO DE PRONÚNCIA
+    | BOTÕES DE PRONÚNCIA
     |--------------------------------------------------------------------------
     */
 
@@ -2859,11 +2441,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .querySelectorAll('.btn-gravar-pronuncia')
         .forEach(function (botao) {
 
-
             botao.addEventListener(
                 'click',
                 async function () {
-
 
                     const idQuestao =
                         this.dataset.questao;
@@ -2923,7 +2503,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
     |--------------------------------------------------------------------------
-    | BOTÃO DE ÁUDIO NORMAL
+    | BOTÕES DE ÁUDIO NORMAL
     |--------------------------------------------------------------------------
     */
 
@@ -2931,11 +2511,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .querySelectorAll('.btn-gravar-audio')
         .forEach(function (botao) {
 
-
             botao.addEventListener(
                 'click',
                 async function () {
-
 
                     const idQuestao =
                         this.dataset.questao;
@@ -3001,7 +2579,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.confirmarEnvio = function () {
 
-
         const formulario =
             document.getElementById(
                 'formResposta'
@@ -3009,17 +2586,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         if (!formulario) {
-
             return true;
-
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | VERIFICAR GRAVAÇÕES
-        |--------------------------------------------------------------------------
-        */
 
         const audios =
             formulario.querySelectorAll(
@@ -3027,15 +2596,17 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
 
-        for (
-            const input of audios
-        ) {
-
+        for (const input of audios) {
 
             if (
                 !input.files ||
                 input.files.length === 0
             ) {
+
+                const isPronuncia =
+                    input.classList.contains(
+                        'input-pronuncia'
+                    );
 
 
                 const questao =
@@ -3048,12 +2619,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             'input-pronuncia-',
                             ''
                         );
-
-
-                const isPronuncia =
-                    input.classList.contains(
-                        'input-pronuncia'
-                    );
 
 
                 if (isPronuncia) {
@@ -3082,12 +2647,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CONFIRMAÇÃO
-        |--------------------------------------------------------------------------
-        */
-
         return confirm(
 
             'Tem certeza que deseja enviar a atividade?\n\n' +
@@ -3113,41 +2672,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (formulario) {
 
-
         formulario.addEventListener(
             'submit',
             function (event) {
-
 
                 const gravando =
                     Object.values(
                         gravacoes
                     ).some(function (item) {
 
-
                         return (
                             item &&
                             item.recorder &&
-                            item.recorder.state ===
-                            'recording'
+                            item.recorder.state === 'recording'
                         );
-
 
                     });
 
 
                 if (gravando) {
 
-
                     event.preventDefault();
 
-
                     alert(
-
                         'Pare a gravação antes de enviar a atividade.'
-
                     );
-
 
                 }
 
@@ -3163,4 +2712,3 @@ document.addEventListener('DOMContentLoaded', function () {
 @endpush
 
 @endsection
-```

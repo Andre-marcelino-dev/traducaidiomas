@@ -21,7 +21,6 @@ Route::prefix('v1')->group(function () {
 
         // Login possui seu próprio rate limit.
 
-<<<<<<< HEAD
         Route::post('/login', [AlunoApiAuthController::class, 'login'])
             ->middleware('throttle:login')
             ->name('login');
@@ -38,6 +37,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/me', [AlunoApiAuthController::class, 'me'])
                 ->name('me');
 
+            // Cursos
             Route::get('/cursos', [AlunoApiCursoController::class, 'index'])
                 ->name('cursos.index');
 
@@ -57,20 +57,31 @@ Route::prefix('v1')->group(function () {
 
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])
                 ->name('materiais.download');
-=======
-            Route::get('/cursos', [AlunoApiCursoController::class, 'index'])->name('cursos.index');
-            Route::get('/cursos/{idCurso}/modulos', [AlunoApiCursoController::class, 'modulos'])->name('cursos.modulos');
-            Route::get('/cursos/{idCurso}/materiais', [AlunoApiCursoController::class, 'materiais'])->name('cursos.materiais');
-            Route::get('/modulos/{idModulo}', [AlunoApiCursoController::class, 'modulo'])->name('modulos.show');
-            Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
-            Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
-            Route::post('/reagendamento/solicitar', [AlunoApiReagendamentoController::class, 'solicitar'])->name('reagendamento.solicitar');
 
-            Route::get('/atividades', [AlunoApiAtividadeController::class, 'index'])->name('atividades.index');
-            Route::get('/atividades/{id}', [AlunoApiAtividadeController::class, 'show'])->whereNumber('id')->name('atividades.show');
-            Route::get('/atividades/{id}/audio', [AlunoApiAtividadeController::class, 'audio'])->whereNumber('id')->name('atividades.audio');
-            Route::post('/atividades/{id}/responder', [AlunoApiAtividadeController::class, 'responder'])->whereNumber('id')->name('atividades.responder');
->>>>>>> 6f578f56ecd30dc7830ded11ab7a911becaaacd1
+            // Agenda
+            Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])
+                ->name('agenda.index');
+
+            // Reagendamento
+            Route::post('/reagendamento/solicitar', [AlunoApiReagendamentoController::class, 'solicitar'])
+                ->name('reagendamento.solicitar');
+
+            // Atividades
+            Route::get('/atividades', [AlunoApiAtividadeController::class, 'index'])
+                ->name('atividades.index');
+
+            Route::get('/atividades/{id}', [AlunoApiAtividadeController::class, 'show'])
+                ->whereNumber('id')
+                ->name('atividades.show');
+
+            Route::get('/atividades/{id}/audio', [AlunoApiAtividadeController::class, 'audio'])
+                ->whereNumber('id')
+                ->name('atividades.audio');
+
+            Route::post('/atividades/{id}/responder', [AlunoApiAtividadeController::class, 'responder'])
+                ->whereNumber('id')
+                ->name('atividades.responder');
+        });
         });
     });
 
@@ -145,4 +156,3 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/modulos/{id}', [ModuloController::class, 'show']);
     });
-});
