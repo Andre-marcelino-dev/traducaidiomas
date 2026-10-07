@@ -35,6 +35,17 @@ class TipoToken
             ], 403);
         }
 
+        // Aluno desativado depois de entrar: apaga as chaves dele e manda o app
+        // de volta para o login (401 = o app limpa a sessão sozinho).
+        if ($usuario instanceof Aluno && $usuario->estaInativo()) {
+            $usuario->tokens()->delete();
+
+            return response()->json([
+                'success' => false,
+                'message' => Aluno::MENSAGEM_INATIVO,
+            ], 401);
+        }
+
         return $next($request);
     }
 }

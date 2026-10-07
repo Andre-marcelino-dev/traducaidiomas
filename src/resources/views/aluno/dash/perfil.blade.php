@@ -118,65 +118,30 @@
                         🔒 Redefinir Senha
                     </div>
                     <div class="card-body">
-                        <ul class="nav nav-tabs mb-3" id="senhaTab">
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#comSenha">Sei minha senha</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#semSenha">Esqueci minha senha</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            {{-- COM SENHA ATUAL --}}
-                            <div class="tab-pane fade show active" id="comSenha">
-                                <form action="{{ route('aluno.perfil.senha') }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="modo" value="com_senha">
-                                    <div class="mb-3">
-                                        <label class="form-label">Senha Atual</label>
-                                        <input type="password" name="senha_atual" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nova Senha</label>
-                                        <input type="password" name="nova_senha" class="form-control" required minlength="6">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Confirmar Nova Senha</label>
-                                        <input type="password" name="nova_senha_confirmation" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-lock me-1"></i> Redefinir Senha
-                                    </button>
-                                </form>
+                        {{-- Só com a senha atual: trocar só com o e-mail deixava qualquer
+                             pessoa no computador do aluno logado roubar a conta. --}}
+                        <form action="{{ route('aluno.perfil.senha') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="mb-3">
+                                <label class="form-label">Senha Atual</label>
+                                <input type="password" name="senha_atual" class="form-control" required>
                             </div>
-                            {{-- SEM SENHA ATUAL --}}
-                            <div class="tab-pane fade" id="semSenha">
-                                <div class="alert alert-info small">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    Confirme seu email cadastrado e defina uma nova senha.
-                                </div>
-                                <form action="{{ route('aluno.perfil.senha') }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="modo" value="sem_senha">
-                                    <div class="mb-3">
-                                        <label class="form-label">Confirme seu Email</label>
-                                        <input type="email" name="email_confirmacao" class="form-control" required placeholder="Digite o email cadastrado">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nova Senha</label>
-                                        <input type="password" name="nova_senha" class="form-control" required minlength="6">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Confirmar Nova Senha</label>
-                                        <input type="password" name="nova_senha_confirmation" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-warning">
-                                        <i class="fas fa-key me-1"></i> Redefinir Senha
-                                    </button>
-                                </form>
+                            <div class="mb-3">
+                                <label class="form-label">Nova Senha</label>
+                                <input type="password" name="nova_senha" class="form-control" required minlength="6">
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirmar Nova Senha</label>
+                                <input type="password" name="nova_senha_confirmation" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-lock me-1"></i> Redefinir Senha
+                            </button>
+                        </form>
+                        <div class="alert alert-info small mt-3 mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Esqueceu sua senha atual? Peça para a escola redefinir pelo painel.
                         </div>
                     </div>
                 </div>

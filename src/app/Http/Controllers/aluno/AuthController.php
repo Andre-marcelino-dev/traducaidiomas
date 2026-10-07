@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
+use App\Models\Aluno;
 use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,15 @@ class AuthController extends Controller
         ];
 
         if (Auth::guard('aluno')->attempt($credenciais)) {
+            // Senha certa, mas cadastro desativado pela escola: não entra.
+            if (Auth::guard('aluno')->user()->estaInativo()) {
+                Auth::guard('aluno')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withInput()->with('error', Aluno::MENSAGEM_INATIVO);
+            }
+
             $request->session()->regenerate();
             return redirect()->route('aluno.cursos.escolher');
         }
@@ -75,22 +85,15 @@ class AuthController extends Controller
     {
         $aluno = auth('aluno')->user();
 
-        if ($request->modo === 'sem_senha') {
-            $request->validate([
-                'email_confirmacao' => 'required|email',
-                'nova_senha'        => 'required|min:6|confirmed',
-            ]);
-            if ($request->email_confirmacao !== $aluno->email_aluno) {
-                return back()->with('error', 'Email não confere com o cadastrado.');
-            }
-        } else {
-            $request->validate([
-                'senha_atual' => 'required',
-                'nova_senha'  => 'required|min:6|confirmed',
-            ]);
-            if (!password_verify($request->senha_atual, $aluno->senha_aluno)) {
-                return back()->with('error', 'Senha atual incorreta.');
-            }
+        // Sempre exige a senha atual. O antigo modo "sem_senha" (só o e-mail)
+        // deixava qualquer pessoa no computador do aluno logado trocar a senha.
+        // Esqueceu a senha: a escola redefine pelo painel (Alunos > Editar).
+        $request->validate([
+            'senha_atual' => 'required',
+            'nova_senha'  => 'required|min:6|confirmed',
+        ]);
+        if (!password_verify($request->senha_atual, $aluno->senha_aluno)) {
+            return back()->with('error', 'Senha atual incorreta.');
         }
 
         $aluno->update(['senha_aluno' => bcrypt($request->nova_senha)]);

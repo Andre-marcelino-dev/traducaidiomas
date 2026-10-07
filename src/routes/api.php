@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaControll
 use App\Http\Controllers\Api\V1\Aluno\AtividadeController as AlunoApiAtividadeController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
+use App\Http\Controllers\Api\V1\Aluno\PerfilController as AlunoApiPerfilController;
 use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
 use App\Http\Controllers\Api\V1\Professor\AuthController as ProfessorApiAuthController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,11 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
         Route::middleware(['auth:sanctum', 'token:aluno'])->group(function () {
             Route::post('/logout', [AlunoApiAuthController::class, 'logout'])->name('logout');
             Route::get('/me', [AlunoApiAuthController::class, 'me'])->name('me');
+
+            Route::get('/perfil', [AlunoApiPerfilController::class, 'show'])->name('perfil.show');
+            Route::put('/perfil/email', [AlunoApiPerfilController::class, 'email'])->name('perfil.email');
+            Route::put('/perfil/senha', [AlunoApiPerfilController::class, 'senha'])->middleware('throttle:login')->name('perfil.senha');
+            Route::post('/perfil/foto', [AlunoApiPerfilController::class, 'foto'])->name('perfil.foto');
 
             Route::get('/cursos', [AlunoApiCursoController::class, 'index'])->name('cursos.index');
             Route::get('/cursos/{idCurso}/modulos', [AlunoApiCursoController::class, 'modulos'])->name('cursos.modulos');

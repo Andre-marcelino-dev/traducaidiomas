@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Aluno;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,16 @@ class SessionTimeout
     {
         if (!Auth::guard($guard)->check()) {
             return $next($request);
+        }
+
+        // Aluno desativado pela escola enquanto estava logado: sai no próximo clique.
+        $usuario = Auth::guard($guard)->user();
+        if ($usuario instanceof Aluno && $usuario->estaInativo()) {
+            Auth::guard($guard)->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('aluno.login')->with('error', Aluno::MENSAGEM_INATIVO);
         }
 
         $key = 'last_activity_' . $guard;
