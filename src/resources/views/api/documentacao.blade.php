@@ -229,6 +229,33 @@
 
     <div class="endpoint">
         <span class="method get">GET</span>
+        <code>/api/v1/aluno/perfil</code>
+        <p>Tela <strong>Perfil</strong>: nome, e-mail, telefone, foto, situação e <code>cursos</code> (idioma e nível).</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        <code>/api/v1/aluno/perfil/email</code>
+        <p>Troca o e-mail. Corpo: <code>email_aluno</code> e <code>senha_atual</code>. E-mail já usado ou senha errada: <code>422</code>.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        <code>/api/v1/aluno/perfil/senha</code>
+        <p>
+            Troca a senha. Corpo: <code>senha_atual</code>, <code>nova_senha</code> (mín. 6) e
+            <code>nova_senha_confirmation</code>. Desconecta os outros aparelhos do aluno.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/perfil/foto</code>
+        <p>Troca a foto (multipart, campo <code>foto_aluno</code>: JPG, PNG ou WEBP até 2 MB).</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
         <code>/api/v1/aluno/agenda</code>
         <p>Tela <strong>Agenda</strong>: <code>proxima_aula</code> e as <code>aulas</code> de todos os cursos matriculados.</p>
     </div>
