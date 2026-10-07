@@ -103,7 +103,12 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Novo Email</label>
-                                <input type="email" name="email_aluno" class="form-control" placeholder="Digite o novo email" required>
+                                <input type="email" name="email_aluno" class="form-control" placeholder="Digite o novo email" value="{{ old('email_aluno') }}" required>
+                            </div>
+                            {{-- O e-mail é o login: trocar pede a senha (como no app). --}}
+                            <div class="mb-3">
+                                <label class="form-label">Senha Atual</label>
+                                <input type="password" name="senha_atual" class="form-control" placeholder="Para confirmar que é você" required>
                             </div>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-1"></i> Atualizar Email
