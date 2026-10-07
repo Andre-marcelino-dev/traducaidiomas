@@ -3,7 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Aluno;
+use App\Models\Curso;
+use App\Models\Matricula;
+use App\Models\Nivel;
+use App\Support\CursoAtual;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -93,6 +98,35 @@ class AlunoInativoTest extends TestCase
         $this->assertNotContains($vencida->id, $ids);   // vencida: apagada
         $this->assertContains($valendo->id, $ids);      // outro aparelho: continua
         $this->assertCount(2, $ids);                    // a que valia + a nova
+    }
+
+    public function test_site_nao_troca_senha_so_com_o_email(): void
+    {
+        $aluno = $this->aluno('EM CURSO');
+
+        // O painel do aluno exige um curso escolhido (middleware CursoSelecionado).
+        $curso = Curso::find(DB::table('tbl_cursos')->insertGetId(['nome_curso' => 'Inglês', 'descricao_curso' => 'Inglês']));
+        $matricula = Matricula::create([
+            'id_aluno' => $aluno->id_aluno, 'id_curso' => $curso->id_curso,
+            'id_nivel' => Nivel::create(['nome_nivel' => 'iniciante'])->id_nivel,
+            'data_matricula' => now(), 'status_matricula' => 'ATIVO',
+        ]);
+        $this->actingAs($aluno, 'aluno')->withSession([CursoAtual::SESSAO => $matricula->id_matricula]);
+
+        // O antigo modo "sem_senha" (só o e-mail) não funciona mais.
+        $this->from('/aluno/perfil')->put('/aluno/perfil/senha', [
+            'modo' => 'sem_senha', 'email_confirmacao' => $aluno->email_aluno,
+            'nova_senha' => 'invasor123', 'nova_senha_confirmation' => 'invasor123',
+        ])->assertSessionHasErrors('senha_atual');
+
+        $this->assertTrue(Hash::check('segredo123', $aluno->fresh()->senha_aluno));
+
+        // Com a senha atual continua funcionando.
+        $this->from('/aluno/perfil')->put('/aluno/perfil/senha', [
+            'senha_atual' => 'segredo123', 'nova_senha' => 'novaSenha9', 'nova_senha_confirmation' => 'novaSenha9',
+        ])->assertRedirect(route('aluno.perfil'));
+
+        $this->assertTrue(Hash::check('novaSenha9', $aluno->fresh()->senha_aluno));
     }
 
     public function test_site_login_de_aluno_inativo_e_recusado(): void

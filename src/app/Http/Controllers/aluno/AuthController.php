@@ -85,22 +85,15 @@ class AuthController extends Controller
     {
         $aluno = auth('aluno')->user();
 
-        if ($request->modo === 'sem_senha') {
-            $request->validate([
-                'email_confirmacao' => 'required|email',
-                'nova_senha'        => 'required|min:6|confirmed',
-            ]);
-            if ($request->email_confirmacao !== $aluno->email_aluno) {
-                return back()->with('error', 'Email não confere com o cadastrado.');
-            }
-        } else {
-            $request->validate([
-                'senha_atual' => 'required',
-                'nova_senha'  => 'required|min:6|confirmed',
-            ]);
-            if (!password_verify($request->senha_atual, $aluno->senha_aluno)) {
-                return back()->with('error', 'Senha atual incorreta.');
-            }
+        // Sempre exige a senha atual. O antigo modo "sem_senha" (só o e-mail)
+        // deixava qualquer pessoa no computador do aluno logado trocar a senha.
+        // Esqueceu a senha: a escola redefine pelo painel (Alunos > Editar).
+        $request->validate([
+            'senha_atual' => 'required',
+            'nova_senha'  => 'required|min:6|confirmed',
+        ]);
+        if (!password_verify($request->senha_atual, $aluno->senha_aluno)) {
+            return back()->with('error', 'Senha atual incorreta.');
         }
 
         $aluno->update(['senha_aluno' => bcrypt($request->nova_senha)]);
