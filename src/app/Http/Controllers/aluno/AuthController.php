@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
+use App\Models\Aluno;
 use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,15 @@ class AuthController extends Controller
         ];
 
         if (Auth::guard('aluno')->attempt($credenciais)) {
+            // Senha certa, mas cadastro desativado pela escola: não entra.
+            if (Auth::guard('aluno')->user()->estaInativo()) {
+                Auth::guard('aluno')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withInput()->with('error', Aluno::MENSAGEM_INATIVO);
+            }
+
             $request->session()->regenerate();
             return redirect()->route('aluno.cursos.escolher');
         }

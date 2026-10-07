@@ -14,6 +14,9 @@ class Aluno extends Authenticatable
     /** Únicos valores aceitos em status_aluno. */
     const STATUS = ['EM CURSO', 'CONCLUIDO', 'INATIVO'];
 
+    /** Mensagem mostrada no site e no app quando o aluno inativo tenta entrar. */
+    const MENSAGEM_INATIVO = 'Seu cadastro está inativo. Fale com a escola para reativar o acesso.';
+
     protected $table = 'tbl_alunos';
     protected $primaryKey = 'id_aluno';
     public $timestamps = false;
@@ -37,6 +40,15 @@ class Aluno extends Authenticatable
     public function getAuthPassword()
     {
         return $this->senha_aluno;
+    }
+
+    /**
+     * Aluno desativado pela escola não entra no site nem no app.
+     * (CONCLUIDO continua entrando, para ver o histórico.)
+     */
+    public function estaInativo(): bool
+    {
+        return $this->status_aluno === 'INATIVO';
     }
 
     public function matriculas()

@@ -26,6 +26,19 @@ class AuthController extends Controller
             ], 401);
         }
 
+        if ($aluno->estaInativo()) {
+            return response()->json([
+                'success' => false,
+                'message' => Aluno::MENSAGEM_INATIVO,
+            ], 403);
+        }
+
+        // Limpa as chaves vencidas deste aluno (as que ainda valem continuam,
+        // para não desconectar outro aparelho dele).
+        if ($minutos = config('sanctum.expiration')) {
+            $aluno->tokens()->where('created_at', '<', now()->subMinutes($minutos))->delete();
+        }
+
         $token = $aluno->createToken('app-mobile')->plainTextToken;
 
         return response()->json([
