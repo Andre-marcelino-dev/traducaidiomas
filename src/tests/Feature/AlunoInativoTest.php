@@ -129,6 +129,38 @@ class AlunoInativoTest extends TestCase
         $this->assertTrue(Hash::check('novaSenha9', $aluno->fresh()->senha_aluno));
     }
 
+    public function test_site_trocar_email_exige_a_senha_atual(): void
+    {
+        $aluno = $this->aluno('EM CURSO');
+        $emailAntigo = $aluno->email_aluno;
+
+        $curso = Curso::find(DB::table('tbl_cursos')->insertGetId(['nome_curso' => 'Inglês', 'descricao_curso' => 'Inglês']));
+        $matricula = Matricula::create([
+            'id_aluno' => $aluno->id_aluno, 'id_curso' => $curso->id_curso,
+            'id_nivel' => Nivel::create(['nome_nivel' => 'iniciante'])->id_nivel,
+            'data_matricula' => now(), 'status_matricula' => 'ATIVO',
+        ]);
+        $this->actingAs($aluno, 'aluno')->withSession([CursoAtual::SESSAO => $matricula->id_matricula]);
+
+        // Sem a senha: recusado.
+        $this->from('/aluno/perfil')->put('/aluno/perfil/email', ['email_aluno' => 'invasor@aluno.test'])
+            ->assertSessionHasErrors('senha_atual');
+
+        // Senha errada: recusado.
+        $this->from('/aluno/perfil')->put('/aluno/perfil/email', [
+            'email_aluno' => 'invasor@aluno.test', 'senha_atual' => 'errada',
+        ])->assertSessionHas('error', 'Senha atual incorreta.');
+
+        $this->assertSame($emailAntigo, $aluno->fresh()->email_aluno);
+
+        // Senha certa: troca.
+        $this->from('/aluno/perfil')->put('/aluno/perfil/email', [
+            'email_aluno' => 'novo@aluno.test', 'senha_atual' => 'segredo123',
+        ])->assertRedirect(route('aluno.perfil'));
+
+        $this->assertSame('novo@aluno.test', $aluno->fresh()->email_aluno);
+    }
+
     public function test_site_login_de_aluno_inativo_e_recusado(): void
     {
         $aluno = $this->aluno('INATIVO');

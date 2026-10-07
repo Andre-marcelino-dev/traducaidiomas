@@ -74,9 +74,15 @@ class AuthController extends Controller
     public function atualizarEmail(Request $request)
     {
         $aluno = auth('aluno')->user();
+        // O e-mail é o login: sem a senha, alguém no computador do aluno logado
+        // podia trocar o e-mail e deixá-lo sem conseguir entrar.
         $request->validate([
             'email_aluno' => 'required|email|max:80|unique:tbl_alunos,email_aluno,' . $aluno->id_aluno . ',id_aluno',
+            'senha_atual' => 'required',
         ]);
+        if (!password_verify($request->senha_atual, $aluno->senha_aluno)) {
+            return back()->withInput($request->only('email_aluno'))->with('error', 'Senha atual incorreta.');
+        }
         $aluno->update(['email_aluno' => $request->email_aluno]);
         return redirect()->route('aluno.perfil')->with('success', 'Email atualizado com sucesso!');
     }
