@@ -12,6 +12,7 @@ use App\Support\CursoAtual;
 use App\Support\ModuloProgresso;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class CursoController extends Controller
@@ -242,6 +243,78 @@ class CursoController extends Controller
         $ext = pathinfo($caminho, PATHINFO_EXTENSION);
 
         return response()->download($caminho, $material->titulo_materiais . '.' . $ext);
+    }
+
+    /**
+     * Tela "Desempenho": presença, materiais vistos e minutos estudados do curso.
+     * Mesma regra do site (aluno/ProgressoController), restrita a um curso em vez
+     * da matrícula "atual" da sessão.
+     */
+    public function desempenho(Request $request, int $idCurso): JsonResponse
+    {
+        $matricula = $this->matriculaNoCurso($request, $idCurso);
+
+        if (!$matricula) {
+            return $this->naoEncontrado('Matrícula não encontrada para este curso.');
+        }
+
+        $idAluno = (int) $request->user()->id_aluno;
+
+        $presencas = Presenca::with(['aula', 'ultimaJustificativa'])
+            ->whereHas('aula', fn ($q) => $q->where('id_curso', $idCurso))
+            ->where('id_aluno', $idAluno)
+            ->orderByDesc('data_registro_presenca')
+            ->get();
+
+        $totalAulas = $presencas->count();
+        $presentes = $presencas->where('status_presenca', 'presente')->count();
+        $faltas = $presencas->where('status_presenca', 'falta')->count();
+        $justificadas = $presencas->where('status_presenca', 'justificado')->count();
+        $percentualPresenca = $totalAulas > 0 ? (int) round((($presentes + $justificadas) / $totalAulas) * 100) : 0;
+
+        $minutosEstudados = (int) $presencas
+            ->whereIn('status_presenca', ['presente', 'justificado'])
+            ->sum(fn ($p) => $p->aula?->duracao_minutos ?? 0);
+
+        $idsMateriais = CursoAtual::filtrar(Materiais::query(), $matricula)->pluck('id_materiais');
+        $totalMateriais = $idsMateriais->count();
+        $materiaisVistos = DB::table('tbl_progresso_materiais')
+            ->where('id_aluno', $idAluno)
+            ->where('status_progresso', 'CONCLUIDO')
+            ->whereIn('id_materiais', $idsMateriais)
+            ->count();
+        $percentualMateriais = $totalMateriais > 0 ? (int) round(($materiaisVistos / $totalMateriais) * 100) : 0;
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'curso' => $matricula->curso?->nome_curso,
+                'nivel' => $matricula->nivel?->nome_nivel,
+                'presenca' => [
+                    'total_aulas' => $totalAulas,
+                    'presentes' => $presentes,
+                    'faltas' => $faltas,
+                    'justificadas' => $justificadas,
+                    'percentual' => $percentualPresenca,
+                ],
+                'materiais' => [
+                    'total' => $totalMateriais,
+                    'vistos' => $materiaisVistos,
+                    'percentual' => $percentualMateriais,
+                ],
+                'minutos_estudados' => $minutosEstudados,
+                'ultimas_presencas' => $presencas->take(5)->values()->map(fn (Presenca $p) => [
+                    'id_presenca' => $p->id_presenca,
+                    'data' => substr((string) $p->data_registro_presenca, 0, 10),
+                    'aula_titulo' => $p->aula?->titulo_aulas,
+                    'status' => $p->status_presenca,
+                    'justificativa' => $p->ultimaJustificativa ? [
+                        'status' => $p->ultimaJustificativa->status_justificativa,
+                        'resposta_professor' => $p->ultimaJustificativa->resposta_professor,
+                    ] : null,
+                ]),
+            ],
+        ]);
     }
 
     private function matriculaNoCurso(Request $request, int $idCurso): ?Matricula

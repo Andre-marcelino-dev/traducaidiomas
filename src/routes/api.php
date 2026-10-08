@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaControll
 use App\Http\Controllers\Api\V1\Aluno\AtividadeController as AlunoApiAtividadeController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
+use App\Http\Controllers\Api\V1\Aluno\JustificativaController as AlunoApiJustificativaController;
 use App\Http\Controllers\Api\V1\Aluno\PerfilController as AlunoApiPerfilController;
 use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
 use App\Http\Controllers\Api\V1\Professor\AuthController as ProfessorApiAuthController;
@@ -31,6 +32,8 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/cursos', [AlunoApiCursoController::class, 'index'])->name('cursos.index');
             Route::get('/cursos/{idCurso}/modulos', [AlunoApiCursoController::class, 'modulos'])->name('cursos.modulos');
             Route::get('/cursos/{idCurso}/materiais', [AlunoApiCursoController::class, 'materiais'])->name('cursos.materiais');
+            Route::get('/cursos/{idCurso}/desempenho', [AlunoApiCursoController::class, 'desempenho'])->name('cursos.desempenho');
+            Route::post('/presencas/{idPresenca}/justificar', [AlunoApiJustificativaController::class, 'store'])->name('presencas.justificar');
             Route::get('/modulos/{idModulo}', [AlunoApiCursoController::class, 'modulo'])->name('modulos.show');
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
             Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
