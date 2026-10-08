@@ -261,6 +261,7 @@ class AppFase3Test extends TestCase
             ->assertJsonPath('data.0.titulo', 'Apostila')
             ->assertJsonPath('data.0.nome_modulo', 'Módulo 1')
             ->assertJsonPath('data.0.extensao', 'pdf')
+            ->assertJsonPath('data.0.tamanho_bytes', strlen('%PDF-1.4'))
             ->assertJsonPath('data.0.concluido', false)
             ->assertJsonPath('data.0.url_download', route('api.aluno.materiais.download', $material->id_materiais));
 

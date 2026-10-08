@@ -202,6 +202,7 @@ class CursoController extends Controller
                 'ordem_modulo' => $m->modulo?->ordem_modulo,
                 'tem_arquivo'  => (bool) $m->arquivo_materiais,
                 'extensao'     => $m->arquivo_materiais ? strtolower(pathinfo($m->arquivo_materiais, PATHINFO_EXTENSION)) : null,
+                'tamanho_bytes' => $this->tamanhoArquivo($m->arquivo_materiais),
                 'concluido'    => $concluidos->contains((int) $m->id_materiais),
                 'url_download' => $m->arquivo_materiais ? route('api.aluno.materiais.download', $m->id_materiais) : null,
             ]),
@@ -329,5 +330,19 @@ class CursoController extends Controller
     private function naoEncontrado(string $mensagem): JsonResponse
     {
         return response()->json(['success' => false, 'message' => $mensagem], Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Tamanho do arquivo em bytes, ou null se não tiver arquivo (o app mostra "2,4 MB").
+     */
+    private function tamanhoArquivo(?string $caminhoRelativo): ?int
+    {
+        if (!$caminhoRelativo) {
+            return null;
+        }
+
+        $caminho = public_path($caminhoRelativo);
+
+        return is_file($caminho) ? filesize($caminho) : null;
     }
 }
