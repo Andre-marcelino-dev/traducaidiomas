@@ -67,10 +67,19 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        // Chatbot chama a Groq (cota paga): limita por usuário logado ou IP do visitante.
+        // Chatbot chama a Groq (cota paga): limita por usuário logado (site ou app)
+        // ou IP do visitante. O app do aluno usa token (Sanctum), não a sessão do
+        // site, então sem olhar $request->user() o limite cairia por IP e
+        // misturaria alunos diferentes atrás do mesmo IP (ou daria um orçamento
+        // dobrado pro mesmo aluno, um no site e outro no app). Usa o mesmo prefixo
+        // "aluno"/"prof" dos dois lados pra cair no mesmo balde de cota.
         RateLimiter::for('chatbot', function (Request $request) {
+            $usuarioToken = $request->user();
+            $prefixoToken = $usuarioToken instanceof \App\Models\Professor ? 'prof' : 'aluno';
+
             $quem = auth('admin')->id() ? 'prof' . auth('admin')->id()
-                : (auth('aluno')->id() ? 'aluno' . auth('aluno')->id() : $request->ip());
+                : (auth('aluno')->id() ? 'aluno' . auth('aluno')->id()
+                : ($usuarioToken ? $prefixoToken . $usuarioToken->getAuthIdentifier() : $request->ip()));
 
             return [
                 Limit::perMinute(10)->by('chatbot|' . $quem),
