@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ModuloController;
 use App\Http\Controllers\Api\V1\Aluno\AgendaController as AlunoApiAgendaController;
 use App\Http\Controllers\Api\V1\Aluno\AtividadeController as AlunoApiAtividadeController;
 use App\Http\Controllers\Api\V1\Aluno\AuthController as AlunoApiAuthController;
+use App\Http\Controllers\Api\V1\Aluno\ChatbotController as AlunoApiChatbotController;
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
 use App\Http\Controllers\Api\V1\Aluno\DuvidaController as AlunoApiDuvidaController;
 use App\Http\Controllers\Api\V1\Aluno\JustificativaController as AlunoApiJustificativaController;
@@ -47,6 +48,9 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
 
             Route::get('/duvidas', [AlunoApiDuvidaController::class, 'index'])->name('duvidas.index');
             Route::post('/duvidas', [AlunoApiDuvidaController::class, 'store'])->name('duvidas.store');
+
+            Route::get('/chatbot/dados', [AlunoApiChatbotController::class, 'dados'])->name('chatbot.dados');
+            Route::post('/chatbot/mensagem', [AlunoApiChatbotController::class, 'mensagem'])->middleware('throttle:chatbot')->name('chatbot.mensagem');
         });
     });
 
