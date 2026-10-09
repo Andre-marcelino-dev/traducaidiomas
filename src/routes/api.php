@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Aluno\DuvidaController as AlunoApiDuvidaControll
 use App\Http\Controllers\Api\V1\Aluno\JustificativaController as AlunoApiJustificativaController;
 use App\Http\Controllers\Api\V1\Aluno\PerfilController as AlunoApiPerfilController;
 use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
+use App\Http\Controllers\Api\V1\Aluno\SenhaController as AlunoApiSenhaController;
 use App\Http\Controllers\Api\V1\Professor\AuthController as ProfessorApiAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,8 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
     // ── App do aluno (token Sanctum de aluno) ──
     Route::prefix('aluno')->name('api.aluno.')->group(function () {
         Route::post('/login', [AlunoApiAuthController::class, 'login'])->middleware('throttle:login')->name('login');
+        Route::post('/senha/esqueci', [AlunoApiSenhaController::class, 'esqueci'])->middleware('throttle:login')->name('senha.esqueci');
+        Route::post('/senha/redefinir', [AlunoApiSenhaController::class, 'redefinir'])->middleware('throttle:login')->name('senha.redefinir');
 
         Route::middleware(['auth:sanctum', 'token:aluno'])->group(function () {
             Route::post('/logout', [AlunoApiAuthController::class, 'logout'])->name('logout');
