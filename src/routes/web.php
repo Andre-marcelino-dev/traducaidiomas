@@ -51,6 +51,23 @@ Route::get('/sistema/migrate/{token}', function (string $token) {
     return '<pre>' . e(Artisan::output()) . '</pre>';
 });
 
+// ── Rota de diagnóstico (limpa cache de config e mostra o fim do log) ──
+Route::get('/sistema/diagnostico/{token}', function (string $token) {
+    if (!hash_equals((string) env('DEPLOY_SECRET'), $token)) {
+        abort(404);
+    }
+
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+
+    $logPath = storage_path('logs/laravel.log');
+    $log = file_exists($logPath)
+        ? e(implode('', array_slice(file($logPath), -100)))
+        : 'Sem arquivo de log.';
+
+    return '<pre>' . $log . '</pre>';
+});
+
 // ── Rotas Públicas do Site ──
 Route::get("/", [HomeController::class, 'home'])->name('home');
 Route::get("/sobre", [SobreController::class, 'sobre'])->name('sobre');
