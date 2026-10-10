@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Aluno\ChatbotController as AlunoApiChatbotContro
 use App\Http\Controllers\Api\V1\Aluno\CursoController as AlunoApiCursoController;
 use App\Http\Controllers\Api\V1\Aluno\DuvidaController as AlunoApiDuvidaController;
 use App\Http\Controllers\Api\V1\Aluno\JustificativaController as AlunoApiJustificativaController;
+use App\Http\Controllers\Api\V1\Aluno\NotificacaoController as AlunoApiNotificacaoController;
 use App\Http\Controllers\Api\V1\Aluno\PerfilController as AlunoApiPerfilController;
 use App\Http\Controllers\Api\V1\Aluno\ReagendamentoController as AlunoApiReagendamentoController;
 use App\Http\Controllers\Api\V1\Aluno\SenhaController as AlunoApiSenhaController;
@@ -54,6 +55,10 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
 
             Route::get('/chatbot/dados', [AlunoApiChatbotController::class, 'dados'])->name('chatbot.dados');
             Route::post('/chatbot/mensagem', [AlunoApiChatbotController::class, 'mensagem'])->middleware('throttle:chatbot')->name('chatbot.mensagem');
+
+            Route::get('/notificacoes', [AlunoApiNotificacaoController::class, 'index'])->name('notificacoes.index');
+            Route::post('/notificacoes/lidas', [AlunoApiNotificacaoController::class, 'marcarTodas'])->name('notificacoes.todas');
+            Route::post('/notificacoes/{id}/lida', [AlunoApiNotificacaoController::class, 'marcarLida'])->whereNumber('id')->name('notificacoes.lida');
         });
     });
 

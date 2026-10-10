@@ -8,6 +8,7 @@ use App\Models\AtividadeRespostaQuestao;
 use App\Models\Curso;
 use App\Models\Aluno;
 use App\Models\Modulo;
+use App\Support\Notificar;
 use App\Support\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +81,9 @@ class AtividadeController extends Controller
             ]);
         }
 
+        // Avisa no sino do app os alunos do curso (depois das questões criadas).
+        Notificar::atividadeNova($atividade->fresh());
+
         return redirect()->route('admin.atividades.index')->with('success', 'Atividade criada com sucesso!');
     }
 
@@ -111,6 +115,16 @@ class AtividadeController extends Controller
             'status_resposta'     => 'CORRIGIDA',
             'data_correcao'       => now(),
         ]);
+
+        if ($resposta->atividade) {
+            Notificar::atividadeCorrigida(
+                $resposta->atividade,
+                (int) $resposta->id_aluno,
+                $request->nota,
+                (int) (auth('admin')->id() ?? $resposta->atividade->id_professor)
+            );
+        }
+
         return redirect()->back()->with('success', 'Atividade corrigida com sucesso!');
     }
 

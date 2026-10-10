@@ -305,6 +305,28 @@
         </p>
     </div>
 
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/api/v1/aluno/notificacoes</code>
+        <p>
+            Sino do app: <code>nao_lidas</code> e os últimos 50 avisos (<code>mensagem</code>, <code>link</code> da tela
+            do app, <code>lida</code>, <code>data</code>). Criados quando o professor cadastra aula, atividade ou material,
+            corrige atividade, responde dúvida ou responde reagendamento.
+        </p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/notificacoes/{id}/lida</code>
+        <p>Marca um aviso como lido. Aviso de outro aluno: <code>404</code>.</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/api/v1/aluno/notificacoes/lidas</code>
+        <p>Marca todos os avisos do aluno como lidos.</p>
+    </div>
+
     <p>
         <strong>Regra de conclusão:</strong> uma aula fica <em>concluída</em> quando o professor
         marca presença <code>presente</code> ou <code>justificado</code>; um material, quando o
