@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Aula;
+use App\Support\Notificar;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -79,6 +80,9 @@ class AulaController extends Controller
         $request->validate($this->regras);
 
         $aula = Aula::create($request->only($this->campos));
+
+        // Avisa no sino do app os alunos do curso (igual ao painel do professor).
+        Notificar::aulaNova($aula);
 
         return response()->json([
             'success' => true,

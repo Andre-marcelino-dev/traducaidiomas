@@ -6,10 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Aula;
 use App\Models\Aluno;
 use App\Models\Reagendamento;
+use App\Support\Notificar;
 use Illuminate\Http\Request;
 
 class ReagendamentoController extends Controller
 {
+    /** Aviso no sino do app: o pedido do aluno foi confirmado ou recusado. */
+    private function avisarAluno(Reagendamento $reagendamento, bool $aceito): void
+    {
+        Notificar::reagendamentoRespondido(
+            (int) $reagendamento->aluno_id,
+            (string) ($reagendamento->aula?->titulo_aulas ?? 'sua aula'),
+            $aceito,
+            (int) (auth('admin')->id() ?? $reagendamento->professor_id)
+        );
+    }
+
     public function index()
     {
         $reagendamentos = Reagendamento::with(['aluno', 'aula', 'professor'])
@@ -68,6 +80,8 @@ class ReagendamentoController extends Controller
             'notificado_aluno' => false,
         ]);
 
+        $this->avisarAluno($reagendamento, true);
+
         return redirect()
             ->route('admin.reagendamentos.index')
             ->with('success', 'Reagendamento confirmado com sucesso!');
@@ -80,6 +94,8 @@ class ReagendamentoController extends Controller
             'resposta_professor' => $request->resposta_professor,
             'notificado_aluno' => false,
         ]);
+
+        $this->avisarAluno($reagendamento, false);
 
         return redirect()
             ->route('admin.reagendamentos.index')

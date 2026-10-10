@@ -7,6 +7,7 @@ use App\Models\Materiais;
 use App\Models\Professor;
 use App\Models\Curso;
 use App\Models\Modulo;
+use App\Support\Notificar;
 use App\Support\Upload;
 use Illuminate\Http\Request;
 
@@ -48,7 +49,10 @@ class MateriaisController extends Controller
             $dados['arquivo_materiais'] = '';
         }
 
-        Materiais::create($dados);
+        $material = Materiais::create($dados);
+
+        // Avisa no sino do app os alunos do curso.
+        Notificar::materialNovo($material);
 
         return redirect()->route('admin.materiais.index')
             ->with('success', 'Material criado com sucesso!');

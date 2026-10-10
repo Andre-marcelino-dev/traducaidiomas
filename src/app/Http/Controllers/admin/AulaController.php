@@ -7,6 +7,7 @@ use App\Models\Aula;
 use App\Models\Professor;
 use App\Models\Curso;
 use App\Models\Modulo;
+use App\Support\Notificar;
 use Illuminate\Http\Request;
 
 class AulaController extends Controller
@@ -74,10 +75,13 @@ public function store(Request $request)
         'status_aulas'    => 'required|in:ATIVO,INATIVO,CANCELADO',
     ]);
 
-    Aula::create($request->only([
+    $aula = Aula::create($request->only([
         'titulo_aulas', 'descricao_aulas', 'data_aulas', 'hora_aulas',
         'id_professor', 'id_curso', 'id_modulo', 'ordem_aula', 'duracao_minutos', 'link_teams', 'cursos_aulas', 'status_aulas',
     ]));
+
+    // Avisa no sino do app os alunos do curso.
+    Notificar::aulaNova($aula);
 
     return redirect()
         ->route('admin.aulas.index')

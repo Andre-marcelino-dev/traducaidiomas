@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Duvida;
+use App\Support\Notificar;
 use Illuminate\Http\Request;
 
 class DuvidaController extends Controller
@@ -59,6 +60,12 @@ class DuvidaController extends Controller
             'status_duvida'      => 'respondida',
             'respondido_em'      => now(),
         ]);
+
+        Notificar::duvidaRespondida(
+            (int) $duvida->id_aluno,
+            (string) $duvida->assunto_duvida,
+            (int) auth('admin')->id()
+        );
 
         return redirect()->route('admin.duvidas.show', $duvida->id_duvida)
             ->with('success', 'Resposta enviada ao aluno!');
