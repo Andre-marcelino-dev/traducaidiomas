@@ -6,8 +6,10 @@
         <h1>TraducaIdiomas</h1>
         @endif
         <?php
-        // Mesmo valor de $_SERVER['REQUEST_URI'], mas sem quebrar quando ele não existe (testes).
-        $pgAtual = basename(path: request()->getRequestUri());
+        // Item do menu da página atual (sublinhado pela classe .ativo do header.css).
+        // Antes comparava com "sobre.php"/"contato.php", nomes do site antigo em PHP,
+        // e por isso nunca destacava nada.
+        $ativo = fn (string ...$rotas) => request()->routeIs(...$rotas) ? 'ativo' : '';
         ?>
 
         <button class=abrir-menu></button>
@@ -15,12 +17,12 @@
             <button class=fechar-menu></button>
             <ul>
 
-                <li><a href="{{ route('home') }}" class="<?= $pgAtual == 'index.php' ? 'ativo' : '' ?>">Home</a></li>
+                <li><a href="{{ route('home') }}" class="{{ $ativo('home') }}">Home</a></li>
 
-                <li><a href="{{ route('sobre') }}" class="<?= $pgAtual == 'sobre.php' ? 'ativo' : '' ?>"> Sobre</a></li>
+                <li><a href="{{ route('sobre') }}" class="{{ $ativo('sobre') }}"> Sobre</a></li>
 
                 <li class="dropdown">
-                    <a href="{{ route('servicos') }}">Serviços <span class="dropdown-arrow">›</span></a>
+                    <a href="{{ route('servicos') }}" class="{{ $ativo('servicos', 'servicos.categoria') }}">Serviços <span class="dropdown-arrow">›</span></a>
                     <div class="submenu">
                         <span class="submenu-header">Nossos Serviços</span>
                         <ul class="submenu-list">
@@ -41,10 +43,10 @@
                     </div>
                 </li>
 
-                <li><a href="{{ route('quiz') }}" class="<?= $pgAtual == 'quiz.php' ? 'ativo' : '' ?>">Quiz</a></li>
+                <li><a href="{{ route('quiz') }}" class="{{ $ativo('quiz') }}">Quiz</a></li>
 
 
-                <li><a href="{{ route('contato') }}" class="<?= $pgAtual == 'contato.php' ? 'ativo' : '' ?>">Contato</a>
+                <li><a href="{{ route('contato') }}" class="{{ $ativo('contato') }}">Contato</a>
                 </li>
 
             </ul>
