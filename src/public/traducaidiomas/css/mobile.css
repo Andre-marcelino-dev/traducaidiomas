@@ -1,0 +1,269 @@
+/*
+######################################################################
+###############    AJUSTES MOBILE (carregado por último)    ##########
+######################################################################
+Corrige o layout das seções em tablets e celulares. Fica no fim do
+estilo.css para ganhar dos estilos de cada seção sem usar !important.
+*/
+
+img,
+iframe,
+video {
+  max-width: 100%;
+}
+
+/* Balões do rodapé: o último abria para fora da tela (rolagem lateral) */
+.footer-servico:last-child .fs-card {
+  left: auto;
+  right: 0;
+  transform: translateY(6px);
+}
+
+.footer-servico:last-child .fs-card::after {
+  left: auto;
+  right: 24px;
+  transform: none;
+}
+
+.footer-servico:last-child:hover .fs-card {
+  transform: translateY(0);
+}
+
+/* ----------------------------- TABLET ----------------------------- */
+@media (max-width: 1200px) {
+
+  /* responsivo.css zerava o padding e o conteúdo encostava na borda */
+  .container {
+    padding-inline: clamp(16px, 4vw, 31px);
+  }
+}
+
+@media (max-width: 980px) {
+
+  /* espaço do topo fixo (mais baixo no celular, ver menu.css) */
+  .banner .banner-grid {
+    padding: 100px clamp(16px, 4vw, 31px) 40px;
+  }
+
+  .banner-card {
+    padding: clamp(28px, 6vw, 56px);
+  }
+}
+
+/* ---------------------------- CELULAR ---------------------------- */
+@media (max-width: 768px) {
+
+  /* BANNER */
+  .banner-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .banner-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+  }
+
+  .banner-card h1 {
+    font-size: clamp(1.7rem, 7.5vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .banner-card p {
+    font-size: 1rem;
+  }
+
+  .banner-actions {
+    justify-content: center;
+  }
+
+  .banner-actions .btn {
+    flex: 1 1 200px;
+  }
+
+  .banner-metrics {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+
+  /* setas do slider em cima do texto atrapalham no toque */
+  .banner .slick-prev,
+  .banner .slick-next {
+    display: none !important;
+  }
+
+  /* FAIXA ETÁRIA: cartões empilhados, o ativo abre */
+  .idade {
+    padding: 32px 0;
+  }
+
+  .options {
+    flex-direction: column;
+    gap: 12px;
+    width: calc(100% - 32px);
+  }
+
+  .option {
+    flex: none;
+    height: 110px;
+  }
+
+  .option.active {
+    flex: none;
+    height: 420px;
+  }
+
+  .option .shadow {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.05) 60%);
+  }
+
+  .option .label {
+    padding: 18px;
+  }
+
+  .option .main {
+    font-size: 1.3em;
+  }
+
+  .option .sub {
+    font-size: 0.95em;
+  }
+
+  .option .sub br {
+    display: none;
+  }
+
+  .option .icon {
+    font-size: 1.5em;
+  }
+
+  /* ALUNOS (sobre): minmax(320px) estourava em celulares de 320px */
+  .card-container {
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    padding: 20px 16px;
+  }
+
+  /* CONTATO: o contato.css usa seletores aninhados (#main_container #...),
+     por isso as regras de celular do responsivo.css não pegavam */
+  #main_container {
+    flex-direction: column;
+    gap: 28px;
+    padding: 28px 16px;
+    border-radius: 24px 24px 0 0;
+  }
+
+  #main_container #contcts_container,
+  #main_container #contacts_form_container {
+    width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  #main_container #contcts_container {
+    text-align: center;
+  }
+
+  #main_container #contcts_container #cards_container {
+    width: 100%;
+  }
+
+  #main_container #contcts_container #cards_container .contact-card {
+    width: 100%;
+    gap: 12px;
+    text-align: left;
+  }
+
+  #main_container .card-infos {
+    min-width: 0;
+  }
+
+  #main_container .card-infos span {
+    overflow-wrap: anywhere;
+  }
+
+  #main_container #contacts_form_container {
+    padding: 20px 16px;
+  }
+
+  /* no grid de 2 colunas alguns campos usam "grid-column: 1 / 3" e
+     criavam uma coluna extra, deixando Nome e Mensagem mais estreitos */
+  #main_container #contacts_form_container #contact_form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* campos com 16px: o iPhone não dá zoom ao focar */
+  #main_container input,
+  #main_container textarea,
+  #main_container select {
+    font-size: 16px;
+  }
+
+  /* o mapa é a primeira coisa da página e ficava atrás do topo fixo */
+  .mapa {
+    padding-top: 70px;
+  }
+
+  .mapa iframe {
+    height: 320px;
+  }
+
+  /* TÍTULOS DE PÁGINA */
+  .page-title h2 {
+    font-size: 1.4rem;
+    padding: 24px 16px 8px;
+  }
+
+  .page-title p {
+    font-size: 1rem;
+    padding: 0 16px 24px;
+  }
+
+  /* RODAPÉ */
+  .rodape-conteudo {
+    align-items: center;
+    text-align: center;
+  }
+
+  .rodape-centro,
+  .rodape-redes {
+    width: 100%;
+  }
+
+  .rodape .idiomas {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .idiomas li a {
+    min-width: 0;
+    padding: 6px 10px;
+  }
+
+  /* o cartão flutuante do rodapé é de hover; no toque só atrapalha */
+  .fs-card {
+    display: none;
+  }
+
+  .rodape p {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .banner-card {
+    padding: 24px 16px;
+  }
+
+  .banner-actions .btn {
+    flex-basis: 100%;
+  }
+}

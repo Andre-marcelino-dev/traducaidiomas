@@ -100,10 +100,7 @@
 
 }
 
-/* Linha fixa no item ativo */
-nav ul li a.ativo::after {
-  width: 100%;
-}
+/* Item ativo fica só com a cor de destaque, sem a linha embaixo */
 
 .rede {
   display: flex;
