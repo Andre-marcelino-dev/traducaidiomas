@@ -15,6 +15,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-  <link rel="stylesheet" href="{{ asset('traducaidiomas/css/estilo.css') }}">
+  {{-- ?v= muda quando o arquivo muda: o servidor manda o navegador guardar CSS/JS por 10 anos --}}
+  <link rel="stylesheet" href="{{ asset('traducaidiomas/css/estilo.css') }}?v={{ @filemtime(public_path('traducaidiomas/css/estilo.css')) }}">
   <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}">
 </head>

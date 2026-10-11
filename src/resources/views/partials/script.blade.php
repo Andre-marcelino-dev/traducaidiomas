@@ -10,9 +10,9 @@
 
 <!-- <script src="javascript.js"></script> -->
 
-<script src="{{ asset('traducaidiomas/js/animacao.js') }}"></script>
+<script src="{{ asset('traducaidiomas/js/animacao.js') }}?v={{ @filemtime(public_path('traducaidiomas/js/animacao.js')) }}"></script>
 
-<script src="{{ asset('traducaidiomas/js/menu.js') }}"></script>
+<script src="{{ asset('traducaidiomas/js/menu.js') }}?v={{ @filemtime(public_path('traducaidiomas/js/menu.js')) }}"></script>
 
   @if (request()->routeIs('quiz'))
   <script src="{{ asset('js/quiz.js') }}"></script>
