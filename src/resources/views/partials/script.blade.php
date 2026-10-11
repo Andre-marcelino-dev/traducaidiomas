@@ -12,6 +12,8 @@
 
 <script src="{{ asset('traducaidiomas/js/animacao.js') }}"></script>
 
+<script src="{{ asset('traducaidiomas/js/menu.js') }}"></script>
+
   @if (request()->routeIs('quiz'))
   <script src="{{ asset('js/quiz.js') }}"></script>
   @endif

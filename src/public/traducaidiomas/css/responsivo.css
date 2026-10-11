@@ -113,75 +113,12 @@ Celulares - 0 - 768
 
 
 
-@media not all and (max-width:768px){
-  .abrir-menu,
-  .fechar-menu{
-    display: none;
-  }
-  
 
-  
-}
 
 
 /* Celulares - 0 - 400 - 768 */
 @media (max-width: 768px) {
 
-  nav ul li .submenu {
-    position: static;
-    transform: none;
-    opacity: 1;
-    visibility: visible;
-    box-shadow: none;
-    border-radius: 0;
-    min-width: auto;
-    padding: 0;
-    margin: 0;
-    display: none;
-    overflow: visible;
-  }
-
-  nav ul li .submenu::after {
-    display: none;
-  }
-
-  nav ul li.dropdown:hover .submenu {
-    display: block;
-    transform: none;
-  }
-
-  .submenu-header {
-    padding: 10px 16px 6px;
-    font-size: 0.65em;
-    border-bottom: none;
-  }
-
-  .submenu-list {
-    padding: 0;
-    border-left: 3px solid #012169;
-    margin-left: 12px;
-  }
-
-  .submenu-list li a {
-    padding: 10px 14px !important;
-    gap: 10px;
-  }
-
-  .submenu-icon {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    font-size: 0.9em;
-    border-radius: 8px;
-  }
-
-  .submenu-text strong {
-    font-size: 0.8em;
-  }
-
-  .submenu-text small {
-    font-size: 0.7em;
-  }
 
 .rodape-centro ul{
    display: flex;
@@ -201,48 +138,7 @@ Celulares - 0 - 768
   font-size: 12px;
 }
  
-  .menu-ativo .rede{
-    display:none;
-  }
 
-  nav ul li a{
-    display: flex;
-  }
-
-
-  
-  .topo h1{
-    width: 350px;
-  }
-
-.topo nav{
-  background-color:#fff;
-  height: 50%;
-  position: fixed;
-  top:0;
-  height: auto;
-  max-width: 400px;
-  max-width: 50%;
-  z-index: 100;
-  right: -200px;
-  transition: right 1s ease-in-out;
-}
-
-
-.rede{
-  display: block;
-}
-
-
-
-.menu-ativo .topo nav{
-  right:0;
-}
-
-.topo nav ul {
-  flex-direction: column;
-  
-}
 
 .rodape-conteudo {
     flex-direction: column;
@@ -286,14 +182,6 @@ Celulares - 0 - 768
     gap: 10px;
   }
 
-   .menu-ativo nav .rede {
-    display: flex;          /* agora fica em linha */
-    justify-content: center;
-    flex-direction: row;
-    gap: 2px; 
-    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
-    margin-top: 2px;
-}
 
   /* Título da página */
   .page-title {
@@ -352,13 +240,13 @@ Celulares - 0 - 768
 
   .contact-card {
   display: flex;
-        gap: -1px;
+        gap: 12px;
         padding: 14px;
         border-radius: 10px;
         background: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         align-items: center;
-        width: 109%;
+        width: 100%;
   }
 
   .card-infos p {
@@ -386,7 +274,7 @@ Celulares - 0 - 768
      ============================== */
 
   #contacts_form_container {
-    width: 105%;
+    width: 100%;
      padding: 20px; 
     background: #fff;
     border-radius: 12px;
@@ -480,51 +368,7 @@ rodape-redes span i {
 }
 
 
-/*##################MENU MOBILE##############*/
-.abrir-menu{
-  background-image: url(../img/abrir-menu.png);
-  background-size: cover;
-  padding:20px;
-  border:0;
-  display: block;
-  margin-right:10px;
-}
-.fechar-menu{
-  background-image: url(../img/fechar-menu.png);
-  background-size: cover;
-  padding:20px;
-  border:0;
-  display: block;
-  margin-right:10px;
 
-}
-
-
-
-.rede {
-  display: none; /* some no desktop */
-}
-
-.menu-ativo nav .rede {
-    display: flex;          /* agora fica em linha */
-    justify-content: center;
-    flex-direction: row;
-    gap: 2px; 
-    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
-    margin-top: 2px;
-}
-
-    .menu-ativo nav .rede img {
-        width: 30px;
-        height: 32px;
-        padding: 0;
-        /* margin-left: -26px; */
-    }
-
-.menu-ativo nav .rede img:hover {
-    transform: scale(1.15);
-    transition: 0.2s ease;
-}
 
 
 
@@ -540,14 +384,6 @@ rodape-redes span i {
     display: none;
   } */
 
-   .menu-ativo nav .rede {
-    display: flex;          /* agora fica em linha */
-    justify-content: center;
-    flex-direction: row;
-    gap: 2px; 
-    padding: 10px;             /* espaço entre os ícones (ajuste se quiser) */
-    margin-top: 2px;
-}
 
   /* Título da página */
   .page-title {
