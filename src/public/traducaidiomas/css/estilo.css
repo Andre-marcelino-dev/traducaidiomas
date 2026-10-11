@@ -1,4 +1,5 @@
-@import './header.css';
+/* ?v= nos @import: o servidor manda cachear por 10 anos; troque a data ao alterar o arquivo */
+@import './header.css?v=20261011';
 
 @import './reset.css';
 
@@ -22,7 +23,7 @@
 
 @import './faxaetaria.css';
 
-@import './responsivo.css';
+@import './responsivo.css?v=20261011';
 
 @import './quiz.css';
 
@@ -32,9 +33,9 @@
 
 @import './servico.css';
 
-@import './menu.css';
+@import './menu.css?v=20261011';
 
-@import './mobile.css';
+@import './mobile.css?v=20261011';
 
 
 
