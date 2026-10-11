@@ -6,7 +6,8 @@
         <h1>TraducaIdiomas</h1>
         @endif
         <?php
-        $pgAtual = basename(path: $_SERVER['REQUEST_URI']);
+        // Mesmo valor de $_SERVER['REQUEST_URI'], mas sem quebrar quando ele não existe (testes).
+        $pgAtual = basename(path: request()->getRequestUri());
         ?>
 
         <button class=abrir-menu></button>

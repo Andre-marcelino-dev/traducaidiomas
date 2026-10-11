@@ -38,10 +38,15 @@ class DashController extends Controller
             ->with('professor')
             ->get();
 
-        // Aulas por mês (últimos 6 meses)
-        $aulasPorMes = Aula::selectRaw("DATE_FORMAT(data_aulas, '%Y-%m') as mes, COUNT(*) as total")
+        // Aulas por mês (últimos 6 meses). O "ano-mês" é escrito do jeito de cada
+        // banco: MySQL no site, SQLite nos testes automáticos (mesmo resultado).
+        $anoMes = DB::connection()->getDriverName() === 'sqlite'
+            ? "strftime('%Y-%m', data_aulas)"
+            : "DATE_FORMAT(data_aulas, '%Y-%m')";
+
+        $aulasPorMes = Aula::selectRaw("{$anoMes} as mes, COUNT(*) as total")
             ->whereNotNull('data_aulas')
-            ->whereRaw("data_aulas >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)")
+            ->whereDate('data_aulas', '>=', now()->subMonths(6)->toDateString())
             ->groupBy('mes')
             ->orderBy('mes')
             ->pluck('total', 'mes');
