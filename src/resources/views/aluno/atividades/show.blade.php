@@ -144,6 +144,7 @@
                             "
                         >
 
+                            {{-- Atividades de pronúncia substituem a resposta textual pela gravação de voz. --}}
                             @if($atividade->tipo_atividade === 'pronuncia')
 
                                 Instruções do Teste de Pronúncia

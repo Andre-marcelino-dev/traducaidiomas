@@ -9,6 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tbl_atividade_resposta_questoes', function (Blueprint $table) {
+            // Armazena o caminho da gravação enviada na atividade de pronúncia.
             $table->string('audio_resposta', 500)
                 ->nullable()
                 ->after('resposta_aluno');

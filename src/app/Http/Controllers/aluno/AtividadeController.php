@@ -119,6 +119,7 @@ class AtividadeController extends Controller
 
         foreach ($atividade->questoes as $questao) {
 
+            // Questões de áudio são usadas pela atividade de pronúncia para receber a gravação do aluno.
             if ($questao->tipo_questao === 'audio') {
 
                 $regras[
@@ -228,6 +229,7 @@ class AtividadeController extends Controller
             |
             */
 
+            // Persiste o arquivo gravado no campo específico da resposta, em vez de tentar corrigi-lo como texto.
             if ($questao->tipo_questao === 'audio') {
 
                 $nomeCampo =

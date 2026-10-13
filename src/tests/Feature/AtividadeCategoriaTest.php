@@ -232,6 +232,7 @@ class AtividadeCategoriaTest extends TestCase
             'data_matricula'   => now(),
             'status_matricula' => 'ATIVO',
         ]);
+        // Garante que a categoria FALA mantenha o cartão de uma atividade de pronúncia identificável ao aluno.
         Atividade::create([
             'id_professor'         => $this->professor->id_professor,
             'id_curso'             => $this->ingles->id_curso,

@@ -19,6 +19,7 @@ class Atividade extends Model
         'id_modulo',
         'titulo_atividade',
         'descricao_atividade',
+        // Aceita, entre outros estilos, "pronuncia", que o Blade do aluno trata como teste de gravação.
         'tipo_atividade',
         'audio',
         'arquivo_audio',

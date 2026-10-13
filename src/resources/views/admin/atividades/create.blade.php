@@ -74,6 +74,7 @@
                                     🎧 Conversa
                                 </option>
 
+                                {{-- Ativa o fluxo de questão em áudio e gravação de pronúncia para o aluno. --}}
                                 <option
                                     value="pronuncia"
                                     @selected(old('tipo_atividade') === 'pronuncia')

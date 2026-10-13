@@ -271,6 +271,7 @@
                             'color' => '#2563eb',
                         ],
 
+                        // Destaca, na lista do aluno, a atividade cuja resposta é uma gravação de voz.
                         'pronuncia' => [
                             'icon' => 'fa-microphone',
                             'label' => 'Pronúncia',

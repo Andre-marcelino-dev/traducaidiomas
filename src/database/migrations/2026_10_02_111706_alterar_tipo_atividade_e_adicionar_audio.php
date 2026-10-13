@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // O tipo "pronuncia" habilita o teste de gravação no painel do aluno.
         /*
          * Primeiro permitimos os valores antigos e os novos
          * para conseguir converter as atividades existentes.

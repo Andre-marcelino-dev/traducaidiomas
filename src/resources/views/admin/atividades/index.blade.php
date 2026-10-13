@@ -231,6 +231,7 @@
                                         'classe' => 'tipo-conversa',
                                     ],
 
+                                    // Identidade visual das atividades em que o aluno grava a própria fala.
                                     'pronuncia' => [
                                         'nome' => 'Pronúncia',
                                         'icone' => 'fas fa-microphone',

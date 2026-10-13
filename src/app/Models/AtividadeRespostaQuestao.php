@@ -16,6 +16,7 @@ class AtividadeRespostaQuestao extends Model
         'id_resposta',
         'id_questao',
         'resposta_aluno',
+        // Caminho do áudio enviado pelo aluno para avaliação da pronúncia.
         'audio_resposta',
         'correta',
     ];

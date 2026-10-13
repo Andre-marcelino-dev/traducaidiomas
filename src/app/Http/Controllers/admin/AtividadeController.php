@@ -94,6 +94,7 @@ class AtividadeController extends Controller
              * pelo aplicativo do aluno para definir o
              * ícone e o visual da atividade.
              */
+            // "pronuncia" habilita a interface de gravação de resposta para o aluno.
             'tipo_atividade' =>
                 'required|in:conjugacao,conversa,pronuncia,leitura',
 
