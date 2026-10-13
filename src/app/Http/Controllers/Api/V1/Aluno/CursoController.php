@@ -317,23 +317,23 @@ class CursoController extends Controller
                 'curso',
                 'nivel',
             ])
-                ->where(
-                    'id_aluno',
-                    $request->user()->id_aluno
-                )
-                ->where(
-                    'id_curso',
-                    $modulo->id_curso
-                )
-                ->where(
-                    'id_nivel',
-                    $modulo->id_nivel
-                )
-                ->where(
-                    'status_matricula',
-                    'ATIVO'
-                )
-                ->first()
+            ->where(
+                'id_aluno',
+                $request->user()->id_aluno
+            )
+            ->where(
+                'id_curso',
+                $modulo->id_curso
+            )
+            ->where(
+                'id_nivel',
+                $modulo->id_nivel
+            )
+            ->where(
+                'status_matricula',
+                'ATIVO'
+            )
+            ->first()
             : null;
 
         if (!$matricula) {
@@ -704,7 +704,7 @@ class CursoController extends Controller
         ModuloProgresso::registrarMaterial(
             $idAluno,
             $material,
-            'concluido' => true
+            true
         );
 
         $ext = pathinfo(
