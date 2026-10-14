@@ -31,7 +31,7 @@
                 ['POST', '/aluno/login', 'publica', 'Login do aluno (app traduca-APP). Devolve o token e os dados do aluno. Aluno com cadastro INATIVO recebe 403.', [
                     $p('email_aluno', 'corpo', 'e-mail', true, 'E-mail cadastrado do aluno.'),
                     $p('senha_aluno', 'corpo', 'texto', true, 'Senha do aluno.'),
-                ], "{\n  \"success\": true,\n  \"data\": {\n    \"token\": \"12|aBcD...\",\n    \"aluno\": { \"id_aluno\": 1, \"nome_aluno\": \"Caio Ferreira\", \"email_aluno\": \"caio@email.com\", \"foto_aluno\": \"aluno_123.png\" }\n  }\n}"],
+                ], "{\n  \"success\": true,\n  \"data\": {\n    \"token\": \"12|aBcD...\",\n    \"aluno\": { \"id_aluno\": 1, \"nome_aluno\": \"Aluno Exemplo\", \"email_aluno\": \"aluno@exemplo.com\", \"foto_aluno\": \"aluno_exemplo.png\" }\n  }\n}"],
                 ['POST', '/aluno/logout', 'aluno', 'Encerra a sessão: apaga o token atual.', [], null],
                 ['GET', '/aluno/me', 'aluno', 'Dados básicos do aluno do token (id, nome, e-mail, foto).', [], null],
                 ['POST', '/aluno/senha/esqueci', 'publica', 'Envia por e-mail um código de 6 dígitos para redefinir a senha (vale 30 minutos). A resposta é a mesma exista ou não o e-mail, para não revelar quem é aluno.', [
