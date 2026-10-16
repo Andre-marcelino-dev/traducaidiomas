@@ -109,7 +109,7 @@
 
             <div class="input-group">
                 <label for="subjet"> Assunto </label>
-                <input type="text" id="subjet" name="assunto" value="{{ old('assunto') }}" required />
+                <input type="text" id="subjet" name="assunto" value="{{ old('assunto', $assuntoSugerido ?? '') }}" required />
             </div>
 
             <div class="input-group">

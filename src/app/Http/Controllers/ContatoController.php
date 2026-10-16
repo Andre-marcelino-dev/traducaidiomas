@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\QuizNivelamento;
 use Illuminate\Http\Request;
 
 class ContatoController extends Controller
 {
-    public function contato()
+    public function contato(Request $request)
     {
-        return view('site.contato.contato');
+        // Vindo do quiz (?curso=Inglês B1), o assunto já chega preenchido.
+        $curso = QuizNivelamento::limparCurso($request->query('curso'));
+
+        return view('site.contato.contato', [
+            'assuntoSugerido' => $curso !== '' ? "Interesse no curso {$curso}" : '',
+        ]);
     }
 
   public function enviar(Request $request)
