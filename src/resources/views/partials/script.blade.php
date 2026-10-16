@@ -15,7 +15,7 @@
 <script src="{{ asset('traducaidiomas/js/menu.js') }}?v={{ @filemtime(public_path('traducaidiomas/js/menu.js')) }}"></script>
 
   @if (request()->routeIs('quiz'))
-  <script src="{{ asset('js/quiz.js') }}"></script>
+  <script type="module" src="{{ asset('js/quiz.js') }}?v={{ @filemtime(public_path('js/quiz.js')) }}"></script>
   @endif
 
   {{-- resources/views/partials/script.blade.php --}}

@@ -87,6 +87,9 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        // Quiz público (perguntas, correção e resultado): 60 requisições por minuto por IP.
+        RateLimiter::for('quiz', fn (Request $request) => Limit::perMinute(60)->by('quiz|' . $request->ip()));
+
         // API em geral: 60 requisições por minuto por token (ou IP sem token).
         RateLimiter::for('api', function (Request $request) {
             $usuario = $request->user();

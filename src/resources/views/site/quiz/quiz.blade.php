@@ -2,12 +2,7 @@
 
 @section('content')
 
-
-@include('site.quiz.banner')
+{{-- Página do teste de nivelamento; a interface é ligada por public/js/quiz.js. --}}
 @include('site.quiz.page-quiz')
-
-
-
-
 
 @endsection

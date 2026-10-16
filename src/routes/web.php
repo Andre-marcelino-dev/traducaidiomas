@@ -57,6 +57,14 @@ Route::get("/sobre", [SobreController::class, 'sobre'])->name('sobre');
 Route::get("/servicos", [ServicosController::class, 'servicos'])->name('servicos');
 Route::get("/servicos/categoria/{id}", [ServicosController::class, 'servicos'])->name('servicos.categoria');
 Route::get("/quiz", [QuizController::class, 'quiz'])->name('quiz');
+
+// Quiz: correção e resultado no servidor (o gabarito não vai para o navegador)
+Route::prefix('quiz/{idioma}')->name('quiz.')->where(['idioma' => '[a-z]+'])->middleware('throttle:quiz')->group(function () {
+    Route::get('/perguntas',    [QuizController::class, 'perguntas'])->name('perguntas');
+    Route::post('/responder',   [QuizController::class, 'responder'])->name('responder');
+    Route::post('/finalizar',   [QuizController::class, 'finalizar'])->name('finalizar');
+    Route::delete('/respostas', [QuizController::class, 'reiniciar'])->name('reiniciar');
+});
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
 Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
 
