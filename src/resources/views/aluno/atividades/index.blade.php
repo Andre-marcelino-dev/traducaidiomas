@@ -9,7 +9,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('aluno.dash') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Atividades</li>
+                    <li class="breadcrumb-item active">Atividades legais</li>
                 </ol>
             </div>
         </div>

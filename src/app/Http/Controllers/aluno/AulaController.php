@@ -22,13 +22,6 @@ class AulaController extends Controller
             ->orderBy('hora_aulas')
             ->get();
 
-        if ($aulas->isEmpty()) {
-            $aulas = Aula::with('professor')
-                ->orderBy('data_aulas')
-                ->orderBy('hora_aulas')
-                ->get();
-        }
-
         $agora = now();
 
         $proximaAula = $aulas->filter(function ($aula) use ($agora) {
@@ -47,5 +40,4 @@ class AulaController extends Controller
         return view('aluno.aulas.index', compact('aulas', 'proximaAula', 'materiais', 'aluno'));
     }
 }
-
 

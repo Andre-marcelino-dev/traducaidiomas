@@ -17,6 +17,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
 function updateTimeline() {
+    if (!sections.length || !progressBar || !prevBtn || !nextBtn) return;
     sections.forEach((section, index) => {
         section.classList.remove('active');
         if (index === currentLevel) {
@@ -53,7 +54,7 @@ updateTimeline();
 
 
 
-const firstSectionCards = sections[0].querySelectorAll('.timeline-card');
+const firstSectionCards = sections[0]?.querySelectorAll('.timeline-card') || [];
 setTimeout(() => {
     firstSectionCards.forEach(card => card.classList.add('show'));
 }, 100);
@@ -67,13 +68,7 @@ $(".option").click(function(){
 });
 
   
-   document.querySelector('.abrir-menu').onclick = function(){
-  document.documentElement.classList.add('menu-ativo')
-   }
-
-   document.querySelector('.fechar-menu').onclick = function(){
-     document.documentElement.classList.remove("menu-ativo")
-
-     
- }
-
+const abrirMenu = document.querySelector('.abrir-menu');
+const fecharMenu = document.querySelector('.fechar-menu');
+if (abrirMenu) abrirMenu.onclick = () => document.documentElement.classList.add('menu-ativo');
+if (fecharMenu) fecharMenu.onclick = () => document.documentElement.classList.remove('menu-ativo');

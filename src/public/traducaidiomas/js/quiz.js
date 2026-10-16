@@ -12,6 +12,9 @@
 
 
 
+(() => {
+    if (!document.getElementById('next-btn')) return;
+
 let questions = [
             {
                 question: "A) Excuse me. __________________ ) Yes. There's a bank on the next corner.",
@@ -191,3 +194,4 @@ let questions = [
 
         // Iniciar o quiz quando a página carregar
         startQuiz();
+})();

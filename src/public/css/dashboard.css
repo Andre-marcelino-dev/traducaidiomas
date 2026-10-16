@@ -1,6 +1,6 @@
-/* ═══════════════════════════════════════════════
-   TRADUCA IDIOMAS — DASHBOARD PROFESSIONAL CSS
-   ═══════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TRADUCA IDIOMAS â€” DASHBOARD PROFESSIONAL CSS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 :root {
     --navy-dark:  #1a1a2e;
@@ -24,7 +24,7 @@
     --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
 }
 
-/* ── GREETING ─────────────────────────────────── */
+/* â”€â”€ GREETING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dash-greeting-card {
     background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 50%, var(--navy-light) 100%);
     border-radius: var(--card-radius);
@@ -93,7 +93,7 @@
 
 .dash-badge-prof i { color: #e2b96f; }
 
-/* ── METRIC CARDS ──────────────────────────────── */
+/* â”€â”€ METRIC CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .mc {
     border-radius: var(--card-radius);
     padding: 1.5rem 1.6rem;
@@ -148,7 +148,7 @@
     z-index: 1;
 }
 
-/* ── CARDS ─────────────────────────────────────── */
+/* â”€â”€ CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .d-card {
     background: #fff;
     border: none;
@@ -196,7 +196,7 @@
 .recent-card .card-header h5 { font-size: .78rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--slate-600); margin: 0; }
 .recent-card .card-header a { font-size: .73rem; color: var(--indigo); text-decoration: none; font-weight: 500; }
 
-/* ── TABLE ─────────────────────────────────────── */
+/* â”€â”€ TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .recent-table th {
     font-size: .68rem;
     font-weight: 700;
@@ -219,7 +219,7 @@
 .recent-table tbody tr { transition: background .15s; }
 .recent-table tbody tr:hover { background: var(--slate-50); }
 
-/* ── AVATARS ───────────────────────────────────── */
+/* â”€â”€ AVATARS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .prof-avatar {
     width: 38px; height: 38px;
     border-radius: 10px;
@@ -236,14 +236,14 @@
     flex-shrink: 0;
 }
 
-/* ── BADGES ────────────────────────────────────── */
+/* â”€â”€ BADGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .badge-nivel { font-size: .67rem; font-weight: 600; padding: .28rem .7rem; border-radius: 50px; letter-spacing: .04em; }
 .badge-basico        { background: #dbeafe; color: #1d4ed8; }
 .badge-intermediario { background: #fef3c7; color: #b45309; }
 .badge-avancado      { background: #d1fae5; color: #065f46; }
 .badge-fluente       { background: #ede9fe; color: #5b21b6; }
 
-/* ── QUICK ACTIONS ─────────────────────────────── */
+/* â”€â”€ QUICK ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .quick-action {
     display: flex;
     align-items: center;
@@ -273,7 +273,7 @@
 .qa-desc  { font-size: .7rem; color: var(--slate-400); margin: 0; }
 .qa-arrow { margin-left: auto; opacity: .35; font-size: .78rem; }
 
-/* ── TODAY SCHEDULE ────────────────────────────── */
+/* â”€â”€ TODAY SCHEDULE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .schedule-item {
     display: flex;
     align-items: flex-start;
@@ -316,7 +316,7 @@
 .schedule-info .title { font-size: .85rem; font-weight: 600; color: var(--slate-800); }
 .schedule-info .sub   { font-size: .72rem; color: var(--slate-400); margin-top: 2px; }
 
-/* ── COURSE BAR ────────────────────────────────── */
+/* â”€â”€ COURSE BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .course-bar-item {
     margin-bottom: 1rem;
 }
@@ -345,7 +345,7 @@
     transition: width 1s ease;
 }
 
-/* ── ATTENDANCE RING ───────────────────────────── */
+/* â”€â”€ ATTENDANCE RING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .attendance-ring-wrap {
     display: flex;
     flex-direction: column;
@@ -371,7 +371,7 @@
     margin-top: .4rem;
 }
 
-/* ── RANKING ───────────────────────────────────── */
+/* â”€â”€ RANKING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .rank-item {
     display: flex;
     align-items: center;
@@ -406,7 +406,7 @@
     text-align: right;
 }
 
-/* ── REAGENDAMENTO ITEM ────────────────────────── */
+/* â”€â”€ REAGENDAMENTO ITEM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .reag-item {
     display: flex;
     align-items: flex-start;
@@ -446,20 +446,20 @@
 
 .reag-btn:hover { background: #ffe4e6; color: var(--rose); }
 
-/* ── STAT MINI ─────────────────────────────────── */
+/* â”€â”€ STAT MINI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .stat-mini { display: flex; align-items: center; justify-content: space-between; padding: .75rem 0; border-bottom: 1px solid var(--slate-100); }
 .stat-mini:last-child { border-bottom: none; }
 .stat-mini-label { font-size: .78rem; color: var(--slate-600); }
 .stat-mini-value { font-size: .9rem; font-weight: 700; color: var(--slate-800); }
 
-/* ── PROGRESS THIN ─────────────────────────────── */
+/* â”€â”€ PROGRESS THIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .progress-thin { height: 5px; border-radius: 99px; background: var(--slate-100); overflow: hidden; margin-top: .4rem; }
 .progress-thin-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--indigo), #8b5cf6); transition: width .8s ease; }
 
-/* ── FRASES WIDGET ─────────────────────────────── */
+/* â”€â”€ FRASES WIDGET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 #card-frases .card-header { background: linear-gradient(135deg, #f8faff 0%, #eef3ff 100%); }
 
-/* ── SECTION DIVIDER ───────────────────────────── */
+/* â”€â”€ SECTION DIVIDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .section-label {
     font-size: .68rem;
     font-weight: 700;
@@ -470,7 +470,7 @@
     padding-left: .25rem;
 }
 
-/* ── ALERT BADGE ───────────────────────────────── */
+/* â”€â”€ ALERT BADGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .alert-pill {
     display: inline-flex;
     align-items: center;
@@ -484,7 +484,7 @@
     letter-spacing: .04em;
 }
 
-/* ── ANIMATIONS ────────────────────────────────── */
+/* â”€â”€ ANIMATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .fade-up {
     opacity: 0;
     transform: translateY(18px);
@@ -500,7 +500,7 @@
 .fade-up:nth-child(5) { animation-delay: .20s; }
 .fade-up:nth-child(6) { animation-delay: .24s; }
 
-/* ── TODAY BADGE ───────────────────────────────── */
+/* â”€â”€ TODAY BADGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .today-empty {
     display: flex;
     flex-direction: column;
@@ -512,7 +512,7 @@
     gap: .5rem;
 }
 
-/* ── METRIC CARD (legacy alias) ────────────────── */
+/* â”€â”€ METRIC CARD (legacy alias) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .metric-card { border: none; border-radius: var(--card-radius); padding: 1.5rem; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; height: 100%; }
 .metric-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg) !important; }
 .metric-card .metric-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1rem; }
@@ -521,11 +521,11 @@
 .metric-card .metric-trend { position: absolute; bottom: 1.2rem; right: 1.5rem; font-size: .72rem; font-weight: 600; display: flex; align-items: center; gap: .3rem; }
 .metric-card-rose { background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%); color: #fff; }
 
-/* ═══════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DASHBOARD PREMIUM ENHANCEMENTS
-   ═══════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ── GREETING ANIMATED BG ─────────────────────── */
+/* â”€â”€ GREETING ANIMATED BG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes greetingShimmer {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -545,7 +545,7 @@
     background-clip: text;
 }
 
-/* ── PRÓXIMAS AULAS ENHANCED ──────────────────── */
+/* â”€â”€ PRÃ“XIMAS AULAS ENHANCED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .prox-aula-item {
     display: flex;
     align-items: flex-start;
@@ -626,7 +626,7 @@
     gap: .5rem;
 }
 
-/* ── SCHEDULE ITEM HOVER ──────────────────────── */
+/* â”€â”€ SCHEDULE ITEM HOVER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .schedule-item {
     transition: all .2s;
     border-radius: 8px;
@@ -638,7 +638,7 @@
     background: var(--slate-50);
 }
 
-/* ── RANK ITEM HOVER ──────────────────────────── */
+/* â”€â”€ RANK ITEM HOVER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .rank-item {
     transition: all .2s;
     border-radius: 8px;
@@ -650,7 +650,7 @@
     background: var(--slate-50);
 }
 
-/* ── REAG ITEM HOVER ──────────────────────────── */
+/* â”€â”€ REAG ITEM HOVER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .reag-item {
     transition: all .2s;
     border-radius: 8px;
@@ -662,7 +662,7 @@
     background: var(--slate-50);
 }
 
-/* ── SECTION LABEL ENHANCED ───────────────────── */
+/* â”€â”€ SECTION LABEL ENHANCED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dash-section-title {
     font-size: .65rem;
     font-weight: 800;
@@ -683,13 +683,13 @@
     background: linear-gradient(90deg, var(--slate-200), transparent);
 }
 
-/* ── PULSE KEYFRAME ───────────────────────────── */
+/* â”€â”€ PULSE KEYFRAME â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: .5; }
 }
 
-/* ── EDIT BTN MINI (for tables in dashboard) ──── */
+/* â”€â”€ EDIT BTN MINI (for tables in dashboard) â”€â”€â”€â”€ */
 .dash-edit-btn {
     width: 32px;
     height: 32px;
@@ -713,7 +713,7 @@
     box-shadow: 0 2px 8px rgba(99,102,241,.15);
 }
 
-/* ── GREETING PHOTO GLOW ──────────────────────── */
+/* â”€â”€ GREETING PHOTO GLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dash-photo {
     width: 110px;
     height: 110px;
@@ -729,7 +729,7 @@
     box-shadow: 0 12px 32px rgba(0,0,0,.3), 0 0 60px rgba(99,102,241,.25);
 }
 
-/* ── LIVE INDICATOR ───────────────────────────── */
+/* â”€â”€ LIVE INDICATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dash-live-dot {
     width: 8px;
     height: 8px;
@@ -740,7 +740,7 @@
     box-shadow: 0 0 0 3px rgba(16,185,129,.2);
 }
 
-/* ── QUICK ACTION ENHANCED ────────────────────── */
+/* â”€â”€ QUICK ACTION ENHANCED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .quick-action {
     position: relative;
     overflow: hidden;
@@ -761,7 +761,7 @@
     left: 100%;
 }
 
-/* ── PRÓXIMAS AULAS CARDS ─────────────────────── */
+/* â”€â”€ PRÃ“XIMAS AULAS CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .prox-card {
     background: #fff;
     border: 1.5px solid var(--slate-100);
@@ -850,7 +850,7 @@
     transform: translateX(3px);
 }
 
-/* ── REAGENDAMENTO CARDS ──────────────────────── */
+/* â”€â”€ REAGENDAMENTO CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .reag-card {
     background: #fff;
     border: 1.5px solid #fecdd3;
@@ -950,7 +950,7 @@
     color: #fff;
 }
 
-/* ── OK BANNER (empty state) ──────────────────── */
+/* â”€â”€ OK BANNER (empty state) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dash-ok-banner {
     display: flex;
     align-items: center;
@@ -990,3 +990,5 @@
     color: #16a34a;
     opacity: .7;
 }
+
+

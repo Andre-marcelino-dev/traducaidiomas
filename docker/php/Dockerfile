@@ -32,7 +32,16 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin \ 
     --filename=composer 
  
-WORKDIR /var/www/html 
+WORKDIR /var/www/html
+
+# Diretório usado pelo compilador de views em ambiente Docker.
+RUN mkdir -p /tmp/traduca-framework/views \
+    && chmod -R 777 /tmp/traduca-framework
+
+# O PHP-FPM executa como www-data e precisa compilar views e caches.
+RUN mkdir -p /var/www/html/storage/framework/{cache,sessions,views} /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
  
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 CMD ["php-fpm"] 

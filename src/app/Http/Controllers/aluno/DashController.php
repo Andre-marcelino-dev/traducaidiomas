@@ -21,9 +21,6 @@ class DashController extends Controller
 
         // Busca aulas dos cursos do aluno, ou todas se não houver correspondência
         $aulas = Aula::whereIn('id_curso', $idCursos)->get();
-        if ($aulas->isEmpty()) {
-            $aulas = Aula::all();
-        }
 
         $totalAulas = $aulas->count();
 

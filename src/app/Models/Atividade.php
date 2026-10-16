@@ -16,4 +16,5 @@ class Atividade extends Model
     public function curso() { return $this->belongsTo(Curso::class, 'id_curso', 'id_curso'); }
     public function questoes() { return $this->hasMany(AtividadeQuestao::class, 'id_atividade', 'id_atividade'); }
     public function respostas() { return $this->hasMany(AtividadeResposta::class, 'id_atividade', 'id_atividade'); }
+    public function anexos() { return $this->hasMany(AtividadeAnexo::class, 'id_atividade', 'id_atividade'); }
 }

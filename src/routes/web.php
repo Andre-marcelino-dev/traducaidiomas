@@ -237,5 +237,13 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             ->name('reagendamentos.index');
         Route::get('reagendamento/notificacoes', [AlunoReagendamentoController::class, 'contarNotificacoes'])
             ->name('reagendamento.notificacoes');
+
+        // ── Notificações (Aluno) ──
+        Route::get('notificacoes', [AlunoReagendamentoController::class, 'listarNotificacoes'])
+            ->name('notificacoes.listar');
+        Route::post('notificacoes/marcar-lidas', [AlunoReagendamentoController::class, 'marcarComoLidas'])
+            ->name('notificacoes.marcar-lidas');
+        Route::post('notificacoes/{id}/marcar-lida', [AlunoReagendamentoController::class, 'marcarComoLida'])
+            ->name('notificacoes.marcar-lida');
     });
 });

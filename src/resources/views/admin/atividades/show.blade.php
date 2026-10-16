@@ -36,9 +36,13 @@
                     @if($questao->tipo_questao === 'multipla_escolha')
                         <p>A) {{ $questao->opcao_a }} &nbsp; B) {{ $questao->opcao_b }} &nbsp; C) {{ $questao->opcao_c }} &nbsp; D) {{ $questao->opcao_d }}</p>
                         <p class="text-success"><strong>Resposta correta: {{ $questao->resposta_correta }}</strong></p>
-                    @else
-                        <p class="text-muted">Questão dissertativa</p>
-                    @endif
+                  @elseif($questao->tipo_questao === 'audio')
+    <p class="text-primary">
+        🎙️ Questão de resposta em áudio
+    </p>
+@else
+    <p class="text-muted">Questão dissertativa</p>
+@endif
                 </div>
                 @endforeach
             </div>

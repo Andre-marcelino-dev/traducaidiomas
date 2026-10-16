@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Aluno;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reagendamento;
+use App\Models\Notificacao;
 use App\Models\Aula;
 use App\Models\Professor;
 use Illuminate\Http\Request;
@@ -11,6 +12,59 @@ use Illuminate\Support\Facades\Auth;
 
 class ReagendamentoController extends Controller
 {
+        /**
+     * Conta notificações não lidas do aluno logado.
+     */
+    public function contarNotificacoes()
+    {
+        $count = Notificacao::where('id_aluno', auth('aluno')->id_aluno)
+            ->where('lida_notificacoes', 0)
+            ->count();
+
+        return response()->json(['count' => $count]);
+    }
+
+    /**
+     * Lista notificações não lidas do aluno (JSON para AJAX).
+     */
+    public function listarNotificacoes()
+    {
+        $notificacoes = Notificacao::where('id_aluno', auth('aluno')->id_aluno)
+            ->where('lida_notificacoes', 0)
+            ->orderByDesc('data_criacao_notificacoes')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'notificacoes' => $notificacoes,
+            'count'        => $notificacoes->count(),
+        ]);
+    }
+
+    /**
+     * Marca todas as notificações do aluno como lidas.
+     */
+    public function marcarComoLidas()
+    {
+        Notificacao::where('id_aluno', auth('aluno')->id_aluno)
+            ->where('lida_notificacoes', 0)
+            ->update(['lida_notificacoes' => 1]);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Marca uma notificação específica como lida.
+     */
+    public function marcarComoLida($id)
+    {
+        Notificacao::where('id_aluno', auth('aluno')->id_aluno)
+            ->where('id_notificacoes', $id)
+            ->update(['lida_notificacoes' => 1]);
+
+        return response()->json(['success' => true]);
+    }
+
     /**
      * Aluno solicita um reagendamento.
      */

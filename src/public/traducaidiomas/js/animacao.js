@@ -17,6 +17,7 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
 function updateTimeline() {
+    if (!sections.length || !progressBar || !prevBtn || !nextBtn) return;
     sections.forEach((section, index) => {
         section.classList.remove('active');
         if (index === currentLevel) {
@@ -53,7 +54,7 @@ updateTimeline();
 
 
 
-const firstSectionCards = sections[0].querySelectorAll('.timeline-card');
+const firstSectionCards = sections[0]?.querySelectorAll('.timeline-card') || [];
 setTimeout(() => {
     firstSectionCards.forEach(card => card.classList.add('show'));
 }, 100);
@@ -71,7 +72,7 @@ $(document).ready(function() {
    const abrirMenu = document.querySelector('.abrir-menu');
    console.log('Elemento .abrir-menu:', abrirMenu);
    if (abrirMenu) {
-       abrirMenu.onclick = function(){
+       if (abrirMenu) abrirMenu.onclick = function(){
            console.log('Clicou em abrir menu');
            document.documentElement.classList.add('menu-ativo');
        }
@@ -81,10 +82,9 @@ $(document).ready(function() {
 
    const fecharMenu = document.querySelector('.fechar-menu');
    if (fecharMenu) {
-       fecharMenu.onclick = function(){
+       if (fecharMenu) fecharMenu.onclick = function(){
            console.log('Clicou em fechar menu');
            document.documentElement.classList.remove("menu-ativo");
        }
    }
 });
-
