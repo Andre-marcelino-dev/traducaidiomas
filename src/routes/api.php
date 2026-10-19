@@ -49,6 +49,8 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/atividades/{id}', [AlunoApiAtividadeController::class, 'show'])->whereNumber('id')->name('atividades.show');
             Route::get('/atividades/{id}/audio', [AlunoApiAtividadeController::class, 'audio'])->whereNumber('id')->name('atividades.audio');
             Route::post('/atividades/{id}/responder', [AlunoApiAtividadeController::class, 'responder'])->whereNumber('id')->name('atividades.responder');
+            Route::post('/atividades/{id}/questoes/{idQuestao}/audio', [AlunoApiAtividadeController::class, 'responderAudio'])->whereNumber(['id', 'idQuestao'])->name('atividades.questoes.responderAudio');
+            Route::get('/atividades/{id}/questoes/{idQuestao}/audio', [AlunoApiAtividadeController::class, 'audioResposta'])->whereNumber(['id', 'idQuestao'])->name('atividades.questoes.audio');
 
             Route::get('/duvidas', [AlunoApiDuvidaController::class, 'index'])->name('duvidas.index');
             Route::post('/duvidas', [AlunoApiDuvidaController::class, 'store'])->name('duvidas.store');

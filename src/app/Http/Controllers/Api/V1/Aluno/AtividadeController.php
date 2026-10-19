@@ -8,6 +8,7 @@ use App\Models\AtividadeResposta;
 use App\Models\AtividadeRespostaQuestao;
 use App\Models\Matricula;
 use App\Support\CursoAtual;
+use App\Support\Upload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -61,22 +62,28 @@ class AtividadeController extends Controller
         $porQuestao = $resposta ? $resposta->respostasQuestoes->keyBy('id_questao') : collect();
 
         $questoes = $atividade->questoes->sortBy([['ordem', 'asc'], ['id_questao', 'asc']])->values()
-            ->map(function ($q, int $i) use ($porQuestao) {
+            ->map(function ($q, int $i) use ($porQuestao, $atividade) {
                 $rq = $porQuestao[$q->id_questao] ?? null;
+                $temAudioGravado = $q->tipo_questao === 'audio' && $rq?->resposta_aluno;
 
                 return [
                     'id_questao' => $q->id_questao,
                     'numero'     => $i + 1,
                     'enunciado'  => $q->enunciado,
-                    'tipo'       => $q->tipo_questao, // multipla_escolha | texto
+                    'tipo'       => $q->tipo_questao, // multipla_escolha | texto | audio
                     'opcoes'     => $q->tipo_questao === 'multipla_escolha'
                         ? collect(['A' => $q->opcao_a, 'B' => $q->opcao_b, 'C' => $q->opcao_c, 'D' => $q->opcao_d])
                             ->filter(fn ($texto) => filled($texto))
                             ->map(fn ($texto, $letra) => ['letra' => $letra, 'texto' => $texto])
                             ->values()
                         : [],
-                    'resposta_aluno' => $rq?->resposta_aluno,
-                    // Igual ao site: só diz se acertou (null = questão de texto ou não enviada).
+                    // Em questões de áudio, resposta_aluno guarda o NOME do arquivo
+                    // gravado (não aparece pro app; ele só usa a url abaixo).
+                    'resposta_aluno' => $q->tipo_questao === 'audio' ? null : $rq?->resposta_aluno,
+                    'url_resposta_audio' => $temAudioGravado
+                        ? route('api.aluno.atividades.questoes.audio', [$atividade->id_atividade, $q->id_questao])
+                        : null,
+                    // Igual ao site: só diz se acertou (null = questão de texto/áudio ou não enviada).
                     'correta' => $rq && $rq->correta !== null ? (bool) $rq->correta : null,
                 ];
             });
@@ -142,9 +149,17 @@ class AtividadeController extends Controller
         $respostas = $request->input('respostas', []);
 
         $resposta->update(['status_resposta' => 'ENVIADA', 'data_envio' => now()]);
-        $resposta->respostasQuestoes()->delete();
+
+        // Questões de áudio são enviadas por rota própria (upload do arquivo) e
+        // não entram neste formulário — preserva o que já foi gravado, só
+        // substitui as respostas de múltipla escolha/texto.
+        $idsQuestoesAudio = $atividade->questoes->where('tipo_questao', 'audio')->pluck('id_questao');
+        $resposta->respostasQuestoes()->whereNotIn('id_questao', $idsQuestoesAudio)->delete();
 
         foreach ($atividade->questoes as $questao) {
+            if ($questao->tipo_questao === 'audio') {
+                continue;
+            }
             $respostaAluno = $respostas[$questao->id_questao] ?? null;
             $correta = null;
             if ($questao->tipo_questao === 'multipla_escolha') {
@@ -162,6 +177,90 @@ class AtividadeController extends Controller
             'success' => true,
             'message' => 'Atividade enviada com sucesso!',
         ]);
+    }
+
+    /**
+     * Aluno envia (ou substitui) a gravação de uma questão de áudio.
+     * Marca a atividade como ENVIADA na hora — não depende do botão de
+     * "enviar respostas" das questões de texto/múltipla escolha.
+     */
+    public function responderAudio(Request $request, int $id, int $idQuestao): JsonResponse
+    {
+        $request->validate([
+            'audio' => 'required|file|mimes:' . implode(',', Upload::AUDIOS) . '|max:20480',
+        ], [
+            'audio.required' => 'Grave sua resposta antes de enviar.',
+            'audio.mimes'    => 'Áudio inválido. Tente gravar de novo.',
+            'audio.max'      => 'O áudio pode ter no máximo 20 MB.',
+        ]);
+
+        $idAluno = (int) $request->user()->id_aluno;
+        $atividade = $this->atividadeDoAluno($idAluno, $id);
+
+        if (!$atividade) {
+            return $this->naoEncontrada();
+        }
+
+        $questao = $atividade->questoes->firstWhere('id_questao', $idQuestao);
+        if (!$questao || $questao->tipo_questao !== 'audio') {
+            return $this->naoEncontrada('Questão de áudio não encontrada.');
+        }
+
+        $resposta = AtividadeResposta::firstOrCreate(
+            ['id_atividade' => $atividade->id_atividade, 'id_aluno' => $idAluno],
+            ['status_resposta' => 'PENDENTE']
+        );
+
+        if ($resposta->status_resposta === 'CORRIGIDA') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Esta atividade já foi corrigida e não pode ser reenviada.',
+            ], Response::HTTP_CONFLICT);
+        }
+
+        $rq = AtividadeRespostaQuestao::firstOrNew([
+            'id_resposta' => $resposta->id_resposta,
+            'id_questao'  => $idQuestao,
+        ]);
+
+        $antigo = $rq->resposta_aluno;
+
+        $nome = 'traducaidiomas/atividades-respostas/'
+            . Upload::salvar($request->file('audio'), 'atividades-respostas', Upload::AUDIOS, 'resposta');
+        $rq->resposta_aluno = $nome;
+        $rq->save();
+
+        if ($antigo && is_file(public_path($antigo))) {
+            @unlink(public_path($antigo));
+        }
+
+        $resposta->update(['status_resposta' => 'ENVIADA', 'data_envio' => now()]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Gravação enviada! Aguarde a correção do professor.',
+            'data' => [
+                'url_resposta_audio' => route('api.aluno.atividades.questoes.audio', [$atividade->id_atividade, $idQuestao]),
+            ],
+        ]);
+    }
+
+    /**
+     * Devolve a gravação que o próprio aluno enviou (pra ele ouvir de novo).
+     */
+    public function audioResposta(Request $request, int $id, int $idQuestao)
+    {
+        $idAluno = (int) $request->user()->id_aluno;
+        $atividade = $this->atividadeDoAluno($idAluno, $id);
+        $resposta = $atividade?->respostas->first();
+        $rq = $resposta?->respostasQuestoes->firstWhere('id_questao', $idQuestao);
+        $caminho = $rq?->resposta_aluno ? public_path((string) $rq->resposta_aluno) : null;
+
+        if (!$rq || !$rq->resposta_aluno || !is_file($caminho)) {
+            return $this->naoEncontrada('Áudio não encontrado.');
+        }
+
+        return response()->file($caminho);
     }
 
     /**

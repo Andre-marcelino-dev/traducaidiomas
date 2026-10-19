@@ -198,6 +198,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/',             [AdminAtividadeController::class, 'store'])->name('store');
             Route::get('/{id}',          [AdminAtividadeController::class, 'show'])->name('show');
             Route::get('/{id}/audio',    [AdminAtividadeController::class, 'audio'])->name('audio');
+            Route::get('/resposta-questao/{id}/audio', [AdminAtividadeController::class, 'audioResposta'])->name('resposta-questao.audio');
             Route::delete('/{id}',       [AdminAtividadeController::class, 'destroy'])->name('destroy');
             Route::put('/corrigir/{id}', [AdminAtividadeController::class, 'corrigir'])->name('corrigir');
         });

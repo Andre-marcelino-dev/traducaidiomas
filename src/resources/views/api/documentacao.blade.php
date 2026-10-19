@@ -123,10 +123,19 @@
                 ['GET', '/aluno/atividades/{id}/audio', 'aluno', 'Áudio da atividade (precisa do token). Sem áudio: 404.', [
                     $p('id', 'caminho', 'número', true, 'Id da atividade.'),
                 ], null],
-                ['POST', '/aluno/atividades/{id}/responder', 'aluno', 'Envia as respostas. Atividade já corrigida: 409.', [
+                ['POST', '/aluno/atividades/{id}/responder', 'aluno', 'Envia as respostas de texto/múltipla escolha. Não mexe em questões de áudio. Atividade já corrigida: 409.', [
                     $p('id', 'caminho', 'número', true, 'Id da atividade.'),
                     $p('respostas', 'corpo', 'objeto', true, 'Respostas por questão: {"<id_questao>": "B"} ou {"<id_questao>": "texto"}.'),
                 ], "Corpo:\n{\n  \"respostas\": { \"15\": \"B\", \"16\": \"I woke up early.\" }\n}"],
+                ['POST', '/aluno/atividades/{id}/questoes/{idQuestao}/audio', 'aluno', 'Envia (ou substitui) a gravação de uma questão de áudio; marca a atividade como enviada na hora. Multipart, campo "audio". Atividade já corrigida: 409.', [
+                    $p('id', 'caminho', 'número', true, 'Id da atividade.'),
+                    $p('idQuestao', 'caminho', 'número', true, 'Id da questão (tipo "audio").'),
+                    $p('audio', 'corpo', 'arquivo', true, 'Gravação (mp3, wav, ogg, m4a, aac, webm). Até 20 MB.'),
+                ], null],
+                ['GET', '/aluno/atividades/{id}/questoes/{idQuestao}/audio', 'aluno', 'Gravação que o próprio aluno enviou para essa questão. Sem gravação: 404.', [
+                    $p('id', 'caminho', 'número', true, 'Id da atividade.'),
+                    $p('idQuestao', 'caminho', 'número', true, 'Id da questão.'),
+                ], null],
             ],
         ],
         [
