@@ -49,4 +49,5 @@ src/public/traducaidiomas/professor/*
 src/public/traducaidiomas/materiais/*
 src/public/traducaidiomas/forum/*
 src/public/traducaidiomas/atividades/*
+src/public/traducaidiomas/atividades-respostas/*
 !src/public/traducaidiomas/*/.htaccess

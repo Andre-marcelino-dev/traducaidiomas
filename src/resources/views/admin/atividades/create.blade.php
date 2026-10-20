@@ -91,6 +91,7 @@
                             <select name="tipo_questao[]" class="form-select tipo-questao">
                                 <option value="multipla_escolha">Múltipla Escolha</option>
                                 <option value="texto">Texto Dissertativo</option>
+                                <option value="audio">Áudio (aluno grava a resposta)</option>
                             </select>
                         </div>
                         <div class="opcoes-multipla">

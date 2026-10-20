@@ -42,6 +42,8 @@
                     @if($questao->tipo_questao === 'multipla_escolha')
                         <p>A) {{ $questao->opcao_a }} &nbsp; B) {{ $questao->opcao_b }} &nbsp; C) {{ $questao->opcao_c }} &nbsp; D) {{ $questao->opcao_d }}</p>
                         <p class="text-success"><strong>Resposta correta: {{ $questao->resposta_correta }}</strong></p>
+                    @elseif($questao->tipo_questao === 'audio')
+                        <p class="text-muted"><i class="fas fa-microphone me-1"></i> Questão de áudio — o aluno grava a resposta pelo app</p>
                     @else
                         <p class="text-muted">Questão dissertativa</p>
                     @endif
@@ -72,7 +74,15 @@
                     @foreach($resposta->respostasQuestoes as $rq)
                     <div class="mb-2 p-2 bg-light rounded">
                         <small class="text-muted">{{ $rq->questao?->enunciado }}</small><br>
-                        <strong>Resposta: </strong> {{ $rq->resposta_aluno ?? '—' }}
+                        @if($rq->questao?->tipo_questao === 'audio')
+                            @if($rq->resposta_aluno)
+                                <audio controls preload="none" class="w-100 mt-1" src="{{ route('admin.atividades.resposta-questao.audio', $rq->id) }}"></audio>
+                            @else
+                                <strong>Resposta: </strong> —
+                            @endif
+                        @else
+                            <strong>Resposta: </strong> {{ $rq->resposta_aluno ?? '—' }}
+                        @endif
                         @if($rq->correta !== null)
                             {!! $rq->correta ? '<span class="badge bg-success ms-2">✅ Correta</span>' : '<span class="badge bg-danger ms-2">❌ Errada</span>' !!}
                         @endif

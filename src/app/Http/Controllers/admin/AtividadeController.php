@@ -102,6 +102,16 @@ class AtividadeController extends Controller
         return response()->file($caminho);
     }
 
+    /** Gravação que o aluno enviou como resposta de uma questão de áudio. */
+    public function audioResposta($id)
+    {
+        $rq = AtividadeRespostaQuestao::findOrFail($id);
+        $caminho = public_path((string) $rq->resposta_aluno);
+        abort_unless($rq->resposta_aluno && is_file($caminho), 404);
+
+        return response()->file($caminho);
+    }
+
     public function corrigir(Request $request, $id)
     {
         $resposta = AtividadeResposta::findOrFail($id);
@@ -133,13 +143,23 @@ class AtividadeController extends Controller
         $atividade = Atividade::findOrFail($id);
 
         // As respostas dos alunos não têm cascade no banco: apaga antes (senão erro 500).
-        DB::transaction(function () use ($atividade) {
+        $audiosResposta = [];
+        DB::transaction(function () use ($atividade, &$audiosResposta) {
             $respostaIds = $atividade->respostas()->pluck('id_resposta');
+            $audiosResposta = AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)
+                ->whereNotNull('resposta_aluno')
+                ->pluck('resposta_aluno')->all();
             AtividadeRespostaQuestao::whereIn('id_resposta', $respostaIds)->delete();
             AtividadeResposta::whereIn('id_resposta', $respostaIds)->delete();
             $atividade->questoes()->delete();
             $atividade->delete();
         });
+
+        foreach ($audiosResposta as $caminho) {
+            if (is_file(public_path($caminho))) {
+                @unlink(public_path($caminho));
+            }
+        }
 
         if ($atividade->arquivo_audio && is_file(public_path($atividade->arquivo_audio))) {
             @unlink(public_path($atividade->arquivo_audio));
