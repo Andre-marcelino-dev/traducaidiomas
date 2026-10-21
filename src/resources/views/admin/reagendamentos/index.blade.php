@@ -118,6 +118,12 @@
                                 </td>
                                 <td>
                                     <p class="mb-0" style="font-size:.85rem;color:#64748b;max-width:300px;line-height:1.4;">{{ $reagendamento->motivo }}</p>
+                                    @if($reagendamento->data_sugerida)
+                                        <div style="font-size:.72rem;color:#059669;margin-top:4px;">
+                                            <i class="fas fa-lightbulb me-1"></i>
+                                            Aluno sugeriu: {{ \Carbon\Carbon::parse($reagendamento->data_sugerida)->format('d/m/Y H:i') }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($reagendamento->status === 'pendente')
@@ -137,7 +143,7 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         @if ($reagendamento->status === 'pendente')
                                             <button type="button" class="tbl-btn-success"
-                                                onclick="abrirModalConfirmar({{ $reagendamento->id }}, '{{ $reagendamento->aula?->titulo_aulas }}', '{{ $reagendamento->aluno?->nome_aluno }}')">
+                                                onclick="abrirModalConfirmar({{ $reagendamento->id }}, '{{ $reagendamento->aula?->titulo_aulas }}', '{{ $reagendamento->aluno?->nome_aluno }}', {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('Y-m-d').'\'' : 'null' }}, {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('H:i').'\'' : 'null' }})">
                                                 <i class="fas fa-calendar-check"></i>
                                             </button>
                                             <form action="{{ route('admin.reagendamentos.recusar', $reagendamento->id) }}" method="POST" class="d-inline">
@@ -308,10 +314,14 @@
 @include('admin.partials.modal-delete', ['delTitulo' => 'Excluir Reagendamento', 'delDescricao' => 'Você está prestes a excluir o reagendamento de:'])
 
 <script>
-    function abrirModalConfirmar(id, aula, aluno) {
+    function abrirModalConfirmar(id, aula, aluno, dataSugerida, horaSugerida) {
         document.getElementById('modalConfirmarAluno').textContent = aluno;
         document.getElementById('modalConfirmarAula').textContent  = aula;
         document.getElementById('formConfirmarData').action = '/admin/reagendamentos/' + id + '/aceitar';
+        // Já vem preenchido com a data que o aluno sugeriu (se ele sugeriu
+        // uma); o professor ainda pode trocar antes de confirmar.
+        document.getElementById('novaDataAulas').value = dataSugerida || '';
+        document.getElementById('novaHoraAulas').value = horaSugerida || '';
         new bootstrap.Modal(document.getElementById('modalConfirmarData')).show();
     }
 
