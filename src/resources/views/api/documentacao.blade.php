@@ -105,9 +105,13 @@
             'descricao' => '',
             'rotas' => [
                 ['GET', '/aluno/agenda', 'aluno', 'Próxima aula e as aulas de todos os cursos matriculados.', [], null],
+                ['GET', '/aluno/reagendamento/{idAula}/sugestoes', 'aluno', 'Até 3 horários livres do professor dessa aula (mesmo horário da aula original, em dias sem outra aula marcada).', [
+                    $p('idAula', 'caminho', 'número', true, 'Id da aula.'),
+                ], null],
                 ['POST', '/aluno/reagendamento/solicitar', 'aluno', 'Pede o reagendamento de uma aula. Se já existe pedido pendente para a mesma aula: 409.', [
                     $p('aula_id', 'corpo', 'número', true, 'Id da aula.'),
                     $p('motivo', 'corpo', 'texto', true, 'Motivo (10 a 500 caracteres).'),
+                    $p('data_sugerida', 'corpo', 'texto', false, 'Data/hora sugerida pelo aluno (uma das 3 de /sugestoes, por exemplo), formato "AAAA-MM-DD HH:MM". Precisa ser no futuro.'),
                 ], null],
             ],
         ],

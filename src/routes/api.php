@@ -44,6 +44,7 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
             Route::get('/materiais/{idMaterial}/download', [AlunoApiCursoController::class, 'downloadMaterial'])->name('materiais.download');
             Route::get('/agenda', [AlunoApiAgendaController::class, 'index'])->name('agenda.index');
             Route::post('/reagendamento/solicitar', [AlunoApiReagendamentoController::class, 'solicitar'])->name('reagendamento.solicitar');
+            Route::get('/reagendamento/{idAula}/sugestoes', [AlunoApiReagendamentoController::class, 'sugestoes'])->whereNumber('idAula')->name('reagendamento.sugestoes');
 
             Route::get('/atividades', [AlunoApiAtividadeController::class, 'index'])->name('atividades.index');
             Route::get('/atividades/{id}', [AlunoApiAtividadeController::class, 'show'])->whereNumber('id')->name('atividades.show');
