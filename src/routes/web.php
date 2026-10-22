@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\ReagendamentoController as AdminReagendamentoCont
 use App\Http\Controllers\aluno\JustificativaController as AlunoJustificativaController;
 use App\Http\Controllers\admin\JustificativaController as AdminJustificativaController;
 use App\Http\Controllers\admin\AuthController;
+use App\Http\Controllers\admin\SenhaController as AdminSenhaController;
 use App\Http\Controllers\admin\DashController;
 use App\Http\Controllers\admin\ProfessorController;
 use App\Http\Controllers\admin\AlunoController;
@@ -85,9 +86,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AuthController::class, 'autenticar'])->middleware('throttle:login')->name('autenticar');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Primeiro acesso e "esqueci a senha" pela tela de login foram removidos:
-    // só pediam nome/e-mail + telefone (dados públicos) para trocar a senha.
-    // Agora o admin cadastra/redefine a senha em Professores > Editar.
+    // "Esqueci a senha": código de 6 dígitos enviado ao e-mail cadastrado.
+    // (A antiga recuperação por telefone foi removida: usava só dados públicos.)
+    Route::get('/senha/esqueci',    [AdminSenhaController::class, 'esqueci'])->name('senha.esqueci');
+    Route::post('/senha/esqueci',   [AdminSenhaController::class, 'enviarCodigo'])->middleware('throttle:login')->name('senha.enviar');
+    Route::get('/senha/redefinir',  [AdminSenhaController::class, 'redefinir'])->name('senha.redefinir');
+    Route::post('/senha/redefinir', [AdminSenhaController::class, 'salvar'])->middleware('throttle:login')->name('senha.salvar');
 
     // Painel Admin (Protegidas por Middleware)
     Route::middleware(['auth:admin', 'session.timeout:admin'])->group(function () {
