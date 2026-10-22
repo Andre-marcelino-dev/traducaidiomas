@@ -8,13 +8,13 @@
 
         <div id="cards_container">
             <!-- ################ INICIO CARD PHONE ##############  -->
-            <a href="tel:+5511963067419" target="_blank" class="contact-card phone">
+            <a href="tel:+5511999612140" target="_blank" class="contact-card phone">
                 <div class="card-icon">
                     <i class="fa-solid fa-phone"></i>
                 </div>
                 <div class="card-infos">
                     <p>Telefone</p>
-                    <span> (11)96306-7419 </span>
+                    <span> (11)999612140 </span>
                 </div>
             </a>
             <!-- ################ FIM CARD PHONE ##############  -->

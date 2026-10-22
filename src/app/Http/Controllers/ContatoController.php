@@ -32,13 +32,18 @@ class ContatoController extends Controller
         'mensagem.required' => 'O campo mensagem é obrigatório.',
     ]);
 
-    \Mail::raw(
-        "Nome: {$request->nome}\nE-mail: {$request->email}\nAssunto: {$request->assunto}\n\nMensagem:\n{$request->mensagem}",
-        function ($message) use ($request) {
-            $message->to('anddrem89@gmail.com')
-        ->subject("Contato: {$request->assunto}");
-        }
-    );
+    // Se o SMTP falhar, não derruba a página: registra no log e segue com o WhatsApp.
+    try {
+        \Mail::raw(
+            "Nome: {$request->nome}\nE-mail: {$request->email}\nAssunto: {$request->assunto}\n\nMensagem:\n{$request->mensagem}",
+            function ($message) use ($request) {
+                $message->to('anddrem89@gmail.com')
+            ->subject("Contato: {$request->assunto}");
+            }
+        );
+    } catch (\Throwable $e) {
+        \Log::error('Erro ao enviar e-mail de contato', ['erro' => $e->getMessage()]);
+    }
 
     $textoWhatsapp = urlencode(
         "📩 *Nova mensagem do site*\n\n"
