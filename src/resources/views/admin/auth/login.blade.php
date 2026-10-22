@@ -136,7 +136,7 @@
 
                 <div class="linha-opcoes">
                     <span></span>
-                    <span class="link-esqueceu">Esqueceu a senha? Peça ao administrador.</span>
+                    <a href="{{ route('admin.senha.esqueci') }}" class="link-esqueceu">Esqueceu a senha?</a>
                 </div>
 
                 <button type="submit" class="btn-entrar" id="btnEntrar">
