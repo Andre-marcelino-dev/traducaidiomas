@@ -114,7 +114,7 @@
 
             <div class="input-group">
                 <label for="message"> Mensagem </label>
-                <textarea name="mensagem" id="message" required rows="8">{{ old('mensagem') }}</textarea>
+                <textarea name="mensagem" id="message" required rows="8">{{ old('mensagem', $mensagemSugerida ?? '') }}</textarea>
             </div>
 
             <button type="submit">Enviar mensagem</button>

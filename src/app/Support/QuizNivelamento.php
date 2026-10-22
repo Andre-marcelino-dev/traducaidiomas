@@ -80,6 +80,20 @@ class QuizNivelamento
         ])->values()->all();
     }
 
+    /** Curso do catálogo pelo nome (ex.: "Inglês B1"), ou null se não existir. */
+    public static function cursoPorNome(string $nome): ?array
+    {
+        foreach (array_keys(self::idiomas()) as $slug) {
+            foreach (self::cursos($slug) as $curso) {
+                if (mb_strtolower($curso['nome']) === mb_strtolower($nome)) {
+                    return $curso;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /** Monta o resultado final (nível, curso e textos) a partir dos acertos. */
     public static function resultado(string $slug, int $acertos): array
     {

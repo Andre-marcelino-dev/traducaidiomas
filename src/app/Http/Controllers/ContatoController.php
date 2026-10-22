@@ -13,8 +13,21 @@ class ContatoController extends Controller
         $curso = QuizNivelamento::limparCurso($request->query('curso'));
 
         return view('site.contato.contato', [
-            'assuntoSugerido' => $curso !== '' ? "Interesse no curso {$curso}" : '',
+            'assuntoSugerido'  => $curso !== '' ? "Interesse no curso {$curso}" : '',
+            'mensagemSugerida' => $curso !== '' ? $this->mensagemDoCurso($curso) : '',
         ]);
+    }
+
+    /** Texto inicial da mensagem com uma breve descrição do curso escolhido. */
+    private function mensagemDoCurso(string $curso): string
+    {
+        $dados = QuizNivelamento::cursoPorNome($curso);
+
+        $texto = $dados
+            ? "Olá! Tenho interesse no curso {$dados['nome']} ({$dados['rotulo']}).\n{$dados['descricao']}\n\n"
+            : "Olá! Tenho interesse no curso {$curso}.\n\n";
+
+        return $texto . 'Gostaria de saber mais sobre valores, horários e como funcionam as aulas.';
     }
 
   public function enviar(Request $request)
