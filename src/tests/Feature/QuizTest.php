@@ -159,6 +159,21 @@ class QuizTest extends TestCase
         $this->assertStringContainsString('value="Interesse no curso Inglês B1"', $html);
     }
 
+    public function test_contato_preenche_a_mensagem_com_a_descricao_do_curso(): void
+    {
+        $html = $this->get(route('contato', ['curso' => 'Inglês A1']))->assertOk()->getContent();
+
+        $this->assertStringContainsString('Olá! Tenho interesse no curso Inglês A1 (Iniciante).', $html);
+        $this->assertStringContainsString('Primeiros passos em Inglês: vocabulário essencial', $html);
+    }
+
+    public function test_contato_sem_curso_deixa_a_mensagem_vazia(): void
+    {
+        $html = $this->get(route('contato'))->assertOk()->getContent();
+
+        $this->assertMatchesRegularExpression('/<textarea name="mensagem"[^>]*><\/textarea>/', $html);
+    }
+
     public function test_contato_nao_executa_html_vindo_do_curso(): void
     {
         $html = $this->get(route('contato', ['curso' => '<script>alert(1)</script>']))->assertOk()->getContent();
