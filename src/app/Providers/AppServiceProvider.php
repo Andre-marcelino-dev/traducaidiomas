@@ -87,6 +87,13 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
+        // Formulário de contato: cada envio dispara um e-mail, então limita por IP
+        // (evita robô lotando a caixa da escola e queimando o e-mail no SMTP).
+        RateLimiter::for('contato', fn (Request $request) => [
+            Limit::perMinute(3)->by('contato|' . $request->ip()),
+            Limit::perHour(10)->by('contato-hora|' . $request->ip()),
+        ]);
+
         // Quiz público (perguntas, correção e resultado): 60 requisições por minuto por IP.
         RateLimiter::for('quiz', fn (Request $request) => Limit::perMinute(60)->by('quiz|' . $request->ip()));
 

@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -19,6 +20,12 @@ use Illuminate\Validation\ValidationException;
 class SenhaController extends Controller
 {
     private const MINUTOS_VALIDADE = 30;
+    private const MAX_TENTATIVAS = 5;
+
+    private static function chaveTentativas(string $email): string
+    {
+        return 'codigo-senha-aluno|' . mb_strtolower($email);
+    }
 
     public function esqueci(Request $request): JsonResponse
     {
@@ -35,6 +42,7 @@ class SenhaController extends Controller
             CodigoSenhaAluno::where('email_aluno', $aluno->email_aluno)
                 ->where('usado', false)
                 ->update(['usado' => true]);
+            RateLimiter::clear(self::chaveTentativas($aluno->email_aluno));
 
             CodigoSenhaAluno::create([
                 'email_aluno' => $aluno->email_aluno,
@@ -71,15 +79,28 @@ class SenhaController extends Controller
         ]);
 
         $registro = CodigoSenhaAluno::where('email_aluno', $dados['email_aluno'])
-            ->where('codigo', $dados['codigo'])
             ->where('usado', false)
             ->where('expira_em', '>=', now())
             ->latest('id_codigo')
             ->first();
 
-        if (!$registro) {
+        if (!$registro || !hash_equals($registro->codigo, trim($dados['codigo']))) {
+            // Conta os erros por e-mail (no cache, sem coluna nova); ao chegar no
+            // limite, o código vigente deixa de valer e o aluno precisa pedir outro.
+            if ($registro) {
+                $chave = self::chaveTentativas($dados['email_aluno']);
+                RateLimiter::hit($chave, self::MINUTOS_VALIDADE * 60);
+
+                if (RateLimiter::attempts($chave) >= self::MAX_TENTATIVAS) {
+                    $registro->update(['usado' => true]);
+                    RateLimiter::clear($chave);
+                }
+            }
+
             throw ValidationException::withMessages(['codigo' => 'Código inválido ou expirado.']);
         }
+
+        RateLimiter::clear(self::chaveTentativas($dados['email_aluno']));
 
         $aluno = Aluno::where('email_aluno', $dados['email_aluno'])->first();
 
