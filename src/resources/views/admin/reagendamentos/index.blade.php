@@ -23,53 +23,53 @@
         <div class="row g-3 mb-4">
             <div class="col-sm-6 col-xl-3 fade-up">
                 <div class="mc mc-amber shadow">
-                    <div class="mc-icon"><i class="fas fa-clock"></i></div>
+                    <div class="mc-icon"><i class="bi bi-clock"></i></div>
                     <div class="mc-val">{{ $reagendamentos->where('status', 'pendente')->count() }}</div>
                     <p class="mc-lbl">Pendentes</p>
-                    <div class="mc-trend"><i class="fas fa-hourglass-half me-1"></i>aguardando resposta</div>
+                    <div class="mc-trend"><i class="bi bi-hourglass-split me-1"></i>aguardando resposta</div>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3 fade-up">
                 <div class="mc mc-green shadow">
-                    <div class="mc-icon"><i class="fas fa-circle-check"></i></div>
+                    <div class="mc-icon"><i class="bi bi-check-circle"></i></div>
                     <div class="mc-val">{{ $reagendamentos->where('status', 'confirmado')->count() }}</div>
                     <p class="mc-lbl">Confirmados</p>
-                    <div class="mc-trend"><i class="fas fa-check me-1"></i>aprovados</div>
+                    <div class="mc-trend"><i class="bi bi-check-lg me-1"></i>aprovados</div>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3 fade-up">
                 <div class="mc mc-rose shadow">
-                    <div class="mc-icon"><i class="fas fa-circle-xmark"></i></div>
+                    <div class="mc-icon"><i class="bi bi-x-circle"></i></div>
                     <div class="mc-val">{{ $reagendamentos->where('status', 'recusado')->count() }}</div>
                     <p class="mc-lbl">Recusados</p>
-                    <div class="mc-trend"><i class="fas fa-ban me-1"></i>negados</div>
+                    <div class="mc-trend"><i class="bi bi-slash-circle me-1"></i>negados</div>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3 fade-up">
                 <div class="mc mc-blue shadow">
-                    <div class="mc-icon"><i class="fas fa-calendar-days"></i></div>
+                    <div class="mc-icon"><i class="bi bi-calendar3"></i></div>
                     <div class="mc-val">{{ $reagendamentos->count() }}</div>
                     <p class="mc-lbl">Total</p>
-                    <div class="mc-trend"><i class="fas fa-database me-1"></i>registrados</div>
+                    <div class="mc-trend"><i class="bi bi-database me-1"></i>registrados</div>
                 </div>
             </div>
         </div>
 
         @if (session('success'))
             <div class="alert alert-success alert-styled alert-dismissible fade show mb-3">
-                <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
         @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show mb-3" style="border-radius:12px;border:none;">
-                <i class="fas fa-exclamation-triangle me-2"></i>{{ session('error') }}
+                <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show mb-3" style="border-radius:12px;border:none;">
-                <i class="fas fa-exclamation-triangle me-2"></i>Preencha todos os campos obrigatórios.
+                <i class="bi bi-exclamation-triangle me-2"></i>Preencha todos os campos obrigatórios.
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
@@ -77,9 +77,9 @@
         {{-- TABELA --}}
         <div class="d-card fade-up">
             <div class="d-card-header">
-                <h6><i class="fas fa-calendar-alt text-warning"></i> Solicitações de Reagendamento</h6>
+                <h6><i class="bi bi-calendar-event text-warning"></i> Solicitações de Reagendamento</h6>
                 <button type="button" class="tbl-btn-novo" data-bs-toggle="modal" data-bs-target="#modalNovoReagendamentoAdmin">
-                    <i class="fas fa-plus"></i> Novo Reagendamento
+                    <i class="bi bi-plus-lg"></i> Novo Reagendamento
                 </button>
             </div>
             <div class="table-responsive">
@@ -107,7 +107,7 @@
                                 <td>
                                     <div style="font-weight:600;font-size:.85rem;">{{ $reagendamento->aula?->titulo_aulas ?? 'Aula não encontrada' }}</div>
                                     <div style="font-size:.72rem;color:#94a3b8;">
-                                        <i class="fas fa-calendar-day me-1"></i>
+                                        <i class="bi bi-calendar-date me-1"></i>
                                         @if($reagendamento->aula && $reagendamento->aula->data_aulas)
                                             {{ \Carbon\Carbon::parse($reagendamento->aula->data_aulas)->format('d/m/Y') }}
                                             {{ $reagendamento->aula->hora_aulas ? \Carbon\Carbon::parse($reagendamento->aula->hora_aulas)->format('H:i') : '' }}
@@ -120,7 +120,7 @@
                                     <p class="mb-0" style="font-size:.85rem;color:#64748b;max-width:300px;line-height:1.4;">{{ $reagendamento->motivo }}</p>
                                     @if($reagendamento->data_sugerida)
                                         <div style="font-size:.72rem;color:#059669;margin-top:4px;">
-                                            <i class="fas fa-lightbulb me-1"></i>
+                                            <i class="bi bi-lightbulb me-1"></i>
                                             Aluno sugeriu: {{ \Carbon\Carbon::parse($reagendamento->data_sugerida)->format('d/m/Y H:i') }}
                                         </div>
                                     @endif
@@ -140,29 +140,30 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <div class="d-flex justify-content-center gap-2">
+                                    <div class="d-flex flex-wrap justify-content-center gap-2" style="white-space:nowrap;">
                                         @if ($reagendamento->status === 'pendente')
-                                            <button type="button" class="tbl-btn-success"
+                                            <button type="button" class="tbl-btn-success" style="box-shadow:none;" title="Confirmar e escolher a nova data"
                                                 onclick="abrirModalConfirmar({{ $reagendamento->id }}, '{{ $reagendamento->aula?->titulo_aulas }}', '{{ $reagendamento->aluno?->nome_aluno }}', {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('Y-m-d').'\'' : 'null' }}, {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('H:i').'\'' : 'null' }})">
-                                                <i class="fas fa-calendar-check"></i>
+                                                <i class="bi bi-calendar-check"></i> Confirmar
                                             </button>
                                             <form action="{{ route('admin.reagendamentos.recusar', $reagendamento->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('PUT')
-                                                <button type="submit" class="tbl-btn-excluir" style="box-shadow:none;">
-                                                    <i class="fas fa-times"></i>
+                                                <button type="submit" class="tbl-btn-excluir" style="box-shadow:none;" title="Recusar o pedido do aluno">
+                                                    <i class="bi bi-x-circle"></i> Recusar
                                                 </button>
                                             </form>
                                         @else
-                                            <span style="font-size:.75rem;color:#94a3b8;">Concluído</span>
+                                            <span style="font-size:.75rem;color:#94a3b8;align-self:center;"><i class="bi bi-check2-all"></i> Concluído</span>
                                         @endif
+                                        {{-- Cinza para não confundir com "Recusar" (vermelho): excluir só apaga o registro da lista. --}}
                                         <form action="{{ route('admin.reagendamentos.destroy', $reagendamento->id) }}" method="POST" class="d-inline form-delete">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="tbl-btn-excluir" style="background:#fee2e2;color:#dc2626;box-shadow:none;"
+                                            <button type="button" class="tbl-btn-excluir" style="background:#f1f5f9;color:#475569;box-shadow:none;" title="Apagar este registro"
                                                 data-nome="{{ $reagendamento->aluno?->nome_aluno }}"
                                                 onclick="abrirModalExcluir(this)">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="bi bi-trash"></i> Excluir
                                             </button>
                                         </form>
                                     </div>
@@ -172,7 +173,7 @@
                             <tr>
                                 <td colspan="5">
                                     <div class="tbl-empty">
-                                        <i class="fas fa-calendar-check tbl-empty-icon"></i>
+                                        <i class="bi bi-calendar-check tbl-empty-icon"></i>
                                         <span class="tbl-empty-text">Nenhuma solicitação de reagendamento.</span>
                                     </div>
                                 </td>
@@ -193,7 +194,7 @@
             <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:16px 16px 0 0;padding:1.5rem 1.5rem 1rem;">
                 <div class="d-flex align-items-center gap-3">
                     <div style="width:48px;height:48px;background:#059669;border-radius:12px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-calendar-check text-white fs-5"></i>
+                        <i class="bi bi-calendar-check text-white fs-5"></i>
                     </div>
                     <div>
                         <h5 class="modal-title mb-0 fw-bold" style="color:#065f46;">Confirmar Reagendamento</h5>
@@ -214,13 +215,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-secondary" style="font-size:.85rem;">
-                            <i class="fas fa-calendar me-1 text-success"></i> Nova Data
+                            <i class="bi bi-calendar me-1 text-success"></i> Nova Data
                         </label>
                         <input type="date" name="nova_data_aulas" id="novaDataAulas" class="form-control" style="border-radius:10px;" min="{{ now()->addDay()->format('Y-m-d') }}" required>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold text-secondary" style="font-size:.85rem;">
-                            <i class="fas fa-clock me-1 text-success"></i> Nova Hora
+                            <i class="bi bi-clock me-1 text-success"></i> Nova Hora
                         </label>
                         <input type="time" name="nova_hora_aulas" id="novaHoraAulas" class="form-control" style="border-radius:10px;" required>
                     </div>
@@ -228,7 +229,7 @@
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
                     <button type="button" class="del-btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="tbl-btn-success">
-                        <i class="fas fa-paper-plane"></i> Confirmar e Notificar Aluno
+                        <i class="bi bi-send"></i> Confirmar e Notificar Aluno
                     </button>
                 </div>
             </form>
@@ -243,7 +244,7 @@
             <div class="modal-header border-0 pb-0" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-radius:16px 16px 0 0;padding:1.5rem 1.5rem 1rem;">
                 <div class="d-flex align-items-center gap-3">
                     <div style="width:48px;height:48px;background:#d97706;border-radius:12px;display:flex;align-items:center;justify-content:center;">
-                        <i class="fas fa-calendar-plus text-white fs-5"></i>
+                        <i class="bi bi-calendar-plus text-white fs-5"></i>
                     </div>
                     <div>
                         <h5 class="modal-title mb-0 fw-bold" style="color:#92400e;">Lançar Reagendamento</h5>
@@ -257,7 +258,7 @@
                 <div class="modal-body px-4 py-3">
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-secondary" style="font-size:.85rem;">
-                            <i class="fas fa-user me-1 text-warning"></i> Selecione o Aluno
+                            <i class="bi bi-person me-1 text-warning"></i> Selecione o Aluno
                         </label>
                         <select name="aluno_id" class="form-select @error('aluno_id') is-invalid @enderror" style="border-radius:10px;" required>
                             <option value="">Escolha o aluno...</option>
@@ -271,7 +272,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-secondary" style="font-size:.85rem;">
-                            <i class="fas fa-book-open me-1 text-warning"></i> Selecione a Aula
+                            <i class="bi bi-book me-1 text-warning"></i> Selecione a Aula
                         </label>
                         <select name="aula_id" class="form-select @error('aula_id') is-invalid @enderror" style="border-radius:10px;" required>
                             <option value="">Escolha a aula...</option>
@@ -287,7 +288,7 @@
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-semibold text-secondary" style="font-size:.85rem;">
-                            <i class="fas fa-comment-alt me-1 text-warning"></i> Observações / Motivo
+                            <i class="bi bi-chat-left-text me-1 text-warning"></i> Observações / Motivo
                         </label>
                         <textarea name="motivo" id="motivoAdmin" rows="3"
                             class="form-control @error('motivo') is-invalid @enderror"
@@ -303,7 +304,7 @@
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
                     <button type="button" class="del-btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="tbl-btn-novo" style="border-radius:10px;background:linear-gradient(135deg,#d97706,#f59e0b);">
-                        <i class="fas fa-save"></i> Salvar Alteração
+                        <i class="bi bi-save"></i> Salvar Alteração
                     </button>
                 </div>
             </form>
