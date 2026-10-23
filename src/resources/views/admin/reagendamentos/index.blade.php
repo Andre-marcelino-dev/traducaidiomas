@@ -143,7 +143,7 @@
                                     <div class="d-flex flex-wrap justify-content-center gap-2" style="white-space:nowrap;">
                                         @if ($reagendamento->status === 'pendente')
                                             <button type="button" class="tbl-btn-success" style="box-shadow:none;" title="Confirmar e escolher a nova data"
-                                                onclick="abrirModalConfirmar({{ $reagendamento->id }}, '{{ $reagendamento->aula?->titulo_aulas }}', '{{ $reagendamento->aluno?->nome_aluno }}', {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('Y-m-d').'\'' : 'null' }}, {{ $reagendamento->data_sugerida ? '\''.\Carbon\Carbon::parse($reagendamento->data_sugerida)->format('H:i').'\'' : 'null' }})">
+                                                onclick="abrirModalConfirmar({{ $reagendamento->id }}, @js($reagendamento->aula?->titulo_aulas), @js($reagendamento->aluno?->nome_aluno), @js($reagendamento->data_sugerida ? \Carbon\Carbon::parse($reagendamento->data_sugerida)->format('Y-m-d') : null), @js($reagendamento->data_sugerida ? \Carbon\Carbon::parse($reagendamento->data_sugerida)->format('H:i') : null))">
                                                 <i class="bi bi-calendar-check"></i> Confirmar
                                             </button>
                                             <form action="{{ route('admin.reagendamentos.recusar', $reagendamento->id) }}" method="POST" class="d-inline">

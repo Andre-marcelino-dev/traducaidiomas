@@ -4,18 +4,24 @@ namespace Tests\Feature;
 
 use App\Models\Aluno;
 use App\Models\Atividade;
+use App\Models\Aula;
+use App\Models\CodigoSenhaAluno;
 use App\Models\Curso;
+use App\Models\ForumTopico;
 use App\Models\Materiais;
 use App\Models\Matricula;
 use App\Models\Nivel;
 use App\Models\Professor;
+use App\Models\Reagendamento;
 use App\Support\CursoAtual;
 use App\Support\Upload;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 /**
@@ -355,5 +361,99 @@ class SegurancaTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
         Upload::salvar($arquivo, 'alunos', Upload::IMAGENS, 'foto');
+    }
+
+    // ── Ajustes de segurança (cabeçalhos, limites, fórum, reagendamento) ──
+
+    public function test_respostas_trazem_cabecalhos_de_seguranca(): void
+    {
+        $resposta = $this->get('/');
+
+        $resposta->assertHeader('X-Frame-Options', 'SAMEORIGIN')
+            ->assertHeader('X-Content-Type-Options', 'nosniff')
+            ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+            ->assertHeaderMissing('X-Powered-By');
+    }
+
+    public function test_formulario_de_contato_limita_envios_por_ip(): void
+    {
+        Mail::fake();
+        $dados = ['nome' => 'Visitante', 'email' => 'v@site.test', 'assunto' => 'Oi', 'mensagem' => 'Olá'];
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->post('/contato', $dados)->assertRedirect();
+        }
+
+        $this->post('/contato', $dados)->assertStatus(429);
+    }
+
+    public function test_codigo_de_senha_do_app_para_de_valer_apos_cinco_erros(): void
+    {
+        Mail::fake();
+        // O throttle:login (5/min) já barraria antes; aqui o foco é o contador do próprio código.
+        $this->withoutMiddleware(ThrottleRequests::class);
+
+        $aluno = $this->aluno();
+        $this->postJson('/api/v1/aluno/senha/esqueci', ['email_aluno' => $aluno->email_aluno])->assertOk();
+        $codigo = CodigoSenhaAluno::where('email_aluno', $aluno->email_aluno)->latest('id_codigo')->value('codigo');
+        $errado = $codigo === '000000' ? '111111' : '000000';
+        $dados = ['email_aluno' => $aluno->email_aluno, 'nova_senha' => 'novaSenha1', 'nova_senha_confirmation' => 'novaSenha1'];
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->postJson('/api/v1/aluno/senha/redefinir', ['codigo' => $errado] + $dados)->assertStatus(422);
+        }
+
+        // Depois de 5 erros, nem o código certo funciona mais (precisa pedir outro).
+        $this->postJson('/api/v1/aluno/senha/redefinir', ['codigo' => $codigo] + $dados)->assertStatus(422);
+        $this->assertTrue(Hash::check('segredo123', $aluno->fresh()->senha_aluno));
+
+        // Um código novo funciona normalmente.
+        $this->postJson('/api/v1/aluno/senha/esqueci', ['email_aluno' => $aluno->email_aluno])->assertOk();
+        $novo = CodigoSenhaAluno::where('email_aluno', $aluno->email_aluno)->latest('id_codigo')->value('codigo');
+        $this->postJson('/api/v1/aluno/senha/redefinir', ['codigo' => $novo] + $dados)->assertOk();
+    }
+
+    public function test_aluno_com_matricula_cancelada_nao_ve_o_forum_do_curso(): void
+    {
+        $nivel = Nivel::create(['nome_nivel' => 'Iniciante']);
+        $ingles = $this->curso('Inglês');
+        $aluno = $this->aluno();
+        $matricula = $this->matricular($aluno, $ingles, $nivel);
+        $topico = ForumTopico::create([
+            'id_curso' => $ingles->id_curso, 'id_aluno' => $aluno->id_aluno,
+            'titulo_topico' => 'Dúvida', 'descricao_topico' => 'Texto',
+        ]);
+        $sessao = [CursoAtual::SESSAO => $matricula->id_matricula];
+
+        $this->actingAs($aluno, 'aluno')->withSession($sessao)->get('/aluno/forum/' . $topico->id_topico)->assertOk();
+
+        $matricula->update(['status_matricula' => 'CANCELADO']);
+
+        $this->actingAs($aluno, 'aluno')->get('/aluno/forum/' . $topico->id_topico)->assertForbidden();
+    }
+
+    public function test_reagendamento_com_apostrofo_nao_quebra_o_botao_confirmar(): void
+    {
+        $admin = $this->professor(true);
+        $curso = $this->curso('Inglês');
+        $aluno = $this->aluno();
+        $aluno->update(['nome_aluno' => "Joana D'Arc"]);
+        $aula = Aula::create([
+            'id_professor' => $admin->id_professor, 'id_curso' => $curso->id_curso,
+            'titulo_aulas' => "Let's talk", 'descricao_aulas' => 'Desc',
+            'data_aulas' => '2026-12-01', 'hora_aulas' => '19:00:00', 'cursos_aulas' => 'Inglês', 'status_aulas' => 'ATIVO',
+        ]);
+        Reagendamento::create([
+            'aluno_id' => $aluno->id_aluno, 'aula_id' => $aula->id_aulas, 'professor_id' => $admin->id_professor,
+            'motivo' => 'Viagem marcada', 'status' => 'pendente',
+        ]);
+
+        $html = $this->actingAs($admin, 'admin')->get('/admin/reagendamentos')->assertOk()->getContent();
+
+        // O apóstrofo vai escapado para o JavaScript (como no @js), não solto dentro de '...'.
+        $escapado = fn (string $texto) => "'" . substr(json_encode($texto, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE), 1, -1) . "'";
+        $this->assertStringContainsString($escapado("Let's talk"), $html);
+        $this->assertStringContainsString($escapado("Joana D'Arc"), $html);
+        $this->assertStringNotContainsString("'Let's talk'", $html);
     }
 }

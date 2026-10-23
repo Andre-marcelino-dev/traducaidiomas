@@ -67,7 +67,7 @@ Route::prefix('quiz/{idioma}')->name('quiz.')->where(['idioma' => '[a-z]+'])->mi
     Route::delete('/respostas', [QuizController::class, 'reiniciar'])->name('reiniciar');
 });
 Route::get("/contato", [ContatoController::class, 'contato'])->name('contato');
-Route::post("/contato", [ContatoController::class, 'enviar'])->name('contato.enviar'); // 👈 ADICIONADO
+Route::post("/contato", [ContatoController::class, 'enviar'])->middleware('throttle:contato')->name('contato.enviar');
 
 
 Route::view('/api/documentacao', 'api.documentacao')->name('api.documentacao');

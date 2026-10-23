@@ -15,7 +15,7 @@ class ForumController extends Controller
     public function index(Request $request)
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
 
         $query = ForumTopico::with(['curso', 'aluno', 'respostas'])->whereIn('id_curso', $idCursos);
 
@@ -35,7 +35,7 @@ class ForumController extends Controller
     public function create()
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
         $cursos = Curso::whereIn('id_curso', $idCursos)->get();
 
         return view('aluno.forum.create', compact('cursos'));
@@ -44,7 +44,7 @@ class ForumController extends Controller
     public function store(Request $request)
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
 
         $dados = $request->validate([
             'id_curso'         => 'required|exists:tbl_cursos,id_curso',
@@ -75,7 +75,7 @@ class ForumController extends Controller
     public function show($id)
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
 
         $topico = ForumTopico::with(['curso', 'aluno', 'respostas' => function ($q) {
             $q->with('aluno')->orderBy('criado_em');
@@ -89,7 +89,7 @@ class ForumController extends Controller
     public function storeResposta(Request $request, $id)
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
 
         $topico = ForumTopico::findOrFail($id);
         abort_unless($idCursos->contains($topico->id_curso), 403);
@@ -111,7 +111,7 @@ class ForumController extends Controller
     public function download($id)
     {
         $aluno = auth('aluno')->user();
-        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->pluck('id_curso');
+        $idCursos = Matricula::where('id_aluno', $aluno->id_aluno)->where('status_matricula', 'ATIVO')->pluck('id_curso');
 
         $topico = ForumTopico::findOrFail($id);
         abort_unless($idCursos->contains($topico->id_curso), 403);
