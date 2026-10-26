@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Chatbot;
+namespace Tests\Unit\chatbot;
 
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
