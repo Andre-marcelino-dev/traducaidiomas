@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Aluno;
+namespace App\Http\Controllers\aluno;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reagendamento;
