@@ -106,8 +106,8 @@ class AtividadeController extends Controller
     public function audioResposta($id)
     {
         $rq = AtividadeRespostaQuestao::findOrFail($id);
-        $caminho = public_path((string) $rq->resposta_aluno);
-        abort_unless($rq->resposta_aluno && is_file($caminho), 404);
+        $caminho = $rq->caminhoGravacao();
+        abort_unless($caminho, 404);
 
         return response()->file($caminho);
     }

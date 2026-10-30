@@ -188,6 +188,32 @@ class AppFase5AtividadeAudioTest extends TestCase
         $this->assertSame('Foi bom.', $detalhe->json('data.questoes.1.resposta_aluno'));
     }
 
+    public function test_resposta_de_texto_nao_vira_caminho_de_arquivo(): void
+    {
+        // Um aluno escreve um caminho de arquivo numa questão de TEXTO e depois
+        // pede a "gravação" dela: a rota de áudio não pode entregar esse arquivo.
+        $texto = AtividadeQuestao::create([
+            'id_atividade' => $this->atividade->id_atividade, 'enunciado' => 'Como foi seu dia?',
+            'tipo_questao' => 'texto', 'ordem' => 2,
+        ]);
+
+        $this->withToken($this->token)
+            ->postJson("/api/v1/aluno/atividades/{$this->atividade->id_atividade}/responder", [
+                'respostas' => [$texto->id_questao => '../.env'],
+            ])
+            ->assertOk();
+
+        $this->withToken($this->token)
+            ->getJson("/api/v1/aluno/atividades/{$this->atividade->id_atividade}/questoes/{$texto->id_questao}/audio")
+            ->assertNotFound();
+
+        // Pelo painel também não.
+        $rq = AtividadeRespostaQuestao::where('id_questao', $texto->id_questao)->firstOrFail();
+        $this->actingAs($this->professor, 'admin')
+            ->get(route('admin.atividades.resposta-questao.audio', $rq->id))
+            ->assertNotFound();
+    }
+
     public function test_questao_de_outra_atividade_da_404(): void
     {
         $this->withToken($this->token)

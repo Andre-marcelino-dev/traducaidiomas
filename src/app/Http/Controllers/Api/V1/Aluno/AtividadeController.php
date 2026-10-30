@@ -254,9 +254,9 @@ class AtividadeController extends Controller
         $atividade = $this->atividadeDoAluno($idAluno, $id);
         $resposta = $atividade?->respostas->first();
         $rq = $resposta?->respostasQuestoes->firstWhere('id_questao', $idQuestao);
-        $caminho = $rq?->resposta_aluno ? public_path((string) $rq->resposta_aluno) : null;
+        $caminho = $rq?->caminhoGravacao();
 
-        if (!$rq || !$rq->resposta_aluno || !is_file($caminho)) {
+        if (!$caminho) {
             return $this->naoEncontrada('Áudio não encontrado.');
         }
 
