@@ -198,7 +198,8 @@
 
                                     <input type="file" name="audio_{{ $questao->id_questao }}" accept="audio/*" class="atv-gravador-arquivo" hidden>
                                     <div class="atv-gravador-alternativa" hidden>
-                                        Não foi possível usar o microfone neste navegador. Envie um arquivo de áudio:
+                                        <span class="atv-gravador-motivo">Não foi possível usar o microfone neste navegador.</span>
+                                        Você pode enviar um arquivo de áudio (por exemplo, gravado no gravador de voz do celular):
                                         <input type="file" accept="audio/*" class="form-control form-control-sm mt-1 atv-gravador-arquivo-manual">
                                     </div>
                                 </div>
@@ -343,20 +344,26 @@
         const status = box.querySelector('.atv-gravador-status');
         const previa = box.querySelector('.atv-gravador-previa');
         const arquivo = box.querySelector('.atv-gravador-arquivo');
+        const alternativa = box.querySelector('.atv-gravador-alternativa');
+        const manual = box.querySelector('.atv-gravador-arquivo-manual');
+
+        // Arquivo escolhido à mão (ex.: gravado no celular) vai pelo mesmo campo da gravação.
+        manual.addEventListener('change', function () {
+            if (!manual.files.length) return;
+            arquivo.files = manual.files;
+            previa.src = URL.createObjectURL(manual.files[0]);
+            previa.hidden = false;
+            status.textContent = 'Arquivo escolhido. Ouça antes de enviar.';
+        });
+
+        const mostrarAlternativa = function (motivo) {
+            box.querySelector('.atv-gravador-motivo').textContent = motivo;
+            alternativa.hidden = false;
+        };
 
         if (!podeGravar) {
-            // Sem gravação no navegador: o aluno escolhe um arquivo de áudio.
-            const manual = box.querySelector('.atv-gravador-arquivo-manual');
-            manual.name = arquivo.name;
-            arquivo.remove();
             box.querySelector('.atv-gravador-controles').hidden = true;
-            box.querySelector('.atv-gravador-alternativa').hidden = false;
-            manual.addEventListener('change', function () {
-                if (manual.files.length) {
-                    previa.src = URL.createObjectURL(manual.files[0]);
-                    previa.hidden = false;
-                }
-            });
+            mostrarAlternativa('Este navegador não consegue gravar áudio.');
             return;
         }
 
@@ -379,7 +386,15 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             } catch (e) {
-                status.textContent = 'Permita o uso do microfone no navegador para gravar.';
+                // Bloqueio do aluno, da escola/empresa (Chrome gerenciado) ou falta de microfone:
+                // explica o motivo e oferece o envio de um arquivo, pra ele não ficar sem saída.
+                const motivo = e && e.name === 'NotFoundError'
+                    ? 'Nenhum microfone foi encontrado neste computador.'
+                    : (e && e.name === 'NotReadableError'
+                        ? 'O microfone está sendo usado por outro programa.'
+                        : 'O navegador bloqueou o microfone (clique no ícone ao lado do endereço do site para permitir; em computadores da escola ou empresa ele pode estar bloqueado pela TI).');
+                status.textContent = '';
+                mostrarAlternativa(motivo);
                 return;
             }
 
