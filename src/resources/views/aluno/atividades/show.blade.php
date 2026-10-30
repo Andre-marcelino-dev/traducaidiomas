@@ -20,6 +20,13 @@
 <div class="app-content">
     <div class="container-fluid">
 
+        @if(session('error') || $errors->any())
+            <div class="alert alert-danger alert-styled alert-dismissible fade show mb-3">
+                <i class="fas fa-circle-exclamation me-2"></i>{{ session('error') ?? $errors->first() }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         {{-- Descrição --}}
         @if($atividade->descricao_atividade)
             <div class="d-card fade-up mb-4">
@@ -112,6 +119,15 @@
                                         @endif
                                     @endif
                                 </div>
+                            @elseif($questao->tipo_questao === 'audio')
+                                <div style="margin-top:.5rem;">
+                                    @if($rq?->resposta_aluno)
+                                        <div style="font-size:.75rem;color:#64748b;margin-bottom:.3rem;"><i class="fas fa-microphone me-1"></i> Sua gravação</div>
+                                        <audio controls preload="none" class="w-100" src="{{ route('aluno.atividades.questoes.audio', [$atividade->id_atividade, $questao->id_questao]) }}"></audio>
+                                    @else
+                                        <span style="font-size:.85rem;color:#94a3b8;">Nenhuma gravação enviada.</span>
+                                    @endif
+                                </div>
                             @else
                                 <div style="padding-left:36px;font-size:.85rem;color:#475569;background:#fff;border-radius:8px;padding:.5rem .75rem;margin-top:.5rem;border:1px solid #e2e8f0;">
                                     {{ $rq?->resposta_aluno ?? '—' }}
@@ -128,7 +144,7 @@
 
         @else
             {{-- ══ FORMULÁRIO ══ --}}
-            <form action="{{ route('aluno.atividades.responder', $atividade->id_atividade) }}" method="POST">
+            <form action="{{ route('aluno.atividades.responder', $atividade->id_atividade) }}" method="POST" enctype="multipart/form-data" id="formAtividade">
                 @csrf
                 @foreach($atividade->questoes as $i => $questao)
                     <div class="d-card fade-up mb-3">
@@ -139,6 +155,8 @@
                             </h6>
                             @if($questao->tipo_questao === 'multipla_escolha')
                                 <span class="tbl-badge blue"><i class="fas fa-list-ol me-1"></i> Múltipla Escolha</span>
+                            @elseif($questao->tipo_questao === 'audio')
+                                <span class="tbl-badge"><i class="fas fa-microphone me-1"></i> Fala (gravação)</span>
                             @else
                                 <span class="tbl-badge"><i class="fas fa-pen me-1"></i> Dissertativa</span>
                             @endif
@@ -151,25 +169,50 @@
                                     @foreach(['A' => $questao->opcao_a, 'B' => $questao->opcao_b, 'C' => $questao->opcao_c, 'D' => $questao->opcao_d] as $letra => $opcao)
                                         @if($opcao)
                                             <label class="atv-option">
-                                                <input type="radio" name="questao_{{ $questao->id_questao }}" value="{{ $letra }}" required class="atv-radio">
+                                                <input type="radio" name="questao_{{ $questao->id_questao }}" value="{{ $letra }}" required class="atv-radio" @checked(old('questao_' . $questao->id_questao) === $letra)>
                                                 <span class="atv-option-letra">{{ $letra }}</span>
                                                 <span class="atv-option-text">{{ $opcao }}</span>
                                             </label>
                                         @endif
                                     @endforeach
                                 </div>
+                            @elseif($questao->tipo_questao === 'audio')
+                                @php $jaGravou = (bool) $resposta?->respostasQuestoes->firstWhere('id_questao', $questao->id_questao)?->resposta_aluno; @endphp
+                                <div class="atv-gravador" data-ja-gravou="{{ $jaGravou ? '1' : '0' }}" data-questao="{{ $i + 1 }}">
+                                    @if($jaGravou)
+                                        <div class="atv-gravador-aviso">
+                                            <i class="fas fa-circle-check me-1"></i> Você já enviou uma gravação (pelo app). Pode ouvir abaixo ou gravar de novo para substituir.
+                                            <audio controls preload="none" class="w-100 mt-2" src="{{ route('aluno.atividades.questoes.audio', [$atividade->id_atividade, $questao->id_questao]) }}"></audio>
+                                        </div>
+                                    @endif
+
+                                    <div class="atv-gravador-controles">
+                                        <button type="button" class="atv-btn-gravar" data-acao="gravar">
+                                            <i class="fas fa-microphone"></i> <span>Gravar</span>
+                                        </button>
+                                        <span class="atv-gravador-tempo" hidden>00:00</span>
+                                        <span class="atv-gravador-status"></span>
+                                    </div>
+
+                                    <audio class="atv-gravador-previa w-100 mt-2" controls hidden></audio>
+
+                                    <input type="file" name="audio_{{ $questao->id_questao }}" accept="audio/*" class="atv-gravador-arquivo" hidden>
+                                    <div class="atv-gravador-alternativa" hidden>
+                                        Não foi possível usar o microfone neste navegador. Envie um arquivo de áudio:
+                                        <input type="file" accept="audio/*" class="form-control form-control-sm mt-1 atv-gravador-arquivo-manual">
+                                    </div>
+                                </div>
                             @else
                                 <textarea name="questao_{{ $questao->id_questao }}" class="form-control" rows="4"
                                     placeholder="Digite sua resposta..." required
-                                    style="border-radius:10px;border-color:#e2e8f0;"></textarea>
+                                    style="border-radius:10px;border-color:#e2e8f0;">{{ old('questao_' . $questao->id_questao) }}</textarea>
                             @endif
                         </div>
                     </div>
                 @endforeach
 
                 <div class="d-flex gap-2 mb-5 fade-up">
-                    <button type="submit" class="tbl-btn-success" style="padding:.6rem 1.5rem;font-size:.85rem;"
-                        onclick="return confirm('Confirmar envio da atividade?')">
+                    <button type="submit" class="tbl-btn-success" style="padding:.6rem 1.5rem;font-size:.85rem;">
                         <i class="fas fa-paper-plane"></i> Enviar Atividade
                     </button>
                     <a href="{{ route('aluno.atividades.index') }}" class="del-btn-cancelar">
@@ -230,7 +273,182 @@
         color: #1e293b;
         font-weight: 500;
     }
+
+    /* ── Questão de fala (gravação) ── */
+    .atv-gravador-controles {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        flex-wrap: wrap;
+    }
+    .atv-btn-gravar {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .6rem 1.2rem;
+        border: none;
+        border-radius: 10px;
+        font-size: .85rem;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #818cf8);
+        cursor: pointer;
+    }
+    .atv-btn-gravar.gravando {
+        background: linear-gradient(135deg, #e11d48, #f43f5e);
+    }
+    .atv-gravador-tempo {
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        color: #e11d48;
+    }
+    .atv-gravador-status {
+        font-size: .8rem;
+        color: #64748b;
+    }
+    .atv-gravador-aviso,
+    .atv-gravador-alternativa {
+        font-size: .8rem;
+        color: #475569;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: .6rem .8rem;
+        margin-bottom: .75rem;
+    }
+    .atv-gravador-alternativa {
+        margin: .75rem 0 0;
+    }
 </style>
+
+<script>
+(function () {
+    const form = document.getElementById('formAtividade');
+    if (!form) return;
+
+    // Gravar no navegador precisa de microfone + MediaRecorder; DataTransfer põe
+    // a gravação no <input type="file"> pra ela ir junto com o formulário.
+    const podeGravar = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+        && window.MediaRecorder && window.DataTransfer);
+    const LIMITE_SEGUNDOS = 300; // 5 minutos: bem abaixo dos 20 MB aceitos pelo servidor
+    const extensaoDe = tipo => tipo.includes('ogg') ? 'ogg' : (tipo.includes('mp4') || tipo.includes('aac') ? 'm4a' : 'webm');
+    const formatar = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    let gravadorAtivo = null;
+
+    document.querySelectorAll('.atv-gravador').forEach(function (box) {
+        const btn = box.querySelector('[data-acao="gravar"]');
+        const icone = btn.querySelector('i');
+        const rotulo = btn.querySelector('span');
+        const tempo = box.querySelector('.atv-gravador-tempo');
+        const status = box.querySelector('.atv-gravador-status');
+        const previa = box.querySelector('.atv-gravador-previa');
+        const arquivo = box.querySelector('.atv-gravador-arquivo');
+
+        if (!podeGravar) {
+            // Sem gravação no navegador: o aluno escolhe um arquivo de áudio.
+            const manual = box.querySelector('.atv-gravador-arquivo-manual');
+            manual.name = arquivo.name;
+            arquivo.remove();
+            box.querySelector('.atv-gravador-controles').hidden = true;
+            box.querySelector('.atv-gravador-alternativa').hidden = false;
+            manual.addEventListener('change', function () {
+                if (manual.files.length) {
+                    previa.src = URL.createObjectURL(manual.files[0]);
+                    previa.hidden = false;
+                }
+            });
+            return;
+        }
+
+        let recorder = null;
+        let stream = null;
+        let pedacos = [];
+        let timer = null;
+        let segundos = 0;
+
+        btn.addEventListener('click', async function () {
+            if (recorder && recorder.state === 'recording') {
+                recorder.stop();
+                return;
+            }
+            if (gravadorAtivo) {
+                status.textContent = 'Pare a outra gravação primeiro.';
+                return;
+            }
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (e) {
+                status.textContent = 'Permita o uso do microfone no navegador para gravar.';
+                return;
+            }
+
+            pedacos = [];
+            recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = function (e) {
+                if (e.data.size) pedacos.push(e.data);
+            };
+            recorder.onstop = function () {
+                clearInterval(timer);
+                stream.getTracks().forEach(t => t.stop());
+                gravadorAtivo = null;
+
+                const tipo = (recorder.mimeType || 'audio/webm').split(';')[0];
+                const blob = new Blob(pedacos, { type: tipo });
+                const dt = new DataTransfer();
+                dt.items.add(new File([blob], 'resposta.' + extensaoDe(tipo), { type: tipo }));
+                arquivo.files = dt.files;
+
+                previa.src = URL.createObjectURL(blob);
+                previa.hidden = false;
+                btn.classList.remove('gravando');
+                icone.className = 'fas fa-rotate-right';
+                rotulo.textContent = 'Gravar de novo';
+                status.textContent = 'Gravação pronta. Ouça antes de enviar.';
+            };
+
+            recorder.start();
+            gravadorAtivo = box;
+            segundos = 0;
+            tempo.textContent = formatar(0);
+            tempo.hidden = false;
+            timer = setInterval(function () {
+                segundos++;
+                tempo.textContent = formatar(segundos);
+                if (segundos >= LIMITE_SEGUNDOS) recorder.stop();
+            }, 1000);
+
+            previa.hidden = true;
+            btn.classList.add('gravando');
+            icone.className = 'fas fa-stop';
+            rotulo.textContent = 'Parar';
+            status.textContent = 'Gravando... (máximo 5 minutos)';
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        if (gravadorAtivo) {
+            e.preventDefault();
+            alert('Pare a gravação antes de enviar a atividade.');
+            return;
+        }
+
+        for (const box of form.querySelectorAll('.atv-gravador')) {
+            const input = box.querySelector('input[type="file"][name]');
+            if (box.dataset.jaGravou !== '1' && !(input && input.files.length)) {
+                e.preventDefault();
+                alert('Grave sua resposta da questão ' + box.dataset.questao + ' antes de enviar.');
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+        }
+
+        if (!confirm('Confirmar envio da atividade?')) {
+            e.preventDefault();
+        }
+    });
+})();
+</script>
 @endpush
 
 @endsection

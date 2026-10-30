@@ -273,6 +273,7 @@ Route::prefix('aluno')->name('aluno.')->group(function () {
             Route::get('/atividades/{id}', [AlunoAtividadeController::class, 'show'])->name('atividades.show');
             Route::get('/atividades/{id}/audio', [AlunoAtividadeController::class, 'audio'])->name('atividades.audio');
             Route::post('/atividades/{id}/responder', [AlunoAtividadeController::class, 'responder'])->name('atividades.responder');
+            Route::get('/atividades/{id}/questoes/{idQuestao}/audio', [AlunoAtividadeController::class, 'audioResposta'])->name('atividades.questoes.audio');
 
             // Materiais (somente leitura)
             Route::get('/materiais',                   [AlunoMateriaisController::class, 'index'])->name('materiais.index');
